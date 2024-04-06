@@ -13,3 +13,10 @@
     text-wrap: balance;
   }
 }
+
+.custom-underline {
+  background-image: linear-gradient(#000, #000);
+  background-size: 100% 1px;
+  background-position: left bottom;
+  background-repeat: no-repeat;
+}
