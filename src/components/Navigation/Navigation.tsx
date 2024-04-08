@@ -3,33 +3,43 @@
 import Link from "next/link";
 
 import { usePathname } from "next/navigation";
-import Combobox from "../Combobox";
 
-import Dropdown from "../Dropdown";
+import { cn } from "@/lib/utils";
+
+import Dropdown from "../FolderDropdown";
+
+const routePaths = ["/", "/join", "/signin"];
 
 export default function Navigation() {
   const pathname = usePathname();
   let isUserLoggedIn = pathname === "/" ? false : true;
   return (
-    <nav className="flex items-center justify-between px-6 py-4 border-b">
+    <nav
+      className={cn(
+        "flex items-center justify-between px-6 py-4",
+        pathname !== "/" && "border-b"
+      )}
+    >
       <div className="flex items-center gap-5">
         <div>
           <span>Pocket Feed</span>
         </div>
-        {isUserLoggedIn && (
+        {pathname.startsWith("/folder/") && (
           <>
             <div className="flex items-center gap-5">
               <hr className="border-0 bg-[#343434] w-[1px] h-4 rotate-[16deg]" />
               <Dropdown />
             </div>
-
-            <div>Explore</div>
+            <Link href="/explore">Explore</Link>
           </>
         )}
       </div>
 
       {isUserLoggedIn ? (
-        <div>Profile</div>
+        <div className="flex gap-8">
+          <Link href="/add">Add</Link>
+          <div>Profile</div>
+        </div>
       ) : (
         <div className="flex gap-6">
           <Link

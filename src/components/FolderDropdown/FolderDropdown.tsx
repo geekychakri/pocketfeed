@@ -1,19 +1,52 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { CaretSortIcon } from "@radix-ui/react-icons";
 
 import { usePathname } from "next/navigation";
 
+import { useRouter } from "next/navigation";
+
 import FolderItem from "../FolderItem";
 
-const folders = ["Home", "Tech", "Music", "News", "Podcast"];
+import { useHotkeys } from "react-hotkeys-hook";
+
+const folders = ["Home", "Tech", "Music", "News", "Podcast"]; //TODO:
 
 const DropdownMenuDemo = () => {
   const pathname = usePathname();
+  const router = useRouter();
 
-  const [selectedFolder, setSelectedFolder] = useState(pathname.split("/")[2]);
+  const [selectedFolder, setSelectedFolder] = useState(
+    pathname.split("/")[2] || "Home"
+  );
+  const [folderIndex, setFolderIndex] = useState(0);
+  const [pressArrowKey, setPressArrowkey] = useState(false);
+
+  console.log({ pressArrowKey });
+
+  useEffect(() => {
+    if (pressArrowKey) {
+      setSelectedFolder(folders[folderIndex]);
+      router.push(`/folder/${folders[folderIndex]}`);
+      console.log("RUN FOLDER DROPDOWN EFFECT"); //TODO:
+    }
+  }, [router, folderIndex, pressArrowKey]);
+
+  useHotkeys("left", () => {
+    setPressArrowkey(true);
+    if (folderIndex > 0) {
+      setFolderIndex(folderIndex - 1);
+    }
+  });
+
+  useHotkeys("right", () => {
+    setPressArrowkey(true);
+    if (folderIndex < folders.length - 1) {
+      setFolderIndex((prevState) => prevState + 1);
+    }
+  });
 
   return (
     <DropdownMenu.Root>
@@ -40,8 +73,16 @@ const DropdownMenuDemo = () => {
                 folder={folder}
                 index={index}
                 key={index}
-                selectedFolder={selectedFolder}
-                setSelectedFolder={setSelectedFolder}
+                onSelect={(folder) => {
+                  setFolderIndex(
+                    folders.findIndex((folderItem) => folderItem === folder)
+                  );
+                  setSelectedFolder(
+                    folder === selectedFolder ? "Home" : folder
+                  ); //TODO:
+                  router.push(`/folder/${folder}`);
+                }}
+                isChecked={folder === selectedFolder}
               />
             );
           })}

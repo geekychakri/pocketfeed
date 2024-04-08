@@ -5,7 +5,6 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 import Navigation from "@/components/Navigation";
-import NavigationEvents from "@/components/NavigationEvents";
 
 export const metadata: Metadata = {
   title: "Pocket Feed",
@@ -20,7 +19,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/* <NavigationEvents /> */}
         <Navigation />
         {children}
       </body>

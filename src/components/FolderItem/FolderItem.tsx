@@ -1,37 +1,28 @@
 import { useHotkeys } from "react-hotkeys-hook";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
-import { useRouter } from "next/navigation";
-
 import { CheckIcon } from "@radix-ui/react-icons";
 
 const FolderItem = ({
   folder,
   index,
-  selectedFolder,
-  setSelectedFolder,
+  isChecked,
+  onSelect,
 }: {
   folder: string;
   index: number;
-  selectedFolder: string;
-  setSelectedFolder: (item: string) => void;
+  isChecked: DropdownMenu.DropdownMenuCheckboxItemProps["checked"];
+  onSelect: (folder: string) => void;
 }) => {
-  const router = useRouter();
   const shortcutKey = index + 1;
-  useHotkeys(shortcutKey.toString(), async () => {
-    router.push(`/geeky/${folder}`);
-    setSelectedFolder(folder);
+  useHotkeys(shortcutKey.toString(), () => {
+    onSelect(folder);
   });
-
-  const handleSelectFolder = (item: string) => {
-    setSelectedFolder(item === selectedFolder ? "Home" : item); //TODO:
-    router.push(`/geeky/${item}`);
-  };
 
   return (
     <DropdownMenu.CheckboxItem
-      checked={folder === selectedFolder}
-      onSelect={() => handleSelectFolder(folder)}
+      checked={isChecked}
+      onSelect={() => onSelect(folder)}
       className="group text-[14px] leading-none rounded-[3px] flex items-center h-[25px] px-[5px] relative pl-[25px] select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-primary data-[highlighted]:text-violet1 group py-4"
       key={index}
     >
@@ -39,9 +30,9 @@ const FolderItem = ({
         <CheckIcon className="text-primary group-hover:text-white" />
       </DropdownMenu.ItemIndicator>
       {folder}{" "}
-      <div className="ml-auto pl-[20px] text-mauve11 group-data-[highlighted]:text-white group-data-[disabled]:text-mauve8">
+      <kbd className="ml-auto pl-[20px] text-mauve11 group-data-[highlighted]:text-white group-data-[disabled]:text-mauve8">
         {index + 1}
-      </div>
+      </kbd>
     </DropdownMenu.CheckboxItem>
   );
 };
