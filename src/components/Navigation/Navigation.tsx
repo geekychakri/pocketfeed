@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils";
 
 import Dropdown from "../FolderDropdown";
 
+import ProfileAvatar from "../ProfileAvatar";
+
 const routePaths = ["/", "/join", "/signin"];
 
 export default function Navigation() {
@@ -36,9 +38,9 @@ export default function Navigation() {
       </div>
 
       {isUserLoggedIn ? (
-        <div className="flex gap-8">
+        <div className="flex items-center gap-8">
           <Link href="/add">Add</Link>
-          <div>Profile</div>
+          <ProfileAvatar />
         </div>
       ) : (
         <div className="flex gap-6">

@@ -23,14 +23,14 @@ const FolderItem = ({
     <DropdownMenu.CheckboxItem
       checked={isChecked}
       onSelect={() => onSelect(folder)}
-      className="group text-[14px] leading-none rounded-[3px] flex items-center h-[25px] px-[5px] relative pl-[25px] select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-primary data-[highlighted]:text-violet1 group py-4"
+      className="group text-[14px] leading-none rounded-[3px] flex items-center h-[25px] px-[5px] relative pl-[25px] select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 group py-4"
       key={index}
     >
       <DropdownMenu.ItemIndicator className="absolute left-0 w-[25px] inline-flex items-center justify-center">
-        <CheckIcon className="text-primary group-hover:text-white" />
+        <CheckIcon className="text-primary" />
       </DropdownMenu.ItemIndicator>
       {folder}{" "}
-      <kbd className="ml-auto pl-[20px] text-mauve11 group-data-[highlighted]:text-white group-data-[disabled]:text-mauve8">
+      <kbd className="ml-auto pl-[20px] text-mauve11 group-data-[highlighted]:text-black duration-150 group-data-[disabled]:text-mauve8">
         {index + 1}
       </kbd>
     </DropdownMenu.CheckboxItem>
