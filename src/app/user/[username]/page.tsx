@@ -1,14 +1,37 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
+
+import { cn } from "@/lib/utils";
 
 import RouteBack from "@/components/RouteBack/RouteBack";
 
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/UserAvatar";
+
+import { motion, AnimatePresence, m } from "framer-motion";
+
+import UserNotes from "@/components/UserNotes";
+import UserSubscriptions from "@/components/UserSubscriptions";
+
+const navLinks = [
+  {
+    title: "Notes",
+    href: "/user/geeky/notes",
+  },
+  {
+    title: "Feed",
+    href: "/user/geeky/feed",
+  },
+];
 
 export default function UserProfile({
   params,
 }: {
   params: { username: string };
 }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+
   return (
     <main className="flex flex-col gap-8 w-full max-w-[720px] mx-auto py-20">
       <div className="flex flex-col gap-8">
@@ -45,10 +68,35 @@ export default function UserProfile({
           Follow
         </button>
       </div>
-      <div className="flex text-center border-b">
-        <div className="flex-1 p-4">Notes</div>
-        <div className="flex-1 p-4">Feed</div>
-      </div>
+      <motion.ul className="flex text-center border-b">
+        {navLinks.map((item, index) => {
+          const isActive = index === activeIndex;
+          return (
+            <motion.li
+              key={index}
+              onClick={() => setActiveIndex(index)}
+              className="relative list-none flex-1"
+            >
+              {isActive && (
+                <motion.span
+                  layoutId="highlight"
+                  className="absolute h-[2px] right-0 left-0 bottom-0 bg-primary rounded-full"
+                ></motion.span>
+              )}
+              <button
+                // href={item.href}
+                className={cn(
+                  "w-full p-4 opacity-50 outline-none",
+                  isActive && "opacity-100"
+                )}
+              >
+                {item.title}
+              </button>
+            </motion.li>
+          );
+        })}
+      </motion.ul>
+      <div>{activeIndex === 0 ? <UserNotes /> : <UserSubscriptions />}</div>
     </main>
   );
 }
