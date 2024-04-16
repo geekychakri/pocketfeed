@@ -24,7 +24,7 @@ const config = {
         ...blackA,
         ...mauve,
         ...violet,
-        primary: "#ff5a1f",
+        primary: "#ff4f18",
       },
       keyframes: {
         slideDownAndFade: {
