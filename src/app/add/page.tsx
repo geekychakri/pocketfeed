@@ -7,6 +7,7 @@ import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import FolderSelect from "@/components/FolderSelect";
 
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import { SpinnerRotate } from "@/components/SpinnerRotate";
 
@@ -43,9 +44,30 @@ export default function Add() {
           url: urlValue,
         }),
       });
+      if (!res.ok) {
+        throw new Error("Something went wrong!");
+      }
       const data = await res.json();
+      if (!data.feedUrl) {
+        toast.info("Feed URL not found.", {
+          style: {
+            fontFamily: "var(--font-inter)",
+          },
+          className: "shadow-none text-base",
+        });
+        return;
+      }
       setRssData(data?.rssData);
-    } catch (err) {
+    } catch (error) {
+      let message;
+      if (error instanceof Error) message = error.message;
+      else message = String(error);
+      toast.info(message, {
+        style: {
+          fontFamily: "var(--font-inter)",
+        },
+        className: "shadow-none text-base",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -99,10 +121,8 @@ export default function Add() {
                 alt="favicon"
               />
             </div>
-            <h2 className="font-medium">
-              {rssData?.feedUrl?.title || rssData?.title}
-            </h2>
-            <p className="text-sm">{rssData?.url}</p>
+            <h2 className="font-medium">{rssData?.title}</h2>
+            <p className="text-sm break-words">{rssData?.url}</p>
           </div>
           <label className="flex flex-col gap-2">
             <span>Choose a folder</span>

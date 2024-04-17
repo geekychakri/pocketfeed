@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    font-family: var(--font-inter);
+  }
   body {
     overflow-x: hidden;
   }
