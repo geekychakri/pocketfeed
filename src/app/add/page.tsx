@@ -11,6 +11,8 @@ import { toast } from "sonner";
 
 import { SpinnerRotate } from "@/components/SpinnerRotate";
 
+import { checkIfObjectIsEmpty } from "@/lib/utils";
+
 type RssDataType = {
   url: string;
   title: string;
@@ -28,8 +30,7 @@ export default function Add() {
   const [rssData, setRssData] = useState<Partial<RssDataType>>({});
   const [isLoading, setIsLoading] = useState(false);
 
-  const isRssDataEmpty =
-    Object.keys(rssData).length === 0 && rssData.constructor === Object;
+  const isRssDataEmpty = checkIfObjectIsEmpty(rssData);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -45,29 +46,22 @@ export default function Add() {
         }),
       });
       if (!res.ok) {
-        throw new Error("Something went wrong!");
+        const text = await res.text();
+        console.log({ text });
+        throw new Error(text);
       }
       const data = await res.json();
-      if (!data.feedUrl) {
-        toast.info("Feed URL not found.", {
-          style: {
-            fontFamily: "var(--font-inter)",
-          },
-          className: "shadow-none text-base",
-        });
+      console.log(data);
+      if (checkIfObjectIsEmpty(data)) {
+        toast.message("Feed URL not found");
         return;
       }
-      setRssData(data?.rssData);
+      setRssData(data);
     } catch (error) {
       let message;
       if (error instanceof Error) message = error.message;
       else message = String(error);
-      toast.info(message, {
-        style: {
-          fontFamily: "var(--font-inter)",
-        },
-        className: "shadow-none text-base",
-      });
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }

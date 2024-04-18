@@ -27,7 +27,15 @@ export default function RootLayout({
       <body>
         <Navigation />
         {children}
-        <Toaster />
+        <Toaster
+          duration={3000}
+          toastOptions={{
+            style: {
+              fontFamily: "var(--font-inter)",
+            },
+            className: "shadow-none text-base",
+          }}
+        />
       </body>
     </html>
   );

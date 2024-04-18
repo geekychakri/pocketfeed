@@ -1,33 +1,40 @@
 import rssFinder from "rss-finder";
-
 import getMetaData from "metadata-scraper";
+
+import { getFeedUrlSchema } from "@/lib/zod/schemas";
+import { handleAndReturnErrorResponse } from "@/lib/api/errors";
 
 export async function POST(request: Request) {
   try {
-    const res = await request.json();
-    console.log(res);
-    const rssRes = await rssFinder(res.ur);
+    const bodyRaw = await request.json();
+    const body = getFeedUrlSchema.parse(bodyRaw);
+    const { url } = body;
+    const rssRes = await rssFinder(url);
     console.log(rssRes);
     const { site, feedUrls } = rssRes;
-    let rssData;
-    if (feedUrls.length >= 1 && res.url.includes("youtube.com")) {
-      const data = await getMetaData(res.url);
-      console.log(data);
-      rssData = {
-        ...site,
-        title: data.title,
-        favicon: data.image,
-        feedUrl: feedUrls[0],
-      };
+    if (feedUrls.length >= 1) {
+      let rssData;
+      if (url.includes("youtube.com")) {
+        const data = await getMetaData(url);
+        console.log(data);
+        rssData = {
+          ...site,
+          title: data.title,
+          favicon: data.image,
+          feedUrl: feedUrls[0],
+        };
+      } else {
+        rssData = {
+          ...site,
+          feedUrl: feedUrls[0],
+        };
+      }
+      console.log(rssData);
+      return Response.json(rssData);
     } else {
-      rssData = {
-        ...site,
-        feedUrl: feedUrls[0],
-      };
+      return Response.json({});
     }
-    console.log(rssData);
-    return Response.json({ rssData });
   } catch (err) {
-    return Response.json({ msg: "Something went wrong!" }, { status: 500 });
+    return handleAndReturnErrorResponse(err);
   }
 }
