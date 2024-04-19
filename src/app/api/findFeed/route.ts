@@ -14,22 +14,13 @@ export async function POST(request: Request) {
     const { site, feedUrls } = rssRes;
     if (feedUrls.length >= 1) {
       let rssData;
-      if (url.includes("youtube.com")) {
-        const data = await getMetaData(url);
-        console.log(data);
-        rssData = {
-          ...site,
-          title: data.title,
-          favicon: data.image,
-          feedUrl: feedUrls[0],
-        };
-      } else {
-        rssData = {
-          ...site,
-          feedUrl: feedUrls[0],
-        };
-      }
-      console.log(rssData);
+      const data = await getMetaData(url);
+      rssData = {
+        ...site,
+        title: data.title,
+        favicon: url.includes("youtube.com") ? data.image : data.icon,
+        feedUrl: feedUrls[0],
+      };
       return Response.json(rssData);
     } else {
       return Response.json({});

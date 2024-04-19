@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { ArrowLeftIcon } from "@radix-ui/react-icons";
+import { ArrowLeftIcon, Pencil2Icon } from "@radix-ui/react-icons";
 
 import FolderSelect from "@/components/FolderSelect";
 
@@ -109,13 +109,22 @@ export default function Add() {
             <div>
               <img
                 src={rssData?.favicon as string}
-                width={20}
-                height={20}
+                width={40}
+                height={40}
                 className="rounded-full"
                 alt="favicon"
               />
             </div>
-            <h2 className="font-medium">{rssData?.title}</h2>
+            <h2
+              contentEditable
+              spellCheck={false}
+              className="group/title flex items-center gap-1 font-medium focus:outline-primary"
+            >
+              <span>{rssData?.title}</span>
+              <span className="group-focus/title:hidden">
+                <Pencil2Icon />
+              </span>
+            </h2>
             <p className="text-sm break-words">{rssData?.url}</p>
           </div>
           <label className="flex flex-col gap-2">
