@@ -7,18 +7,21 @@ import { handleAndReturnErrorResponse } from "@/lib/api/errors";
 export async function POST(request: Request) {
   try {
     const bodyRaw = await request.json();
+    console.log(bodyRaw);
     const body = getFeedUrlSchema.parse(bodyRaw);
     const { url } = body;
+
     const rssRes = await rssFinder(url);
     console.log(rssRes);
     const { site, feedUrls } = rssRes;
     if (feedUrls.length >= 1) {
       let rssData;
-      const data = await getMetaData(url);
+      // const data = await getMetaData(url);
+      // console.log(data);
       rssData = {
         ...site,
-        title: data.title,
-        favicon: url.includes("youtube.com") ? data.image : data.icon,
+        // title: site.title,
+        favicon: url.includes("youtube.com") ? site.image : site.favicon,
         feedUrl: feedUrls[0],
       };
       return Response.json(rssData);

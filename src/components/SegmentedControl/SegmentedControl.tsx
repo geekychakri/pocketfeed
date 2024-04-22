@@ -34,6 +34,7 @@ const SegmentedControl = ({ items }: SegmentedControlProps): JSX.Element => {
             <Link
               href={item.href}
               className={cn("inline-block w-full p-4 outline-none")}
+              replace
             >
               {item.title}
             </Link>

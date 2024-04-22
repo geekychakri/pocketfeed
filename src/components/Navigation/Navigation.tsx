@@ -74,13 +74,13 @@ export default function Navigation() {
   return (
     <nav
       className={cn(
-        "flex items-center justify-between px-6 py-4",
+        "flex items-center justify-between px-6 h-[70px]",
         pathname !== "/" && "border-b"
       )}
     >
       <div className="flex items-center gap-5">
         <div>
-          <span>Pocket Feed</span>
+          <span className="font-medium">Pocket Feed</span>
         </div>
         {pathname.startsWith("/folder/") && (
           <>
@@ -94,7 +94,7 @@ export default function Navigation() {
       </div>
 
       {isUserLoggedIn ? (
-        <div className="flex items-center justify-end gap-8 w-[200px] h-[50px]">
+        <div className="flex items-center justify-end gap-8 w-[200px]">
           <AnimatePresence mode="wait">
             {isOffline ? (
               <motion.div
@@ -142,16 +142,16 @@ export default function Navigation() {
           </AnimatePresence>
         </div>
       ) : (
-        <div className="flex gap-6">
+        <div className="flex items-center gap-2">
           <Link
             href="signin"
-            className="border px-4 py-2 w-24 text-center rounded-lg cursor-pointer"
+            className="w-24 font-medium text-center rounded-lg cursor-pointer hover:text-primary duration-150"
           >
             Sign in
           </Link>
           <Link
             href="/join"
-            className="border px-4 py-2 w-24 text-center rounded-lg cursor-pointer bg-primary text-white"
+            className="py-1 w-24 font-medium border border-primary text-center rounded-md cursor-pointer hover:bg-primary hover:border-primary hover:text-white duration-150"
           >
             Join
           </Link>

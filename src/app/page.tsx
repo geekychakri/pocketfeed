@@ -5,8 +5,8 @@ export default function Home() {
         <h1 className="text-7xl tracking-tight text-center font-medium">
           All of your favorite content in one place.
         </h1>
-        <div className="self-center flex gap-7 font-medium">
-          <button className="bg-primary text-white text-xl px-6 py-3 rounded-lg">
+        <div className="self-center flex gap-7">
+          <button className="bg-primary text-white text-xl font-medium px-6 py-3 rounded-md">
             Join for free
           </button>
           <button className="text-xl">Watch Demo</button>

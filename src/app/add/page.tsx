@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { ArrowLeftIcon, Pencil2Icon } from "@radix-ui/react-icons";
 
@@ -11,7 +11,7 @@ import { toast } from "sonner";
 
 import { SpinnerRotate } from "@/components/SpinnerRotate";
 
-import { checkIfObjectIsEmpty } from "@/lib/utils";
+import { cn, checkIfObjectIsEmpty, isHttpValid } from "@/lib/utils";
 
 type RssDataType = {
   url: string;
@@ -29,11 +29,15 @@ export default function Add() {
   const [urlValue, setUrlValue] = useState("");
   const [rssData, setRssData] = useState<Partial<RssDataType>>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [showNewFolderInput, setShowNewFolderInput] = useState(false);
 
   const isRssDataEmpty = checkIfObjectIsEmpty(rssData);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // if (!isHttpValid(urlValue)) {
+    //   setUrlValue("https://" + urlValue);
+    // }
     setIsLoading(true);
     try {
       const res = await fetch("/api/findFeed", {
@@ -42,6 +46,7 @@ export default function Add() {
           "Content-type": "application/json",
         },
         body: JSON.stringify({
+          // url: isHttpValid(urlValue) ? urlValue : "https://" + urlValue,
           url: urlValue,
         }),
       });
@@ -81,18 +86,26 @@ export default function Add() {
           <input
             type="url"
             id="url"
-            required
-            placeholder="example.com"
+            placeholder="https://www.example.com"
+            autoComplete="off"
             className="px-4 py-2 rounded-md border focus:border-primary outline-none duration-100"
             onChange={(e) => {
               setRssData({});
               setUrlValue(e.target.value);
             }}
+            value={urlValue}
             spellCheck={false}
+            required
           />
         </label>
+
         {isRssDataEmpty && (
-          <button className="bg-primary flex items-center justify-center font-medium text-white px-4 py-2 h-12 rounded-md">
+          <button
+            className={cn(
+              "bg-primary flex items-center justify-center font-medium text-white px-4 py-2 h-12 rounded-md"
+            )}
+            disabled={isLoading}
+          >
             {isLoading ? (
               <span>
                 <SpinnerRotate />
@@ -117,6 +130,7 @@ export default function Add() {
             </div>
             <h2
               contentEditable
+              suppressContentEditableWarning
               spellCheck={false}
               className="group/title flex items-center gap-1 font-medium focus:outline-primary"
             >
@@ -128,9 +142,19 @@ export default function Add() {
             <p className="text-sm break-words">{rssData?.url}</p>
           </div>
           <label className="flex flex-col gap-2">
-            <span>Choose a folder</span>
-            <FolderSelect />
+            <span className="font-medium">Choose a folder</span>
+            <FolderSelect
+              onShowNewFolderInput={() => setShowNewFolderInput(true)}
+            />
           </label>
+          {showNewFolderInput && (
+            <input
+              type="text"
+              id="new-folder"
+              placeholder="New folder name"
+              className="px-4 py-2 rounded-md border focus:border-primary outline-none duration-100"
+            />
+          )}
           <button className="bg-primary font-medium text-white px-4 py-2 rounded-md">
             Add
           </button>

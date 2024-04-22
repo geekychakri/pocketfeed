@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import * as Select from "@radix-ui/react-select";
 
 import { cn } from "@/lib/utils";
@@ -12,16 +12,29 @@ import {
 
 const folders = ["Home", "Tech", "Music", "News", "Podcast"]; //TODO:
 
-const FolderSelect = () => {
-  //   const [value, setValue] = React.useState("france");
+const FolderSelect = ({
+  onShowNewFolderInput,
+}: {
+  onShowNewFolderInput: () => void;
+}) => {
+  const [value, setValue] = React.useState("Home");
+
   return (
-    <Select.Root>
+    <Select.Root
+      value={value}
+      onValueChange={(value) => {
+        if (value === "New Folder") {
+          onShowNewFolderInput();
+        }
+        setValue(value);
+      }}
+    >
       <Select.Trigger
-        className="inline-flex items-center justify-between rounded px-[15px] text-sm leading-none h-[40px] gap-[5px] border outline-none"
-        aria-label="Food"
+        className="inline-flex items-center justify-between rounded-md px-4 py-2 gap-[5px] border outline-none"
+        aria-label="folder"
       >
         <Select.Value placeholder="Select a folder" />
-        <Select.Icon className="text-violet11">
+        <Select.Icon className="text-primary">
           <ChevronDownIcon />
         </Select.Icon>
       </Select.Trigger>
@@ -38,6 +51,9 @@ const FolderSelect = () => {
                 </SelectItem>
               );
             })}
+            <SelectItem value="New Folder" key="new-folder">
+              Create a new folder
+            </SelectItem>
           </Select.Viewport>
 
           <Select.ScrollDownButton className="flex items-center justify-center h-[25px] bg-white cursor-default">
