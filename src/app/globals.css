@@ -5,9 +5,18 @@
 @layer base {
   html {
     font-family: var(--font-inter);
+    caret-color: #ff5a1f;
+    accent-color: #ff5a1f;
   }
   body {
     overflow-x: hidden;
+  }
+  html,
+  body {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    touch-action: manipulation;
   }
 }
 
@@ -23,4 +32,38 @@
   background-size: 100% 1px;
   background-position: left bottom;
   background-repeat: no-repeat;
+}
+
+article {
+  p,
+  table,
+  ul,
+  img {
+    margin: 1em 0 !important;
+    /* font-size: 20px; */
+  }
+
+  table {
+    border-collapse: collapse;
+
+    td,
+    th {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+    }
+  }
+
+  pre {
+    white-space: pre-wrap;
+    &:has(code) {
+      padding: 1em;
+      background: #f6f8fa;
+      border-radius: 5px;
+    }
+  }
+}
+
+::selection {
+  background: #ff5a1f;
+  color: #fff;
 }

@@ -10,8 +10,6 @@ const inter = Inter({
   display: "swap",
 });
 
-import Navigation from "@/components/Navigation";
-
 export const metadata: Metadata = {
   title: "Pocket Feed",
   description: "All of your favorite content in one place.",
@@ -25,7 +23,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body>
-        <Navigation />
         {children}
         <Toaster
           duration={3000}

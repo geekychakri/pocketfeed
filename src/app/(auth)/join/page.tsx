@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Join() {
   return (
-    <main className="flex flex-col gap-8 items-center justify-center py-20">
+    <>
       <h1 className="text-2xl font-medium tracking-tight">Logo</h1>
       <form className="flex flex-col gap-6 max-w-96 w-full">
         <label htmlFor="email" className="flex flex-col gap-2">
@@ -45,6 +45,6 @@ export default function Join() {
           </Link>
         </span>
       </form>
-    </main>
+    </>
   );
 }

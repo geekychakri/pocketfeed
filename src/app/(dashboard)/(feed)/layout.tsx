@@ -1,10 +1,3 @@
-import type { Metadata } from "next";
-
-// export const metadata: Metadata = {
-//   title: "Pocket Feed",
-//   description: "All of your favorite content in one place.",
-// };
-
 export default function FeedLayout({
   children,
 }: Readonly<{

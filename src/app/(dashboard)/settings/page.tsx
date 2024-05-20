@@ -1,5 +1,6 @@
 import RouteBack from "@/components/RouteBack/RouteBack";
 import FileUpload from "@/components/FileUpload";
+import Link from "next/link";
 
 export default function Settings() {
   return (
@@ -76,6 +77,14 @@ export default function Settings() {
         <div className="border rounded-md p-8">
           <h3>Notion</h3>
         </div>
+      </div>
+      <div>
+        <Link
+          href="/settings/import_export"
+          className="font-medium custom-underline"
+        >
+          Import and Export - Bring your OPML
+        </Link>
       </div>
       <div className="font-medium flex gap-4 [&>*]:flex-1 [&>*]:px-4 [&>*]:py-2 [&>*]:rounded-md [&>*]:text-[15px]">
         <button className="border">Logout</button>

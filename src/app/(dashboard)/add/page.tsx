@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { ArrowLeftIcon, Pencil2Icon } from "@radix-ui/react-icons";
 

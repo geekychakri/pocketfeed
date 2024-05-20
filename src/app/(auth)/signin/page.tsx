@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function SignIn() {
   return (
-    <main className="flex flex-col gap-8 items-center justify-center py-20">
+    <>
       <h1 className="text-2xl font-medium tracking-tight text-gray-700">
         Logo
       </h1>
@@ -46,6 +46,6 @@ export default function SignIn() {
           </span>
         </div>
       </form>
-    </main>
+    </>
   );
 }
