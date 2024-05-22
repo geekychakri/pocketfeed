@@ -67,3 +67,12 @@ article {
   background: #ff5a1f;
   color: #fff;
 }
+
+.juBESy > input {
+  opacity: 0;
+  position: absolute;
+}
+
+.outline-none {
+  outline: none !important;
+}

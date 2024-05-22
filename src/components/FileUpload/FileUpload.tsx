@@ -18,7 +18,12 @@ function FileUpload() {
   };
 
   return (
-    <FileUploader handleChange={handleChange} name="avatar" types={fileTypes}>
+    <FileUploader
+      handleChange={handleChange}
+      name="avatar"
+      types={fileTypes}
+      classes="outline-none"
+    >
       <div className="flex gap-6 border p-8 rounded-md">
         <div className="">
           <p>Avatar</p>
