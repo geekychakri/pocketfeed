@@ -1,5 +1,8 @@
 import Link from "next/link";
 
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
+
 export default function SignIn() {
   return (
     <>
@@ -13,27 +16,35 @@ export default function SignIn() {
         </p>
         <label htmlFor="email" className="flex flex-col gap-2">
           <span className="font-medium">Email address</span>
-          <input
+          {/* <input
             type="email"
             id="email"
             required
             placeholder="john@doe.com"
             className="px-4 py-2 rounded-md border focus:border-primary outline-none duration-100"
-          />
+          /> */}
+          <Input type="email" id="email" required placeholder="john@doe.com" />
         </label>
         <label htmlFor="password" className="flex flex-col gap-2">
           <span className="font-medium">Password</span>
-          <input
+          {/* <input
             type="password"
             id="password"
             required
             placeholder="••••••••"
             className="px-4 py-2 rounded-md border focus:border-primary outline-none duration-100"
+          /> */}
+          <Input
+            type="password"
+            id="password"
+            required
+            placeholder="••••••••"
           />
         </label>
-        <button className="bg-primary font-medium text-white px-4 py-2 rounded-md">
+        {/* <button className="bg-primary font-medium text-white px-4 py-2 rounded-md">
           Sign in
-        </button>
+        </button> */}
+        <Button>Sign in</Button>
         <div className="self-start flex flex-col gap-4">
           <Link href="/new-password" className="custom-underline self-start">
             Forgot your password?

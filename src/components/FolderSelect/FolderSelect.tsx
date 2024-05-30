@@ -15,7 +15,7 @@ const folders = ["Home", "Tech", "Music", "News", "Podcast"]; //TODO:
 const FolderSelect = ({
   onShowNewFolderInput,
 }: {
-  onShowNewFolderInput: () => void;
+  onShowNewFolderInput: (val: boolean) => void;
 }) => {
   const [value, setValue] = React.useState("Home");
 
@@ -24,7 +24,9 @@ const FolderSelect = ({
       value={value}
       onValueChange={(value) => {
         if (value === "New Folder") {
-          onShowNewFolderInput();
+          onShowNewFolderInput(true);
+        } else {
+          onShowNewFolderInput(false);
         }
         setValue(value);
       }}

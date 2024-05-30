@@ -1,15 +1,17 @@
 export default function Home() {
   return (
-    <div className="max-w-4xl mx-auto flex flex-col items-center justify-center gap-36 py-24">
+    <div className="max-w-4xl mx-auto flex flex-col items-center justify-center gap-36 py-20">
       <header className="flex flex-col gap-14">
-        <h1 className="text-7xl tracking-tight text-center font-medium">
-          All of your favorite content in one place.
+        <h1 className="flex flex-col text-8xl tracking-tighter text-center font-semibold">
+          <span>All of your favorite</span>
+          <span className="text-[#f84f39]">content</span>
+          <span>in one place.</span>
         </h1>
         <div className="self-center flex gap-7">
-          <button className="bg-primary text-white text-xl font-medium px-6 py-3 rounded-md">
+          <button className="w-56 bg-primary text-white text-xl font-medium px-6 py-3 rounded-md">
             Join for free
           </button>
-          <button className="text-xl">Watch Demo</button>
+          {/* <button className="text-xl">Watch Demo</button> */}
         </div>
       </header>
       <main className="flex flex-col gap-36">

@@ -144,7 +144,7 @@ export default function Add() {
           <label className="flex flex-col gap-2">
             <span className="font-medium">Choose a folder</span>
             <FolderSelect
-              onShowNewFolderInput={() => setShowNewFolderInput(true)}
+              onShowNewFolderInput={(val) => setShowNewFolderInput(val)}
             />
           </label>
           {showNewFolderInput && (

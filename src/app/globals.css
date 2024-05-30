@@ -2,14 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-primary: 248, 79, 57;
+}
+
 @layer base {
   html {
     font-family: var(--font-inter);
-    caret-color: #ff5a1f;
-    accent-color: #ff5a1f;
+    caret-color: #f84f39;
+    accent-color: #f84f39;
   }
   body {
     overflow-x: hidden;
+    /* background-color: #f9f2e2; */
   }
   html,
   body {
@@ -17,6 +22,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
@@ -76,3 +82,14 @@ article {
 .outline-none {
   outline: none !important;
 }
+
+input:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #fcfcfc, 0 0 0 4px #8f8f8f;
+}
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --color-primary: 124, 79, 57;
+  }
+} */

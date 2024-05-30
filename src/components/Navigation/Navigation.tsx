@@ -74,8 +74,8 @@ export default function Navigation() {
   return (
     <nav
       className={cn(
-        "flex items-center justify-between px-6 h-[70px]",
-        pathname !== "/" && "border-b"
+        "flex items-center justify-between px-12 h-[70px] border-t-[6px] border-primary",
+        pathname !== "/" && "shadow-[0_1px_0_0_rgba(0,0,0,0.05)]"
       )}
     >
       <div className="flex items-center gap-5">
@@ -142,16 +142,16 @@ export default function Navigation() {
           </AnimatePresence>
         </div>
       ) : (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-7">
           <Link
             href="signin"
-            className="w-24 font-medium text-center rounded-lg cursor-pointer hover:text-primary duration-150"
+            className=" font-medium text-center rounded-lg cursor-pointer hover:text-primary duration-150"
           >
             Sign in
           </Link>
           <Link
             href="/join"
-            className="py-1 w-24 font-medium border border-primary text-center rounded-md cursor-pointer hover:bg-primary hover:border-primary hover:text-white duration-150"
+            className="py-1 font-medium text-primary border-primary text-center rounded-md cursor-pointer"
           >
             Join
           </Link>
