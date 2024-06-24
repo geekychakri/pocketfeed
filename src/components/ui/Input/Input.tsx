@@ -5,9 +5,9 @@ export default forwardRef<HTMLInputElement, ComponentProps<"input">>(
     return (
       <input
         ref={ref}
-        className="px-4 py-2 rounded-md border focus:border-primary outline-none duration-100"
+        className="rounded-md border px-4 py-2 outline-none"
         {...rest}
       />
     );
-  }
+  },
 );

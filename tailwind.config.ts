@@ -65,6 +65,10 @@ const config = {
           },
           to: { opacity: "1", transform: "translate(-50%, -50%) scale(1)" },
         },
+        "caret-blink": {
+          "0%,70%,100%": { opacity: "1" },
+          "20%,50%": { opacity: "0" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -78,6 +82,7 @@ const config = {
           "slideRightAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)",
         overlayShow: "overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)",
         contentShow: "contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "caret-blink": "caret-blink 1.2s ease-out infinite",
       },
     },
   },

@@ -13,8 +13,12 @@
     accent-color: #f84f39;
   }
   body {
+    color: #1d1d1f;
     overflow-x: hidden;
+
     /* background-color: #f9f2e2; */
+    /* background: #f6f0ea;
+    color: #313131; */
   }
   html,
   body {
@@ -83,9 +87,13 @@ article {
   outline: none !important;
 }
 
-input:focus-visible {
+input:focus-visible,
+a:focus-visible,
+button:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px #fcfcfc, 0 0 0 4px #8f8f8f;
+  box-shadow:
+    0 0 0 2px #fcfcfc,
+    0 0 0 4px #f84f39;
 }
 
 /* @media (prefers-color-scheme: dark) {

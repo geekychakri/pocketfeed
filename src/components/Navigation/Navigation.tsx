@@ -11,6 +11,7 @@ import Dropdown from "../FolderDropdown";
 import ProfileAvatar from "../ProfileAvatar";
 
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@clerk/clerk-react";
 
 import { useNavigatorOnline } from "@/hooks/useNavigatorOnline";
 
@@ -68,33 +69,34 @@ const routePaths = ["/", "/join", "/signin"];
 
 export default function Navigation() {
   const pathname = usePathname();
-  let isUserLoggedIn = pathname === "/" ? false : true;
+  const {  isSignedIn } = useAuth();
+  // let isUserLoggedIn = pathname === "/" ? false : true;
 
   const { isOffline } = useNavigatorOnline();
   return (
     <nav
       className={cn(
-        "flex items-center justify-between px-12 h-[70px] border-t-[6px] border-primary",
-        pathname !== "/" && "shadow-[0_1px_0_0_rgba(0,0,0,0.05)]"
+        "flex h-[70px] items-center justify-between px-4",
+        pathname !== "/" && "shadow-[0_1px_0_0_rgba(0,0,0,0.05)]",
       )}
     >
       <div className="flex items-center gap-5">
         <div>
-          <span className="font-medium">Pocket Feed</span>
+          <span className="font-medium">Logo</span>
         </div>
         {pathname.startsWith("/folder/") && (
           <>
             <div className="flex items-center gap-5">
-              <hr className="border-0 bg-[#343434] w-[1px] h-4 rotate-[16deg]" />
+              <hr className="h-4 w-[1px] rotate-[16deg] border-0 bg-[#343434]" />
               <Dropdown />
             </div>
-            <Link href="/explore">Explore</Link>
+            {/* <Link href="/explore">Explore</Link> */}
           </>
         )}
       </div>
 
-      {isUserLoggedIn ? (
-        <div className="flex items-center justify-end gap-8 w-[200px]">
+      {isSignedIn ? (
+        <div className="flex w-[200px] items-center justify-end gap-8">
           <AnimatePresence mode="wait">
             {isOffline ? (
               <motion.div
@@ -135,7 +137,7 @@ export default function Navigation() {
                 animate="showAvatar"
                 exit="exitAvatar"
               >
-                <Link href="/add">Add</Link>
+                {/* <Link href="/add">Add</Link> */}
                 <ProfileAvatar />
               </motion.div>
             )}
@@ -145,13 +147,13 @@ export default function Navigation() {
         <div className="flex items-center gap-7">
           <Link
             href="signin"
-            className=" font-medium text-center rounded-lg cursor-pointer hover:text-primary duration-150"
+            className="cursor-pointer rounded-lg text-center font-medium duration-150 hover:text-primary"
           >
             Sign in
           </Link>
           <Link
             href="/join"
-            className="py-1 font-medium text-primary border-primary text-center rounded-md cursor-pointer"
+            className="cursor-pointer rounded-md border-primary py-1 text-center font-medium text-primary"
           >
             Join
           </Link>

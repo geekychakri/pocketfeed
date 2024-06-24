@@ -88,7 +88,7 @@ export default function Settings() {
       </div>
       <div className="font-medium flex gap-4 [&>*]:flex-1 [&>*]:px-4 [&>*]:py-2 [&>*]:rounded-md [&>*]:text-[15px]">
         <button className="border">Logout</button>
-        <button className="border">Reload app</button>
+        {/* <button className="border">Reload app</button> */}
         <button className="text-[#ea4a46] bg-[rgba(234,74,70,0.2)] border-0">
           Delete account
         </button>
