@@ -13,6 +13,11 @@
 /.next/
 /out/
 
+# xata
+/.xata/
+.xatarc
+src/xata.ts
+
 # production
 /build
 

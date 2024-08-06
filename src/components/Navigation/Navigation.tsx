@@ -69,7 +69,7 @@ const routePaths = ["/", "/join", "/signin"];
 
 export default function Navigation() {
   const pathname = usePathname();
-  const {  isSignedIn } = useAuth();
+  const { isSignedIn } = useAuth();
   // let isUserLoggedIn = pathname === "/" ? false : true;
 
   const { isOffline } = useNavigatorOnline();

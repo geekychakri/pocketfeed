@@ -1,4 +1,3 @@
 export default function Loading() {
-  // Or a custom loading skeleton component
   return <div className="p-4">Loading...</div>;
 }

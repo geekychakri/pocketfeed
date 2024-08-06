@@ -1,1 +1,1 @@
-declare module "rss-finder";
+// declare module "rss-finder";
