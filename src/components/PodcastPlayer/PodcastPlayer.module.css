@@ -1,114 +1,31 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-:root {
-  --color-primary: 248, 79, 57;
-}
-
-@layer base {
-  html {
-    font-family: var(--font-inter);
-    caret-color: #f84f39;
-    accent-color: #f84f39;
-  }
-  body {
-    color: #1d1d1f;
-    overflow-x: hidden;
-
-    /* background-color: #f9f2e2; */
-    /* background: #f6f0ea;
-    color: #313131; */
-  }
-  html,
-  body {
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-  }
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-    color: #ff5a1f;
-  }
-}
-
-.custom-underline {
-  background-image: linear-gradient(#000, #000);
-  background-size: 100% 1px;
-  background-position: left bottom;
-  background-repeat: no-repeat;
-}
-
-article {
-  p,
-  table,
-  ul,
-  img {
-    margin: 1em 0 !important;
-    /* font-size: 20px; */
-  }
-
-  table {
-    border-collapse: collapse;
-
-    td,
-    th {
-      border: 1px solid #ccc;
-      padding: 0.5em;
-    }
-  }
-
-  pre {
-    white-space: pre-wrap;
-    &:has(code) {
-      padding: 1em;
-      background: #f6f8fa;
-      border-radius: 5px;
-    }
-  }
-}
-
-::selection {
-  background: #ff5a1f;
-  color: #fff;
-}
-
-.juBESy > input {
-  opacity: 0;
-  position: absolute;
-}
-
-.outline-none {
-  outline: none !important;
-}
-
-input:focus-visible,
-a:focus-visible,
-button:focus-visible {
-  outline: none;
-  box-shadow:
-    0 0 0 2px #fcfcfc,
-    0 0 0 4px #f84f39;
-}
-
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --color-primary: 124, 79, 57;
-  }
-} */
-/* Podcast Player */
 .audioPlayer {
   --primary: #f40082;
   --secondary: #ffd200;
+  /* animation: 3s linear 5s 1 normal forwards running slideUp; */
+  /* animation-name: slideUp;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards; */
+  animation-name: slideUp;
+  /* animation-delay: 0.5s; */
+  animation-duration: 0.8s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-out;
+  transition: transform 0.8s cubic-bezier(0.5, 0, 0.5, 1);
+}
 
-  align-items: center;
-  display: flex;
-  width: 700px;
+@keyframes slideUp {
+  /* 100%,
+  5%,
+  80% {
+    bottom: 0;
+  } */
+  0% {
+    bottom: -288px;
+  }
+  100% {
+    bottom: 0;
+  }
 }
 
 .forwardBackward {
@@ -116,13 +33,15 @@ button:focus-visible {
   border: none;
   display: flex;
   align-items: center;
+  gap: 4px;
   font-family: monospace;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
+  font-weight: 600;
 }
 
 .forwardBackward:hover {
-  color: var(--primary);
+  /* color: var(--primary); */
 }
 
 .playPause {
@@ -150,15 +69,15 @@ button:focus-visible {
 }
 
 .currentTime {
-  margin-left: 25px;
+  /* margin-left: 25px; */
 }
 
 .progressBar {
-  --bar-bg: #ffe3d4;
+  --bar-bg: #777778;
   --seek-before-width: 0;
-  --seek-before-color: #ffc2a1;
-  --knobby: #3452a5;
-  --selectedKnobby: #26c9c3;
+  --seek-before-color: red;
+  --knobby: #f84f39;
+  --selectedKnobby: #ea432d;
 
   appearance: none;
   background: var(--bar-bg);
@@ -167,6 +86,9 @@ button:focus-visible {
   width: 100%;
   height: 11px;
   outline: none;
+  border: none;
+  touch-action: none;
+  user-select: none;
 }
 
 /* progress bar - safari */
@@ -201,6 +123,7 @@ button:focus-visible {
   background-color: var(--seek-before-color);
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
+  /* border-radius: 10px; */
   position: absolute;
   top: 0;
   left: 0;
@@ -219,48 +142,44 @@ button:focus-visible {
 /* knobby - chrome and safari */
 .progressBar::-webkit-slider-thumb {
   -webkit-appearance: none;
-  height: 15px;
-  width: 15px;
-  border-radius: 50%;
+  height: 20px;
+  width: 12px;
+  border-radius: 0px;
   border: none;
   background-color: var(--knobby);
   cursor: pointer;
   position: relative;
-  margin: -2px 0 0 0;
+  margin: -5px 0 0 0px;
   z-index: 3;
   box-sizing: border-box;
+  transition-duration: 0.2s;
+  /* transform: scale(1.2); */
 }
 
 /* knobby while dragging - chrome and safari */
 .progressBar:active::-webkit-slider-thumb {
+  /* transition-duration: 0.2s; */
   transform: scale(1.2);
   background: var(--selectedKnobby);
 }
 
 /* knobby - firefox */
 .progressBar::-moz-range-thumb {
-  height: 15px;
-  width: 15px;
-  border-radius: 50%;
-  border: transparent;
+  appearance: none;
+  height: 20px;
+  width: 12px;
+  border-radius: 0px;
+  border: none;
   background-color: var(--knobby);
   cursor: pointer;
   position: relative;
   z-index: 3;
   box-sizing: border-box;
+  transition-duration: 0.2s;
 }
 
 /* knobby while dragging - firefox */
 .progressBar:active::-moz-range-thumb {
   transform: scale(1.2);
   background: var(--selectedKnobby);
-}
-
-/*Custom AudioCSS*/
-audio::-webkit-media-controls-panel {
-  background-color: transparent;
-}
-
-audio::-webkit-media-controls-play-button {
-  display: none;
 }

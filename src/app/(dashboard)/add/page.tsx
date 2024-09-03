@@ -214,6 +214,8 @@ export default function Add() {
                 );
               })}
 
+              <input type="hidden" value={rssData?.favicon} name="favicon" />
+
               <div className="flex flex-col gap-3">
                 <FolderSelect />
               </div>

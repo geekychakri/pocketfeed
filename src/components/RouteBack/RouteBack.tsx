@@ -8,7 +8,7 @@ export default function RouteBack() {
 
   return (
     <button onClick={() => router.back()}>
-      <ArrowLeftIcon className="w-5 h-5" />
+      <ArrowLeftIcon className="h-5 w-5" />
     </button>
   );
 }

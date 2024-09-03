@@ -146,7 +146,7 @@ export default function Navigation() {
       ) : (
         <div className="flex items-center gap-7">
           <Link
-            href="signin"
+            href="/signin"
             className="cursor-pointer rounded-lg text-center font-medium duration-150 hover:text-primary"
           >
             Sign in

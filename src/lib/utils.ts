@@ -17,3 +17,5 @@ export function isHttpValid(str: string) {
     return false;
   }
 }
+
+export function relativeTime() {}
