@@ -11,6 +11,7 @@
     font-family: var(--font-inter);
     caret-color: #f84f39;
     accent-color: #f84f39;
+    scrollbar-gutter: stable;
   }
   body {
     color: #1d1d1f;
@@ -89,7 +90,8 @@ article {
 
 input:focus-visible,
 a:focus-visible,
-button:focus-visible {
+button:focus-visible,
+textarea:focus-visible {
   outline: none;
   box-shadow:
     0 0 0 2px #fcfcfc,

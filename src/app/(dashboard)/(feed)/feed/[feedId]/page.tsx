@@ -3,6 +3,8 @@ import Parser from "rss-parser";
 import Link from "next/link";
 import RouteBack from "@/components/RouteBack/RouteBack";
 
+import { currentUser } from "@clerk/nextjs/server";
+
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import PodcastPlayButton from "./components/PodcastPlayButton";
@@ -16,13 +18,16 @@ const xata = getXataClient();
 const parser = new Parser();
 
 export default async function Feed({ params }: { params: { feedId: string } }) {
+  const user = await currentUser();
+
   const feed = await xata.db.feeds
     .filter({
-      username: "test",
+      username: user?.username,
       feedId: params.feedId,
     })
     .getMany();
-  console.log({ favicon: feed[0].favicon });
+  console.log(feed);
+  // console.log({ favicon: feed[0].favicon });
 
   let feedList = await parser.parseURL(feed[0].rssURL as string);
 

@@ -67,7 +67,7 @@ const itemOfflineText = {
 
 const routePaths = ["/", "/join", "/signin"];
 
-export default function Navigation() {
+export default function Navigation({ avatarUrl }: { avatarUrl: string }) {
   const pathname = usePathname();
   const { isSignedIn } = useAuth();
   // let isUserLoggedIn = pathname === "/" ? false : true;
@@ -138,7 +138,7 @@ export default function Navigation() {
                 exit="exitAvatar"
               >
                 {/* <Link href="/add">Add</Link> */}
-                <ProfileAvatar />
+                <ProfileAvatar avatarUrl={avatarUrl} />
               </motion.div>
             )}
           </AnimatePresence>

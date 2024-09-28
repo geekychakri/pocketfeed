@@ -11,7 +11,9 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center gap-32 py-20">
       <header className="flex flex-col gap-14">
-        <h1 className={`flex flex-col text-center text-8xl font-semibold leading-none tracking-tight ${InstrumentSerif.className}`}>
+        <h1
+          className={`flex flex-col text-center text-8xl leading-none tracking-tight ${InstrumentSerif.className}`}
+        >
           <span>All of your favorite</span>
           <span className={`text-[#f84f39] ${InstrumentSerif.className}`}>
             content

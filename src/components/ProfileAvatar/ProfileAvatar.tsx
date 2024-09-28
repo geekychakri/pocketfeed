@@ -31,14 +31,14 @@ const AvatarDropdownItem = ({
   </Link>
 );
 
-export default function ProfileAvatar() {
+export default function ProfileAvatar({ avatarUrl }: { avatarUrl: string }) {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
         <Avatar className="inline-flex h-[45px] w-[45px] select-none items-center justify-center overflow-hidden rounded-full bg-blackA1 align-middle">
           <AvatarImage
             className="h-full w-full rounded-[inherit] border-2 object-cover"
-            src="https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?&w=128&h=128&dpr=2&q=80"
+            src={avatarUrl}
             alt="Colm Tuite"
           />
           <AvatarFallback

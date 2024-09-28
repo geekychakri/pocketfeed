@@ -3,6 +3,10 @@ import { redirect } from "next/navigation";
 import qs from "qs";
 import { nanoid } from "nanoid";
 
+import { auth } from "@clerk/nextjs/server";
+
+import { currentUser } from "@clerk/nextjs/server";
+
 import { getXataClient } from "@/xata";
 
 const xata = getXataClient();
@@ -18,6 +22,8 @@ type FeedsType = {
 };
 
 export async function addFeeds(prevState: any, formData: FormData) {
+  const user = await currentUser();
+  console.log({ username: user?.username });
   const results = qs.parse(
     Object.fromEntries(formData.entries()) as {},
   ) as FeedsType;
@@ -34,7 +40,7 @@ export async function addFeeds(prevState: any, formData: FormData) {
           title: item?.title,
           folder: results.folder,
           favicon: results.favicon,
-          username: "test", //TODO:
+          username: user?.username, //TODO:
           feedId,
         };
       });
@@ -45,7 +51,7 @@ export async function addFeeds(prevState: any, formData: FormData) {
         folder: results.folder,
         favicon: results.favicon,
         title: item?.title,
-        username: "test",
+        username: user?.username,
         feedId,
       };
     });
@@ -62,4 +68,45 @@ export async function addFeeds(prevState: any, formData: FormData) {
 
   redirect(`/folder/${results.folder}`);
   console.log("DONE");
+}
+
+export async function createUser(email: string, username: string) {
+  try {
+    // Mutate data
+    const record = await xata.db.users.create({
+      email,
+      username,
+    });
+    return { message: "success" };
+  } catch (e) {
+    throw new Error("Failed to create user");
+  }
+}
+
+export async function updateProfile(prevState: any, formData: FormData) {
+  const fullname = formData.get("fullname") as string;
+  const website = formData.get("website") as string;
+  const bio = formData.get("bio") as string;
+
+  console.log({ fullname, website, bio });
+
+  const { userId }: { userId: string | null } = auth();
+
+  try {
+    const user = await xata.db.users.filter({ clerkUserId: userId }).getFirst();
+    // await user?.update({
+    //   fullname,
+    //   website,
+    //   bio,
+    // });
+    const updateUser = await xata.db.users.update(user?.id as string, {
+      fullname,
+      website,
+      bio,
+    });
+
+    return { message: "Profile updated successfully!" };
+  } catch (err) {
+    return { message: "Something went wrong!" };
+  }
 }

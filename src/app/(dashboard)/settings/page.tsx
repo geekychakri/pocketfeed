@@ -2,94 +2,80 @@ import RouteBack from "@/components/RouteBack/RouteBack";
 import FileUpload from "@/components/FileUpload";
 import Link from "next/link";
 
-export default function Settings() {
+import ProfileForm from "@/components/ProfileForm";
+
+import { auth } from "@clerk/nextjs/server";
+
+import { getXataClient, UsersRecord } from "@/xata";
+import { XataFile } from "@xata.io/client";
+const xata = getXataClient();
+
+export default async function Settings() {
+  const { userId }: { userId: string | null } = auth();
+  console.log({ userId });
+  const user = (await xata.db.users
+    .filter({ clerkUserId: userId })
+    .getFirst()) as UsersRecord;
+
+  const avatarUrl = user.avatar?.transform({
+    width: 64,
+    height: 64,
+    format: "webp",
+  });
+
+  console.log(user);
+
+  const { avatar, ...rest } = user;
+  const userInfo = rest;
+  // const userInfo = (({ fullname, website, bio }) => ({
+  //   fullname,
+  //   website,
+  //   bio,
+  // }))(user) as { fullname: string; website: string; bio: string }; //TODO:
+
+  // const { fullname, website, bio } = user as UsersRecord;
   return (
-    <main className="flex flex-col gap-8 w-full max-w-[520px] mx-auto py-20">
+    <main className="mx-auto flex w-full max-w-[520px] flex-col gap-8 py-20">
       <h1 className="flex items-center gap-4 font-medium">
         <RouteBack />
         <span className="text-xl">Settings</span>
       </h1>
-      <div className="flex items-center justify-between border rounded-md p-8">
+      <div className="flex items-center justify-between rounded-md border p-8">
         <div className="flex flex-col gap-2">
           <h2 className="font-medium">Membership Status</h2>
-          <span className="bg-[#eee] px-2 py-1 text-sm rounded-md self-start">
+          <span className="self-start rounded-md bg-[#eee] px-2 py-1 text-sm">
             Free
           </span>
         </div>
-        <button className="bg-primary inline px-4 py-2 text-white rounded-md font-medium">
+        <button className="inline rounded-md bg-primary px-4 py-2 font-medium text-white">
           Change
         </button>
       </div>
       <div>
-        <FileUpload />
+        <FileUpload
+          username={userInfo.username as string}
+          avatarUrl={avatarUrl?.url as string}
+        />
       </div>
-      <form className="flex flex-col gap-6">
-        <label htmlFor="username" className="flex flex-col gap-2">
-          <span className="font-medium">Username</span>
-          <input
-            type="text"
-            id="username"
-            placeholder="john@doe.com"
-            className="px-4 py-2 rounded-md border focus:border-primary outline-none duration-100"
-          />
-        </label>
-        <label htmlFor="email" className="flex flex-col gap-2">
-          <span className="font-medium">Email address</span>
-          <input
-            type="email"
-            id="email"
-            placeholder="john@doe.com"
-            className="px-4 py-2 rounded-md border focus:border-primary outline-none duration-100"
-          />
-        </label>
-        <label htmlFor="fullname" className="flex flex-col gap-2">
-          <span className="font-medium">Full name</span>
-          <input
-            type="text"
-            id="fullname"
-            placeholder="Geeky Chakri"
-            className="px-4 py-2 rounded-md border focus:border-primary outline-none duration-100"
-          />
-        </label>
-        <label htmlFor="website" className="flex flex-col gap-2">
-          <span className="font-medium">Website</span>
-          <input
-            type="text"
-            id="website"
-            className="px-4 py-2 rounded-md border focus:border-primary outline-none duration-100"
-            placeholder="geekychakri.github.io"
-          />
-        </label>
-        <label htmlFor="bio" className="flex flex-col gap-2">
-          <span className="font-medium">Bio</span>
-          <textarea
-            id="bio"
-            placeholder="I love reading blogs..."
-            className="px-4 py-2 min-h-24 rounded-md border focus:border-primary scroll-pb-2 outline-none duration-100"
-          />
-        </label>
-        <button className="bg-primary font-medium text-white px-4 py-2 rounded-md">
-          Save
-        </button>
-      </form>
+      <ProfileForm userInfo={userInfo} />
       <div className="flex flex-col gap-2">
         <h2 className="font-medium">Integrations</h2>
-        <div className="border rounded-md p-8">
+        <div className="rounded-md border p-8">
           <h3>Notion</h3>
         </div>
       </div>
       <div>
         <Link
           href="/settings/import_export"
-          className="font-medium custom-underline"
+          className="custom-underline font-medium"
         >
           Import and Export - Bring your OPML
         </Link>
       </div>
-      <div className="font-medium flex gap-4 [&>*]:flex-1 [&>*]:px-4 [&>*]:py-2 [&>*]:rounded-md [&>*]:text-[15px]">
+      <div className="flex gap-4 font-medium [&>*]:flex-1 [&>*]:rounded-md [&>*]:px-4 [&>*]:py-2 [&>*]:text-[15px]">
         <button className="border">Logout</button>
         {/* <button className="border">Reload app</button> */}
-        <button className="text-[#ea4a46] bg-[rgba(234,74,70,0.2)] border-0">
+        <button className="border-0 bg-[rgba(234,74,70,0.2)] text-[#ea4a46]">
           Delete account
         </button>
       </div>

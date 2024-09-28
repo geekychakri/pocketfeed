@@ -99,6 +99,10 @@ const AudioPlayer = () => {
     }
   };
 
+  if (!show) {
+    return null;
+  }
+
   return (
     <div
       className={`${styles.audioPlayer} fixed -bottom-72 left-0 right-0 flex items-center gap-5 bg-gray-100 p-4 ${show === "hide" ? "translate-y-80" : ""}`}
