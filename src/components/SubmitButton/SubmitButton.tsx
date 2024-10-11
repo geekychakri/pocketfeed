@@ -1,17 +1,46 @@
 "use client";
 
+import { ComponentProps, ReactNode, forwardRef } from "react";
+import { cn } from "@/lib/utils";
 import { useFormStatus } from "react-dom";
 
 import { SpinnerRotate } from "../SpinnerRotate";
 
-export default function SubmitButton({ text }: { text: string }) {
+type ButtonProps = {
+  icon?: ReactNode;
+  children: ReactNode;
+  className?: string;
+};
+
+// export default function SubmitButton({ text }: { text: string }) {
+//   const { pending } = useFormStatus();
+//   return (
+//     <button
+//       className="flex h-11 w-full items-center justify-center rounded-md bg-primary px-4 py-2 font-medium text-white"
+//       disabled={pending}
+//     >
+//       {pending ? <SpinnerRotate /> : text}
+//     </button>
+//   );
+// }
+
+export default forwardRef<
+  HTMLButtonElement,
+  ComponentProps<"button"> & ButtonProps
+>(function SubmitButton({ icon, children, className, ...rest }, ref) {
   const { pending } = useFormStatus();
   return (
     <button
-      className="flex h-11 w-full items-center justify-center rounded-md bg-primary px-4 py-2 font-medium text-white"
-      disabled={pending}
+      ref={ref}
+      className={cn(
+        "flex h-11 w-[160px] items-center justify-center rounded-md bg-primary px-4 py-2 font-medium text-white",
+        className,
+      )}
+      aria-disabled={pending}
+      {...rest}
     >
-      {pending ? <SpinnerRotate /> : text}
+      {icon}
+      {pending ? <SpinnerRotate /> : children}
     </button>
   );
-}
+});

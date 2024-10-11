@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Cross1Icon } from "@radix-ui/react-icons";
+import { cn } from "@/lib/utils";
 
 export default function Modal({
   open,
@@ -11,6 +12,7 @@ export default function Modal({
   onOpenChange?: (open: boolean) => void;
   children: ReactNode;
 }) {
+  console.log({ open });
   return (
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
       {children}
@@ -23,14 +25,14 @@ export const ModalContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ title, children, ...props }, forwardedRef) => (
   <DialogPrimitive.Portal>
-    <DialogPrimitive.Overlay className="bg-[#ffffffcc] data-[state=open]:animate-overlayShow fixed inset-0 backdrop-blur-[3px]" />
+    <DialogPrimitive.Overlay className="fixed inset-0 bg-[#ffffffcc] backdrop-blur-[3px] data-[state=open]:animate-overlayShow" />
     <DialogPrimitive.Content
       {...props}
       ref={forwardedRef}
-      className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md bg-white border border-[#ededed] shadow-[0_8px_30px_0px_rgba(0,0,0,0.12)] p-[25px] focus:outline-none"
+      className="fixed left-[50%] top-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-lg border border-[#ededed] bg-[#f7f7f8] py-[25px] shadow-[0_8px_30px_0px_rgba(0,0,0,0.12)] focus:outline-none data-[state=open]:animate-contentShow"
     >
-      <div className="flex items-center justify-between">
-        <DialogPrimitive.Title className="text-lg">
+      <div className="mb-[16px] flex items-center justify-between px-[25px]">
+        <DialogPrimitive.Title className="text-lg font-medium">
           {title}
         </DialogPrimitive.Title>
         <DialogPrimitive.Close aria-label="Close">

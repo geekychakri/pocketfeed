@@ -110,3 +110,44 @@ export async function updateProfile(prevState: any, formData: FormData) {
     return { message: "Something went wrong!" };
   }
 }
+
+export async function addNewFolder(prevState: any, formData: FormData) {
+  const { userId }: { userId: string | null } = auth();
+  const folder = formData.get("folder") as string;
+  const folderExists = await xata.db.folders
+    .filter({ userId, folder })
+    .getFirstOrThrow();
+
+  if (!folderExists) {
+    const newFolder = await xata.db.folders.create({
+      userId,
+      folder,
+    });
+    console.log({ newFolder });
+
+    // if (!res.ok) {
+    //   return { message: 'Please enter a valid email' }
+    // }
+
+    // redirect(`/folder/${folder}`);
+
+    return { message: "success", id: newFolder.id };
+  } else {
+    return { message: "Folder already exists!", id: "" };
+  }
+}
+
+export async function deleteFolder(prevState: any, formData: FormData) {
+  const { userId }: { userId: string | null } = auth();
+  const folderId = formData.get("folderId") as string;
+  console.log({ folderId });
+  const deletedFolder = await xata.db.folders.delete(folderId); //Filter Delete TODO:
+
+  // if (!res.ok) {
+  //   return { message: 'Please enter a valid email' }
+  // }
+
+  // redirect(`/folder/${folder}`);
+
+  return { message: "success" };
+}

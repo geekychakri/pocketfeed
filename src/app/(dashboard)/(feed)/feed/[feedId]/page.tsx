@@ -29,14 +29,16 @@ export default async function Feed({ params }: { params: { feedId: string } }) {
   console.log(feed);
   // console.log({ favicon: feed[0].favicon });
 
-  let feedList = await parser.parseURL(feed[0].rssURL as string);
+  const feedList = await parser.parseURL(feed[0].rssURL as string);
 
-  // console.log(feedList);
+  console.log(feedList);
+
+  console.log(feedList?.image?.url);
   return (
     <div className="flex flex-col gap-6 p-4">
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-4">
         <RouteBack />
-        <span className="font-medium">{feedList?.title}</span>
+        <span className="text-lg font-semibold">{feedList?.title}</span>
       </div>
       {/* <p>{params.feedname.split("-").join(" ")}</p> */}
       {feedList.items
@@ -49,24 +51,27 @@ export default async function Feed({ params }: { params: { feedId: string } }) {
               <PodcastCard
                 key={i}
                 item={item}
-                albumCover={feed[0].favicon as string}
+                albumCover={feedList?.image?.url as string}
               />
             );
           } else if (item.link?.includes("youtube.com")) {
             return (
               <div
                 key={i}
-                className="flex flex-col gap-3 rounded-md bg-[#f7f7f8] p-4"
+                className="flex flex-col gap-4 rounded-md border bg-[#f7f7f8] p-4"
               >
-                <span className="flex flex-col gap-1">
-                  <span className="font-semibold">{item.title}</span>
-                  <span className="line-clamp-2 text-gray-600">
-                    {item.contentSnippet}
+                <span>
+                  <span className="flex flex-col gap-1">
+                    <span className="font-semibold">{item.title}</span>
+                    <span className="line-clamp-2 text-gray-600">
+                      {item.contentSnippet}
+                    </span>
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    {dayjs().to(dayjs(item.isoDate))}
                   </span>
                 </span>
-                <span className="text-sm text-gray-500">
-                  {dayjs().to(dayjs(item.isoDate))}
-                </span>
+
                 <div>
                   <YouTubePlayButton youtubeId={item.id.split(":")[2]} />
                 </div>
@@ -81,10 +86,9 @@ export default async function Feed({ params }: { params: { feedId: string } }) {
                   : `/read/${encodeURIComponent(`${feedList.link}/${item.link}` as string)}`
               }
               key={i}
-              className="flex flex-col gap-3 rounded-md bg-[#f7f7f8] p-4"
+              className="flex flex-col gap-3 rounded-md border bg-[#f7f7f8] p-4"
               prefetch={false}
             >
-              <div className="text-3xl">Hello</div>
               <span className="flex flex-col gap-1">
                 <span className="font-semibold">{item.title}</span>
                 <span className="line-clamp-2 text-gray-600">
@@ -99,6 +103,14 @@ export default async function Feed({ params }: { params: { feedId: string } }) {
           );
         })}
       {feedList.link?.includes("youtube.com") && <YouTubeModal />}
+      <a
+        target="_blank"
+        href={feedList.link}
+        rel="noreferrer noopener"
+        className="rounded-md bg-primary p-2 text-center text-white"
+      >
+        Visit original page
+      </a>
     </div>
   );
 }
@@ -110,19 +122,23 @@ const PodcastCard = ({
   item: any;
   albumCover: string;
 }) => {
+  // console.log({ item });
   const title = item.title;
   const audioUrl = item.enclosure.url;
+  // const coverImage = item.itunes.image;
   return (
-    <div className="flex flex-col gap-3 rounded-md bg-[#f7f7f8] p-4">
-      <span className="flex flex-col gap-1">
-        <span className="font-semibold">{item.title}</span>
-        <span className="line-clamp-2 text-gray-600">
-          {item.contentSnippet}
+    <div className="flex flex-col gap-4 rounded-md border bg-[#f7f7f8] p-4">
+      <span className="flex flex-col gap-3">
+        <span className="flex flex-col gap-1">
+          <span className="font-semibold">{item.title}</span>
+          <span className="line-clamp-2 text-gray-600">
+            {item.contentSnippet}
+          </span>
         </span>
-      </span>
 
-      <span className="text-sm text-gray-500">
-        {dayjs().to(dayjs(item.isoDate))}
+        <span className="text-sm text-gray-500">
+          {dayjs().to(dayjs(item.isoDate))}
+        </span>
       </span>
 
       {item.enclosure?.length && (

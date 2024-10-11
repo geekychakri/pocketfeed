@@ -10,10 +10,16 @@ import Dropdown from "../FolderDropdown";
 
 import ProfileAvatar from "../ProfileAvatar";
 
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useMotionValueEvent,
+} from "framer-motion";
 import { useAuth } from "@clerk/clerk-react";
 
 import { useNavigatorOnline } from "@/hooks/useNavigatorOnline";
+import { use, useState } from "react";
 
 const containerVariants = {
   hideAvatar: {
@@ -67,17 +73,43 @@ const itemOfflineText = {
 
 const routePaths = ["/", "/join", "/signin"];
 
-export default function Navigation({ avatarUrl }: { avatarUrl: string }) {
+export default function Navigation({
+  avatarUrl,
+  foldersList,
+}: {
+  avatarUrl: string;
+  foldersList: { id: string; folder: string }[];
+}) {
   const pathname = usePathname();
   const { isSignedIn } = useAuth();
   // let isUserLoggedIn = pathname === "/" ? false : true;
 
+  const [showBottomShadow, setShowBottomShadow] = useState(false);
+
+  const { scrollY } = useScroll();
+
+  useMotionValueEvent(scrollY, "change", (y) => {
+    if (y > 100) {
+      setShowBottomShadow(true);
+    } else {
+      setShowBottomShadow(false);
+    }
+  });
   const { isOffline } = useNavigatorOnline();
   return (
-    <nav
+    <motion.nav
+      animate={showBottomShadow ? "show" : "hide"}
+      variants={{
+        show: {
+          boxShadow: "0 1px 0 0 rgba(0,0,0,0.05)",
+        },
+        hide: {
+          boxShadow: "none",
+        },
+      }}
+      transition={{ duration: 0.2 }}
       className={cn(
-        "flex h-[70px] items-center justify-between px-4",
-        pathname !== "/" && "shadow-[0_1px_0_0_rgba(0,0,0,0.05)]",
+        "sticky top-0 flex h-[70px] items-center justify-between bg-[#fff] px-4",
       )}
     >
       <div className="flex items-center gap-5">
@@ -88,7 +120,7 @@ export default function Navigation({ avatarUrl }: { avatarUrl: string }) {
           <>
             <div className="flex items-center gap-5">
               <hr className="h-4 w-[1px] rotate-[16deg] border-0 bg-[#343434]" />
-              <Dropdown />
+              <Dropdown foldersList={foldersList} />
             </div>
             {/* <Link href="/explore">Explore</Link> */}
           </>
@@ -159,6 +191,6 @@ export default function Navigation({ avatarUrl }: { avatarUrl: string }) {
           </Link>
         </div>
       )}
-    </nav>
+    </motion.nav>
   );
 }

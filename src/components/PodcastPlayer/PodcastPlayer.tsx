@@ -24,7 +24,7 @@ type PodcastPlayerProps = {
   audioUrl: string;
 };
 
-const AudioPlayer = () => {
+const PodcastPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
@@ -99,16 +99,60 @@ const AudioPlayer = () => {
     }
   };
 
+  useEffect(() => {
+    if ("mediaSession" in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: "DEMO",
+        artist: "Rick Astley",
+        album: "Whenever You Need Somebody",
+        artwork: [
+          {
+            src: "https://dummyimage.com/96x96",
+            sizes: "96x96",
+            type: "image/png",
+          },
+          {
+            src: "https://dummyimage.com/128x128",
+            sizes: "128x128",
+            type: "image/png",
+          },
+          {
+            src: "https://dummyimage.com/192x192",
+            sizes: "192x192",
+            type: "image/png",
+          },
+          {
+            src: "https://dummyimage.com/256x256",
+            sizes: "256x256",
+            type: "image/png",
+          },
+          {
+            src: "https://dummyimage.com/384x384",
+            sizes: "384x384",
+            type: "image/png",
+          },
+          {
+            src: "https://dummyimage.com/512x512",
+            sizes: "512x512",
+            type: "image/png",
+          },
+        ],
+      });
+    }
+  }, []);
+
   if (!show) {
     return null;
   }
 
   return (
     <div
-      className={`${styles.audioPlayer} fixed -bottom-72 left-0 right-0 flex items-center gap-5 bg-gray-100 p-4 ${show === "hide" ? "translate-y-80" : ""}`}
+      className={`${styles.audioPlayer} fixed -bottom-72 left-0 right-0 flex items-center gap-5 border-t bg-gray-100 p-4 ${show === "hide" ? "translate-y-80" : ""}`}
     >
       <div>
-        <div className="size-32 bg-yellow-300 max-sm:hidden"></div>
+        <div className="size-32 bg-yellow-300 max-sm:hidden">
+          <img src={albumCover} alt="" className="max-w-full object-contain" />
+        </div>
       </div>
       <div className="flex flex-1 flex-col gap-5">
         <div className="flex justify-between">
@@ -206,4 +250,4 @@ const AudioPlayer = () => {
   );
 };
 
-export default AudioPlayer;
+export default PodcastPlayer;

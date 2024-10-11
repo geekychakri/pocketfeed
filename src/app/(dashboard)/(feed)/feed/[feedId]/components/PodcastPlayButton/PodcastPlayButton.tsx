@@ -14,7 +14,7 @@ export default function PodcastPlayButton({
     useShowPodcastPlayer();
   return (
     <button
-      className="rounded-md border-2 border-black px-4 py-1 font-medium"
+      className="flex items-center gap-1 rounded-md border-2 bg-white px-4 py-1 text-base font-medium text-[#e62117]"
       onClick={() => {
         openPodcastPlayer();
         setAlbumCover(albumCover);
@@ -22,7 +22,7 @@ export default function PodcastPlayButton({
         setAudioUrl(audioUrl);
       }}
     >
-      Play
+      Listen Now
     </button>
   );
 }

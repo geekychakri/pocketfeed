@@ -33,7 +33,7 @@ const AvatarDropdownItem = ({
 
 export default function ProfileAvatar({ avatarUrl }: { avatarUrl: string }) {
   return (
-    <DropdownMenu.Root>
+    <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger asChild>
         <Avatar className="inline-flex h-[45px] w-[45px] select-none items-center justify-center overflow-hidden rounded-full bg-blackA1 align-middle">
           <AvatarImage

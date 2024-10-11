@@ -23,14 +23,14 @@ export default function ProfileForm({ userInfo }: { userInfo: UsersRecord }) {
 
   const { username, email, fullname, website, bio } = userInfo as UsersRecord;
 
-  const [state, formAction] = useFormState(updateProfile, initialState);
+  const [formState, formAction] = useFormState(updateProfile, initialState);
 
   useEffect(() => {
-    if (state?.message) {
+    if (formState?.message) {
       console.log("state msg");
-      toast.error(state?.message);
+      toast.error(formState?.message);
     }
-  }, [state]);
+  }, [formState]);
 
   return (
     <form action={formAction} className="flex flex-col gap-6">
@@ -90,7 +90,7 @@ export default function ProfileForm({ userInfo }: { userInfo: UsersRecord }) {
       {/* <button className="rounded-md bg-primary px-4 py-2 font-medium text-white">
         Save
       </button> */}
-      <SubmitButton text="Save" />
+      <SubmitButton>Save</SubmitButton>
     </form>
   );
 }

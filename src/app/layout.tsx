@@ -11,6 +11,8 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 
+import { GeistSans } from "geist/font/sans";
+
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -29,7 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className={inter.variable}>
+      <html lang="en" className={GeistSans.className}>
         <body>
           {children}
           <Toaster

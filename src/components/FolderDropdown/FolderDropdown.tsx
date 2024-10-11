@@ -1,36 +1,117 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { CaretSortIcon, PlusIcon, TrashIcon } from "@radix-ui/react-icons";
+import {
+  CaretSortIcon,
+  ExclamationTriangleIcon,
+  PlusIcon,
+  TrashIcon,
+} from "@radix-ui/react-icons";
+import SubmitButton from "../SubmitButton";
 
 import { useRouter, usePathname } from "next/navigation";
+import { useFormState } from "react-dom";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import FolderItem from "../FolderItem";
 
 import Modal from "../Modal/Modal";
 
-const folders = ["Home", "Tech", "Music", "News", "Podcast"]; //TODO:
+import Input from "../ui/Input";
 
-const DropdownMenuDemo = () => {
+import { addNewFolder, deleteFolder } from "@/app/actions";
+import Button from "../ui/Button";
+import { toast } from "sonner";
+
+// const folders = ["Tech", "Music", "News"];
+
+const list = ["Biology"];
+
+const folders = ["Home", "Tech", "News", "Science", ...list]; //TODO:
+
+const DropdownMenuDemo = ({
+  foldersList,
+}: {
+  foldersList: { id: string; folder: string }[];
+}) => {
+  const getFolderId = () =>
+    foldersList.find(
+      (folder) => folder.folder === decodeURIComponent(pathname.split("/")[2]),
+    )?.id;
+
+  // const [folders, setFolders] = useState([
+  //   { id: "", folder: "Home" },
+  //   ...foldersList,
+  // ]);
+  const [folders, setFolders] = useState([...foldersList]);
   const pathname = usePathname();
   const router = useRouter();
 
-  const [open, setOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isMissingFolderModalOpen, setIsMissingFolderModalOpen] =
+    useState(false);
 
   const [selectedFolder, setSelectedFolder] = useState(
-    pathname.split("/")[2] || "Home"
+    decodeURIComponent(pathname.split("/")[2]) || foldersList[0].folder,
   );
   const [folderIndex, setFolderIndex] = useState(0);
   const [pressArrowKey, setPressArrowkey] = useState(false);
+  const [folderId, setFolderId] = useState(getFolderId);
+
+  const newFolderInputRef = useRef<HTMLInputElement | null>(null);
+
+  const [formState, formAction] = useFormState(addNewFolder, {
+    message: "",
+    id: "",
+  });
+
+  const [deleteFormState, deleteFormAction] = useFormState(deleteFolder, {
+    message: "",
+  });
 
   console.log({ pressArrowKey });
 
+  console.log({ isModalOpen });
+
+  useEffect(() => {
+    if (formState?.message === "success") {
+      const newFolderName = newFolderInputRef.current?.value as string;
+
+      console.log({ message: formState.message });
+      // toast.error(state?.message);
+      setIsDropdownOpen(false);
+      setIsModalOpen(false);
+      setFolders([...folders, { id: formState.id, folder: newFolderName }]);
+      setFolderId(formState.id);
+      console.log({ foldersLength: folders.length });
+      setSelectedFolder(newFolderName); //TODO:
+      router.push(`/folder/${newFolderName}`);
+    } else if (formState.message === "Folder already exists!") {
+      toast.error(formState.message);
+    }
+  }, [formState]);
+
+  useEffect(() => {
+    if (deleteFormState?.message === "success") {
+      const newFolders = folders.filter((folder) => folder.id !== folderId);
+      setFolders(newFolders);
+      setFolderId(newFolders[0].id);
+      setSelectedFolder(newFolders[0].folder);
+      setIsDeleteModalOpen(false);
+      setIsDropdownOpen(false);
+      router.push(`/folder/${newFolders[0].folder}`);
+    }
+  }, [deleteFormState]);
+
   useEffect(() => {
     if (pressArrowKey) {
-      setSelectedFolder(folders[folderIndex]);
-      router.push(`/folder/${folders[folderIndex]}`);
+      setSelectedFolder(folders[folderIndex].folder);
+      setFolderId(folders[folderIndex].id);
+      router.push(`/folder/${folders[folderIndex].folder}`);
       console.log("RUN FOLDER DROPDOWN EFFECT"); //TODO:
     }
   }, [router, folderIndex, pressArrowKey]);
@@ -48,96 +129,189 @@ const DropdownMenuDemo = () => {
       setFolderIndex((prevState) => prevState + 1);
     }
   });
+  console.log({ folderIndex });
+
+  useEffect(() => {
+    const folderName = decodeURIComponent(pathname.split("/")[2]);
+    const findFolder = folders.some((folder) => folder.folder === folderName);
+    if (!findFolder) {
+      // setSelectedFolder(folders[0].folder);
+      // router.push(`/folder/${folders[0].folder}`);
+      setIsMissingFolderModalOpen(true);
+    }
+  }, []);
 
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger asChild>
-        <button
-          className="flex items-center justify-between outline-none border rounded-full w-56 px-3 h-8 text-sm"
-          aria-label="Select folder"
-          onClick={() => setOpen(true)}
-        >
-          <span>{selectedFolder}</span>
-          <span>
-            <CaretSortIcon />
-          </span>
-        </button>
-      </DropdownMenu.Trigger>
+    <>
+      <DropdownMenu.Root
+        open={isDropdownOpen}
+        onOpenChange={setIsDropdownOpen}
+        modal={false}
+      >
+        <DropdownMenu.Trigger asChild>
+          <button
+            className="flex h-8 w-56 items-center justify-between rounded-full border px-3 text-sm outline-none"
+            aria-label="Select folder"
+            // onClick={() => setIsDrOpen(true)}
+          >
+            <span>{selectedFolder}</span>
+            <span>
+              <CaretSortIcon />
+            </span>
+          </button>
+        </DropdownMenu.Trigger>
 
-      <DropdownMenu.Portal>
-        <DropdownMenu.Content
-          className="min-w-[220px] bg-white rounded-md p-[5px] will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade border"
-          sideOffset={5}
-          // hideWhenDetached={true}
-        >
-          {folders.map((folder: string, index: number) => {
-            return (
-              <FolderItem
-                folder={folder}
-                index={index}
-                key={index}
-                onSelect={(folder) => {
-                  setFolderIndex(
-                    folders.findIndex((folderItem) => folderItem === folder)
-                  );
-                  setSelectedFolder(
-                    folder === selectedFolder ? "Home" : folder
-                  ); //TODO:
-                  router.push(`/folder/${folder}`);
-                }}
-                isChecked={folder === selectedFolder}
-              />
-            );
-          })}
-          <DropdownMenu.Separator className="h-[1px] bg-orange-300 m-[5px]" />
-          <DropdownMenu.Group>
-            <Modal>
-              <Modal.Button asChild>
-                <DropdownMenu.Item
-                  className="text-[14px] flex items-center gap-[5px] h-[25px] px-[5px] relative select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 py-4"
-                  onSelect={(e) => {
-                    e.preventDefault();
-                  }}
+        <DropdownMenu.Portal>
+          <DropdownMenu.Content
+            className="min-w-[220px] rounded-md border bg-white p-[5px] will-change-[opacity,transform] data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
+            sideOffset={5}
+            // hideWhenDetached={true}
+          >
+            {folders.map(
+              (folderItem: { id: string; folder: string }, index: number) => {
+                return (
+                  <FolderItem
+                    folder={folderItem.folder}
+                    index={index}
+                    key={folderItem.id}
+                    onSelect={(folder) => {
+                      setFolderId(folderItem.id);
+                      setFolderIndex(
+                        folders.findIndex(
+                          (folderItem) => folderItem.folder === folder,
+                        ),
+                      );
+                      setSelectedFolder(
+                        folder === selectedFolder ? "Home" : folder,
+                      ); //TODO:
+                      router.push(`/folder/${folder}`);
+                    }}
+                    isChecked={folderItem.folder === selectedFolder}
+                  />
+                );
+              },
+            )}
+            <DropdownMenu.Separator className="m-[5px] h-[1px] bg-orange-300" />
+            <DropdownMenu.Group>
+              <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
+                <Modal.Button asChild>
+                  <DropdownMenu.Item
+                    className="relative flex h-[25px] select-none items-center gap-[5px] px-[5px] py-4 text-[14px] outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[disabled]:text-mauve8"
+                    onSelect={(e) => {
+                      e.preventDefault();
+                    }}
+                  >
+                    <span>
+                      <PlusIcon />
+                    </span>
+                    <span>New folder</span>
+                  </DropdownMenu.Item>
+                </Modal.Button>
+                <Modal.Content title="Create a new folder">
+                  <form
+                    className="flex flex-col gap-4 px-[25px] py-4"
+                    action={formAction}
+                  >
+                    <span className="flex flex-col gap-1">
+                      <label htmlFor="folder" className="text-gray-500">
+                        Folder name
+                      </label>
+                      <Input
+                        type="text"
+                        className="rounded-md border p-2"
+                        id="folder"
+                        name="folder"
+                        placeholder="Blog"
+                        required
+                        ref={newFolderInputRef}
+                      />
+                    </span>
+                    <SubmitButton>Create</SubmitButton>
+                  </form>
+                </Modal.Content>
+              </Modal>
+
+              {folders.length > 1 ? (
+                <Modal
+                  open={isDeleteModalOpen}
+                  onOpenChange={setIsDeleteModalOpen}
                 >
-                  <span>
-                    <PlusIcon />
-                  </span>
-                  <span>New folder</span>
-                </DropdownMenu.Item>
-              </Modal.Button>
-              <Modal.Content title="Create new folder">
-                <form className="flex flex-col gap-4 py-4">
-                  <span className="flex flex-col gap-1">
-                    <label htmlFor="folder" className="text-gray-500">
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      className="border 
-                       rounded-md p-2"
-                      id="folder"
-                      placeholder="Blog"
-                      required
-                    />
-                  </span>
-                  <button className="bg-primary font-medium text-white px-4 py-2 rounded-md outline-offset-[3px]">
-                    Create
-                  </button>
-                </form>
-              </Modal.Content>
-            </Modal>
+                  <Modal.Button asChild>
+                    <DropdownMenu.Item
+                      className="relative flex h-[25px] select-none items-center gap-[5px] px-[5px] py-4 text-[14px] outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[disabled]:text-mauve8"
+                      onSelect={(e) => {
+                        e.preventDefault();
+                      }}
+                    >
+                      <span>
+                        <TrashIcon />
+                      </span>
+                      <span>Delete folder</span>
+                    </DropdownMenu.Item>
+                  </Modal.Button>
+                  <Modal.Content title="Delete folder">
+                    <form
+                      className="flex flex-col gap-4"
+                      action={deleteFormAction}
+                    >
+                      <input type="hidden" value={folderId} name="folderId" />
+                      <div className="flex flex-col gap-4 rounded-lg border bg-white p-[25px] shadow-sm">
+                        <p>
+                          Are you sure you want to delete{" "}
+                          <span className="font-semibold">
+                            {decodeURIComponent(pathname.split("/")[2])}
+                          </span>
+                          ?
+                        </p>
+                        <p className="flex items-center gap-2 text-[#ef4444]">
+                          <span>
+                            <ExclamationTriangleIcon />
+                          </span>
+                          <span className="text-sm">
+                            This action is permanent and cannot be undone.
+                          </span>
+                        </p>
+                      </div>
 
-            <DropdownMenu.Item className="group text-[14px] leading-none rounded-[3px] flex items-center gap-[5px] h-[25px] px-[5px] relative select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 py-4">
-              <span>
-                <TrashIcon />
-              </span>
-              <span>Delete folder</span>
-            </DropdownMenu.Item>
-          </DropdownMenu.Group>
-          <DropdownMenu.Arrow className="fill-primary" />
-        </DropdownMenu.Content>
-      </DropdownMenu.Portal>
-    </DropdownMenu.Root>
+                      <div className="flex justify-end gap-4 px-[25px]">
+                        <SubmitButton className="gap-1 bg-[#ef4444]">
+                          <span>Delete folder</span>
+                          <TrashIcon className="size-[18px]" />
+                        </SubmitButton>
+                      </div>
+                    </form>
+                  </Modal.Content>
+                </Modal>
+              ) : null}
+            </DropdownMenu.Group>
+            <DropdownMenu.Arrow className="fill-primary" />
+          </DropdownMenu.Content>
+        </DropdownMenu.Portal>
+      </DropdownMenu.Root>
+      <Modal
+        open={isMissingFolderModalOpen}
+        onOpenChange={(open) => {
+          console.log("CHANGE");
+          setIsMissingFolderModalOpen(false);
+          setSelectedFolder(folders[0].folder);
+          router.push(`/folder/${folders[0].folder}`);
+        }}
+      >
+        <Modal.Content title="Create a new folder">
+          <form className="flex flex-col gap-4">
+            <div className="rounded-lg border bg-white p-[25px] shadow-sm">
+              <span className="font-semibold">
+                {decodeURIComponent(pathname.split("/")[2])}
+              </span>{" "}
+              folder does not exist. Do you want to create one?
+            </div>
+            <div className="px-[25px]">
+              <SubmitButton>Create</SubmitButton>
+            </div>
+          </form>
+        </Modal.Content>
+      </Modal>
+    </>
   );
 };
 

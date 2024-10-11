@@ -29,7 +29,26 @@ export default async function MainLayout({
   console.log({ userId });
   const user = (await xata.db.users
     .filter({ clerkUserId: userId })
+    .select(["avatar"])
     .getFirst()) as UsersRecord;
+
+  const folders = await xata.db.folders
+    .filter({ userId })
+    .select(["folder"])
+    .getMany();
+
+  console.log(folders);
+
+  const foldersList = folders.map((item) => ({
+    id: item.id,
+    folder: item.folder,
+  })) as { id: string; folder: string }[];
+
+  console.log(foldersList);
+
+  // const
+
+  console.log(user);
 
   const avatarUrl = user.avatar?.transform({
     width: 64,
@@ -38,7 +57,10 @@ export default async function MainLayout({
   });
   return (
     <>
-      <Navigation avatarUrl={avatarUrl?.url as string} />
+      <Navigation
+        avatarUrl={avatarUrl?.url as string}
+        foldersList={foldersList}
+      />
       {/* {show && <PodcastPlayer />} */}
       <PodcastPlayer />
       {children}
