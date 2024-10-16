@@ -163,7 +163,7 @@ const DropdownMenuDemo = ({
 
         <DropdownMenu.Portal>
           <DropdownMenu.Content
-            className="min-w-[220px] rounded-md border bg-white p-[5px] will-change-[opacity,transform] data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
+            className="z-[11] min-w-[220px] rounded-md border bg-white p-[5px] will-change-[opacity,transform] data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
             sideOffset={5}
             // hideWhenDetached={true}
           >

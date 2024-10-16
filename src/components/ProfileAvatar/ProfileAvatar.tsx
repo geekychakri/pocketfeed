@@ -52,7 +52,7 @@ export default function ProfileAvatar({ avatarUrl }: { avatarUrl: string }) {
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content
-          className="min-w-[180px] rounded-md border bg-white p-[5px] will-change-[opacity,transform] data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
+          className="z-[10] min-w-[180px] rounded-md border bg-white p-[5px] will-change-[opacity,transform] data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
           sideOffset={5}
           align="end"
         >

@@ -109,7 +109,7 @@ export default function Navigation({
       }}
       transition={{ duration: 0.2 }}
       className={cn(
-        "sticky top-0 flex h-[70px] items-center justify-between bg-[#fff] px-4",
+        "sticky top-0 z-[10] flex h-[70px] items-center justify-between bg-[#fff] px-4",
       )}
     >
       <div className="flex items-center gap-5">

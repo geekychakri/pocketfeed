@@ -1,7 +1,9 @@
 import Link from "next/link";
-import { ChevronRightIcon } from "@radix-ui/react-icons";
+import { ChevronRightIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
+
+import FeedDropdown from "@/components/FeedDropdown";
 
 import { getXataClient } from "@/xata";
 
@@ -14,11 +16,19 @@ export default async function Folder({
   params: { foldername: string };
 }) {
   const { userId }: { userId: string | null } = auth();
-  console.log({ foldername: params.foldername });
+  const folderName = decodeURIComponent(params.foldername);
+  console.log({ folderName });
   const feeds = await xata.db.feeds
-    .filter("folder", params.foldername)
+    .filter("folder", decodeURIComponent(folderName))
     .getMany();
   console.log({ feeds });
+
+  const folders = await xata.db.folders
+    .filter({ userId })
+    .select(["folder"])
+    .getMany();
+
+  console.log({ folders: JSON.parse(JSON.stringify(folders)) });
 
   // const folder = await xata.db.folders
   //   .filter({ userId, folder: params.foldername })
@@ -31,9 +41,7 @@ export default async function Folder({
 
   return (
     <div className="p-4">
-      <h1 className="mb-4 font-medium">
-        {decodeURIComponent(params.foldername)}
-      </h1>
+      <h1 className="mb-4 font-medium">{decodeURIComponent(folderName)}</h1>
 
       {/* <div className="flex flex-col gap-5">
         {[1, 2, 3, 4, 5].map((item, i) => (
@@ -43,11 +51,11 @@ export default async function Folder({
       <div className="flex flex-col gap-6">
         {feeds.length >= 1 ? (
           feeds.map((item, i) => (
-            <Link
+            <div
               // href={`/feed/${item.title?.trim().replace(/\s+/g, "-").toLowerCase()}`}
-              href={`/feed/${item.feedId}`}
+              // href={`/feed/${item.feedId}`}
               key={i}
-              className="flex h-20 w-full items-center justify-between rounded-md border bg-[#f7f7f8] px-4 py-2"
+              className="relative isolate flex h-20 w-full items-center justify-between rounded-md border bg-[#f7f7f8] px-4 py-2"
             >
               <span className="flex items-center gap-3">
                 <img
@@ -57,8 +65,23 @@ export default async function Folder({
                 />
                 <span className="font-medium">{item.title}</span>
               </span>
-              <ChevronRightIcon className="size-5" />
-            </Link>
+              {/* <button
+                className="flex items-center justify-center rounded-md border border-transparent p-1 duration-150 hover:border hover:bg-white"
+                // onClick={(e) => e.stopPropagation()}
+              >
+                <DotsHorizontalIcon className="size-5" />
+              </button> */}
+
+              <FeedDropdown
+                feedId={item.id as string}
+                folderName={folderName}
+                folders={JSON.parse(JSON.stringify(folders))}
+              />
+              <Link
+                href={`/feed/${item.feedId}`}
+                className="absolute inset-0 z-[1]"
+              />
+            </div>
           ))
         ) : (
           <div className="flex flex-col items-center justify-center gap-6">

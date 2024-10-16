@@ -8,6 +8,7 @@ import { auth } from "@clerk/nextjs/server";
 import { currentUser } from "@clerk/nextjs/server";
 
 import { getXataClient } from "@/xata";
+import { revalidatePath } from "next/cache";
 
 const xata = getXataClient();
 
@@ -116,7 +117,7 @@ export async function addNewFolder(prevState: any, formData: FormData) {
   const folder = formData.get("folder") as string;
   const folderExists = await xata.db.folders
     .filter({ userId, folder })
-    .getFirstOrThrow();
+    .getFirst();
 
   if (!folderExists) {
     const newFolder = await xata.db.folders.create({
@@ -149,5 +150,36 @@ export async function deleteFolder(prevState: any, formData: FormData) {
 
   // redirect(`/folder/${folder}`);
 
+  return { message: "success" };
+}
+
+export async function deleteFeed(prevState: any, formData: FormData) {
+  console.log("DELETE FEED");
+  try {
+    const { userId }: { userId: string | null } = auth();
+    const feedId = formData.get("feedId") as string;
+    const folderName = formData.get("folderName") as string;
+
+    console.log({ folderName });
+
+    console.log({ feedId });
+    const deletedFeed = await xata.db.feeds.delete(feedId);
+
+    console.log("DELETED");
+
+    revalidatePath(`/folder/${folderName}`, "page"); //TODO:
+    return { message: "success" };
+  } catch (err) {
+    return { message: "error" };
+  }
+}
+
+export async function moveToFolder(
+  id: string,
+  currentFolder: string,
+  newFolder: string,
+) {
+  const folders = await xata.db.feeds.update(id, { folder: newFolder });
+  revalidatePath(`/folder/${currentFolder}`, "page");
   return { message: "success" };
 }

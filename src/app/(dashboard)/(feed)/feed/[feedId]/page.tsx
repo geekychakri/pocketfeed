@@ -36,7 +36,7 @@ export default async function Feed({ params }: { params: { feedId: string } }) {
   console.log(feedList?.image?.url);
   return (
     <div className="flex flex-col gap-6 p-4">
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-1">
         <RouteBack />
         <span className="text-lg font-semibold">{feedList?.title}</span>
       </div>
@@ -45,8 +45,8 @@ export default async function Feed({ params }: { params: { feedId: string } }) {
         .sort((a, b) => (dayjs(a.isoDate).isAfter(dayjs(b.isoDate)) ? -1 : 1)) //TODO:
         .slice(0, 10) //TODO: check for zero
         .map((item, i) => {
-          // console.log(item);
-          if (item.enclosure?.length) {
+          console.log({ enclosure: item.enclosure });
+          if (item.enclosure?.type?.includes("audio")) {
             return (
               <PodcastCard
                 key={i}
@@ -80,11 +80,12 @@ export default async function Feed({ params }: { params: { feedId: string } }) {
           }
           return (
             <Link
-              href={
-                item.link?.includes(feedList.link as string)
-                  ? `/read/${encodeURIComponent(item.link as string)}`
-                  : `/read/${encodeURIComponent(`${feedList.link}/${item.link}` as string)}`
-              }
+              // href={
+              //   item.link?.includes(feedList.link as string)
+              //     ? `/read/${encodeURIComponent(item.link as string)}`
+              //     : `/read/${encodeURIComponent(`${feedList.link}/${item.link}` as string)}`
+              // }
+              href={`/read/${encodeURIComponent(item.link as string)}`} //TODO::
               key={i}
               className="flex flex-col gap-3 rounded-md border bg-[#f7f7f8] p-4"
               prefetch={false}

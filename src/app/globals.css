@@ -16,6 +16,7 @@
     /* scrollbar-color: hotpink blue;
     scrollbar-width: none; */
     scrollbar-width: thin;
+    scrollbar-color: #f84f39 #eee;
   }
   body {
     color: #1d1d1f;
@@ -272,4 +273,9 @@ audio::-webkit-media-controls-panel {
 
 audio::-webkit-media-controls-play-button {
   display: none;
+}
+
+.body.markup a {
+  text-decoration: underline;
+  text-decoration-color: #f84f39;
 }

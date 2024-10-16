@@ -5,7 +5,8 @@ export default function Article({ content }: { content: string }) {
     <>
       <article
         dangerouslySetInnerHTML={{ __html: content }}
-        className="leading-normal text-lg relative"
+        // className="relative text-lg leading-normal"
+        className="prose lg:prose-xl"
       ></article>
     </>
   );
