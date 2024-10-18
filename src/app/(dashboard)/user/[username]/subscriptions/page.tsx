@@ -12,7 +12,9 @@ export default async function SubscriptionList() {
   return (
     <div className="flex flex-col gap-4">
       {feeds.map((feed, i) => (
-        <div key={i}>{feed.title}</div>
+        <div key={i} className="rounded-md bg-gray-100 p-4">
+          {feed.title}
+        </div>
       ))}
     </div>
   );

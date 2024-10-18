@@ -98,19 +98,17 @@ export default function Navigation({
   const { isOffline } = useNavigatorOnline();
   return (
     <motion.nav
-      animate={showBottomShadow ? "show" : "hide"}
-      variants={{
-        show: {
-          boxShadow: "0 1px 0 0 rgba(0,0,0,0.05)",
-        },
-        hide: {
-          boxShadow: "none",
-        },
-      }}
-      transition={{ duration: 0.2 }}
-      className={cn(
-        "sticky top-0 z-[10] flex h-[70px] items-center justify-between bg-[#fff] px-4",
-      )}
+      // animate={showBottomShadow ? "show" : "hide"}
+      // variants={{
+      //   show: {
+      //     boxShadow: "0 1px 0 0 rgba(0,0,0,0.05)",
+      //   },
+      //   hide: {
+      //     boxShadow: "none",
+      //   },
+      // }}
+      // transition={{ duration: 0.2 }}
+      className="nav sticky top-0 z-[10] flex h-[70px] items-center justify-between bg-[#fff] px-4 shadow-[inset_0_-1px_rgba(0,0,0,.08)]"
     >
       <div className="flex items-center gap-5">
         <div>

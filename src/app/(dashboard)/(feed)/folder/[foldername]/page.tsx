@@ -21,7 +21,7 @@ export default async function Folder({
   const feeds = await xata.db.feeds
     .filter("folder", decodeURIComponent(folderName))
     .getMany();
-  console.log({ feeds });
+  console.log({ feeds }); //TODO: filter by userID
 
   const folders = await xata.db.folders
     .filter({ userId })
@@ -55,7 +55,7 @@ export default async function Folder({
               // href={`/feed/${item.title?.trim().replace(/\s+/g, "-").toLowerCase()}`}
               // href={`/feed/${item.feedId}`}
               key={i}
-              className="relative isolate flex h-20 w-full items-center justify-between rounded-md border bg-[#f7f7f8] px-4 py-2"
+              className="relative isolate flex h-20 w-full items-center justify-between rounded-md border bg-white px-4 py-2"
             >
               <span className="flex items-center gap-3">
                 <img

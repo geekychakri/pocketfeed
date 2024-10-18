@@ -58,7 +58,7 @@ export default async function Feed({ params }: { params: { feedId: string } }) {
             return (
               <div
                 key={i}
-                className="flex flex-col gap-4 rounded-md border bg-[#f7f7f8] p-4"
+                className="flex flex-col gap-4 rounded-md border bg-white p-4"
               >
                 <span>
                   <span className="flex flex-col gap-1">
@@ -80,14 +80,14 @@ export default async function Feed({ params }: { params: { feedId: string } }) {
           }
           return (
             <Link
-              // href={
-              //   item.link?.includes(feedList.link as string)
-              //     ? `/read/${encodeURIComponent(item.link as string)}`
-              //     : `/read/${encodeURIComponent(`${feedList.link}/${item.link}` as string)}`
-              // }
-              href={`/read/${encodeURIComponent(item.link as string)}`} //TODO::
+              href={
+                item.link?.includes(new URL(feedList.link as string).hostname)
+                  ? `/read/${encodeURIComponent(item.link as string)}`
+                  : `/read/${encodeURIComponent(`${feedList.link}/${item.link}` as string)}`
+              }
+              // href={`/read/${encodeURIComponent(item.link as string)}`} //TODO::
               key={i}
-              className="flex flex-col gap-3 rounded-md border bg-[#f7f7f8] p-4"
+              className="flex flex-col gap-3 rounded-md border bg-white p-4"
               prefetch={false}
             >
               <span className="flex flex-col gap-1">
@@ -128,7 +128,7 @@ const PodcastCard = ({
   const audioUrl = item.enclosure.url;
   // const coverImage = item.itunes.image;
   return (
-    <div className="flex flex-col gap-4 rounded-md border bg-[#f7f7f8] p-4">
+    <div className="flex flex-col gap-4 rounded-md border bg-white p-4">
       <span className="flex flex-col gap-3">
         <span className="flex flex-col gap-1">
           <span className="font-semibold">{item.title}</span>

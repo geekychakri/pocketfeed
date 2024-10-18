@@ -21,8 +21,10 @@
   body {
     color: #1d1d1f;
     overflow-x: hidden;
+    /* background-color: #f4f4f5; */
+    /* background-color: #fafafa; */
 
-    /* background-color: #f9f2e2; */
+    /* background-color: #f4f4f5 */
     /* background: #f6f0ea;
     color: #313131; */
   }
@@ -53,13 +55,13 @@
   background-repeat: no-repeat;
 }
 
-article {
+/* article {
   p,
   table,
   ul,
   img {
     margin: 1em 0 !important;
-    /* font-size: 20px; */
+    font-size: 20px;
   }
 
   table {
@@ -80,7 +82,7 @@ article {
       border-radius: 5px;
     }
   }
-}
+} */
 
 ::selection {
   background: #ff5a1f;

@@ -19,7 +19,7 @@ function FileUpload() {
   };
 
   const handleImport = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.stopPropagation();
     if (!file) return;
@@ -47,10 +47,10 @@ function FileUpload() {
       classes="outline-none"
       required={true}
     >
-      <div className="flex items-center justify-between border p-6 rounded-2xl">
+      <div className="flex items-center justify-between rounded-xl border p-6">
         <div className="flex flex-col gap-3">
-          <div className="flex gap-4 items-center">
-            <button className="font-medium rounded-md border px-4 py-2 outline-none">
+          <div className="flex items-center gap-4">
+            <button className="rounded-md border px-4 py-2 font-medium outline-none">
               Browse...
             </button>
             <span>{file ? file?.name : "No file selected"}</span>
@@ -59,7 +59,7 @@ function FileUpload() {
         </div>
         <div>
           <button
-            className="font-medium bg-primary text-white px-4 py-2 rounded-md"
+            className="rounded-md bg-primary px-4 py-2 font-medium text-white"
             onClickCapture={handleImport}
           >
             Import
