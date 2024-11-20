@@ -11,7 +11,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       <input
         ref={ref}
         className={cn(
-          "rounded-md border px-4 py-2 outline-none duration-150 hover:border-primary",
+          "rounded-md border px-4 py-2 duration-100 hover:border-primary",
           className,
         )}
         type={type}

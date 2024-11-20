@@ -1,28 +1,97 @@
 "use client";
 import { useShowPodcastPlayer } from "@/store/podcastplayer";
+import { useState } from "react";
+
+import { PlayIcon, PauseIcon } from "@radix-ui/react-icons";
+
+type PodcastPlayButtonType = {};
 
 export default function PodcastPlayButton({
   title,
   albumCover,
   audioUrl,
+  episodeNumber,
+  content,
+  author,
+  albumName,
 }: {
-  title: string;
-  audioUrl: string;
-  albumCover: string;
+  title?: string; //TODO:  Optional for podcast drawer component
+  audioUrl?: string;
+  albumCover?: string;
+  episodeNumber?: string;
+  content?: string;
+  author?: string;
+  albumName?: string;
 }) {
-  const { openPodcastPlayer, setAlbumCover, setTitle, setAudioUrl } =
-    useShowPodcastPlayer();
+  // const [isPlaying, setIsPlaying] = useState(false);
+  const {
+    openPodcastPlayer,
+    setAlbumCover,
+    setTitle,
+    setAudioUrl,
+    activeEpisode,
+    setActiveEpisode,
+    isPlaying,
+    setIsPlayingTrue,
+    setIsPlayingFalse,
+    show,
+    setContent,
+    setEpisodeNumber,
+    setAlbumName,
+    setAuthor,
+  } = useShowPodcastPlayer();
+
   return (
     <button
-      className="flex items-center gap-1 rounded-md border-2 bg-white px-4 py-1 text-base font-medium text-[#e62117]"
+      className="z-[2] flex h-10 w-28 items-center justify-center gap-1 rounded-md border-2 bg-white px-4 py-2 text-base font-medium text-[#e62117]"
       onClick={() => {
+        if (activeEpisode == episodeNumber && isPlaying) {
+          console.log("PREVIOUS CLICK");
+          setIsPlayingFalse();
+          openPodcastPlayer();
+          return;
+        } else if (activeEpisode == episodeNumber && !isPlaying) {
+          console.log("PREVIOUS CLICK");
+          setIsPlayingTrue();
+          openPodcastPlayer();
+          return;
+        }
+        // if (show) {
+        //   setAlbumCover(albumCover);
+        //   setTitle(title);
+        //   setAudioUrl(audioUrl);
+        //   setIsPlayingTrue();
+        //   setActiveEpisode(episodeNumber);
+        //   return;
+        // }
+        console.log("CLICKED");
         openPodcastPlayer();
         setAlbumCover(albumCover);
         setTitle(title);
         setAudioUrl(audioUrl);
+        setIsPlayingTrue();
+        setActiveEpisode(episodeNumber);
+        setContent(content);
+        setEpisodeNumber(episodeNumber);
+        setAlbumName(albumName);
+        setAuthor(author);
       }}
     >
-      Listen Now
+      {activeEpisode == episodeNumber && isPlaying ? (
+        <>
+          <span>
+            <PauseIcon className="size-5" />
+          </span>
+          <span>Pause</span>
+        </>
+      ) : (
+        <>
+          <span>
+            <PlayIcon className="size-5" />
+          </span>
+          <span>Play</span>
+        </>
+      )}
     </button>
   );
 }

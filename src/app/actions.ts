@@ -20,6 +20,7 @@ type FeedsType = {
   }[];
   folder: string;
   favicon: string;
+  siteURL: string;
 };
 
 export async function addFeeds(prevState: any, formData: FormData) {
@@ -41,6 +42,7 @@ export async function addFeeds(prevState: any, formData: FormData) {
           title: item?.title,
           folder: results.folder,
           favicon: results.favicon,
+          siteURL: results.siteURL,
           username: user?.username, //TODO:
           feedId,
         };
@@ -51,6 +53,7 @@ export async function addFeeds(prevState: any, formData: FormData) {
         rssURL: item?.rssURL,
         folder: results.folder,
         favicon: results.favicon,
+        siteURL: results.siteURL,
         title: item?.title,
         username: user?.username,
         feedId,

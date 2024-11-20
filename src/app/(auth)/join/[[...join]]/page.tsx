@@ -5,7 +5,11 @@ import { useSignUp } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
+import {
+  EyeClosedIcon,
+  EyeOpenIcon,
+  GitHubLogoIcon,
+} from "@radix-ui/react-icons";
 import { toast } from "sonner";
 
 import InputOTP from "@/components/InputOTP";
@@ -15,6 +19,7 @@ import { SpinnerRotate } from "@/components/SpinnerRotate";
 import { useNavigatorOnline } from "@/hooks/useNavigatorOnline";
 
 import { createUser } from "@/app/actions";
+import SocialOauth from "@/components/SocialOauth";
 
 export default function Join() {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -140,7 +145,8 @@ export default function Join() {
 
   return (
     <>
-      <h1 className="text-2xl font-medium tracking-tight">Logo</h1>
+      <SocialOauth />
+      <div>or</div>
       <form
         className="flex w-full max-w-96 flex-col gap-6"
         onSubmit={handleSubmit}
@@ -178,7 +184,7 @@ export default function Join() {
           <span className="font-medium">Password (8+ chars)</span>
           <span className="flex items-center rounded-md border duration-150 focus-within:shadow-[0_0_0_2px_#fcfcfc,0_0_0_4px_#f84f39] group-hover:border-primary">
             <Input
-              className="flex-1 border-none bg-transparent p-2 focus-visible:shadow-none"
+              className="flex-1 border-none p-2 focus-visible:shadow-none"
               type={showPassword ? "text" : "password"}
               autoComplete="new-password"
               id="password"
@@ -199,7 +205,7 @@ export default function Join() {
             </button>
           </span>
         </label>
-        <button className="flex items-center justify-center rounded-md bg-primary px-4 py-2 font-medium text-white">
+        <Button type="submit">
           {signUpLoading ? (
             <span className="flex items-center gap-2">
               <SpinnerRotate />
@@ -208,7 +214,7 @@ export default function Join() {
           ) : (
             "Create a free account"
           )}
-        </button>
+        </Button>
         <span className="flex gap-1">
           <span>Already have an account?</span>
           <Link href="/signin" className="custom-underline">

@@ -14,6 +14,8 @@ import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { SpinnerRotate } from "@/components/SpinnerRotate";
 
+import SocialOauth from "@/components/SocialOauth";
+
 export default function SignIn() {
   const { isLoaded, signIn, setActive } = useSignIn();
   // const [email, setEmail] = useState("");
@@ -64,17 +66,21 @@ export default function SignIn() {
 
   return (
     <>
-      <h1 className="text-2xl font-medium tracking-tight text-gray-700">
-        Logo
-      </h1>
-      <form
-        className="flex w-full max-w-96 flex-col gap-6"
-        onSubmit={handleSubmit}
-      >
+      <div className="flex w-full max-w-96 flex-col gap-4">
+        {/* <h1 className="text-center text-2xl font-medium tracking-tight text-gray-700">
+          Logo
+        </h1> */}
         <p className="flex flex-col gap-2">
           <span className="text-xl font-medium">Hey, welcome back</span>
           <span className="text-sm text-gray-700">Good to see you again!</span>
         </p>
+      </div>
+      <SocialOauth />
+      <div>or</div>
+      <form
+        className="flex w-full max-w-96 flex-col gap-6"
+        onSubmit={handleSubmit}
+      >
         <label htmlFor="email" className="flex flex-col gap-2">
           <span className="font-medium">Email address</span>
           <Input
@@ -89,9 +95,9 @@ export default function SignIn() {
         </label>
         <label htmlFor="password" className="flex flex-col gap-2">
           <span className="font-medium">Password</span>
-          <span className="flex items-center rounded-md border duration-150 focus-within:shadow-[0_0_0_2px_#fcfcfc,0_0_0_4px_#f84f39] group-hover:border-primary">
+          <span className="flex items-center rounded-md border duration-100 focus-within:shadow-[0_0_0_2px_#fcfcfc,0_0_0_4px_#f84f39] hover:border-primary">
             <Input
-              className="flex-1 border-none bg-transparent p-2 focus-visible:shadow-none"
+              className="flex-1 border-none p-2 focus-visible:shadow-none"
               type={showPassword ? "text" : "password"}
               id="password"
               required

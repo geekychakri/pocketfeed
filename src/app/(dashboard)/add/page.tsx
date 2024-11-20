@@ -158,9 +158,9 @@ export default function Add() {
       {!isRssDataEmpty && (
         <div className="flex flex-col gap-6 rounded-md border p-4">
           <img
-            src={rssData?.favicon as string}
-            width={40}
-            height={40}
+            src={`https://www.google.com/s2/favicons?domain=${rssData.url}&sz=128`}
+            width={28}
+            height={28}
             className="rounded-full"
             alt="favicon"
           />
@@ -215,6 +215,7 @@ export default function Add() {
               })}
 
               <input type="hidden" value={rssData?.favicon} name="favicon" />
+              <input type="hidden" value={rssData?.url} name="siteURL" />
 
               <div className="flex flex-col gap-3">
                 <FolderSelect />

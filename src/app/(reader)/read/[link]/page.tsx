@@ -8,15 +8,11 @@ import { JSDOM } from "jsdom";
 import { Readability, isProbablyReaderable } from "@mozilla/readability";
 
 export default async function Read({ params }: { params: { link: string } }) {
-  // const article = await ExtractArticle(decodeURIComponent(params.link));
-  // const article = await ExtractArticle(
-  //   "https://12ft.io/https://vercel.com/blog/preventing-infrastructure-abuse-with-vercel-firewall",
-  // );
-  // const article = await Parser.parse(decodeURIComponent(params.link));
-  // console.log(article);
-  // console.log(decodeURIComponent(params.link));
   let article;
-  const dom = await JSDOM.fromURL(decodeURIComponent(params.link));
+
+  const articleUrl = decodeURIComponent(params.link);
+  console.log({ articleUrl });
+  const dom = await JSDOM.fromURL(articleUrl);
 
   if (isProbablyReaderable(dom.window.document)) {
     const reader = new Readability(dom.window.document);

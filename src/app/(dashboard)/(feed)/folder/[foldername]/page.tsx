@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ChevronRightIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { redirect } from "next/navigation";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 
 import FeedDropdown from "@/components/FeedDropdown";
 
@@ -16,12 +16,16 @@ export default async function Folder({
   params: { foldername: string };
 }) {
   const { userId }: { userId: string | null } = auth();
+  const user = await currentUser();
   const folderName = decodeURIComponent(params.foldername);
   console.log({ folderName });
   const feeds = await xata.db.feeds
-    .filter("folder", decodeURIComponent(folderName))
+    .filter({
+      folder: decodeURIComponent(folderName),
+      username: user?.username,
+    })
     .getMany();
-  console.log({ feeds }); //TODO: filter by userID
+  console.log({ feeds }); //TODO: filter by userID choose either auth or  currentuser
 
   const folders = await xata.db.folders
     .filter({ userId })
@@ -59,10 +63,11 @@ export default async function Folder({
             >
               <span className="flex items-center gap-3">
                 <img
-                  src={item.favicon as string}
+                  src={`https://www.google.com/s2/favicons?domain=${item.siteURL}&sz=128`}
                   alt=""
-                  className="size-10 rounded-full"
+                  className="size-7 rounded-full"
                 />
+
                 <span className="font-medium">{item.title}</span>
               </span>
               {/* <button

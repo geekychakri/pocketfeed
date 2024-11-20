@@ -10,7 +10,7 @@ export default function RootLayout({
   return (
     <>
       <AuthNavigation />
-      <main className="flex flex-col gap-8 items-center justify-center w-full max-w-[520px] mx-auto py-10">
+      <main className="mx-auto flex w-full max-w-[520px] flex-col items-center justify-center gap-8 px-4 py-10">
         {children}
         <Toaster
           duration={3000}

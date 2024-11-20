@@ -25,11 +25,11 @@ export const ModalContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ title, children, ...props }, forwardedRef) => (
   <DialogPrimitive.Portal>
-    <DialogPrimitive.Overlay className="fixed inset-0 bg-[#ffffffcc] backdrop-blur-[3px] data-[state=open]:animate-overlayShow" />
+    <DialogPrimitive.Overlay className="fixed inset-0 z-[12] bg-[#ffffffcc] backdrop-blur-[3px] data-[state=open]:animate-overlayShow" />
     <DialogPrimitive.Content
       {...props}
       ref={forwardedRef}
-      className="fixed left-[50%] top-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-lg border border-[#ededed] bg-[#f7f7f8] py-[25px] shadow-[0_8px_30px_0px_rgba(0,0,0,0.12)] focus:outline-none data-[state=open]:animate-contentShow"
+      className="fixed left-[50%] top-[50%] z-[13] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-lg border border-[#ededed] bg-[#f7f7f8] py-[25px] shadow-[0_8px_30px_0px_rgba(0,0,0,0.12)] focus:outline-none data-[state=open]:animate-contentShow"
     >
       <div className="mb-[16px] flex items-center justify-between px-[25px]">
         <DialogPrimitive.Title className="text-lg font-medium">

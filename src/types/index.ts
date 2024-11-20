@@ -1,0 +1,58 @@
+export type FeedListType = {
+  feedUrl: string;
+  paginationLinks: { self: string };
+  title: string;
+  description: string;
+  image: {
+    link: string;
+    url: string;
+    title: string;
+  };
+  items: FeedItemType[];
+  pubDate: string;
+  generator: string;
+  link: string;
+  language: string;
+  copyright: string;
+  lastBuildDate: string;
+  itunes: {
+    owner: {};
+    image: string;
+    categories: [];
+    categoriesWithSubs: [];
+    keywords: [];
+    author: string;
+    summary: string;
+    explicit: string;
+  };
+};
+
+export type FeedItemType = {
+  id: string;
+  title: string;
+  link: string;
+  pubDate: string;
+  creator: string;
+  content: string;
+  contentSnippet: string;
+  guid: string;
+  categories?: string;
+  isoDate: string;
+  author: string;
+  "content:encoded": string;
+  enclosure: {
+    length: string;
+    type: string;
+    url: string;
+  };
+  itunes: {
+    author: string;
+    subtitle: string;
+    summary: string;
+    explicit: string;
+    duration: string;
+    episode: string;
+    episodeType: string;
+    image: string;
+  };
+};

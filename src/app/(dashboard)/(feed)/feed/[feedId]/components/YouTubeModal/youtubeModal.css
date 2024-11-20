@@ -101,11 +101,11 @@
 .modal-video-close-btn {
   position: absolute;
   z-index: 2;
-  top: -45px;
+  top: -35px;
   right: 0px;
   display: inline-block;
-  width: 35px;
-  height: 35px;
+  width: 25px;
+  height: 25px;
   overflow: hidden;
   border: none;
   background: transparent;
@@ -113,7 +113,7 @@
 @media (orientation: landscape) {
   .modal-video-close-btn {
     top: 0;
-    right: -45px;
+    right: -35px;
   }
 }
 .modal-video-close-btn:before {
@@ -126,12 +126,11 @@
 .modal-video-close-btn:after {
   content: "";
   position: absolute;
-  height: 2px;
+  height: 5px;
   width: 100%;
-  top: 50%;
+  top: 60%;
   left: 0;
-  margin-top: -1px;
   background: #fff;
-  border-radius: 5px;
+  border-radius: 8px;
   margin-top: -6px;
 }
