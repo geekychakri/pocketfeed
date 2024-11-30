@@ -108,6 +108,10 @@ const PodcastPlayer = () => {
     }
   }, [currentTime]);
 
+  useEffect(() => {
+    console.log("AUDIO CHANGED");
+  }, [audioUrl]);
+
   if (!show) {
     return null;
   }
@@ -703,7 +707,7 @@ const PodcastPlayer = () => {
         <MediaTheme
           template="media-theme-sutro-audio"
           mediatitle={title}
-          // mediabyline="JS"
+          mediabyline={albumName}
           style={{
             "--media-primary-color": "#000",
           }}

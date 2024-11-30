@@ -40,6 +40,12 @@ export type FeedItemType = {
   isoDate: string;
   author: string;
   "content:encoded": string;
+  "podcast:chapters": {
+    $: {
+      type: string;
+      url: string;
+    };
+  };
   enclosure: {
     length: string;
     type: string;

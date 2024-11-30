@@ -23,7 +23,11 @@ dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
 
 const xata = getXataClient();
-const parser = new Parser();
+const parser = new Parser({
+  customFields: {
+    item: ["podcast:chapters"],
+  },
+});
 
 function checkObjectIsEmpty(value: object) {
   Object.keys(value).length === 0 && value.constructor === Object; // 👈 constructor check
@@ -53,6 +57,8 @@ function convertTimeStringToReadable(timeString: string) {
 
   if (hours === 0) {
     return `${minutes}m`;
+  } else if (minutes === 0) {
+    return `${hours}h`;
   } else {
     return `${hours}h ${minutes}m`;
   }
@@ -158,6 +164,7 @@ function FeedItem({
   if (item.enclosure?.type?.includes("audio")) {
     return (
       <PodcastCard
+        feedUrl={feedList.feedUrl}
         item={item}
         albumCover={feedList?.image?.url as string}
         episodeNumber={item.guid}
@@ -227,6 +234,7 @@ export default async function Feed({ params }: { params: { feedId: string } }) {
     .getMany();
   // console.log(feed);
   // console.log({ favicon: feed[0].favicon });
+  const feedUrl = feed[0].rssURL;
 
   const feedList = (await parser.parseURL(
     feed[0].rssURL as string,
@@ -235,6 +243,8 @@ export default async function Feed({ params }: { params: { feedId: string } }) {
   console.log({ feedList });
 
   console.log({ feedItem: feedList.items.slice(0, 1) });
+
+  console.log({ podcastChapters: feedList.items[0]["podcast:chapters"] });
 
   // const itemsCategorized = feedList.items;
 
@@ -368,19 +378,23 @@ const PodcastCard = ({
   episodeNumber,
   author,
   albumName,
+  feedUrl,
 }: {
   item: FeedItemType;
   albumCover: string;
   episodeNumber: string;
   author: string;
   albumName: string;
+  feedUrl: string;
 }) => {
   // console.log({ item });
   const title = item.title;
   const audioUrl = item.enclosure.url;
-  const content = item["content:encoded"]; //TODO:: content or contentSnippet
+  const content = item["content:encoded"] || item.content; //TODO:: content or contentSnippet
   // const coverImage = item.itunes.image;
   const coverImage = albumCover || item.itunes.image;
+
+  const chaptersUrl = item["podcast:chapters"]?.["$"]?.url ?? null;
 
   console.log({ duartion: item.itunes.duration });
   return (
@@ -400,7 +414,7 @@ const PodcastCard = ({
           {item.itunes?.duration ? (
             <>
               <span>·</span>
-              <span>{convertTimeStringToReadable(item.itunes?.duration)}</span>
+              <span>{convertTimeStringToReadable(item.itunes.duration)}</span>
             </>
           ) : null}
         </span>
@@ -415,6 +429,8 @@ const PodcastCard = ({
           content={content}
           author={author}
           albumName={albumName}
+          feedUrl={feedUrl}
+          chaptersUrl={chaptersUrl}
         />
       )}
       <Link

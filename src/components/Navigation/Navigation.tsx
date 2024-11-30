@@ -112,7 +112,9 @@ export default function Navigation({
     >
       <div className="flex items-center gap-5">
         <div>
-          <span className="font-medium">Logo</span>
+          <span className="font-medium">
+            <span className="text-primary">my</span>pocketfeed.
+          </span>
         </div>
         {pathname.startsWith("/folder/") && (
           <>

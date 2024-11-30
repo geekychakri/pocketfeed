@@ -6,6 +6,8 @@ type ShowPodcastPlayer = {
   closePodcastPlayer: () => void;
   hidePodcastPlayer: () => void;
   title: string;
+  // podcastTitle: string;
+  // setPodcastTitle: (val: string | undefined) => void;
   audioUrl: string;
   albumCover: string;
   activeEpisode: string;
@@ -26,6 +28,10 @@ type ShowPodcastPlayer = {
   setAuthor: (val: string | undefined) => void;
   albumName: string;
   setAlbumName: (val: string | undefined) => void;
+  feedUrl: string;
+  setFeedUrl: (val: string | undefined) => void;
+  chaptersUrl: string;
+  setChaptersUrl: (val: string | undefined) => void;
 };
 
 export const useShowPodcastPlayer = create<ShowPodcastPlayer>((set) => ({
@@ -58,4 +64,12 @@ export const useShowPodcastPlayer = create<ShowPodcastPlayer>((set) => ({
   albumName: "",
   setAlbumName: (albumName: string | undefined) =>
     set((state) => ({ albumName })),
+  feedUrl: "",
+  setFeedUrl: (feedUrl: string | undefined) => set((state) => ({ feedUrl })),
+  chaptersUrl: "",
+  setChaptersUrl: (chaptersUrl: string | undefined) =>
+    set((state) => ({ chaptersUrl })),
+  // podcastTitle: "",
+  // setPodcastTitle: (podcastTitle: string | undefined) =>
+  //   set((state) => ({ podcastTitle })),
 }));

@@ -14,6 +14,8 @@ export default function PodcastPlayButton({
   content,
   author,
   albumName,
+  feedUrl,
+  chaptersUrl,
 }: {
   title?: string; //TODO:  Optional for podcast drawer component
   audioUrl?: string;
@@ -22,6 +24,8 @@ export default function PodcastPlayButton({
   content?: string;
   author?: string;
   albumName?: string;
+  feedUrl?: string;
+  chaptersUrl?: string;
 }) {
   // const [isPlaying, setIsPlaying] = useState(false);
   const {
@@ -39,6 +43,8 @@ export default function PodcastPlayButton({
     setEpisodeNumber,
     setAlbumName,
     setAuthor,
+    setFeedUrl,
+    setChaptersUrl,
   } = useShowPodcastPlayer();
 
   return (
@@ -75,6 +81,8 @@ export default function PodcastPlayButton({
         setEpisodeNumber(episodeNumber);
         setAlbumName(albumName);
         setAuthor(author);
+        setFeedUrl(feedUrl);
+        setChaptersUrl(chaptersUrl);
       }}
     >
       {activeEpisode == episodeNumber && isPlaying ? (

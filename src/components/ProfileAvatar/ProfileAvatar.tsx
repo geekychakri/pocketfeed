@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode } from "react";
+import { ReactElement, ReactNode, useState, ComponentType } from "react";
 
 import Link from "next/link";
 
@@ -13,23 +13,34 @@ import {
 
 import { Avatar, AvatarImage, AvatarFallback } from "../UserAvatar";
 import SignOutButton from "../SignOutButton";
+import { UserIcon } from "@/icons/animated/UserIcon";
+import { SettingsGearIcon } from "@/icons/animated/SettingsGearIcon";
+import { MessageCircleIcon } from "@/icons/animated/MessageCircleIcon";
+import { PartyPopperIcon } from "@/icons/animated/PartyPopperIcon";
 
 const AvatarDropdownItem = ({
   to,
   children,
-  icon,
+  Icon,
 }: {
   to: string;
   children: ReactNode;
-  icon: ReactElement;
-}) => (
-  <Link href={to}>
-    <DropdownMenu.Item className="relative flex h-[25px] select-none items-center gap-2 rounded-[3px] px-2 py-5 text-sm leading-none text-[#555] outline-none duration-150 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[disabled]:text-mauve8 data-[highlighted]:text-black">
-      <span>{icon}</span>
-      {children}
-    </DropdownMenu.Item>
-  </Link>
-);
+  Icon: ComponentType;
+}) => {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <Link href={to}>
+      <DropdownMenu.Item
+        className="relative flex h-[25px] select-none items-center gap-2 rounded-[3px] px-2 py-5 text-sm leading-none text-[#555] outline-none duration-150 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[disabled]:text-mauve8 data-[highlighted]:text-black"
+        onPointerEnter={() => setHovered(true)}
+        onPointerLeave={() => setHovered(false)}
+      >
+        <Icon data-hovered={hovered} />
+        {children}
+      </DropdownMenu.Item>
+    </Link>
+  );
+};
 
 export default function ProfileAvatar({ avatarUrl }: { avatarUrl: string }) {
   return (
@@ -56,17 +67,17 @@ export default function ProfileAvatar({ avatarUrl }: { avatarUrl: string }) {
           sideOffset={5}
           align="end"
         >
-          <AvatarDropdownItem to={`/user/geeky`} icon={<PersonIcon />}>
+          <AvatarDropdownItem to={`/user/geeky`} Icon={UserIcon}>
             <span>Profile</span>
           </AvatarDropdownItem>
-          <AvatarDropdownItem to="/settings" icon={<GearIcon />}>
+          <AvatarDropdownItem to="/settings" Icon={SettingsGearIcon}>
             <span>Settings</span>
           </AvatarDropdownItem>
           <DropdownMenu.Separator className="my-[5px] h-[1px] bg-[#eee]" />
-          <AvatarDropdownItem to="/feedback" icon={<PaperPlaneIcon />}>
+          <AvatarDropdownItem to="/feedback" Icon={MessageCircleIcon}>
             <span>Feedback</span>
           </AvatarDropdownItem>
-          <AvatarDropdownItem to="/pricing" icon={<HeartIcon />}>
+          <AvatarDropdownItem to="/pricing" Icon={PartyPopperIcon}>
             <span>Upgrade</span>
           </AvatarDropdownItem>
 

@@ -18,10 +18,25 @@
     /* scrollbar-width: thin;
     scrollbar-color: #f84f39 #eee; */
   }
+
+  /* html {
+    animation: smoothscroll1 1s;
+  }
+
+  html:focus-within {
+    animation-name: smoothscroll2;
+    scroll-behavior: smooth;
+  } */
+
+  [id] {
+    scroll-margin-top: 30px;
+  }
+
   body {
     color: #1d1d1f;
     overflow-x: hidden;
     background-color: #fafafa;
+    /* background-color: #f7f6f5; */
     /* background-color: #fafafa; */
 
     /* background-color: #f4f4f5 */
@@ -224,5 +239,28 @@ textarea:focus-visible {
 
   100% {
     transform: scaleY(0.6); /* scale down to 60% */
+  }
+}
+
+@keyframes smoothscroll1 {
+  from,
+  to {
+    scroll-behavior: smooth;
+  }
+}
+
+@keyframes smoothscroll2 {
+  from,
+  to {
+    scroll-behavior: smooth;
+  }
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  html {
+    animation: none;
+  }
+  html:focus-within {
+    scroll-behavior: auto;
   }
 }

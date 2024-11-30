@@ -40,6 +40,8 @@ export function extractTimestampTags(
       let match;
       while ((match = timestampRegex.exec(textContent)) !== null) {
         // Store result as an object with timestamp and corresponding text
+        console.log({ match });
+        console.log({ textContent });
         results.push({ timestamp: match[0], text: textContent.trim() });
       }
     } else if (node.nodeType === Node.ELEMENT_NODE) {
@@ -52,3 +54,27 @@ export function extractTimestampTags(
 
   return results;
 }
+
+// export function extractTimestampTags(htmlString) {
+//   const timestamps = [];
+
+//   const parser = new DOMParser();
+//   // Parse the HTML string into a document
+//   const doc = parser.parseFromString(htmlString, "text/html");
+//   const listItems = doc.body.querySelectorAll("*");
+
+//   listItems.forEach((item) => {
+//     const text = item.innerText;
+//     const regex = /(\d{1,2}:\d{2}:\d{2}|\d{1,2}:\d{2})\s+(.*)/; // Matches hh:mm:ss or mm:ss followed by text
+//     const match = text.match(regex);
+
+//     if (match) {
+//       timestamps.push({
+//         timestamp: match[1],
+//         text: match[2],
+//       });
+//     }
+//   });
+
+//   return timestamps;
+// }

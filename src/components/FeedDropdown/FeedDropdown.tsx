@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, startTransition } from "react";
+
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { toast } from "sonner";
 import {
@@ -84,21 +85,26 @@ const FeedDropdown = ({
                 sideOffset={2}
                 alignOffset={-5}
               >
-                {folders.map((item, i) => {
-                  return (
-                    <DropdownMenu.Item
-                      key={item.id}
-                      className="group relative flex h-[25px] select-none items-center rounded-[3px] px-2 py-4 text-sm leading-none text-[#555] outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[disabled]:text-mauve8 data-[highlighted]:text-black"
-                      onSelect={async (e) => {
-                        e.preventDefault();
-                        console.log(item.folder);
-                        await moveToFolderAction(feedId, item.folder as string);
-                      }}
-                    >
-                      {item.folder}
-                    </DropdownMenu.Item>
-                  );
-                })}
+                {folders
+                  .filter((item) => item.folder !== currentFolder)
+                  .map((item, i) => {
+                    return (
+                      <DropdownMenu.Item
+                        key={item.id}
+                        className="group relative flex h-[25px] select-none items-center rounded-[3px] px-2 py-4 text-sm leading-none text-[#555] outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[disabled]:text-mauve8 data-[highlighted]:text-black"
+                        onSelect={async (e) => {
+                          e.preventDefault();
+                          console.log(item.folder);
+                          await moveToFolderAction(
+                            feedId,
+                            item.folder as string,
+                          );
+                        }}
+                      >
+                        {item.folder}
+                      </DropdownMenu.Item>
+                    );
+                  })}
               </DropdownMenu.SubContent>
             </DropdownMenu.Portal>
           </DropdownMenu.Sub>

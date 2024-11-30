@@ -7,6 +7,9 @@ import { motion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
 
+import { balloons } from "balloons-js";
+import { useEffect } from "react";
+
 type SegmentedControlProps = {
   items: { href: string; title: string }[];
 };
@@ -14,8 +17,12 @@ type SegmentedControlProps = {
 const SegmentedControl = ({ items }: SegmentedControlProps): JSX.Element => {
   const pathname = usePathname();
 
+  useEffect(() => {
+    balloons();
+  }, []);
+
   return (
-    <motion.ul className="flex text-center border-b">
+    <motion.ul className="flex border-b text-center">
       {items.map((item, index) => {
         // const isActive = index === activeIndex;
         const isActive = item.href === pathname;
@@ -23,12 +30,12 @@ const SegmentedControl = ({ items }: SegmentedControlProps): JSX.Element => {
           <motion.li
             key={index}
             // onClick={() => setActiveIndex(index)}
-            className="relative list-none flex-1"
+            className="relative flex-1 list-none"
           >
             {isActive && (
               <motion.span
                 layoutId="highlight"
-                className="absolute h-[2px] right-0 left-0 bottom-0 bg-primary rounded-full"
+                className="absolute bottom-0 left-0 right-0 h-[2px] rounded-full bg-primary"
               ></motion.span>
             )}
             <Link

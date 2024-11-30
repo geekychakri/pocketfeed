@@ -2,6 +2,13 @@
 
 import DOMPurify from "isomorphic-dompurify";
 
+DOMPurify.addHook("afterSanitizeAttributes", function (node) {
+  //TODO:
+  if (node.tagName === "A" && node.getAttribute("href")?.startsWith("#")) {
+    node.removeAttribute("target");
+  }
+});
+
 export default function Article({ content }: { content: string }) {
   if (!content) {
     return (

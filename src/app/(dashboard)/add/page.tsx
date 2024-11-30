@@ -20,6 +20,8 @@ import Button from "@/components/ui/Button";
 import { cn, checkIfObjectIsEmpty, isHttpValid } from "@/lib/utils";
 import { addFeeds } from "@/app/actions";
 
+import useSound from "use-sound";
+
 type RssDataType = {
   url: string;
   title: string;
@@ -40,6 +42,9 @@ export default function Add() {
   const [urlValue, setUrlValue] = useState("");
   const [rssData, setRssData] = useState<Partial<RssDataType>>({});
   const [isLoading, setIsLoading] = useState(false);
+
+  const [playToggleOn] = useSound("sounds/toggle_on.wav");
+  const [playToggleOff] = useSound("sounds/toggle_off.wav");
 
   const [state, formAction] = useFormState(addFeeds, initialState);
 
@@ -193,6 +198,10 @@ export default function Add() {
                           }}
                           // checked={input.isChecked}
                           // onCheckedChange={onCheckboxChange(index)}
+                          onCheckedChange={(checked) => {
+                            console.log({ checked });
+                            checked ? playToggleOn() : playToggleOff();
+                          }}
                           defaultChecked={i === 0 ? true : false}
                           // required={i === 0 ? true : false}
                         >
