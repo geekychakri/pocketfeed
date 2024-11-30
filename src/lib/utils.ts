@@ -20,6 +20,25 @@ export function isHttpValid(str: string) {
 
 export function relativeTime() {}
 
+export function cleanUrl(url: string) {
+  // Remove http://, https://, or www.
+  let cleanedUrl = url.replace(/^(https?:\/\/)?(www\.)?/, "");
+
+  // Remove trailing slash if pathname is empty
+  if (cleanedUrl.endsWith("/")) {
+    cleanedUrl = cleanedUrl.slice(0, -1);
+  }
+
+  return cleanedUrl;
+}
+
+export function getInitials(name: string) {
+  return name
+    .split(" ")
+    .map((word) => word[0])
+    .join("");
+}
+
 export function extractTimestampTags(
   htmlString: string,
 ): { timestamp: string; text: string }[] {

@@ -17,6 +17,7 @@ import { UserIcon } from "@/icons/animated/UserIcon";
 import { SettingsGearIcon } from "@/icons/animated/SettingsGearIcon";
 import { MessageCircleIcon } from "@/icons/animated/MessageCircleIcon";
 import { PartyPopperIcon } from "@/icons/animated/PartyPopperIcon";
+import { getInitials } from "@/lib/utils";
 
 const AvatarDropdownItem = ({
   to,
@@ -42,7 +43,14 @@ const AvatarDropdownItem = ({
   );
 };
 
-export default function ProfileAvatar({ avatarUrl }: { avatarUrl: string }) {
+export default function ProfileAvatar({
+  avatarUrl,
+  username,
+}: {
+  avatarUrl: string;
+  username: string;
+}) {
+  console.log({ username });
   return (
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger asChild>
@@ -50,13 +58,13 @@ export default function ProfileAvatar({ avatarUrl }: { avatarUrl: string }) {
           <AvatarImage
             className="h-full w-full rounded-[inherit] border-2 object-cover"
             src={avatarUrl}
-            alt="Colm Tuite"
+            alt={username}
           />
           <AvatarFallback
             className="leading-1 flex h-full w-full items-center justify-center bg-white text-[15px] font-medium text-violet11"
             delayMs={600}
           >
-            CT
+            {getInitials(username)}
           </AvatarFallback>
         </Avatar>
       </DropdownMenu.Trigger>

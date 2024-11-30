@@ -25,11 +25,11 @@ DOMPurify.addHook("beforeSanitizeAttributes", function (node) {
     const timestampRegex = /^(?:\d{1,2}:\d{2}:\d{2}|\d{1,2}:\d{2})$/;
 
     // Check if the inner text matches the timestamp format
-    if (timestampRegex.test(node.textContent.trim())) {
+    if (timestampRegex.test(node.textContent!.trim())) {
       // Remove the href attribute
       // node.removeAttribute("href");
       const span = document.createElement("span");
-      span.innerText = node.textContent?.trim(); // Set inner text to match <a>
+      span.innerText = node.textContent?.trim() as string; // Set inner text to match <a>
 
       // Replace the <a> element with the new <p> element in the DOM
       node.parentNode?.replaceChild(span, node);

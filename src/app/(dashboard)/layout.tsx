@@ -29,7 +29,7 @@ export default async function MainLayout({
   console.log({ userId });
   const user = (await xata.db.users
     .filter({ clerkUserId: userId })
-    .select(["avatar"])
+    .select(["avatar", "username"])
     .getFirst()) as UsersRecord;
 
   const folders = await xata.db.folders
@@ -55,10 +55,13 @@ export default async function MainLayout({
     height: 64,
     format: "webp",
   });
+
+  console.log({ username: user.username });
   return (
     <>
       <Navigation
         avatarUrl={avatarUrl?.url as string}
+        username={user.username as string}
         foldersList={foldersList}
       />
       {/* {show && <PodcastPlayer />} */}

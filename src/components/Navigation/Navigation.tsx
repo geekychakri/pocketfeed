@@ -75,9 +75,11 @@ const routePaths = ["/", "/join", "/signin"];
 
 export default function Navigation({
   avatarUrl,
+  username,
   foldersList,
 }: {
   avatarUrl: string;
+  username: string;
   foldersList: { id: string; folder: string }[];
 }) {
   const pathname = usePathname();
@@ -170,7 +172,7 @@ export default function Navigation({
                 exit="exitAvatar"
               >
                 {/* <Link href="/add">Add</Link> */}
-                <ProfileAvatar avatarUrl={avatarUrl} />
+                <ProfileAvatar avatarUrl={avatarUrl} username={username} />
               </motion.div>
             )}
           </AnimatePresence>

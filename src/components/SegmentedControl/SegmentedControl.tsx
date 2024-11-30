@@ -12,13 +12,19 @@ import { useEffect } from "react";
 
 type SegmentedControlProps = {
   items: { href: string; title: string }[];
+  birthday: string;
 };
 
-const SegmentedControl = ({ items }: SegmentedControlProps): JSX.Element => {
+const SegmentedControl = ({
+  items,
+  birthday,
+}: SegmentedControlProps): JSX.Element => {
   const pathname = usePathname();
 
   useEffect(() => {
-    balloons();
+    if (new Date().getDate().toString() === birthday.split("-")[2]) {
+      balloons();
+    }
   }, []);
 
   return (

@@ -13,6 +13,7 @@ const items = [
 
 import { getXataClient, UsersRecord } from "@/xata";
 import { auth } from "@clerk/nextjs/server";
+import { getInitials } from "@/lib/utils";
 
 const xata = getXataClient();
 
@@ -27,6 +28,8 @@ export default async function UserLayout({
     .filter({ clerkUserId: userId })
     .getFirst()) as UsersRecord;
 
+  console.log({ user });
+
   const avatarUrl = user.avatar?.transform({
     width: 64,
     height: 64,
@@ -37,25 +40,25 @@ export default async function UserLayout({
       <div className="flex flex-col gap-8">
         <div className="flex items-center gap-3">
           <RouteBack />
-          <p>@geekychakri</p>
+          <p>@{user.username}</p>
         </div>
         <div className="flex items-center gap-4">
-          <Avatar className="inline-flex h-[92px] w-[92px] select-none items-center justify-center overflow-hidden rounded-full bg-blackA1 align-middle">
+          <Avatar className="inline-flex h-[92px] w-[92px] flex-none select-none items-center justify-center overflow-hidden rounded-full bg-blackA1 align-middle">
             <AvatarImage
               className="h-full w-full rounded-[inherit] border-2 object-cover"
               src={avatarUrl?.url}
-              alt="Colm Tuite"
+              alt={user.fullname as string}
             />
             <AvatarFallback
               className="leading-1 flex h-full w-full items-center justify-center bg-white text-[15px] font-medium text-violet11"
               delayMs={600}
             >
-              CT
+              {getInitials(user.fullname as string)}
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-col gap-2">
             <p className="flex items-center gap-2 font-medium">
-              <span>Geeky Chakri</span>
+              <span>{user.fullname}</span>
               <span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -74,10 +77,15 @@ export default async function UserLayout({
                 </svg>
               </span>
             </p>
-            <p className="text-gray-500">Frontend Engineer</p>
-            <p className="rounded-full bg-[#eee] px-2 py-1 text-xs">
-              geekychakri.github.io
-            </p>
+            <p className="whitespace-pre text-gray-500">{user.bio}</p>
+            <a
+              href={`https://${user.website as string}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="self-start rounded-full bg-[#eee] px-2 py-1 text-xs"
+            >
+              {user.website}
+            </a>
           </div>
         </div>
         <div className="flex gap-5">
@@ -92,7 +100,7 @@ export default async function UserLayout({
           Follow
         </button>
       </div>
-      <SegmentedControl items={items} />
+      <SegmentedControl items={items} birthday={user.birthday as string} />
       {children}
     </main>
   );

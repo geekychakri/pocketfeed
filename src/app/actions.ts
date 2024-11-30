@@ -10,6 +10,8 @@ import { currentUser } from "@clerk/nextjs/server";
 import { getXataClient } from "@/xata";
 import { revalidatePath } from "next/cache";
 
+import { cleanUrl } from "@/lib/utils";
+
 const xata = getXataClient();
 
 type FeedsType = {
@@ -89,8 +91,9 @@ export async function createUser(email: string, username: string) {
 
 export async function updateProfile(prevState: any, formData: FormData) {
   const fullname = formData.get("fullname") as string;
-  const website = formData.get("website") as string;
+  const website = cleanUrl(formData.get("website") as string);
   const bio = formData.get("bio") as string;
+  const birthday = formData.get("birthday") as string;
 
   console.log({ fullname, website, bio });
 
@@ -107,6 +110,7 @@ export async function updateProfile(prevState: any, formData: FormData) {
       fullname,
       website,
       bio,
+      birthday,
     });
 
     return { message: "Profile updated successfully!" };

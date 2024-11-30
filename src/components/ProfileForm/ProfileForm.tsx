@@ -21,7 +21,8 @@ export default function ProfileForm({ userInfo }: { userInfo: UsersRecord }) {
   // console.log({ userId });
   // const user = await xata.db.users.filter({ clerkUserId: userId }).getFirst();
 
-  const { username, email, fullname, website, bio } = userInfo as UsersRecord;
+  const { username, email, fullname, website, bio, birthday } =
+    userInfo as UsersRecord;
 
   const [formState, formAction] = useFormState(updateProfile, initialState);
 
@@ -82,9 +83,22 @@ export default function ProfileForm({ userInfo }: { userInfo: UsersRecord }) {
         <Textarea
           id="bio"
           name="bio"
-          className="min-h-24 scroll-pb-2"
+          className="min-h-24 scroll-pb-2 whitespace-pre"
           placeholder="I love reading blogs..."
           defaultValue={bio || ""}
+          maxLength={160}
+        />
+      </label>
+      <label htmlFor="birthday" className="flex flex-col gap-2">
+        <span className="font-medium">Birthday</span>
+        <Input
+          type="date"
+          id="birthday"
+          name="birthday"
+          defaultValue={birthday || ""}
+          spellCheck={false}
+
+          // className="rounded-md border px-4 py-2 outline-none duration-100 focus:border-primary"
         />
       </label>
       {/* <button className="rounded-md bg-primary px-4 py-2 font-medium text-white">
