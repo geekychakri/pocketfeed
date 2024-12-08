@@ -15,7 +15,7 @@ export function SpinnerRotate(props: SVGProps<SVGSVGElement>) {
           height="5"
           x="11"
           y="1"
-          fill="#ffffff"
+          fill="currentColor"
           opacity=".14"
         ></rect>
         <rect
@@ -23,7 +23,7 @@ export function SpinnerRotate(props: SVGProps<SVGSVGElement>) {
           height="5"
           x="11"
           y="1"
-          fill="#ffffff"
+          fill="currentColor"
           opacity=".29"
           transform="rotate(30 12 12)"
         ></rect>
@@ -32,7 +32,7 @@ export function SpinnerRotate(props: SVGProps<SVGSVGElement>) {
           height="5"
           x="11"
           y="1"
-          fill="#ffffff"
+          fill="currentColor"
           opacity=".43"
           transform="rotate(60 12 12)"
         ></rect>
@@ -41,7 +41,7 @@ export function SpinnerRotate(props: SVGProps<SVGSVGElement>) {
           height="5"
           x="11"
           y="1"
-          fill="#ffffff"
+          fill="currentColor"
           opacity=".57"
           transform="rotate(90 12 12)"
         ></rect>
@@ -50,7 +50,7 @@ export function SpinnerRotate(props: SVGProps<SVGSVGElement>) {
           height="5"
           x="11"
           y="1"
-          fill="#ffffff"
+          fill="currentColor"
           opacity=".71"
           transform="rotate(120 12 12)"
         ></rect>
@@ -59,7 +59,7 @@ export function SpinnerRotate(props: SVGProps<SVGSVGElement>) {
           height="5"
           x="11"
           y="1"
-          fill="#ffffff"
+          fill="currentColor"
           opacity=".86"
           transform="rotate(150 12 12)"
         ></rect>
@@ -68,7 +68,7 @@ export function SpinnerRotate(props: SVGProps<SVGSVGElement>) {
           height="5"
           x="11"
           y="1"
-          fill="#ffffff"
+          fill="currentColor"
           transform="rotate(180 12 12)"
         ></rect>
         <animateTransform

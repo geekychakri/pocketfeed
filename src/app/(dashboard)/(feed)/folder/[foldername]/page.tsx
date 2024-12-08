@@ -6,6 +6,8 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import FeedDropdown from "@/components/FeedDropdown";
 
 import { getXataClient } from "@/xata";
+import SearchFeed from "@/components/SearchFeed";
+import { FolderFeedList } from "@/components/FolderFeedList";
 
 const xata = getXataClient();
 const folders = ["Home", "Music"];
@@ -19,13 +21,16 @@ export default async function Folder({
   const user = await currentUser();
   const folderName = decodeURIComponent(params.foldername);
   console.log({ folderName });
-  const feeds = await xata.db.feeds
+  const page = await xata.db.feeds
     .filter({
       folder: decodeURIComponent(folderName),
       username: user?.username,
     })
-    .getMany();
-  console.log({ feeds }); //TODO: filter by userID choose either auth or  currentuser
+    .getPaginated({
+      pagination: { size: 2 },
+    });
+  console.log({ page }); //TODO: filter by userID choose either auth or  currentuser
+  //TODO: sort desc by new item
 
   const folders = await xata.db.folders
     .filter({ userId })
@@ -33,6 +38,8 @@ export default async function Folder({
     .getMany();
 
   console.log({ folders: JSON.parse(JSON.stringify(folders)) });
+
+  const hasNextPage = page.hasNextPage();
 
   // const folder = await xata.db.folders
   //   .filter({ userId, folder: params.foldername })
@@ -43,9 +50,14 @@ export default async function Folder({
   //   redirect("/folder/Music");
   // }
 
+  const pageInfo = {
+    hasNextPage,
+    cursor: page.meta.page.cursor, // Contains cursor information
+  };
+
   return (
     <div className="p-4">
-      <h1 className="mb-4 font-medium">{decodeURIComponent(folderName)}</h1>
+      <h1 className="mb-5 font-medium">{decodeURIComponent(folderName)}</h1>
 
       {/* <div className="flex flex-col gap-5">
         {[1, 2, 3, 4, 5].map((item, i) => (
@@ -53,41 +65,12 @@ export default async function Folder({
         ))}
       </div> */}
       <div className="flex flex-col gap-6">
-        {feeds.length >= 1 ? (
-          feeds.map((item, i) => (
-            <div
-              // href={`/feed/${item.title?.trim().replace(/\s+/g, "-").toLowerCase()}`}
-              // href={`/feed/${item.feedId}`}
-              key={i}
-              className="relative isolate flex h-20 w-full items-center justify-between rounded-md border bg-white px-4 py-2"
-            >
-              <span className="flex items-center gap-3">
-                <img
-                  src={`https://www.google.com/s2/favicons?domain=${item.siteURL}&sz=128`}
-                  alt=""
-                  className="size-7 rounded-full"
-                />
-
-                <span className="font-medium">{item.title}</span>
-              </span>
-              {/* <button
-                className="flex items-center justify-center rounded-md border border-transparent p-1 duration-150 hover:border hover:bg-white"
-                // onClick={(e) => e.stopPropagation()}
-              >
-                <DotsHorizontalIcon className="size-5" />
-              </button> */}
-
-              <FeedDropdown
-                feedId={item.id as string}
-                folderName={folderName}
-                folders={JSON.parse(JSON.stringify(folders))}
-              />
-              <Link
-                href={`/feed/${item.feedId}`}
-                className="absolute inset-0 z-[1]"
-              />
-            </div>
-          ))
+        {page.records.length >= 1 ? (
+          <FolderFeedList
+            initialFeeds={JSON.parse(JSON.stringify(page.records))}
+            initialPageInfo={pageInfo}
+            folders={JSON.parse(JSON.stringify(folders))}
+          />
         ) : (
           <div className="flex flex-col items-center justify-center gap-6">
             <img

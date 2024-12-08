@@ -11,6 +11,8 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 
+import { NuqsAdapter } from "nuqs/adapters/next/app";
+
 import { GeistSans } from "geist/font/sans";
 
 const inter = Inter({
@@ -32,8 +34,14 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" className={GeistSans.className}>
+        <head>
+          {/* <script
+            src="https://unpkg.com/react-scan/dist/auto.global.js"
+            async
+          /> */}
+        </head>
         <body>
-          {children}
+          <NuqsAdapter>{children}</NuqsAdapter>
           <Toaster
             duration={3000}
             toastOptions={{

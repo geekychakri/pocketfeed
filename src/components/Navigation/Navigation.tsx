@@ -86,17 +86,17 @@ export default function Navigation({
   const { isSignedIn } = useAuth();
   // let isUserLoggedIn = pathname === "/" ? false : true;
 
-  const [showBottomShadow, setShowBottomShadow] = useState(false);
+  // const [showBottomShadow, setShowBottomShadow] = useState(false);
 
-  const { scrollY } = useScroll();
+  // const { scrollY } = useScroll();
 
-  useMotionValueEvent(scrollY, "change", (y) => {
-    if (y > 100) {
-      setShowBottomShadow(true);
-    } else {
-      setShowBottomShadow(false);
-    }
-  });
+  // useMotionValueEvent(scrollY, "change", (y) => {
+  //   if (y > 100) {
+  //     setShowBottomShadow(true);
+  //   } else {
+  //     setShowBottomShadow(false);
+  //   }
+  // });
   const { isOffline } = useNavigatorOnline();
   return (
     <motion.nav

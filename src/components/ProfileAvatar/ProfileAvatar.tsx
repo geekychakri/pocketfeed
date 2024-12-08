@@ -75,7 +75,7 @@ export default function ProfileAvatar({
           sideOffset={5}
           align="end"
         >
-          <AvatarDropdownItem to={`/user/geeky`} Icon={UserIcon}>
+          <AvatarDropdownItem to={`/user/${username}`} Icon={UserIcon}>
             <span>Profile</span>
           </AvatarDropdownItem>
           <AvatarDropdownItem to="/settings" Icon={SettingsGearIcon}>

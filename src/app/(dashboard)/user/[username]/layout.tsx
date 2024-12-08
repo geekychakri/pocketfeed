@@ -6,14 +6,12 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/UserAvatar";
 
 import SegmentedControl from "@/components/SegmentedControl";
 
-const items = [
-  { href: "/user/geeky", title: "Posts" },
-  { href: "/user/geeky/subscriptions", title: "Subscriptions" },
-];
+// import DOMPurify from "isomorphic-dompurify";
 
 import { getXataClient, UsersRecord } from "@/xata";
 import { auth } from "@clerk/nextjs/server";
-import { getInitials } from "@/lib/utils";
+import { convertTextToLinks, getInitials } from "@/lib/utils";
+import FollowButton from "@/components/FollowButton";
 
 const xata = getXataClient();
 
@@ -35,27 +33,37 @@ export default async function UserLayout({
     height: 64,
     format: "webp",
   });
+
+  const items = [
+    { href: `/user/${user.username}`, title: "Posts" },
+    { href: `/user/${user.username}/subscriptions`, title: "Subscriptions" },
+  ];
   return (
-    <main className="mx-auto flex w-full max-w-[720px] flex-col gap-8 py-20">
-      <div className="flex flex-col gap-8">
+    <main className="mx-auto flex w-full max-w-[720px] flex-col gap-5 py-20">
+      <div className="flex flex-col gap-6">
         <div className="flex items-center gap-3">
           <RouteBack />
           <p>@{user.username}</p>
         </div>
-        <div className="flex items-center gap-4">
-          <Avatar className="inline-flex h-[92px] w-[92px] flex-none select-none items-center justify-center overflow-hidden rounded-full bg-blackA1 align-middle">
-            <AvatarImage
-              className="h-full w-full rounded-[inherit] border-2 object-cover"
-              src={avatarUrl?.url}
-              alt={user.fullname as string}
-            />
-            <AvatarFallback
-              className="leading-1 flex h-full w-full items-center justify-center bg-white text-[15px] font-medium text-violet11"
-              delayMs={600}
-            >
-              {getInitials(user.fullname as string)}
-            </AvatarFallback>
-          </Avatar>
+        <div className="flex flex-col gap-4">
+          <div className="flex justify-between">
+            <Avatar className="inline-flex h-[92px] w-[92px] flex-none select-none items-center justify-center overflow-hidden rounded-full bg-blackA1 align-middle">
+              <AvatarImage
+                className="h-full w-full rounded-[inherit] border-2 object-cover"
+                src={avatarUrl?.url}
+                alt={user.fullname as string}
+              />
+              <AvatarFallback
+                className="leading-1 flex h-full w-full items-center justify-center bg-white text-[15px] font-medium text-violet11"
+                delayMs={600}
+              >
+                {getInitials(user.fullname as string)}
+              </AvatarFallback>
+            </Avatar>
+
+            <FollowButton />
+          </div>
+
           <div className="flex flex-col gap-2">
             <p className="flex items-center gap-2 font-medium">
               <span>{user.fullname}</span>
@@ -77,7 +85,12 @@ export default async function UserLayout({
                 </svg>
               </span>
             </p>
-            <p className="whitespace-pre text-gray-500">{user.bio}</p>
+            <p
+              className="prose whitespace-pre text-gray-500"
+              dangerouslySetInnerHTML={{
+                __html: convertTextToLinks(user.bio as string),
+              }}
+            ></p>
             <a
               href={`https://${user.website as string}`}
               target="_blank"
@@ -96,9 +109,6 @@ export default async function UserLayout({
             10K <span className="text-gray-500">Followers</span>
           </Link>
         </div>
-        <button className="rounded-md border bg-primary px-2 py-2 font-medium text-white">
-          Follow
-        </button>
       </div>
       <SegmentedControl items={items} birthday={user.birthday as string} />
       {children}

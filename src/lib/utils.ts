@@ -39,6 +39,75 @@ export function getInitials(name: string) {
     .join("");
 }
 
+// export function convertTextToLinks(text: string) {
+//   // // Regex to match URLs with or without scheme (http/https/ftp) and naked domains
+//   const urlRegex =
+//     /(https?:\/\/[^\s]+|www\.[^\s]+|[a-zA-Z0-9-]+\.[a-zA-Z0-9-]+\.[a-zA-Z]{2,})(?=\s|$)/g;
+
+//   return text.replace(urlRegex, (url) => {
+//     let formattedUrl = url;
+
+//     // If the URL doesn't have a scheme (http:// or https://), prepend http://
+//     if (!/^https?:\/\//i.test(url)) {
+//       // If it starts with "www", prepend "http://"
+//       if (url.startsWith("www.")) {
+//         formattedUrl = `https://${url}`;
+//       } else {
+//         // For naked domains, prepend "http://"
+//         formattedUrl = `https://${url}`;
+//       }
+//     }
+
+//     // Remove trailing slash if there's no pathname
+//     const parsedUrl = new URL(formattedUrl);
+
+//     // Only remove the trailing slash if there's no pathname
+//     if (!parsedUrl.pathname && parsedUrl.href.endsWith("/")) {
+//       formattedUrl = formattedUrl.replace(/\/$/, ""); // Remove trailing slash
+//     }
+
+//     // Remove the prefix (http://, https://, or www.) from the text
+//     const displayText = url.replace(/^(https?:\/\/|www\.)/i, "");
+
+//     // Return the <a> tag with the formatted full URL in the href, but show the stripped version
+//     return `<a href="${formattedUrl}" target="_blank">${displayText}</a>`;
+//   });
+// }
+
+export function convertTextToLinks(text: string) {
+  // // Regex to match URLs with or without scheme (http/https/ftp) and naked domains
+  const urlRegex =
+    /(https?:\/\/[^\s]+|www\.[^\s]+|[a-zA-Z0-9-]+\.[a-zA-Z0-9-]+\.[a-zA-Z]{2,})(?=\s|$)/g;
+
+  return text.replace(urlRegex, (url) => {
+    let formattedUrl = url;
+
+    // If the URL doesn't have a scheme (http:// or https://), prepend http://
+    if (!/^https?:\/\//i.test(url)) {
+      // If it starts with "www", prepend "http://"
+      if (url.startsWith("www.")) {
+        formattedUrl = `https://${url}`;
+      } else {
+        // For naked domains, prepend "http://"
+        formattedUrl = `https://${url}`;
+      }
+    }
+
+    // Only remove the trailing slash if there's no pathname
+    if (formattedUrl.endsWith("/")) {
+      formattedUrl = formattedUrl.slice(0, -1); // Remove trailing slash
+    }
+
+    console.log(formattedUrl);
+
+    // Remove the prefix (http://, https://, or www.) from the text
+    const displayText = formattedUrl.replace(/^(https?:\/\/(?:www\.)?)/i, "");
+
+    // Return the <a> tag with the formatted full URL in the href, but show the stripped version
+    return `<a href="${formattedUrl}" target="_blank" rel="noopener noreferrer">${displayText}</a>`;
+  });
+}
+
 export function extractTimestampTags(
   htmlString: string,
 ): { timestamp: string; text: string }[] {
