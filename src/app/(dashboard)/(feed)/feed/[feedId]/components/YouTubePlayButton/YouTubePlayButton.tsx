@@ -25,7 +25,7 @@ export default function YouTubePlayButton({
         openYoutubePlayer();
         setYoutubeId(youtubeId);
       }}
-      className="flex items-center gap-1 rounded-md border-2 bg-white px-4 py-1 text-base font-medium text-[#e62117]"
+      className="flex items-center gap-1 rounded-md border-2 border-primary bg-white px-4 py-1 text-base font-medium"
     >
       <span>
         <PlayIcon className="size-5" />

@@ -17,11 +17,11 @@ export default async function Settings() {
     .filter({ clerkUserId: userId })
     .getFirst()) as UsersRecord;
 
-  const avatarUrl = user.avatar?.transform({
-    width: 64,
-    height: 64,
-    format: "webp",
-  });
+  // const avatarUrl = user.avatar?.transform({
+  //   width: 64,
+  //   height: 64,
+  //   format: "webp",
+  // });
 
   console.log(user);
 
@@ -54,7 +54,7 @@ export default async function Settings() {
       <div>
         <FileUpload
           username={userInfo.username as string}
-          avatarUrl={avatarUrl?.url as string}
+          avatarUrl={user.avatarUrl as string}
         />
       </div>
       <ProfileForm userInfo={userInfo} />

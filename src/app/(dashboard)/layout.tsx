@@ -14,10 +14,17 @@ export const metadata: Metadata = {
   description: "All of your favorite content in one place.",
 };
 
-import { getXataClient, UsersRecord } from "@/xata";
+import { FoldersRecord, getXataClient, UsersRecord } from "@/xata";
 import { auth } from "@clerk/nextjs/server";
+import { cache } from "react";
 
 const xata = getXataClient();
+
+// const fetchFolders = cache(async (userId: string) => {
+//   return await xata.db.folders.filter({ userId }).select(["folder"]).getMany();
+// });
+
+import getFolders from "@/lib/getFolders";
 
 export default async function MainLayout({
   children,
@@ -27,15 +34,22 @@ export default async function MainLayout({
   // const { show } = useShowPodcastPlayer();
   const { userId }: { userId: string | null } = auth();
   console.log({ userId });
-  const user = (await xata.db.users
-    .filter({ clerkUserId: userId })
-    .select(["avatar", "username"])
-    .getFirst()) as UsersRecord;
+  const [user, folders] = await Promise.all([
+    xata.db.users
+      .filter({ clerkUserId: userId })
+      .select(["avatarUrl", "username"])
+      .getFirst(),
+    getFolders(userId as string),
+  ]);
+  // const user = (await xata.db.users
+  //   .filter({ clerkUserId: userId })
+  //   .select(["avatarUrl", "username"])
+  //   .getFirst()) as UsersRecord;
 
-  const folders = await xata.db.folders
-    .filter({ userId })
-    .select(["folder"])
-    .getMany();
+  // const folders = await xata.db.folders
+  //   .filter({ userId })
+  //   .select(["folder"])
+  //   .getMany();
 
   console.log(folders);
 
@@ -50,18 +64,18 @@ export default async function MainLayout({
 
   console.log(user);
 
-  const avatarUrl = user.avatar?.transform({
-    width: 64,
-    height: 64,
-    format: "webp",
-  });
+  // const avatarUrl = user.avatar?.transform({
+  //   width: 64,
+  //   height: 64,
+  //   format: "webp",
+  // });
 
-  console.log({ username: user.username });
+  console.log({ username: user?.username });
   return (
     <>
       <Navigation
-        avatarUrl={avatarUrl?.url as string}
-        username={user.username as string}
+        avatarUrl={user?.avatarUrl as string}
+        username={user?.username as string}
         foldersList={foldersList}
       />
       {/* {show && <PodcastPlayer />} */}

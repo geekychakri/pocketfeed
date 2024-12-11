@@ -51,6 +51,7 @@ export default function ProfileAvatar({
   username: string;
 }) {
   console.log({ username });
+  console.log({ avatarUrl });
   return (
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger asChild>

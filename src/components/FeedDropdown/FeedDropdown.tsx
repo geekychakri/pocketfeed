@@ -51,7 +51,7 @@ const FeedDropdown = ({
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger asChild className="z-[2]">
         <button
-          className="inline-flex size-[35px] items-center justify-center rounded-md border border-transparent outline-none duration-100 hover:border hover:bg-gray-200"
+          className="inline-flex size-[35px] flex-none items-center justify-center rounded-md border border-transparent outline-none duration-100 hover:border hover:bg-gray-200"
           aria-label="Feed options"
         >
           <DotsHorizontalIcon />

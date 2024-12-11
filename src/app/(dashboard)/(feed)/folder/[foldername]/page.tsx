@@ -12,6 +12,8 @@ import { FolderFeedList } from "@/components/FolderFeedList";
 const xata = getXataClient();
 const folders = ["Home", "Music"];
 
+import getFolders from "@/lib/getFolders";
+
 export default async function Folder({
   params,
 }: {
@@ -21,21 +23,30 @@ export default async function Folder({
   const user = await currentUser();
   const folderName = decodeURIComponent(params.foldername);
   console.log({ folderName });
+  // const [page, folders] = await Promise.all([
+  //   xata.db.feeds
+  //     .filter({
+  //       folder: decodeURIComponent(folderName),
+  //       username: user?.username,
+  //     })
+  //     .getPaginated({
+  //       pagination: { size: 2 },
+  //     }),
+  //   xata.db.folders.filter({ userId }).select(["folder"]).getMany(),
+  // ]);
   const page = await xata.db.feeds
     .filter({
       folder: decodeURIComponent(folderName),
       username: user?.username,
     })
+    .sort("xata.createdAt", "desc")
     .getPaginated({
-      pagination: { size: 2 },
+      pagination: { size: 5 },
     });
   console.log({ page }); //TODO: filter by userID choose either auth or  currentuser
   //TODO: sort desc by new item
 
-  const folders = await xata.db.folders
-    .filter({ userId })
-    .select(["folder"])
-    .getMany();
+  const folders = await getFolders(userId as string);
 
   console.log({ folders: JSON.parse(JSON.stringify(folders)) });
 

@@ -27,7 +27,7 @@ export default function Article({ content }: { content: string }) {
       <article
         dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }}
         // className="relative text-lg leading-normal"
-        className="prose"
+        className="prose break-words"
       ></article>
     </>
   );

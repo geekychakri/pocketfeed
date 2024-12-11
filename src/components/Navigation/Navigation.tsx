@@ -10,6 +10,8 @@ import Dropdown from "../FolderDropdown";
 
 import ProfileAvatar from "../ProfileAvatar";
 
+import Avatar from "boring-avatars";
+
 import {
   motion,
   AnimatePresence,
@@ -172,7 +174,11 @@ export default function Navigation({
                 exit="exitAvatar"
               >
                 {/* <Link href="/add">Add</Link> */}
-                <ProfileAvatar avatarUrl={avatarUrl} username={username} />
+                {avatarUrl ? (
+                  <ProfileAvatar avatarUrl={avatarUrl} username={username} />
+                ) : (
+                  <Avatar name={username} size={45} />
+                )}
               </motion.div>
             )}
           </AnimatePresence>

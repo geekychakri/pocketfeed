@@ -28,11 +28,11 @@ export default async function UserLayout({
 
   console.log({ user });
 
-  const avatarUrl = user.avatar?.transform({
-    width: 64,
-    height: 64,
-    format: "webp",
-  });
+  // const avatarUrl = user.avatar?.transform({
+  //   width: 64,
+  //   height: 64,
+  //   format: "webp",
+  // });
 
   const items = [
     { href: `/user/${user.username}`, title: "Posts" },
@@ -50,7 +50,7 @@ export default async function UserLayout({
             <Avatar className="inline-flex h-[92px] w-[92px] flex-none select-none items-center justify-center overflow-hidden rounded-full bg-blackA1 align-middle">
               <AvatarImage
                 className="h-full w-full rounded-[inherit] border-2 object-cover"
-                src={avatarUrl?.url}
+                src={user.avatarUrl as string}
                 alt={user.fullname as string}
               />
               <AvatarFallback

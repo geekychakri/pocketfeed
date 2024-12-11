@@ -49,7 +49,7 @@ export default function PodcastPlayButton({
 
   return (
     <button
-      className="z-[2] flex h-10 w-28 items-center justify-center gap-1 rounded-md border-2 bg-white px-4 py-2 text-base font-medium text-[#e62117]"
+      className="z-[2] flex h-10 w-28 items-center justify-center gap-1 rounded-md border-2 border-primary bg-white px-4 py-2 text-base font-medium"
       onClick={() => {
         if (activeEpisode == episodeNumber && isPlaying) {
           console.log("PREVIOUS CLICK");

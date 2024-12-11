@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Open_Sans } from "next/font/google";
 import "./globals.css";
 
 import { Toaster } from "sonner";
@@ -21,6 +21,12 @@ const inter = Inter({
   display: "swap",
 });
 
+const openSans = Open_Sans({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Pocket Feed",
   description: "All of your favorite content in one place.",
@@ -33,7 +39,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className={GeistSans.className}>
+      <html lang="en" className={openSans.className}>
         <head>
           {/* <script
             src="https://unpkg.com/react-scan/dist/auto.global.js"

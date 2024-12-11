@@ -61,7 +61,7 @@ export function FolderFeedList({
           // href={`/feed/${item.title?.trim().replace(/\s+/g, "-").toLowerCase()}`}
           // href={`/feed/${item.feedId}`}
           key={i}
-          className="relative isolate flex h-20 w-full items-center justify-between rounded-md border bg-white px-4 py-2"
+          className="relative isolate flex h-20 w-full items-center justify-between gap-4 rounded-md border bg-white px-4 py-2"
         >
           <span className="flex items-center gap-3">
             <img
@@ -70,7 +70,7 @@ export function FolderFeedList({
               className="size-7 rounded-full"
             />
 
-            <span className="font-medium">{item.title}</span>
+            <span className="line-clamp-1 font-medium">{item.title}</span>
           </span>
 
           <FeedDropdown
