@@ -27,6 +27,7 @@ type FeedsType = {
 
 export async function addFeeds(prevState: any, formData: FormData) {
   const user = await currentUser();
+  const userId = auth().userId;
   console.log({ username: user?.username });
   const results = qs.parse(
     Object.fromEntries(formData.entries()) as {},
@@ -47,6 +48,7 @@ export async function addFeeds(prevState: any, formData: FormData) {
           siteURL: results.siteURL,
           username: user?.username, //TODO:
           feedId,
+          userId,
         };
       });
   } else {
@@ -59,6 +61,7 @@ export async function addFeeds(prevState: any, formData: FormData) {
         title: item?.title,
         username: user?.username,
         feedId,
+        userId,
       };
     });
   }
@@ -100,7 +103,7 @@ export async function updateProfile(prevState: any, formData: FormData) {
   const { userId }: { userId: string | null } = auth();
 
   try {
-    const user = await xata.db.users.filter({ clerkUserId: userId }).getFirst();
+    const user = await xata.db.users.filter({ userId: userId }).getFirst();
     // await user?.update({
     //   fullname,
     //   website,

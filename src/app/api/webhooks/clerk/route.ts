@@ -66,7 +66,7 @@ export async function POST(req: Request) {
     }
 
     // const user = {
-    //   clerkUserId: id,
+    //   userId: id,
     //   email: email_addresses[0].email_address,
     //   ...(first_name ? { firstName: first_name } : {}),
     //   ...(last_name ? { lastName: last_name } : {}),
@@ -76,7 +76,7 @@ export async function POST(req: Request) {
     // await createUser(user as User);
 
     const user = {
-      clerkUserId: id,
+      userId: id,
       email: email_addresses[0].email_address,
       ...(username ? { username } : {}), //check for oauth TODO:
       ...(image_url ? { avatar: image_url } : {}),

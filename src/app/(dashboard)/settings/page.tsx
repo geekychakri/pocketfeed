@@ -14,7 +14,7 @@ export default async function Settings() {
   const { userId }: { userId: string | null } = auth();
   console.log({ userId });
   const user = (await xata.db.users
-    .filter({ clerkUserId: userId })
+    .filter({ userId: userId })
     .getFirst()) as UsersRecord;
 
   // const avatarUrl = user.avatar?.transform({

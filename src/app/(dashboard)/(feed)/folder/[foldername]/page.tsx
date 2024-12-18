@@ -14,13 +14,21 @@ const folders = ["Home", "Music"];
 
 import getFolders from "@/lib/getFolders";
 
+const getLastModified = async (url: string) => {
+  const res = await fetch(url, {
+    method: "HEAD",
+  });
+  const etag = res.headers.get("last-modified");
+  return etag;
+};
+
 export default async function Folder({
   params,
 }: {
   params: { foldername: string };
 }) {
-  const { userId }: { userId: string | null } = auth();
-  const user = await currentUser();
+  const userId = auth().userId || "";
+  // const user = await currentUser();
   const folderName = decodeURIComponent(params.foldername);
   console.log({ folderName });
   // const [page, folders] = await Promise.all([
@@ -37,7 +45,7 @@ export default async function Folder({
   const page = await xata.db.feeds
     .filter({
       folder: decodeURIComponent(folderName),
-      username: user?.username,
+      userId: userId,
     })
     .sort("xata.createdAt", "desc")
     .getPaginated({
@@ -51,6 +59,16 @@ export default async function Folder({
   console.log({ folders: JSON.parse(JSON.stringify(folders)) });
 
   const hasNextPage = page.hasNextPage();
+
+  console.log({ records: page.records });
+
+  // let etags = [];
+  // for (const record of page.records) {
+  //   const tag = await getLastModified(record.rssURL as string);
+  //   etags.push(tag);
+  // }
+
+  // console.log({ etags });
 
   // const folder = await xata.db.folders
   //   .filter({ userId, folder: params.foldername })

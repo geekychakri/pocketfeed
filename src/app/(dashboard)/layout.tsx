@@ -36,13 +36,13 @@ export default async function MainLayout({
   console.log({ userId });
   const [user, folders] = await Promise.all([
     xata.db.users
-      .filter({ clerkUserId: userId })
+      .filter({ userId: userId })
       .select(["avatarUrl", "username"])
       .getFirst(),
     getFolders(userId as string),
   ]);
   // const user = (await xata.db.users
-  //   .filter({ clerkUserId: userId })
+  //   .filter({ userId: userId })
   //   .select(["avatarUrl", "username"])
   //   .getFirst()) as UsersRecord;
 

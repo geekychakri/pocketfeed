@@ -1,0 +1,32 @@
+import GlobalSearch from "@/components/GlobalSearch";
+import SearchResults from "@/components/SearchResults";
+import Input from "@/components/ui/Input";
+import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+
+import { Suspense } from "react";
+
+import Link from "next/link";
+
+import SearchResultSkeleton from "@/components/SearchResultsSkeleton";
+
+export default async function Page(props: {
+  params: { category: string };
+  searchParams?: Promise<{
+    query?: string;
+  }>;
+}) {
+  const category = props.params.category;
+  console.log({ category });
+  const searchParams = await props.searchParams;
+  const query = searchParams?.query || "";
+  return (
+    <main className="mx-auto flex min-h-[500px] w-full max-w-3xl flex-col gap-6 py-20 max-sm:px-4">
+      <GlobalSearch />
+      {/* <SearchResultSkeleton /> */}
+
+      <Suspense key={query} fallback={<SearchResultSkeleton />}>
+        <SearchResults query={query} category={category} />
+      </Suspense>
+    </main>
+  );
+}

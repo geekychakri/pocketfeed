@@ -19,7 +19,7 @@ const initialState = {
 export default function ProfileForm({ userInfo }: { userInfo: UsersRecord }) {
   // const { userId }: { userId: string | null } = auth();
   // console.log({ userId });
-  // const user = await xata.db.users.filter({ clerkUserId: userId }).getFirst();
+  // const user = await xata.db.users.filter({ userId: userId }).getFirst();
 
   const { username, email, fullname, website, bio, birthday } =
     userInfo as UsersRecord;

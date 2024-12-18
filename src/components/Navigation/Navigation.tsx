@@ -12,6 +12,8 @@ import ProfileAvatar from "../ProfileAvatar";
 
 import Avatar from "boring-avatars";
 
+import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+
 import {
   motion,
   AnimatePresence,
@@ -133,6 +135,16 @@ export default function Navigation({
 
       {isSignedIn ? (
         <div className="flex w-[200px] items-center justify-end gap-8">
+          <Link
+            href="/search/feeds"
+            className="flex items-center rounded-full"
+            title="Search"
+          >
+            <span>
+              <MagnifyingGlassIcon className="size-6" />
+            </span>
+            {/* <span className="text-sm">Search</span> */}
+          </Link>
           <AnimatePresence mode="wait">
             {isOffline ? (
               <motion.div

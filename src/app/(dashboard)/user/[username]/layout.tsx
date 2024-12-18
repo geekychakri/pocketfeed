@@ -23,7 +23,7 @@ export default async function UserLayout({
   const { userId }: { userId: string | null } = auth();
   console.log({ userId });
   const user = (await xata.db.users
-    .filter({ clerkUserId: userId })
+    .filter({ userId: userId })
     .getFirst()) as UsersRecord;
 
   console.log({ user });

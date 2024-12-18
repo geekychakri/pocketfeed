@@ -28,7 +28,7 @@ export async function POST(request: Request) {
 
   console.log({ userId });
   const user = (await xata.db.users
-    .filter({ clerkUserId: userId })
+    .filter({ userId: userId })
     .getFirst()) as UsersRecord;
 
   console.log({ user });
