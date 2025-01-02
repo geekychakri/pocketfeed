@@ -51,10 +51,10 @@ const FeedDropdown = ({
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger asChild className="z-[2]">
         <button
-          className="inline-flex size-[35px] flex-none items-center justify-center rounded-md border border-transparent outline-none duration-100 hover:border hover:bg-gray-200"
+          className="group/feed-item inline-flex size-[35px] flex-none items-center justify-center rounded-md border border-transparent outline-none duration-100 hover:border hover:bg-[#f2f2f2]"
           aria-label="Feed options"
         >
-          <DotsHorizontalIcon />
+          <DotsHorizontalIcon className="opacity-50 duration-75 group-hover/feed-item:opacity-100" />
         </button>
       </DropdownMenu.Trigger>
 

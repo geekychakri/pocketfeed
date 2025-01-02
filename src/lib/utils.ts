@@ -33,6 +33,9 @@ export function cleanUrl(url: string) {
 }
 
 export function getInitials(name: string) {
+  if (!name) {
+    return "";
+  }
   return name
     .split(" ")
     .map((word) => word[0])

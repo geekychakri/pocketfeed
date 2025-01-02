@@ -11,17 +11,27 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center gap-32 py-20">
       <header className="flex flex-col gap-14">
-        <h1
-          className={`flex flex-col text-center text-8xl leading-none tracking-tight ${InstrumentSerif.className}`}
-        >
-          <span>All of your favorite</span>
-          <span className={`text-[#f84f39] ${InstrumentSerif.className}`}>
+        <div className="flex flex-col gap-4">
+          <h1
+            className={`flex gap-4 text-center text-8xl leading-none tracking-tight ${InstrumentSerif.className}`}
+          >
+            <span>
+              Less <span>Chaos</span>.
+            </span>
+            {/* <span className={`text-[#f84f39] ${InstrumentSerif.className}`}>
             content
-          </span>
-          <span>in one place.</span>
-        </h1>
+          </span> */}
+            <span>
+              More <span className="text-primary">Focus</span>.
+            </span>
+          </h1>
+          <h2 className="text-center text-2xl text-gray-400">
+            All of your favorite content in one place.
+          </h2>
+        </div>
+
         <div className="flex gap-7 self-center">
-          <button className="w-56 rounded-md bg-primary px-6 py-3 text-xl font-medium text-white">
+          <button className="w-56 rounded-md bg-[#181818] px-6 py-3 text-xl font-medium text-white">
             Join for free
           </button>
           {/* <button className="text-xl">Watch Demo</button> */}

@@ -18,6 +18,9 @@ import PodcastPlayButton from "./components/PodcastPlayButton";
 import YouTubePlayButton from "./components/YouTubePlayButton";
 
 import YouTubeModal from "./components/YouTubeModal";
+import { decode } from "html-entities";
+
+import PostModal from "@/components/PostModal";
 
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
@@ -161,7 +164,9 @@ function FeedItem({
   feedList: FeedListType;
   item: FeedItemType;
 }) {
+  console.log({ feedUrl: feedList.feedUrl });
   if (item.enclosure?.type?.includes("audio")) {
+    //TODO:
     return (
       <PodcastCard
         feedUrl={feedList.feedUrl}
@@ -170,6 +175,7 @@ function FeedItem({
         episodeNumber={item.guid}
         author={feedList.itunes.author}
         albumName={feedList.title}
+        webLink={feedList.link}
       />
     );
   } else if (item.link?.includes("youtube.com")) {
@@ -177,7 +183,7 @@ function FeedItem({
       <div className="flex flex-col gap-4 rounded-md border bg-white p-4">
         <span>
           <span className="flex flex-col gap-1">
-            <span className="font-semibold">{item.title}</span>
+            <span className="font-semibold">{decode(item.title)}</span>
             <span className="line-clamp-2 text-gray-600">
               {item.contentSnippet}
             </span>
@@ -191,24 +197,22 @@ function FeedItem({
 
         <div>
           <YouTubePlayButton youtubeId={item.id.split(":")[2]} />
+          <PostModal
+            feedItem={JSON.stringify(item)}
+            feedTitle={feedList.title}
+            websiteLink={feedList.link}
+          />
         </div>
       </div>
     );
   }
   return (
-    <Link
-      href={
-        item.link?.includes(new URL(feedList.link as string).hostname)
-          ? `/read/${encodeURIComponent(item.link as string)}`
-          : `/read/${encodeURIComponent(`${feedList.link}/${item.link}` as string)}`
-      }
-      // href={`/read/${encodeURIComponent(item.link as string)}`} //TODO::
-
-      className="flex flex-col gap-3 rounded-md border bg-white p-4"
-      prefetch={false}
+    <div
+      className="relative isolate flex flex-col gap-3 rounded-md border bg-white p-4"
+      // prefetch={false}
     >
       <span className="flex flex-col gap-1">
-        <span className="font-semibold">{item.title}</span>
+        <span className="font-semibold">{decode(item.title)}</span>
         <span className="line-clamp-2 text-gray-600">
           {item.contentSnippet}
         </span>
@@ -219,7 +223,22 @@ function FeedItem({
         <span>·</span>
         <span>{dayjs().to(dayjs(item.isoDate))}</span>
       </span>
-    </Link>
+      <PostModal
+        feedItem={JSON.stringify(item)}
+        className="z-[2]"
+        feedTitle={feedList.title}
+        websiteLink={feedList.link}
+      />
+      <Link
+        href={
+          item.link?.includes(new URL(feedList.link as string).hostname)
+            ? `/read/${encodeURIComponent(item.link as string)}`
+            : `/read/${encodeURIComponent(`${feedList.link}/${item.link}` as string)}`
+        }
+        // href={`/read/${encodeURIComponent(item.link as string)}`} //TODO::
+        className="absolute inset-0 z-[1]"
+      />
+    </div>
   );
 }
 
@@ -379,6 +398,7 @@ const PodcastCard = ({
   author,
   albumName,
   feedUrl,
+  webLink,
 }: {
   item: FeedItemType;
   albumCover: string;
@@ -386,22 +406,26 @@ const PodcastCard = ({
   author: string;
   albumName: string;
   feedUrl: string;
+  webLink: string;
 }) => {
   // console.log({ item });
+
   const title = item.title;
   const audioUrl = item.enclosure.url;
   const content = item["content:encoded"] || item.content; //TODO:: content or contentSnippet
   // const coverImage = item.itunes.image;
   const coverImage = albumCover || item.itunes.image;
 
+  const authorInfo = author || item.author;
+
   const chaptersUrl = item["podcast:chapters"]?.["$"]?.url ?? null;
 
-  console.log({ duartion: item.itunes.duration });
+  console.log({ duration: item.itunes.duration });
   return (
     <div className="relative flex flex-col gap-4 rounded-md border bg-white p-4">
       <span className="flex flex-col gap-3">
         <span className="flex flex-col gap-1">
-          <span className="font-semibold">{item.title}</span>
+          <span className="font-semibold">{decode(item.title)}</span>
           <span className="line-clamp-2 text-gray-600">
             {item.contentSnippet}
           </span>
@@ -421,25 +445,33 @@ const PodcastCard = ({
       </span>
 
       {item.enclosure?.length && (
-        <PodcastPlayButton
-          title={title}
-          audioUrl={audioUrl}
-          albumCover={coverImage}
-          episodeNumber={episodeNumber}
-          content={content}
-          author={author}
-          albumName={albumName}
-          feedUrl={feedUrl}
-          chaptersUrl={chaptersUrl}
-        />
+        <div className="flex gap-6">
+          <PodcastPlayButton
+            title={title}
+            audioUrl={audioUrl}
+            albumCover={coverImage}
+            episodeNumber={episodeNumber}
+            content={content}
+            author={authorInfo}
+            albumName={albumName}
+            feedUrl={feedUrl}
+            chaptersUrl={chaptersUrl}
+          />
+          <PostModal
+            feedItem={JSON.stringify(item)}
+            feedTitle={albumName}
+            websiteLink={webLink}
+            feedAlbumCover={albumCover || item.itunes.image}
+          />
+        </div>
       )}
-      <Link
+      {/* <Link
         href={`/podcast/${title
           .trim()
           .replace(/[^a-zA-Z0-9\s]/g, "")
           .replace(/\s+/g, "-")}`}
         className="absolute inset-0 z-[1]"
-      />
+      /> */}
     </div>
   );
 };

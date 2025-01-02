@@ -2,7 +2,7 @@ import { getXataClient, UsersRecord } from "@/xata";
 
 const xata = getXataClient();
 
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 
 import { cloudinary } from "@/lib/cloudinary";
 
@@ -16,6 +16,7 @@ type ResType = {
 };
 
 export async function POST(request: Request) {
+  const username = await currentUser();
   const formData = await request.formData();
   const file = formData.get("avatar") as File;
 
@@ -83,6 +84,7 @@ export async function POST(request: Request) {
       .upload_stream(
         {
           folder: "avatars",
+          public_id: user.username as string,
           overwrite: true,
         },
         function (error, result) {

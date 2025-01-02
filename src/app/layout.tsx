@@ -47,6 +47,9 @@ export default function RootLayout({
           /> */}
         </head>
         <body>
+          <a href="#main" className="sr-only">
+            Skip to content
+          </a>
           <NuqsAdapter>{children}</NuqsAdapter>
           <Toaster
             duration={3000}

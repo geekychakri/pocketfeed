@@ -10,6 +10,8 @@ import FeedDropdown from "./FeedDropdown";
 import Button from "./ui/Button";
 import { SpinnerRotate } from "./SpinnerRotate";
 
+import { decode } from "html-entities";
+
 export function FolderFeedList({
   initialFeeds,
   initialPageInfo,
@@ -61,16 +63,22 @@ export function FolderFeedList({
           // href={`/feed/${item.title?.trim().replace(/\s+/g, "-").toLowerCase()}`}
           // href={`/feed/${item.feedId}`}
           key={i}
-          className="relative isolate flex h-20 w-full items-center justify-between gap-4 rounded-md border bg-white px-4 py-2"
+          className="relative isolate flex h-20 w-full items-center justify-between gap-4 rounded-lg border bg-white px-4 py-2"
         >
           <span className="flex items-center gap-3">
             <img
-              src={`https://www.google.com/s2/favicons?domain=${item.siteURL}&sz=128`}
+              src={
+                item.siteURL.includes("youtube.com")
+                  ? item.favicon
+                  : `https://www.google.com/s2/favicons?domain=${item.siteURL}&sz=128`
+              }
               alt=""
               className="size-7 rounded-full"
             />
 
-            <span className="line-clamp-1 font-medium">{item.title}</span>
+            <span className="line-clamp-1 font-medium">
+              {decode(item.title)}
+            </span>
           </span>
 
           <FeedDropdown

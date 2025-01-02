@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --color-primary: 248, 79, 57;
+  /* --color-primary: 248, 79, 57; */
+  --color-primary: 252, 82, 0;
 }
 
 @layer base {
@@ -35,7 +36,8 @@
   body {
     color: #1d1d1f;
     overflow-x: hidden;
-    background-color: #fafafa;
+    /* background-color: #fafafa;
+    background-color: #fcfcfc; */
     /* background-color: #fcfaf0; */
     /* background-color: #f7f6f5; */
     /* background-color: #fafafa; */
@@ -267,4 +269,12 @@ textarea:focus-visible {
   html:focus-within {
     scroll-behavior: auto;
   }
+}
+
+textarea {
+  min-block-size: 3.5rlh;
+  min-inline-size: 20ch;
+  max-inline-size: 50ch;
+
+  /* field-sizing: content; */
 }

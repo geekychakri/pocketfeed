@@ -29,6 +29,7 @@ export default function Join() {
   const [verifying, setVerifying] = useState(false);
   const [signUpLoading, setSignUpLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
 
   const [codeVerify, setCodeVerify] = useState(false);
 
@@ -56,6 +57,7 @@ export default function Join() {
     }
 
     setSignUpLoading(true);
+    setEmail(emailAddress);
 
     if (!isLoaded) return;
 
@@ -123,7 +125,7 @@ export default function Join() {
         <div>Logo</div>
         <div className="flex flex-col gap-1">
           <h1 className="text-xl font-medium">Please check your email.</h1>
-          <p>We’ve sent a code to {emailInputRef.current?.value}</p>
+          <p>We’ve sent a code to {email}</p>
         </div>
 
         <form onSubmit={handleVerify} className="flex w-full flex-col gap-5">

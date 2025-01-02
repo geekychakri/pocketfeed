@@ -6,6 +6,8 @@ import { Drawer } from "vaul";
 
 import { Cross2Icon, ReaderIcon } from "@radix-ui/react-icons";
 
+import { useFormState } from "react-dom";
+
 import { useShowPodcastPlayer } from "@/store/podcastplayer";
 import PodcastPlayButton from "@/app/(dashboard)/(feed)/feed/[feedId]/components/PodcastPlayButton";
 
@@ -17,6 +19,12 @@ import { extractTimestampTags } from "@/lib/utils";
 
 import DOMPurify from "isomorphic-dompurify";
 import PodcastChapters from "./PodcastChapters";
+
+import Modal from "@/components/Modal/Modal";
+import Textarea from "@/components/ui/Textarea";
+import Button from "@/components/ui/Button";
+
+import { addPost } from "@/app/actions";
 
 DOMPurify.addHook("beforeSanitizeAttributes", function (node) {
   // Check if the node is an anchor tag
@@ -45,12 +53,20 @@ DOMPurify.addHook("afterSanitizeAttributes", function (node) {
   }
 });
 
+const initialState = {
+  message: "",
+};
+
 export default function VaulDrawer({ audioRef }: { audioRef: any }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [chapters, setChapters] = useState<
     { timestamp: string; text: string }[]
   >([]);
-  const { title, content, episodeNumber } = useShowPodcastPlayer();
+  const { title, content, episodeNumber, audioUrl, feedUrl } =
+    useShowPodcastPlayer();
+
+  const [state, formAction] = useFormState(addPost, initialState);
 
   console.log({ isOpen });
 
@@ -61,6 +77,12 @@ export default function VaulDrawer({ audioRef }: { audioRef: any }) {
     console.log({ result });
     setChapters(result);
   }, [content]);
+
+  useEffect(() => {
+    if (state?.message === "success") {
+      setIsModalOpen(false);
+    }
+  }, [state]);
 
   console.log({ chapters });
 
@@ -94,6 +116,40 @@ export default function VaulDrawer({ audioRef }: { audioRef: any }) {
                 <Drawer.Title className="text-lg font-medium">
                   {title}
                 </Drawer.Title>
+                {/* <button className="rounded-lg border px-4 py-2">Post</button> */}
+                <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
+                  <Modal.Button asChild>
+                    <button className="rounded-lg border px-4 py-2">
+                      Post
+                    </button>
+                  </Modal.Button>
+                  <Modal.Content title="What's up?">
+                    <form
+                      className="flex flex-col gap-4 px-[25px] py-4"
+                      action={formAction}
+                    >
+                      <Textarea
+                        placeholder="Share something on your mind!"
+                        className="resize-none"
+                        name="post"
+                      />
+                      <input
+                        type="text"
+                        name="feedItemUrl"
+                        hidden
+                        defaultValue={decodeURIComponent(feedUrl)} //TODO: Link
+                      />
+                      <input
+                        type="text"
+                        name="type"
+                        value="podcast"
+                        hidden
+                        defaultValue={decodeURIComponent(feedUrl)} //TODO: Link
+                      />
+                      <Button>Post</Button>
+                    </form>
+                  </Modal.Content>
+                </Modal>
                 <PodcastPlayButton episodeNumber={episodeNumber} />
               </div>
 

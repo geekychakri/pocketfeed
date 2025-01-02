@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { motion } from "framer-motion";
+import { LayoutGroup, motion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
 
@@ -22,8 +22,10 @@ const SegmentedControl = ({
   const pathname = usePathname();
 
   useEffect(() => {
-    if (new Date().getDate().toString() === birthday.split("-")[2]) {
-      balloons();
+    if (birthday) {
+      if (new Date().getDate().toString() === birthday.split("-")[2]) {
+        balloons();
+      }
     }
   }, []);
 
@@ -34,21 +36,25 @@ const SegmentedControl = ({
         const isActive = item.href === pathname;
         return (
           <motion.li
+            // layout
+            // layoutRoot
             key={index}
             // onClick={() => setActiveIndex(index)}
             className="relative flex-1 list-none"
           >
-            {isActive && (
-              <motion.span
-                layoutId="highlight"
-                className="absolute bottom-0 left-0 right-0 h-[2px] rounded-full bg-primary"
-              ></motion.span>
-            )}
             <Link
               href={item.href}
               className={cn("inline-block w-full p-4 outline-none")}
               replace
             >
+              {isActive && (
+                <motion.span
+                  layoutId="highlight"
+                  initial={false}
+                  className="absolute bottom-0 left-0 right-0 h-[2px] rounded-full bg-primary"
+                  style={{ originY: "0px" }}
+                ></motion.span>
+              )}
               {item.title}
             </Link>
           </motion.li>

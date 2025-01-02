@@ -2,11 +2,14 @@
 import { useShowPodcastPlayer } from "@/store/podcastplayer";
 import { useState } from "react";
 
+import { cn } from "@/lib/utils";
+
 import { PlayIcon, PauseIcon } from "@radix-ui/react-icons";
 
 type PodcastPlayButtonType = {};
 
 export default function PodcastPlayButton({
+  className,
   title,
   albumCover,
   audioUrl,
@@ -17,6 +20,7 @@ export default function PodcastPlayButton({
   feedUrl,
   chaptersUrl,
 }: {
+  className?: string;
   title?: string; //TODO:  Optional for podcast drawer component
   audioUrl?: string;
   albumCover?: string;
@@ -49,7 +53,10 @@ export default function PodcastPlayButton({
 
   return (
     <button
-      className="z-[2] flex h-10 w-28 items-center justify-center gap-1 rounded-md border-2 border-primary bg-white px-4 py-2 text-base font-medium"
+      className={cn(
+        "z-[2] flex h-10 w-28 items-center justify-center gap-1 rounded-md border-2 border-primary bg-white px-4 py-2 text-base font-medium",
+        className,
+      )}
       onClick={() => {
         if (activeEpisode == episodeNumber && isPlaying) {
           console.log("PREVIOUS CLICK");

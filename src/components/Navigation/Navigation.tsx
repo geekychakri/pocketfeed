@@ -122,13 +122,18 @@ export default function Navigation({
             <span className="text-primary">my</span>pocketfeed.
           </span>
         </div>
-        {pathname.startsWith("/folder/") && (
+        {pathname.startsWith("/folder/") ? (
           <>
             <div className="flex items-center gap-5">
               <hr className="h-4 w-[1px] rotate-[16deg] border-0 bg-[#343434]" />
               <Dropdown foldersList={foldersList} />
             </div>
-            {/* <Link href="/explore">Explore</Link> */}
+            <Link href="/explore/discover">Explore</Link>
+          </>
+        ) : (
+          <>
+            <Link href="/folder/Home">Folders</Link>
+            <Link href="/explore/discover">Explore</Link>
           </>
         )}
       </div>

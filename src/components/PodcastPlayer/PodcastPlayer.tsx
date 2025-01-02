@@ -27,6 +27,7 @@ import VolumeSlider from "@/components/VolumeSlider";
 
 import { useShowPodcastPlayer } from "@/store/podcastplayer";
 import VaulDrawer from "../Drawer";
+import { useGlobalRef } from "@/store/globalRef";
 
 type PodcastPlayerProps = {
   albumCover: string;
@@ -34,8 +35,16 @@ type PodcastPlayerProps = {
   audioUrl: string;
 };
 
+// export const audioPlayerRef: { current: HTMLAudioElement | null } = {
+//   current: null,
+// };
+
 const PodcastPlayer = () => {
   const [snap, setSnap] = useState<number | string | null>(snapPoints[0]);
+
+  const { audioPlayerRef } = useGlobalRef(); //TODO:
+
+  console.log({ audioPlayerRef: audioPlayerRef.current });
 
   const {
     closePodcastPlayer,
@@ -57,7 +66,7 @@ const PodcastPlayer = () => {
   console.log({ albumCover });
 
   // references
-  const audioPlayer = useRef<HTMLAudioElement | null>(null); // reference our audio component
+  // const audioPlayerRef = useRef<HTMLAudioElement | null>(null); // reference our audio component
 
   useEffect(() => {
     if ("mediaSession" in navigator) {
@@ -88,23 +97,23 @@ const PodcastPlayer = () => {
     //
     // console.log({ show });
     // }
-    if (show !== "hide") audioPlayer.current?.play();
+    if (show !== "hide") audioPlayerRef.current?.play();
   }, [show]);
 
   useEffect(() => {
     if (!isPlaying) {
       console.log("AUDIO  PLAYER PAUSE");
-      audioPlayer.current?.pause();
+      audioPlayerRef.current?.pause();
     } else if (isPlaying) {
       console.log("AUDIO  PLAYER PLAY");
-      audioPlayer.current?.play();
+      audioPlayerRef.current?.play();
     }
   }, [isPlaying, activeEpisode]);
 
   useEffect(() => {
-    if (audioPlayer.current) {
+    if (audioPlayerRef.current) {
       //TODO:: check time
-      audioPlayer.current.currentTime = currentTime;
+      audioPlayerRef.current.currentTime = currentTime;
     }
   }, [currentTime]);
 
@@ -118,18 +127,18 @@ const PodcastPlayer = () => {
 
   return (
     <div
-      className={`${styles.audioPlayer} fixed -bottom-72 left-0 right-0 z-[10] flex w-full flex-col gap-1 border-t bg-[#fff] p-4 ${show === "hide" ? "translate-y-80" : ""}`}
+      className={`${styles.audioPlayer} fixed -bottom-72 left-[240px] right-0 z-[10] flex flex-col gap-1 border-t bg-[#fff] p-4 ${show === "hide" ? "translate-y-80" : ""}`}
     >
       <div className="absolute -top-3 flex cursor-pointer gap-2 self-end">
         {/* <button>
           <Share2Icon className="size-5" />
         </button> */}
-        <VaulDrawer audioRef={audioPlayer} />
+        <VaulDrawer audioRef={audioPlayerRef} />
         <button
           onClick={() => {
             hidePodcastPlayer();
             // setIsPlaying(false);
-            audioPlayer.current?.pause();
+            audioPlayerRef.current?.pause();
           }}
           className="flex size-5 items-center justify-center rounded-full bg-[#eee]"
         >
@@ -717,7 +726,7 @@ const PodcastPlayer = () => {
             src={audioUrl}
             playsInline
             // autoPlay
-            ref={audioPlayer}
+            ref={audioPlayerRef}
             onPlay={() => setIsPlayingTrue()}
             onPause={() => setIsPlayingFalse()}
           ></audio>

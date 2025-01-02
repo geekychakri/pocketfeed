@@ -10,7 +10,11 @@ import { currentUser } from "@clerk/nextjs/server";
 import { getXataClient } from "@/xata";
 import { revalidatePath } from "next/cache";
 
+import Parser from "rss-parser";
+
 import { cleanUrl } from "@/lib/utils";
+
+import urlMetadata from "url-metadata";
 
 const xata = getXataClient();
 
@@ -191,5 +195,43 @@ export async function moveToFolder(
 ) {
   const folders = await xata.db.feeds.update(id, { folder: newFolder });
   revalidatePath(`/folder/${currentFolder}`, "page");
+  return { message: "success" };
+}
+
+export async function addPost(prevState: any, formData: FormData) {
+  const user = await currentUser();
+  const post = formData.get("post") as string;
+  const feedItemUrl = (formData.get("feedItemUrl") as string) || "";
+
+  // const itemType = formData.get("type");
+
+  const feedItem = formData.get("feedItem") as string;
+  const feedAlbumCover = formData.get("feedAlbumCover") as string;
+  const feedTitle = formData.get("feedTitle") as string;
+  const websiteLink = formData.get("websiteLink") as string;
+
+  // console.log({ feedItem });
+
+  console.log({ feedAlbumCover });
+
+  // const metadata = await urlMetadata(feedItemUrl);  //Check  url  is present
+
+  // const { title = "", author = "", description = "" } = metadata;
+
+  // console.log({ metadata });
+
+  await xata.db.posts.create({
+    body: post,
+    // feedItemUrl,
+    // feedItemTitle: title,
+    // feedItemDescription: description,
+    // feedItemAuthor: author,
+    feedItem,
+    feedTitle,
+    feedAlbumCover,
+    websiteLink,
+    username: user?.username as string,
+  });
+
   return { message: "success" };
 }

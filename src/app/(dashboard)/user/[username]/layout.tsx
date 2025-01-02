@@ -9,7 +9,7 @@ import SegmentedControl from "@/components/SegmentedControl";
 // import DOMPurify from "isomorphic-dompurify";
 
 import { getXataClient, UsersRecord } from "@/xata";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { convertTextToLinks, getInitials } from "@/lib/utils";
 import FollowButton from "@/components/FollowButton";
 
@@ -17,16 +17,70 @@ const xata = getXataClient();
 
 export default async function UserLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: any;
 }>) {
   const { userId }: { userId: string | null } = auth();
-  console.log({ userId });
+  const loggedInUserId = userId as string;
+  // const loggedInUser = await currentUser();
+  // console.log({ userId });
+  console.log({ params: params.username });
   const user = (await xata.db.users
-    .filter({ userId: userId })
+    .filter({ username: params.username })
     .getFirst()) as UsersRecord;
 
   console.log({ user });
+
+  if (!user) {
+    return <div>User not found!</div>;
+  }
+
+  const followee = await xata.db.follows
+    .filter({ followerId: loggedInUserId, followeeId: user.userId as string })
+    .getFirst(); //TODO:
+
+  // const totalFollowersCount = await xata.db.follows.aggregate({
+  //   totalFollowers: {
+  //     count: {
+  //       filter: {
+  //         followeeName: params.username,
+  //       },
+  //     },
+  //   },
+  // });
+
+  const totalFollowersCount = await xata.db.follows.summarize({
+    filter: { followeeName: params.username },
+    columns: ["followeeName"],
+    summaries: {
+      total: { count: "*" },
+    },
+  });
+
+  // const totalFollowingCount = await xata.db.follows.aggregate({
+  //   totalFollowings: {
+  //     count: {
+  //       filter: {
+  //         followerName: params.username,
+  //       },
+  //     },
+  //   },
+  // });
+
+  const totalFollowingCount = await xata.db.follows.summarize({
+    filter: { followerName: params.username },
+    columns: ["followerName"],
+    summaries: {
+      total: { count: "*" },
+    },
+  });
+
+  console.log({ totalFollowersCount });
+
+  console.log({ user });
+  console.log({ followee });
 
   // const avatarUrl = user.avatar?.transform({
   //   width: 64,
@@ -40,6 +94,7 @@ export default async function UserLayout({
   ];
   return (
     <main className="mx-auto flex w-full max-w-[720px] flex-col gap-5 py-20">
+      {/* <h1>Hello {JSON.stringify(user)}</h1> */}
       <div className="flex flex-col gap-6">
         <div className="flex items-center gap-3">
           <RouteBack />
@@ -51,22 +106,22 @@ export default async function UserLayout({
               <AvatarImage
                 className="h-full w-full rounded-[inherit] border-2 object-cover"
                 src={user.avatarUrl as string}
-                alt={user.fullname as string}
+                alt={user?.fullname as string}
               />
               <AvatarFallback
                 className="leading-1 flex h-full w-full items-center justify-center bg-white text-[15px] font-medium text-violet11"
                 delayMs={600}
               >
-                {getInitials(user.fullname as string)}
+                {getInitials((user.fullname || user.username) as string)}
               </AvatarFallback>
             </Avatar>
 
-            <FollowButton />
+            <FollowButton isFollowing={followee?.id as string} />
           </div>
 
           <div className="flex flex-col gap-2">
             <p className="flex items-center gap-2 font-medium">
-              <span>{user.fullname}</span>
+              <span>{user.fullname || user.username}</span>
               <span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -85,28 +140,34 @@ export default async function UserLayout({
                 </svg>
               </span>
             </p>
-            <p
-              className="prose whitespace-pre text-gray-500"
-              dangerouslySetInnerHTML={{
-                __html: convertTextToLinks(user.bio as string),
-              }}
-            ></p>
-            <a
-              href={`https://${user.website as string}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="self-start rounded-full bg-[#eee] px-2 py-1 text-xs"
-            >
-              {user.website}
-            </a>
+            {user.bio && (
+              <p
+                className="prose whitespace-pre text-gray-500"
+                dangerouslySetInnerHTML={{
+                  __html: convertTextToLinks(user.bio as string),
+                }}
+              ></p>
+            )}
+            {user.website && (
+              <a
+                href={`https://${user.website as string}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="self-start rounded-full bg-[#eee] px-2 py-1 text-xs"
+              >
+                {user.website}
+              </a>
+            )}
           </div>
         </div>
         <div className="flex gap-5">
-          <Link href="/user/following" className="text-sm">
-            1 <span className="text-gray-500">Following</span>
+          <Link href={`/user/${user.username}/followers`} className="text-sm">
+            {totalFollowersCount.summaries[0].total}{" "}
+            <span className="text-gray-500">Followers</span>
           </Link>
-          <Link href="/user/followers" className="text-sm">
-            10K <span className="text-gray-500">Followers</span>
+          <Link href={`/user/${user.username}/follows`} className="text-sm">
+            {totalFollowingCount.summaries[0].total}{" "}
+            <span className="text-gray-500">Following</span>
           </Link>
         </div>
       </div>
