@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
-export default function GlobalSearch() {
+export default function GlobalSearch({ category }: { category: string }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -62,7 +62,7 @@ export default function GlobalSearch() {
             className="flex-1 border-none p-2 focus-visible:shadow-none"
             id="password"
             required
-            placeholder="Search for users"
+            placeholder={`Search for ${category}`}
             name="password"
             defaultValue={searchParams.get("query")?.toString()}
             onChange={(e) => {

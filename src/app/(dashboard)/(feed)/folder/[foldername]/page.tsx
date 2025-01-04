@@ -86,7 +86,9 @@ export default async function Folder({
 
   return (
     <div className="p-4">
-      <h1 className="mb-5 font-medium">{decodeURIComponent(folderName)}</h1>
+      <h1 className="mb-5 text-lg font-medium text-primary">
+        {decodeURIComponent(folderName)}
+      </h1>
 
       {/* <div className="flex flex-col gap-5">
         {[1, 2, 3, 4, 5].map((item, i) => (
@@ -111,7 +113,7 @@ export default async function Folder({
               <p className="text-xl font-medium">The folder is empty.</p>
               <Link
                 href="/add"
-                className="rounded-md bg-primary px-4 py-2 text-white"
+                className="rounded-md bg-[#181818] px-4 py-2 text-white"
               >
                 Add a feed
               </Link>

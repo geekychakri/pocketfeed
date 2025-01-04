@@ -14,7 +14,7 @@ export default function YouTubeModal() {
   const { isOpen, closeYoutubePlayer, youtubeId } = useShowYTPlayer();
   const { audioPlayerRef } = useGlobalRef();
 
-  const { isPlaying } = useShowPodcastPlayer();
+  const { isPlaying, show } = useShowPodcastPlayer();
 
   return (
     <ModalVideo
@@ -28,7 +28,11 @@ export default function YouTubeModal() {
         //   console.log("AUDIO  PLAYER PLAY");
         //   audioPlayer.current?.play();
         // }
-        audioPlayerRef.current?.play();
+        if (show === "hide" || "close") {
+          return;
+        } else {
+          audioPlayerRef.current?.play();
+        }
       }}
     />
   );

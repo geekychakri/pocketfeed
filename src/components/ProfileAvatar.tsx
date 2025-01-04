@@ -1,3 +1,5 @@
+"use client";
+
 import { ReactElement, ReactNode, useState, ComponentType } from "react";
 
 import Link from "next/link";
@@ -11,8 +13,8 @@ import {
   HeartIcon,
 } from "@radix-ui/react-icons";
 
-import { Avatar, AvatarImage, AvatarFallback } from "../UserAvatar";
-import SignOutButton from "../SignOutButton";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/UserAvatar";
+import SignOutButton from "@/components/SignOutButton";
 import { UserIcon } from "@/icons/animated/UserIcon";
 import { SettingsGearIcon } from "@/icons/animated/SettingsGearIcon";
 import { MessageCircleIcon } from "@/icons/animated/MessageCircleIcon";
@@ -55,7 +57,7 @@ export default function ProfileAvatar({
   return (
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger asChild>
-        <Avatar className="inline-flex h-[45px] w-[45px] select-none items-center justify-center overflow-hidden rounded-full bg-blackA1 align-middle">
+        <Avatar className="inline-flex h-[35px] w-[35px] flex-none cursor-pointer select-none items-center justify-center overflow-hidden rounded-full bg-blackA1 align-middle duration-100 hover:ring-2 hover:ring-gray-200">
           <AvatarImage
             className="h-full w-full rounded-[inherit] border-2 object-cover"
             src={avatarUrl}
@@ -72,9 +74,9 @@ export default function ProfileAvatar({
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content
-          className="z-[10] min-w-[180px] rounded-md border bg-white p-[5px] will-change-[opacity,transform] data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
+          className="z-40 min-w-[180px] rounded-md border bg-white p-[5px] will-change-[opacity,transform] data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
           sideOffset={5}
-          align="end"
+          align="start"
         >
           <AvatarDropdownItem to={`/user/${username}`} Icon={UserIcon}>
             <span>Profile</span>

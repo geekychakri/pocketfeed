@@ -21,7 +21,7 @@ export default async function Page(props: {
   const query = searchParams?.query || "";
   return (
     <main className="mx-auto flex min-h-[500px] w-full max-w-3xl flex-col gap-6 py-20 max-sm:px-4">
-      <GlobalSearch />
+      <GlobalSearch category={category} />
       {/* <SearchResultSkeleton /> */}
 
       <Suspense key={query} fallback={<SearchResultSkeleton />}>

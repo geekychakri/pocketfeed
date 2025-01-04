@@ -39,7 +39,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className={GeistSans.className}>
+      <html lang="en" className={inter.className}>
         <head>
           {/* <script
             src="https://unpkg.com/react-scan/dist/auto.global.js"
