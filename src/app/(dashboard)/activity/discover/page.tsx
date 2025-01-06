@@ -46,7 +46,7 @@ export default async function Page() {
                   </Link>
                   <p>{post.body}</p>
                 </div>
-                <div className="m-[3px] flex flex-col gap-4 rounded-b-lg rounded-t-2xl border bg-[#fbfbfb] p-3 text-sm">
+                <div className="m-[3px] flex flex-col gap-4 rounded-md border bg-[#fbfbfb] p-3 text-sm">
                   <div className="flex flex-col gap-1">
                     <div className="flex justify-between">
                       <h2 className="font-medium text-primary">
@@ -97,7 +97,7 @@ export default async function Page() {
             return (
               <div
                 key={post.id}
-                className="flex flex-col gap-1 rounded-lg border bg-white shadow-sm"
+                className="flex flex-col gap-1 rounded-md border bg-white shadow-sm"
               >
                 <div className="flex flex-col gap-4 p-4">
                   <Link
@@ -116,7 +116,7 @@ export default async function Page() {
                   </Link>
                   <p>{post.body}</p>
                 </div>
-                <div className="m-[3px] flex flex-col gap-4 rounded-b-lg rounded-t-2xl border bg-[#fbfbfb] p-3 text-sm">
+                <div className="m-[3px] flex flex-col gap-4 rounded-md border bg-[#fbfbfb] p-3 text-sm">
                   <div className="flex flex-col gap-1">
                     <div className="flex justify-between">
                       <h2 className="font-medium text-primary">

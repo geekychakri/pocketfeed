@@ -28,7 +28,7 @@ export default function YouTubeModal() {
         //   console.log("AUDIO  PLAYER PLAY");
         //   audioPlayer.current?.play();
         // }
-        if (show === "hide" || "close") {
+        if (show === "hide" || show === "close") {
           return;
         } else {
           audioPlayerRef.current?.play();

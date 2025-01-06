@@ -62,13 +62,13 @@ const CollapsibleFolders = ({
           </span>
         </div> */}
 
-        <div className="my-2 flex flex-col gap-2">
+        <div className="my-2 flex flex-col gap-px">
           {foldersList.map((folder, i) => {
             return (
               <Link
                 href={`/folder/${folder.folder}`}
                 key={folder.id}
-                className="flex items-center gap-4 text-sm"
+                className="flex h-[30px] items-center gap-4 text-sm"
               >
                 <span>
                   <svg

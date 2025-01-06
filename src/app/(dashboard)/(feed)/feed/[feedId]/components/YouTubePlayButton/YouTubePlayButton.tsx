@@ -40,7 +40,7 @@ export default function YouTubePlayButton({
         audioPlayerRef.current?.pause();
       }}
       className={cn(
-        "flex h-10 w-28 items-center justify-center gap-1 rounded-md border-2 border-primary bg-white px-4 py-2 text-base font-medium",
+        "flex h-10 w-28 items-center justify-center gap-1 rounded-md border border-primary bg-white px-4 py-2 text-base font-medium",
         className,
       )}
     >
