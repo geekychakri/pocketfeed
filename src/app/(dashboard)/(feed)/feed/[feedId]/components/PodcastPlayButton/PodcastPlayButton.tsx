@@ -19,6 +19,7 @@ export default function PodcastPlayButton({
   albumName,
   feedUrl,
   chaptersUrl,
+  showText,
 }: {
   className?: string;
   title?: string; //TODO:  Optional for podcast drawer component
@@ -30,6 +31,7 @@ export default function PodcastPlayButton({
   albumName?: string;
   feedUrl?: string;
   chaptersUrl?: string;
+  showText?: boolean;
 }) {
   // const [isPlaying, setIsPlaying] = useState(false);
   const {
@@ -54,7 +56,7 @@ export default function PodcastPlayButton({
   return (
     <button
       className={cn(
-        "z-[2] flex h-10 w-28 items-center justify-center gap-1 rounded-md border border-primary bg-white px-4 py-2 text-base font-medium",
+        "z-[2] flex size-10 items-center justify-center gap-1 rounded-full bg-ui-normal px-4 py-2 text-base font-medium",
         className,
       )}
       onClick={() => {
@@ -97,14 +99,14 @@ export default function PodcastPlayButton({
           <span>
             <PauseIcon className="size-5" />
           </span>
-          <span>Pause</span>
+          {showText && <span>Pause</span>}
         </>
       ) : (
         <>
           <span>
             <PlayIcon className="size-5" />
           </span>
-          <span>Play</span>
+          {showText && <span>Play</span>}
         </>
       )}
     </button>

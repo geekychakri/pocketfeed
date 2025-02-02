@@ -94,13 +94,13 @@ export default function VaulDrawer({ audioRef }: { audioRef: any }) {
       open={isOpen}
       onOpenChange={setIsOpen}
     >
-      <Drawer.Trigger className="relative flex size-5 items-center justify-center rounded-full bg-[#eee]">
-        <ReaderIcon className="size-3" />
+      <Drawer.Trigger className="border-border-interactive bg-background-secondary relative flex size-6 items-center justify-center rounded-full border">
+        <ReaderIcon className="size-4" />
       </Drawer.Trigger>
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-30 bg-black/40" />
         <Drawer.Content
-          className="fixed bottom-2 left-2 right-2 top-2 z-40 flex outline-none" //w-[310px]
+          className="fixed bottom-2 left-2 right-2 top-2 z-40 flex border-none" //w-[310px]
           // The gap between the edge of the screen and the drawer is 8px in this case.
           style={
             { "--initial-transform": "calc(100% + 8px)" } as React.CSSProperties
@@ -110,7 +110,7 @@ export default function VaulDrawer({ audioRef }: { audioRef: any }) {
           {/* <button onClick={() => console.log(audioRef.current.currentTime)}>
             LOG CURRENT TIME
           </button> */}
-          <div className="drawer h-full grow overflow-y-auto overscroll-contain rounded-[8px] border-2 bg-white">
+          <div className="drawer bg-background-primary border-border-interactive h-full grow overflow-y-auto overscroll-contain rounded-[8px] border">
             <div className="overflow-wrap-anywhere mx-auto flex max-w-[720px] flex-col gap-10 px-3 py-6">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <Drawer.Title className="text-lg font-medium">
@@ -164,13 +164,13 @@ export default function VaulDrawer({ audioRef }: { audioRef: any }) {
                   >
                     <Tabs.Trigger
                       value="tab1"
-                      className="font-semibold data-[state=active]:text-primary"
+                      className="data-[state=active]:bg-ui-normal font-semibold data-[state=active]:rounded-md data-[state=active]:px-4 data-[state=active]:py-2"
                     >
                       Description
                     </Tabs.Trigger>
                     <Tabs.Trigger
                       value="tab2"
-                      className="font-semibold data-[state=active]:text-primary"
+                      className="data-[state=active]:bg-ui-normal font-semibold data-[state=active]:rounded-md data-[state=active]:px-4 data-[state=active]:py-2"
                     >
                       Chapters
                     </Tabs.Trigger>
@@ -180,7 +180,7 @@ export default function VaulDrawer({ audioRef }: { audioRef: any }) {
                       dangerouslySetInnerHTML={{
                         __html: DOMPurify.sanitize(content),
                       }}
-                      className="prose"
+                      className="text-text-primary prose-strong:text-text-primary prose-pre:text-text-secondary prose-headings:text-text-primary prose-pre:bg-background-secondary prose-inline-code:bg-background-secondary prose-inline-code:border-border-non-interactive prose-pre:border-border-non-interactive prose-inline-code:text-text-secondary prose break-words text-lg prose-h2:font-semibold prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-pre:rounded-md prose-pre:border prose-pre:text-base prose-inline-code:rounded-md prose-inline-code:border prose-inline-code:px-1 prose-inline-code:py-[2px] prose-inline-code:before:hidden prose-inline-code:after:hidden max-sm:text-base"
                       id="description"
                     ></div>
                   </Tabs.Content>
@@ -197,7 +197,7 @@ export default function VaulDrawer({ audioRef }: { audioRef: any }) {
                   dangerouslySetInnerHTML={{
                     __html: DOMPurify.sanitize(content),
                   }}
-                  className="prose"
+                  className="text-text-primary prose-strong:text-text-primary prose-pre:text-text-secondary prose-headings:text-text-primary prose-pre:bg-background-secondary prose-inline-code:bg-background-secondary prose-inline-code:border-border-non-interactive prose-pre:border-border-non-interactive prose-inline-code:text-text-secondary prose break-words text-lg prose-h2:font-semibold prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-pre:rounded-md prose-pre:border prose-pre:text-base prose-inline-code:rounded-md prose-inline-code:border prose-inline-code:px-1 prose-inline-code:py-[2px] prose-inline-code:before:hidden prose-inline-code:after:hidden max-sm:text-base"
                   id="description"
                 ></div>
               )}

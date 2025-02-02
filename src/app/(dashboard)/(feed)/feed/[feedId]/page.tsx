@@ -11,6 +11,8 @@ import { currentUser } from "@clerk/nextjs/server";
 
 import { FeedListType, FeedItemType } from "@/types";
 
+import { ArrowTopRightIcon } from "@radix-ui/react-icons";
+
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import localizedFormat from "dayjs/plugin/localizedFormat";
@@ -180,15 +182,17 @@ function FeedItem({
     );
   } else if (item.link?.includes("youtube.com")) {
     return (
-      <div className="flex flex-col gap-4 rounded-md border bg-white p-4">
+      <div className="flex items-center justify-between border-t border-border-primary py-[10px]">
         <span>
           <span className="flex flex-col gap-1">
-            <span className="font-semibold">{decode(item.title)}</span>
-            <span className="line-clamp-2 text-gray-600">
+            <span className="text-balance font-medium tracking-tight !text-inherit">
+              {decode(item.title)}
+            </span>
+            <span className="line-clamp-2 text-text-secondary">
               {item.contentSnippet}
             </span>
           </span>
-          <span className="flex gap-1 text-sm text-gray-500">
+          <span className="flex gap-1 text-sm text-text-secondary">
             <span>{dayjs(item.isoDate).format("ll")}</span>
             <span>·</span>
             <span>{dayjs().to(dayjs(item.isoDate))}</span>
@@ -197,38 +201,38 @@ function FeedItem({
 
         <div>
           <YouTubePlayButton youtubeId={item.id.split(":")[2]} />
-          <PostModal
+          {/* <PostModal
             feedItem={JSON.stringify(item)}
             feedTitle={feedList.title}
             websiteLink={feedList.link}
-          />
+          /> */}
         </div>
       </div>
     );
   }
   return (
     <div
-      className="relative isolate flex flex-col gap-3 rounded-md border bg-white p-4"
+      className="relative isolate flex justify-between gap-3 border-t border-border-primary py-[10px]"
       // prefetch={false}
     >
-      <span className="flex flex-col gap-1">
-        <span className="font-semibold">{decode(item.title)}</span>
-        <span className="line-clamp-2 text-gray-600">
+      <span className="flex flex-col gap-3">
+        <span className="font-medium">{decode(item.title)}</span>
+        {/* <span className="line-clamp-2 text-text-secondary">
           {item.contentSnippet}
-        </span>
+        </span> */}
       </span>
 
-      <span className="flex gap-1 text-sm text-gray-500">
+      <span className="flex gap-1 text-sm text-text-secondary">
         <span>{dayjs(item.isoDate).format("ll")}</span>
-        <span>·</span>
-        <span>{dayjs().to(dayjs(item.isoDate))}</span>
+        {/* <span>·</span>
+        <span>{dayjs().to(dayjs(item.isoDate))}</span> */}
       </span>
-      <PostModal
+      {/* <PostModal
         feedItem={JSON.stringify(item)}
         className="z-[2]"
         feedTitle={feedList.title}
         websiteLink={feedList.link}
-      />
+      /> */}
       <Link
         href={
           item.link?.includes(new URL(feedList.link as string).hostname)
@@ -285,107 +289,206 @@ export default async function Feed({ params }: { params: { feedId: string } }) {
   // console.log({ olderPosts });
 
   return (
-    <div className="flex flex-col gap-6 p-4">
-      <div className="flex items-center gap-1">
-        <RouteBack />
-        <span className="text-lg font-semibold">{feedList?.title}</span>
+    <div className="flex flex-col p-4">
+      <div className="relative mb-5 flex items-center gap-1">
+        <RouteBack className="absolute -left-9" />
+        <span className="text-lg font-medium">{feedList?.title}</span>
       </div>
-      {/* <p>{params.feedname.split("-").join(" ")}</p> */}
-      {/* {feedList.items
+      <div className="[&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
+        {/* <p>{params.feedname.split("-").join(" ")}</p> */}
+        {/* {feedList.items
         .sort((a, b) => (dayjs(a.isoDate).isAfter(dayjs(b.isoDate)) ? -1 : 1)) //TODO:
         .slice(0, 10) //TODO: check for zero
         .map((item, i) => {
           console.log({ enclosure: item.enclosure });
           return <FeedItem feedList={feedList} item={item} i={i} key={i} />;
         })} */}
-      {categorizedFeedItemsList.today.length > 0 && (
-        <>
-          <h1 className="font-medium text-primary">Today</h1>
-          {categorizedFeedItemsList.today.map((item, i) => (
-            <FeedItem feedList={feedList} item={item} key={i} />
-          ))}
-        </>
-      )}
-      {categorizedFeedItemsList.yesterday.length > 0 && (
-        <>
-          <h1 className="font-medium text-primary">Yesterday</h1>
-          {categorizedFeedItemsList.yesterday.map((item, i) => (
-            <FeedItem feedList={feedList} item={item} key={i} />
-          ))}
-        </>
-      )}
-      {categorizedFeedItemsList.thisWeek.length > 0 && (
-        <>
-          <h1 className="font-medium text-primary">This Week</h1>
-          {categorizedFeedItemsList.thisWeek.map((item, i) => (
-            <FeedItem feedList={feedList} item={item} key={i} />
-          ))}
-        </>
-      )}
-      {categorizedFeedItemsList.lastWeek.length > 0 && (
-        <>
-          <h1 className="font-medium text-primary">Last Week</h1>
-          {categorizedFeedItemsList.lastWeek.map((item, i) => (
-            <FeedItem feedList={feedList} item={item} key={i} />
-          ))}
-        </>
-      )}
-      {categorizedFeedItemsList.thisMonth.length > 0 && (
-        <>
-          <h1 className="font-medium text-primary">This Month</h1>
-          {categorizedFeedItemsList.thisMonth.map((item, i) => (
-            <FeedItem feedList={feedList} item={item} key={i} />
-          ))}
-        </>
-      )}
-      {categorizedFeedItemsList.lastMonth.length > 0 && (
-        <>
-          <h1 className="font-medium text-primary">Last Month</h1>
-          {categorizedFeedItemsList.lastMonth.map((item, i) => (
-            <FeedItem feedList={feedList} item={item} key={i} />
-          ))}
-        </>
-      )}
-      {categorizedFeedItemsList.thisYear.length > 0 && (
-        <>
-          <h1 className="font-medium text-primary">This Year</h1>
-          {categorizedFeedItemsList.thisYear.map((item, i) => (
-            <FeedItem feedList={feedList} item={item} key={i} />
-          ))}
-        </>
-      )}
-      {categorizedFeedItemsList.lastYear.length > 0 && (
-        <>
-          <h1 className="font-medium text-primary">Last Year</h1>
-          {categorizedFeedItemsList.lastYear.map((item, i) => (
-            <FeedItem feedList={feedList} item={item} key={i} />
-          ))}
-        </>
-      )}
+        {categorizedFeedItemsList.today.length > 0 && (
+          // <div>
+          //   <h1 className="mb-[10px] font-medium text-brand-primary">Today</h1>
+          //   {categorizedFeedItemsList.today.map((item, i) => (
+          //     <FeedItem feedList={feedList} item={item} key={i} />
+          //   ))}
+          // </div>
+          <div>
+            <h1 className="mb-[10px] font-medium text-brand-primary">Today</h1>
+            <div className="[&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
+              {categorizedFeedItemsList.today.map((item, i) => (
+                <FeedItem feedList={feedList} item={item} key={i} />
+              ))}
+            </div>
+          </div>
+        )}
+        {categorizedFeedItemsList.yesterday.length > 0 && (
+          // <>
+          //   <h1 className="mb-[10px] font-medium text-brand-primary">
+          //     Yesterday
+          //   </h1>
+          //   {categorizedFeedItemsList.yesterday.map((item, i) => (
+          //     <FeedItem feedList={feedList} item={item} key={i} />
+          //   ))}
+          // </>
+          <div>
+            <h1 className="mb-[10px] font-medium text-brand-primary">
+              Yesterday
+            </h1>
+            <div className="[&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
+              {categorizedFeedItemsList.yesterday.map((item, i) => (
+                <FeedItem feedList={feedList} item={item} key={i} />
+              ))}
+            </div>
+          </div>
+        )}
+        {categorizedFeedItemsList.thisWeek.length > 0 && (
+          // <div>
+          //   <h1 className="mb-[10px] font-medium text-brand-primary">
+          //     This Week
+          //   </h1>
+          //   {categorizedFeedItemsList.thisWeek.map((item, i) => (
+          //     <FeedItem feedList={feedList} item={item} key={i} />
+          //   ))}
+          // </div>
+          <div>
+            <h1 className="mb-[10px] font-medium text-brand-primary">
+              This Week
+            </h1>
+            <div className="[&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
+              {categorizedFeedItemsList.thisWeek.map((item, i) => (
+                <FeedItem feedList={feedList} item={item} key={i} />
+              ))}
+            </div>
+          </div>
+        )}
+        {categorizedFeedItemsList.lastWeek.length > 0 && (
+          // <>
+          //   <h1 className="mb-[10px] font-medium text-brand-primary">
+          //     Last Week
+          //   </h1>
+          //   {categorizedFeedItemsList.lastWeek.map((item, i) => (
+          //     <FeedItem feedList={feedList} item={item} key={i} />
+          //   ))}
+          // </>
+          <div>
+            <h1 className="mb-[10px] font-medium text-brand-primary">
+              Last Week
+            </h1>
+            <div className="[&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
+              {categorizedFeedItemsList.lastWeek.map((item, i) => (
+                <FeedItem feedList={feedList} item={item} key={i} />
+              ))}
+            </div>
+          </div>
+        )}
+        {categorizedFeedItemsList.thisMonth.length > 0 && (
+          <div>
+            <h1 className="mb-[10px] font-medium text-brand-primary">
+              This Month
+            </h1>
+            <div className="[&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
+              {categorizedFeedItemsList.thisMonth.map((item, i) => (
+                <FeedItem feedList={feedList} item={item} key={i} />
+              ))}
+            </div>
+          </div>
+        )}
+        {categorizedFeedItemsList.lastMonth.length > 0 && (
+          // <>
+          //   <h1 className="mb-[10px] font-medium text-brand-primary">
+          //     Last Month
+          //   </h1>
+          //   {categorizedFeedItemsList.lastMonth.map((item, i) => (
+          //     <FeedItem feedList={feedList} item={item} key={i} />
+          //   ))}
+          // </>
+          <div>
+            <h1 className="mb-[10px] font-medium text-brand-primary">
+              Last Month
+            </h1>
+            <div className="[&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
+              {categorizedFeedItemsList.lastMonth.map((item, i) => (
+                <FeedItem feedList={feedList} item={item} key={i} />
+              ))}
+            </div>
+          </div>
+        )}
+        {categorizedFeedItemsList.thisYear.length > 0 && (
+          // <>
+          //   <h1 className="mb-[10px] font-medium text-brand-primary">
+          //     This Year
+          //   </h1>
+          //   {categorizedFeedItemsList.thisYear.map((item, i) => (
+          //     <FeedItem feedList={feedList} item={item} key={i} />
+          //   ))}
+          // </>
+          <div>
+            <h1 className="mb-[10px] font-medium text-brand-primary">
+              This Year
+            </h1>
+            <div className="[&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
+              {categorizedFeedItemsList.thisYear.map((item, i) => (
+                <FeedItem feedList={feedList} item={item} key={i} />
+              ))}
+            </div>
+          </div>
+        )}
+        {categorizedFeedItemsList.lastYear.length > 0 && (
+          // <>
+          //   <h1 className="mb-[10px] font-medium text-brand-primary">
+          //     Last Year
+          //   </h1>
+          //   {categorizedFeedItemsList.lastYear.map((item, i) => (
+          //     <FeedItem feedList={feedList} item={item} key={i} />
+          //   ))}
+          // </>
+          <div>
+            <h1 className="mb-[10px] font-medium text-brand-primary">
+              Last Year
+            </h1>
+            <div className="[&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
+              {categorizedFeedItemsList.lastYear.map((item, i) => (
+                <FeedItem feedList={feedList} item={item} key={i} />
+              ))}
+            </div>
+          </div>
+        )}
 
-      {Object.keys(categorizedFeedItemsList.older).length !== 0 && (
-        <>
-          {Object.keys(categorizedFeedItemsList.older)
-            .sort((a, b) => Number(b) - Number(a))
-            .map((item, i) => (
-              <>
-                <h1 className="font-medium text-primary">{item}</h1>
-                {categorizedFeedItemsList.older[item].map((item, i) => (
-                  <FeedItem feedList={feedList} item={item} key={i} />
-                ))}
-              </>
-            ))}
-        </>
-      )}
+        {Object.keys(categorizedFeedItemsList.older).length !== 0 && (
+          <>
+            {Object.keys(categorizedFeedItemsList.older)
+              .sort((a, b) => Number(b) - Number(a))
+              .map((item, i) => (
+                // <>
+                //   <h1 className="mb-[10px] font-medium text-brand-primary">
+                //     {item}
+                //   </h1>
+                //   {categorizedFeedItemsList.older[item].map((item, i) => (
+                //     <FeedItem feedList={feedList} item={item} key={i} />
+                //   ))}
+                // </>
+                <div key={i}>
+                  <h1 className="mb-[10px] font-medium text-brand-primary">
+                    {item}
+                  </h1>
+                  <div className="[&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
+                    {categorizedFeedItemsList.older[item].map((item, i) => (
+                      <FeedItem feedList={feedList} item={item} key={i} />
+                    ))}
+                  </div>
+                </div>
+              ))}
+          </>
+        )}
+      </div>
 
       {feedList.link?.includes("youtube.com") && <YouTubeModal />}
       <a
         target="_blank"
         href={feedList.link}
         rel="noreferrer noopener"
-        className="rounded-md bg-primary p-2 text-center text-white"
+        className="mt-10 flex items-center gap-1 self-start rounded-md transition-[color] hover:text-text-secondary"
       >
-        Visit original page
+        <span className="custom-underline">Visit original page</span>
+        {/* <ArrowTopRightIcon /> */}
       </a>
     </div>
   );
@@ -422,16 +525,18 @@ const PodcastCard = ({
 
   console.log({ duration: item.itunes.duration });
   return (
-    <div className="relative flex flex-col gap-4 rounded-md border bg-white p-4">
+    <div className="relative flex items-center justify-between border-t border-border-primary py-[10px]">
       <span className="flex flex-col gap-3">
         <span className="flex flex-col gap-1">
-          <span className="font-semibold">{decode(item.title)}</span>
-          <span className="line-clamp-2 text-gray-600">
-            {item.contentSnippet}
+          <span className="font-medium tracking-tight">
+            {decode(item.title)}
           </span>
+          {/* <span className="line-clamp-2 text-text-secondary">
+            {item.contentSnippet}
+          </span> */}
         </span>
 
-        <span className="flex gap-1 text-sm text-gray-500">
+        <span className="flex gap-1 text-sm text-text-secondary">
           <span>{dayjs(item.isoDate).format("ll")}</span>
           <span>·</span>
           <span>{dayjs().to(dayjs(item.isoDate))}</span>
@@ -457,12 +562,12 @@ const PodcastCard = ({
             feedUrl={feedUrl}
             chaptersUrl={chaptersUrl}
           />
-          <PostModal
+          {/* <PostModal
             feedItem={JSON.stringify(item)}
             feedTitle={albumName}
             websiteLink={webLink}
             feedAlbumCover={albumCover || item.itunes.image}
-          />
+          /> */}
         </div>
       )}
       {/* <Link

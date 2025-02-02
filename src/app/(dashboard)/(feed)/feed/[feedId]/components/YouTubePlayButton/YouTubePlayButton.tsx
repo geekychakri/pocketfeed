@@ -14,9 +14,11 @@ import { useGlobalRef } from "@/store/globalRef";
 export default function YouTubePlayButton({
   youtubeId,
   className,
+  showText,
 }: {
   youtubeId: string;
   className?: string;
+  showText?: boolean;
 }) {
   const { openYoutubePlayer, setYoutubeId, isOpen } = useShowYTPlayer();
 
@@ -40,14 +42,14 @@ export default function YouTubePlayButton({
         audioPlayerRef.current?.pause();
       }}
       className={cn(
-        "flex h-10 w-28 items-center justify-center gap-1 rounded-md border border-primary bg-white px-4 py-2 text-base font-medium",
+        "flex size-10 items-center justify-center gap-1 rounded-full bg-ui-normal px-4 py-2 text-base font-medium",
         className,
       )}
     >
       <span>
         <PlayIcon className="size-5" />
       </span>
-      <span>Play</span>
+      {showText && <span>Play</span>}
     </button>
   );
 }

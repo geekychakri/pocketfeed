@@ -145,7 +145,7 @@ export default function Add() {
         {isRssDataEmpty && (
           <button
             className={cn(
-              "flex h-12 items-center justify-center rounded-md bg-primary px-4 py-2 font-medium text-white",
+              "flex h-12 items-center justify-center rounded-md bg-[#181818] px-4 py-2 font-medium text-white",
             )}
             disabled={isLoading}
           >

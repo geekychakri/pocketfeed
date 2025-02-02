@@ -1,22 +1,74 @@
+@font-face {
+  font-family: "Monaspace";
+  src: url("../../public/SyntaxHighlightLightOwl.woff2") format("woff2");
+}
+
+/* light theme */
+@font-palette-values --kung-fury {
+  font-family: "Monaspace";
+  override-colors:
+    0 hsl(225 100% 40%),
+    /* curlies and tags */ 1 hsl(250 100% 80%),
+    /* ? */ 2 hsl(225 100% 40%),
+    /* function */ 3 hsl(225 100% 40%),
+    /* ? */ 4 hsl(270 50% 40%),
+    /* () */ 5 hsl(210 40% 2%),
+    /* property name */ 6 hsl(210 10% 30%),
+    /* ? */ 7 hsl(327 100% 54%) /* numbers */;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* --color-primary: 248, 79, 57; */
-  --color-primary: 252, 82, 0;
-}
-
 @layer base {
+  [data-theme="light"] {
+    /* --color-primary: 248, 79, 57; */
+    --brand-primary: 252, 89, 30;
+    --background-primary: #fcfcfc;
+    --background-secondary: #f9f9f9;
+    --ui-normal: #f0f0f0;
+    --ui-hover: #e8e8e8;
+    --ui-active: #e0e0e0;
+    --border-non-interactive: #d9d9d9;
+    --border-interactive: #cecece;
+    --border-focus-ring: #bbbbbb;
+    --text-primary: #202020;
+    --text-secondary: #646464;
+
+    /* --text-color: 0, 0, 0;
+    --border-color: 136, 136, 136; */
+    /* #fc5200 */
+  }
+
+  [data-theme="dark"] {
+    --brand-primary: 252, 89, 30;
+    --background-primary: #1a1a1a;
+    --background-secondary: #232323;
+    --ui-normal: #222222;
+    --ui-hover: #2a2a2a;
+    --ui-active: #313131;
+    --border-non-interactive: #3a3a3a;
+    --border-interactive: #484848;
+    --border-focus-ring: #606060;
+    --border-primary: #2e2e2e;
+    --text-primary: #f2f2f2;
+    --text-secondary: #a0a0a0;
+    --danger: #d93036;
+  }
+
   html {
     font-family: var(--font-inter);
     caret-color: #f84f39;
     accent-color: #f84f39;
 
     scrollbar-gutter: stable;
+
+    /* color: #fc591e; */
+
     /* scrollbar-color: hotpink blue;
-    scrollbar-width: none; */
-    /* scrollbar-width: thin;
+    scrollbar-width: none;
+    scrollbar-width: thin;
     scrollbar-color: #f84f39 #eee; */
   }
 
@@ -78,7 +130,7 @@
 }
 
 .custom-underline {
-  background-image: linear-gradient(#000, #000);
+  background-image: linear-gradient(#fc591e, #fc591e);
   background-size: 100% 1px;
   background-position: left bottom;
   background-repeat: no-repeat;
@@ -137,8 +189,8 @@ button:focus-visible,
 textarea:focus-visible {
   outline: none;
   box-shadow:
-    0 0 0 2px #fcfcfc,
-    0 0 0 4px #f84f39;
+    0 0 0 2px #f84f39,
+    0 0 0 2px #f84f39;
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -277,4 +329,14 @@ textarea {
   max-inline-size: 50ch;
 
   /* field-sizing: content; */
+}
+
+pre {
+  scrollbar-width: thin !important;
+  scrollbar-color: rgb(var(--color-primary)) #eee !important;
+}
+
+pre code {
+  font-family: "Monaspace", monospace !important;
+  /* font-palette: --kung-fury !important; */
 }

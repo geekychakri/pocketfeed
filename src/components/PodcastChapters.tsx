@@ -134,7 +134,7 @@ export default function PodcastChapters({
 
         return (
           <button
-            className={`w-full max-w-[320px] rounded-md px-4 py-2 text-left duration-100 ${isActive ? "bg-neutral-100" : "bg-neutral-50"} hover:bg-neutral-100`}
+            className={`border-border-interactive w-full max-w-[320px] rounded-md border px-4 py-2 text-left duration-100 ${isActive ? "bg-background-secondary" : "bg-ui-normal"} hover:bg-background-secondary`}
             key={i}
             onClick={() => {
               // console.log(chapter);

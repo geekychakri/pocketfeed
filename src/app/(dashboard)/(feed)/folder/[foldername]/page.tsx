@@ -49,7 +49,7 @@ export default async function Folder({
     })
     .sort("xata.createdAt", "desc")
     .getPaginated({
-      pagination: { size: 5 },
+      pagination: { size: 20 },
     });
   console.log({ page }); //TODO: filter by userID choose either auth or  currentuser
   //TODO: sort desc by new item
@@ -85,8 +85,8 @@ export default async function Folder({
   };
 
   return (
-    <div className="p-4">
-      <h1 className="mb-5 text-lg font-medium text-primary">
+    <div className="">
+      <h1 className="flex h-14 items-center font-semibold text-brand-primary">
         {decodeURIComponent(folderName)}
       </h1>
 
@@ -95,7 +95,7 @@ export default async function Folder({
           <div key={i} className="h-20 w-full rounded-md bg-[#eee]"></div>
         ))}
       </div> */}
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col">
         {page.records.length >= 1 ? (
           <FolderFeedList
             initialFeeds={JSON.parse(JSON.stringify(page.records))}

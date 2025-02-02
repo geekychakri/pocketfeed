@@ -9,7 +9,7 @@ export async function GET(request: Request) {
     const xata = getXataClient();
     const page = await xata.db.feeds.getPaginated({
       pagination: {
-        size: 5,
+        size: 20,
         after: cursor || undefined,
       },
     });

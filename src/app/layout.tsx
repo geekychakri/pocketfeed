@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Open_Sans } from "next/font/google";
+
 import "./globals.css";
 
 import { Toaster } from "sonner";
@@ -11,9 +11,13 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 
+import { ThemeProvider } from "next-themes";
+
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import { GeistSans } from "geist/font/sans";
+
+import { Inter } from "next/font/google";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -21,11 +25,11 @@ const inter = Inter({
   display: "swap",
 });
 
-const openSans = Open_Sans({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
+// const openSans = Open_Sans({
+//   subsets: ["latin"],
+//   variable: "--font-inter",
+//   display: "swap",
+// });
 
 export const metadata: Metadata = {
   title: "Pocket Feed",
@@ -39,18 +43,26 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className={inter.className}>
+      <html lang="en" className={inter.className} suppressHydrationWarning>
         <head>
           {/* <script
             src="https://unpkg.com/react-scan/dist/auto.global.js"
             async
           /> */}
         </head>
-        <body>
+        <body className="bg-background-primary text-text-primary">
           <a href="#main" className="sr-only">
             Skip to content
           </a>
-          <NuqsAdapter>{children}</NuqsAdapter>
+          <NuqsAdapter>
+            <ThemeProvider
+              disableTransitionOnChange={true}
+              defaultTheme="system"
+              enableSystem
+            >
+              {children}
+            </ThemeProvider>
+          </NuqsAdapter>
           <Toaster
             duration={3000}
             toastOptions={{

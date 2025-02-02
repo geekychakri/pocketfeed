@@ -127,9 +127,9 @@ const PodcastPlayer = () => {
 
   return (
     <div
-      className={`${styles.audioPlayer} fixed -bottom-72 left-[240px] right-0 z-[10] flex flex-col gap-1 border-t bg-[#fff] p-4 ${show === "hide" ? "translate-y-80" : ""}`}
+      className={`${styles.audioPlayer} bg-background-primary border-border-non-interactive fixed -bottom-72 left-[240px] right-0 z-[10] flex flex-col gap-1 border-t p-4 ${show === "hide" ? "translate-y-80" : ""}`}
     >
-      <div className="absolute -top-3 flex cursor-pointer gap-2 self-end">
+      <div className="absolute -top-[14px] flex cursor-pointer gap-2 self-end">
         {/* <button>
           <Share2Icon className="size-5" />
         </button> */}
@@ -140,9 +140,9 @@ const PodcastPlayer = () => {
             // setIsPlaying(false);
             audioPlayerRef.current?.pause();
           }}
-          className="flex size-5 items-center justify-center rounded-full bg-[#eee]"
+          className="border-border-interactive bg-background-secondary flex size-6 items-center justify-center rounded-full border"
         >
-          <Cross2Icon className="size-3" />
+          <Cross2Icon className="size-4" />
         </button>
       </div>
 
@@ -178,7 +178,7 @@ const PodcastPlayer = () => {
               -webkit-font-smoothing: antialiased;
               border-radius: 16px;
               overflow: hidden;
-              background: #f7f7f7;
+              background: var(--background-secondary);
               font-size: calc(0.75 * var(--base));
               // font-family: Roboto, Arial, sans-serif;
             }
@@ -212,7 +212,7 @@ const PodcastPlayer = () => {
 
             .media-button svg {
               fill: none;
-              stroke: var(--media-primary-color, #fff);
+              stroke: var(--text-primary, #fff);
               stroke-width: 1;
               stroke-linecap: round;
               stroke-linejoin: round;
@@ -304,7 +304,7 @@ const PodcastPlayer = () => {
                 line-height: 1.2;
                 margin: 0;
                 font-weight: 400;
-                color: var(--media-primary-color, #fff);
+                color: var(--text-primary, #fff);
               }
 
               .title {
@@ -717,9 +717,9 @@ const PodcastPlayer = () => {
           template="media-theme-sutro-audio"
           mediatitle={title}
           mediabyline={albumName}
-          style={{
-            "--media-primary-color": "#000",
-          }}
+          // style={{
+          //   "--media-primary-color": "",
+          // }}
         >
           <audio
             slot="media"

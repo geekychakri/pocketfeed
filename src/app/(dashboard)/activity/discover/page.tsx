@@ -27,9 +27,9 @@ export default async function Page() {
             return (
               <div
                 key={post.id}
-                className="flex flex-col gap-1 rounded-lg border bg-white shadow-sm"
+                className="flex flex-col gap-6 rounded-lg border border-border-primary p-4 text-text-primary"
               >
-                <div className="flex flex-col gap-4 p-4">
+                <div className="flex flex-col gap-4">
                   <Link
                     href={`/user/${post.username}`}
                     className="flex items-center gap-1"
@@ -46,10 +46,10 @@ export default async function Page() {
                   </Link>
                   <p>{post.body}</p>
                 </div>
-                <div className="m-[3px] flex flex-col gap-4 rounded-md border bg-[#fbfbfb] p-3 text-sm">
+                <div className="flex flex-col gap-4 rounded-md border border-border-primary bg-background-secondary p-3 text-sm">
                   <div className="flex flex-col gap-1">
                     <div className="flex justify-between">
-                      <h2 className="font-medium text-primary">
+                      <h2 className="text-primary font-medium">
                         {feedItem.title}
                       </h2>
                       <svg
@@ -77,7 +77,8 @@ export default async function Page() {
                     {feedItem.contentSnippet || feedItem.content}
                   </p>
                   <PodcastPlayButton
-                    className="h-9 w-24 text-sm"
+                    showText={true}
+                    className="h-9 w-24 rounded-md border border-border-primary bg-background-primary text-sm transition-[background] hover:bg-transparent"
                     title={feedItem.title}
                     audioUrl={feedItem.enclosure.url}
                     albumCover={post.feedAlbumCover as string}
@@ -97,9 +98,9 @@ export default async function Page() {
             return (
               <div
                 key={post.id}
-                className="flex flex-col gap-1 rounded-md border bg-white shadow-sm"
+                className="flex flex-col gap-6 rounded-lg border border-border-primary p-4 text-text-primary"
               >
-                <div className="flex flex-col gap-4 p-4">
+                <div className="flex flex-col gap-4">
                   <Link
                     href={`/user/${post.username}`}
                     className="flex items-center gap-1"
@@ -116,10 +117,10 @@ export default async function Page() {
                   </Link>
                   <p>{post.body}</p>
                 </div>
-                <div className="m-[3px] flex flex-col gap-4 rounded-md border bg-[#fbfbfb] p-3 text-sm">
+                <div className="flex flex-col gap-4 rounded-md border border-border-primary bg-background-secondary p-3 text-sm">
                   <div className="flex flex-col gap-1">
                     <div className="flex justify-between">
-                      <h2 className="font-medium text-primary">
+                      <h2 className="text-primary font-medium">
                         {feedItem.title}
                       </h2>
                       <svg
@@ -141,7 +142,8 @@ export default async function Page() {
                   </div>
                   <YouTubePlayButton
                     youtubeId={feedItem.id.split(":")[2]}
-                    className="h-9 w-24 text-sm"
+                    className="h-9 w-24 rounded-md border border-border-primary bg-background-primary text-sm transition-[background] hover:bg-transparent"
+                    showText={true}
                   />
                 </div>
               </div>
@@ -150,9 +152,9 @@ export default async function Page() {
           return (
             <div
               key={post.id}
-              className="flex flex-col gap-1 rounded-lg border bg-white shadow-sm"
+              className="flex flex-col gap-6 rounded-lg border border-border-primary p-4 text-text-primary"
             >
-              <div className="flex flex-col gap-4 p-4">
+              <div className="flex flex-col gap-4">
                 <Link
                   href={`/user/${post.username}`}
                   className="flex items-center gap-1"
@@ -179,11 +181,11 @@ export default async function Page() {
                 }
                 prefetch={false}
                 rel="noopener noreferrer"
-                className="m-[3px] flex flex-col gap-4 rounded-md border bg-[#fbfbfb] p-3 text-sm"
+                className="flex flex-col gap-4 rounded-md border border-border-primary bg-background-secondary p-3 text-sm"
               >
                 <div className="flex flex-col gap-1">
                   <div className="flex justify-between">
-                    <h2 className="font-medium text-primary">
+                    <h2 className="text-primary font-medium">
                       {feedItem.title}
                     </h2>
                     <svg

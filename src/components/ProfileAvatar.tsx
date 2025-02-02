@@ -57,19 +57,21 @@ export default function ProfileAvatar({
   return (
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger asChild>
-        <Avatar className="inline-flex h-[35px] w-[35px] flex-none cursor-pointer select-none items-center justify-center overflow-hidden rounded-full bg-blackA1 align-middle duration-100 hover:ring-2 hover:ring-gray-200">
-          <AvatarImage
-            className="h-full w-full rounded-[inherit] border-2 object-cover"
-            src={avatarUrl}
-            alt={username}
-          />
-          <AvatarFallback
-            className="leading-1 flex h-full w-full items-center justify-center bg-white text-[15px] font-medium text-violet11"
-            delayMs={600}
-          >
-            {getInitials(username)}
-          </AvatarFallback>
-        </Avatar>
+        <button className="size-[35px] rounded-full">
+          <Avatar className="inline-flex h-[35px] w-[35px] flex-none cursor-pointer select-none items-center justify-center overflow-hidden rounded-full bg-blackA1 align-middle duration-100 hover:ring-2 hover:ring-gray-200">
+            <AvatarImage
+              className="h-full w-full rounded-[inherit] border-2 object-cover"
+              src={avatarUrl}
+              alt={username}
+            />
+            <AvatarFallback
+              className="leading-1 flex h-full w-full items-center justify-center bg-white text-[15px] font-medium text-violet11"
+              delayMs={600}
+            >
+              {getInitials(username)}
+            </AvatarFallback>
+          </Avatar>
+        </button>
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Portal>

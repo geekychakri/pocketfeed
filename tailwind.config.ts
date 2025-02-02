@@ -1,9 +1,11 @@
 import type { Config } from "tailwindcss";
 
+const plugin = require("tailwindcss/plugin");
+
 const { blackA, mauve, violet } = require("@radix-ui/colors");
 
 const config = {
-  darkMode: ["class"],
+  // darkMode: ["class"],
   future: {
     hoverOnlyWhenSupported: true,
   },
@@ -27,7 +29,19 @@ const config = {
         ...blackA,
         ...mauve,
         ...violet,
-        primary: "rgba(var(--color-primary))",
+        "brand-primary": "rgba(var(--brand-primary))",
+        "background-primary": "var(--background-primary)",
+        "background-secondary": "var(--background-secondary)",
+        "ui-normal": "var(--ui-normal)",
+        "ui-hover": "var(--ui-hover)",
+        "ui-active": "var(--ui-active)",
+        "border-non-interactive": "var(--border-non-interactive)",
+        "border-interactive": "var(--border-interactive)",
+        "border-focus-ring": "var(--border-focus-ring)",
+        "border-primary": "var(--border-primary)",
+        "text-primary": "var(--text-primary)",
+        "text-secondary": "var(--text-secondary)",
+        danger: "var(--danger)",
       },
       keyframes: {
         slideDownAndFade: {
@@ -86,7 +100,16 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("@tailwindcss/typography"),
+    plugin(function ({ addVariant }) {
+      addVariant(
+        "prose-inline-code",
+        '&.prose :where(:not(pre)>code):not(:where([class~="not-prose"] *))',
+      );
+    }),
+  ],
 } satisfies Config;
 
 export default config;

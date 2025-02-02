@@ -4,7 +4,7 @@ export default function FeedLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main id="main" className="mx-auto w-full max-w-[750px] py-5">
+    <main id="main" className="mx-auto w-full max-w-[750px] py-14">
       {children}
     </main>
   );

@@ -58,40 +58,42 @@ export function FolderFeedList({
   };
   return (
     <>
-      {feeds.map((item, i) => (
-        <div
-          // href={`/feed/${item.title?.trim().replace(/\s+/g, "-").toLowerCase()}`}
-          // href={`/feed/${item.feedId}`}
-          key={i}
-          className="relative isolate flex h-20 w-full items-center justify-between gap-4 rounded-lg border bg-white px-4 py-2"
-        >
-          <span className="flex items-center gap-3">
-            <img
-              src={
-                item.siteURL.includes("youtube.com")
-                  ? item.favicon
-                  : `https://www.google.com/s2/favicons?domain=${item.siteURL}&sz=128`
-              }
-              alt=""
-              className="size-7 rounded-full"
-            />
+      <div className="flex flex-col [&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
+        {feeds.map((item, i) => (
+          <div
+            // href={`/feed/${item.title?.trim().replace(/\s+/g, "-").toLowerCase()}`}
+            // href={`/feed/${item.feedId}`}
+            key={i}
+            className="relative isolate flex w-full items-center justify-between gap-4 border-t border-border-primary py-[10px] transition-opacity"
+          >
+            <span className="flex items-center gap-3">
+              <img
+                src={
+                  item.siteURL.includes("youtube.com")
+                    ? item.favicon
+                    : `https://www.google.com/s2/favicons?domain=${item.siteURL}&sz=128`
+                }
+                alt=""
+                className="size-7 rounded-full"
+              />
 
-            <span className="line-clamp-1 font-medium">
-              {decode(item.title)}
+              <span className="line-clamp-1 font-medium">
+                {decode(item.title)}
+              </span>
             </span>
-          </span>
 
-          <FeedDropdown
-            feedId={item.id as string}
-            folderName={folderName}
-            folders={JSON.parse(JSON.stringify(folders))}
-          />
-          <Link
-            href={`/feed/${item.feedId}`}
-            className="absolute inset-0 z-[1]"
-          />
-        </div>
-      ))}
+            <FeedDropdown
+              feedId={item.id as string}
+              folderName={folderName}
+              folders={JSON.parse(JSON.stringify(folders))}
+            />
+            <Link
+              href={`/feed/${item.feedId}`}
+              className="absolute inset-0 z-[1]"
+            />
+          </div>
+        ))}
+      </div>
 
       {pageInfo.hasNextPage && (
         // <button
@@ -104,14 +106,14 @@ export function FolderFeedList({
         <Button
           onClick={loadMore}
           disabled={loading}
-          className="border border-gray-200 bg-white px-2 py-4 text-sm text-black"
+          className="pointer-events-auto border border-border-primary bg-ui-normal px-2 py-4 text-sm text-text-primary transition-[background-color] hover:bg-ui-hover"
         >
           {loading ? <SpinnerRotate fill="#e5e5e5" /> : <span>Show More</span>}
         </Button>
       )}
 
       {!pageInfo.hasNextPage && (
-        <p className="text-center text-gray-500">End of feed</p>
+        <p className="text-center text-gray-500">End of list!</p>
       )}
     </>
   );

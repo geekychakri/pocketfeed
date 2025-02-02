@@ -49,22 +49,22 @@ const FeedDropdown = ({
   };
   return (
     <DropdownMenu.Root modal={false}>
-      <DropdownMenu.Trigger asChild className="z-[2]">
-        <button
-          className="group/feed-item inline-flex size-[35px] flex-none items-center justify-center rounded-md border border-transparent outline-none duration-100 hover:border hover:bg-[#f2f2f2]"
-          aria-label="Feed options"
-        >
-          <DotsHorizontalIcon className="opacity-50 duration-75 group-hover/feed-item:opacity-100" />
+      <DropdownMenu.Trigger
+        asChild
+        className="group/feed-item z-[2] inline-flex size-[35px] flex-none items-center justify-center rounded-md transition-[background-color] hover:bg-ui-hover data-[state=open]:bg-ui-hover [&[data-state=open]>*]:opacity-100"
+      >
+        <button aria-label="Feed options">
+          <DotsHorizontalIcon className="opacity-50 transition-opacity group-hover/feed-item:opacity-100" />
         </button>
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content
-          className="min-w-[180px] rounded-md bg-white p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform] data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
+          className="min-w-[180px] rounded-md border border-border-primary bg-background-primary p-[5px] will-change-[opacity,transform] data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
           sideOffset={5}
         >
           <DropdownMenu.Item
-            className="group relative flex select-none items-center rounded-[3px] text-sm leading-none text-[#555] outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[disabled]:text-mauve8 data-[highlighted]:text-black"
+            className="data-[highlighted]:bg-danger group relative flex select-none items-center rounded-[3px] text-sm leading-none outline-none data-[disabled]:pointer-events-none"
             onSelect={(e) => {
               e.preventDefault();
             }}
@@ -73,7 +73,7 @@ const FeedDropdown = ({
           </DropdownMenu.Item>
 
           <DropdownMenu.Sub>
-            <DropdownMenu.SubTrigger className="group relative flex h-[25px] select-none items-center gap-1 rounded-[3px] px-2 py-4 text-sm leading-none text-[#555] outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[highlighted]:data-[state=open]:bg-gray-100 data-[state=open]:bg-gray-50 data-[disabled]:text-mauve8 data-[highlighted]:data-[state=open]:text-black data-[highlighted]:text-black data-[state=open]:text-black">
+            <DropdownMenu.SubTrigger className="line-none group relative flex h-[25px] select-none items-center gap-1 rounded-[3px] px-2 py-4 text-sm leading-none outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-ui-normal data-[highlighted]:data-[state=open]:bg-ui-normal data-[state=open]:bg-ui-normal data-[highlighted]:data-[state=open]:text-text-primary data-[highlighted]:text-text-primary data-[state=open]:text-text-primary">
               <span>
                 <DoubleArrowRightIcon />
               </span>
@@ -81,7 +81,7 @@ const FeedDropdown = ({
             </DropdownMenu.SubTrigger>
             <DropdownMenu.Portal>
               <DropdownMenu.SubContent
-                className="min-w-[180px] rounded-md bg-white p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform] data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
+                className="min-w-[180px] rounded-md border border-[#2e2e2e] bg-background-primary p-[5px] will-change-[opacity,transform] data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
                 sideOffset={2}
                 alignOffset={-5}
               >
@@ -91,7 +91,7 @@ const FeedDropdown = ({
                     return (
                       <DropdownMenu.Item
                         key={item.id}
-                        className="group relative flex h-[25px] select-none items-center rounded-[3px] px-2 py-4 text-sm leading-none text-[#555] outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[disabled]:text-mauve8 data-[highlighted]:text-black"
+                        className="group relative flex h-[25px] select-none items-center rounded-[3px] px-2 py-4 text-sm leading-none outline-none data-[highlighted]:bg-ui-normal"
                         onSelect={async (e) => {
                           e.preventDefault();
                           console.log(item.folder);
@@ -156,7 +156,7 @@ function DeleteFeedButton() {
       <span>
         <TrashIcon />
       </span>
-      <span>Delete</span>
+      <span>Unsubscribe</span>
     </button>
   );
 }
