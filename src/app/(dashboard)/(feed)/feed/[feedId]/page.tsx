@@ -189,10 +189,10 @@ function FeedItem({
     );
   } else if (item.link?.includes("youtube.com")) {
     return (
-      <div className="flex items-center justify-between border-t border-border-primary py-[10px]">
-        <span>
+      <div className="flex items-center justify-between gap-5 border-t border-border-primary py-[10px]">
+        <div className="">
           <span className="flex flex-col gap-1">
-            <span className="text-balance tracking-tight !text-inherit">
+            <span className="tracking-tight !text-inherit">
               {decode(item.title)}
             </span>
             <span className="line-clamp-2 text-text-secondary">
@@ -204,7 +204,7 @@ function FeedItem({
             <span>·</span>
             <span>{dayjs().to(dayjs(item.isoDate))}</span>
           </span>
-        </span>
+        </div>
 
         <div>
           <YouTubePlayButton youtubeId={item.id.split(":")[2]} />

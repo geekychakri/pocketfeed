@@ -90,11 +90,11 @@ export default function VaulDrawer({ audioRef }: { audioRef: any }) {
     <Drawer.Root
       direction="right"
       // dismissible={false}
-      modal={false}
+
       open={isOpen}
       onOpenChange={setIsOpen}
     >
-      <Drawer.Trigger className="border-border-interactive bg-background-secondary relative flex size-6 items-center justify-center rounded-full border">
+      <Drawer.Trigger className="relative flex size-6 items-center justify-center rounded-full border border-border-interactive bg-background-secondary">
         <ReaderIcon className="size-4" />
       </Drawer.Trigger>
       <Drawer.Portal>
@@ -110,7 +110,7 @@ export default function VaulDrawer({ audioRef }: { audioRef: any }) {
           {/* <button onClick={() => console.log(audioRef.current.currentTime)}>
             LOG CURRENT TIME
           </button> */}
-          <div className="drawer bg-background-primary border-border-interactive h-full grow overflow-y-auto overscroll-contain rounded-[8px] border">
+          <div className="drawer h-full grow overflow-y-auto overscroll-contain rounded-[8px] border border-border-interactive bg-background-primary">
             <div className="overflow-wrap-anywhere mx-auto flex max-w-[720px] flex-col gap-10 px-3 py-6">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <Drawer.Title className="text-lg font-medium">
@@ -164,13 +164,13 @@ export default function VaulDrawer({ audioRef }: { audioRef: any }) {
                   >
                     <Tabs.Trigger
                       value="tab1"
-                      className="data-[state=active]:bg-ui-normal font-semibold data-[state=active]:rounded-md data-[state=active]:px-4 data-[state=active]:py-2"
+                      className="font-semibold data-[state=active]:rounded-md data-[state=active]:bg-ui-normal data-[state=active]:px-4 data-[state=active]:py-2"
                     >
                       Description
                     </Tabs.Trigger>
                     <Tabs.Trigger
                       value="tab2"
-                      className="data-[state=active]:bg-ui-normal font-semibold data-[state=active]:rounded-md data-[state=active]:px-4 data-[state=active]:py-2"
+                      className="font-semibold data-[state=active]:rounded-md data-[state=active]:bg-ui-normal data-[state=active]:px-4 data-[state=active]:py-2"
                     >
                       Chapters
                     </Tabs.Trigger>
@@ -180,7 +180,7 @@ export default function VaulDrawer({ audioRef }: { audioRef: any }) {
                       dangerouslySetInnerHTML={{
                         __html: DOMPurify.sanitize(content),
                       }}
-                      className="text-text-primary prose-strong:text-text-primary prose-pre:text-text-secondary prose-headings:text-text-primary prose-pre:bg-background-secondary prose-inline-code:bg-background-secondary prose-inline-code:border-border-non-interactive prose-pre:border-border-non-interactive prose-inline-code:text-text-secondary prose break-words text-lg prose-h2:font-semibold prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-pre:rounded-md prose-pre:border prose-pre:text-base prose-inline-code:rounded-md prose-inline-code:border prose-inline-code:px-1 prose-inline-code:py-[2px] prose-inline-code:before:hidden prose-inline-code:after:hidden max-sm:text-base"
+                      className="prose-a:text-primary prose break-words text-lg text-text-primary prose-headings:text-text-primary prose-h2:font-semibold prose-a:no-underline hover:prose-a:underline prose-strong:text-text-primary prose-pre:rounded-md prose-pre:border prose-pre:border-border-non-interactive prose-pre:bg-background-secondary prose-pre:text-base prose-pre:text-text-secondary prose-inline-code:rounded-md prose-inline-code:border prose-inline-code:border-border-non-interactive prose-inline-code:bg-background-secondary prose-inline-code:px-1 prose-inline-code:py-[2px] prose-inline-code:text-text-secondary prose-inline-code:before:hidden prose-inline-code:after:hidden max-sm:text-base"
                       id="description"
                     ></div>
                   </Tabs.Content>
@@ -197,7 +197,7 @@ export default function VaulDrawer({ audioRef }: { audioRef: any }) {
                   dangerouslySetInnerHTML={{
                     __html: DOMPurify.sanitize(content),
                   }}
-                  className="text-text-primary prose-strong:text-text-primary prose-pre:text-text-secondary prose-headings:text-text-primary prose-pre:bg-background-secondary prose-inline-code:bg-background-secondary prose-inline-code:border-border-non-interactive prose-pre:border-border-non-interactive prose-inline-code:text-text-secondary prose break-words text-lg prose-h2:font-semibold prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-pre:rounded-md prose-pre:border prose-pre:text-base prose-inline-code:rounded-md prose-inline-code:border prose-inline-code:px-1 prose-inline-code:py-[2px] prose-inline-code:before:hidden prose-inline-code:after:hidden max-sm:text-base"
+                  className="prose-a:text-primary prose break-words text-lg text-text-primary prose-headings:text-text-primary prose-h2:font-semibold prose-a:no-underline hover:prose-a:underline prose-strong:text-text-primary prose-pre:rounded-md prose-pre:border prose-pre:border-border-non-interactive prose-pre:bg-background-secondary prose-pre:text-base prose-pre:text-text-secondary prose-inline-code:rounded-md prose-inline-code:border prose-inline-code:border-border-non-interactive prose-inline-code:bg-background-secondary prose-inline-code:px-1 prose-inline-code:py-[2px] prose-inline-code:text-text-secondary prose-inline-code:before:hidden prose-inline-code:after:hidden max-sm:text-base"
                   id="description"
                 ></div>
               )}

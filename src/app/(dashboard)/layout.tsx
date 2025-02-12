@@ -85,7 +85,7 @@ export default async function MainLayout({
 
   console.log({ username: user?.username });
   return (
-    <div className="flex">
+    <main className="flex">
       {/* <Navigation
         avatarUrl={user?.avatarUrl as string}
         username={user?.username as string}
@@ -144,6 +144,6 @@ export default async function MainLayout({
       {/* {show && <PodcastPlayer />} */}
       {/* <PodcastPlayer /> */}
       {children}
-    </div>
+    </main>
   );
 }

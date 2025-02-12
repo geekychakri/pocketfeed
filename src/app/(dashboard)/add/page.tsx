@@ -126,7 +126,7 @@ export default function Add() {
             id="url"
             placeholder="https://www.example.com"
             autoComplete="off"
-            className="rounded-md border px-4 py-2 outline-none duration-100 focus:border-primary"
+            className="border-shadow rounded-md bg-transparent px-4 py-2"
             onChange={(e) => {
               setRssData({});
               setUrlValue(e.target.value);
@@ -145,7 +145,7 @@ export default function Add() {
         {isRssDataEmpty && (
           <button
             className={cn(
-              "flex h-12 items-center justify-center rounded-md bg-[#181818] px-4 py-2 font-medium text-white",
+              "flex h-12 items-center justify-center rounded-md bg-ui-normal px-4 py-2 font-medium text-white duration-100 hover:bg-ui-hover",
             )}
             disabled={isLoading}
           >
@@ -161,9 +161,13 @@ export default function Add() {
       </form>
 
       {!isRssDataEmpty && (
-        <div className="flex flex-col gap-6 rounded-md border p-4">
+        <div className="border-shadow flex flex-col gap-6 rounded-md p-4">
           <img
-            src={`https://www.google.com/s2/favicons?domain=${rssData.url}&sz=128`}
+            src={
+              rssData.url?.includes("youtube.com")
+                ? rssData.favicon
+                : `https://www.google.com/s2/favicons?domain=${rssData.url}&sz=128`
+            }
             width={28}
             height={28}
             className="rounded-full"
@@ -177,9 +181,13 @@ export default function Add() {
                     <div className="flex items-center gap-4">
                       <input
                         type="text"
-                        className="flex-1 rounded border p-2"
+                        className="border-shadow flex-1 rounded bg-transparent p-2"
                         name={`feeds[${i}][title]`}
-                        defaultValue={item.title || rssData?.title}
+                        defaultValue={
+                          rssData.url?.includes("youtube.com")
+                            ? rssData?.title
+                            : item.title || rssData?.title
+                        }
                         required={i === 0 ? true : false}
                       />
                       {(rssData?.feedUrls?.length ?? 0) > 1 && (
@@ -191,8 +199,8 @@ export default function Add() {
                         //   />
                         <Switch.Root
                           name={`feeds[${i}][isChecked]`}
-                          className="relative h-[25px] w-[42px] cursor-default rounded-full bg-blackA6 shadow-[0_2px_10px] shadow-blackA4 outline-none focus:shadow-[0_0_0_2px] focus:shadow-black data-[state=checked]:bg-primary"
-                          id="airplane-mode"
+                          className="relative h-[25px] w-[42px] cursor-default rounded-full bg-ui-normal outline-none data-[state=checked]:bg-[rgba(252,89,30,0.2)]"
+                          id={`select-feed-${i}`}
                           style={{
                             WebkitTapHighlightColor: "rgba(0, 0, 0, 0)",
                           }}
@@ -205,7 +213,7 @@ export default function Add() {
                           defaultChecked={i === 0 ? true : false}
                           // required={i === 0 ? true : false}
                         >
-                          <Switch.Thumb className="block h-[21px] w-[21px] translate-x-0.5 rounded-full bg-white shadow-[0_2px_2px] shadow-blackA4 transition-transform duration-100 will-change-transform data-[state=checked]:translate-x-[19px]" />
+                          <Switch.Thumb className="block h-[21px] w-[21px] translate-x-0.5 rounded-full bg-brand-primary shadow-[0_2px_2px] shadow-blackA4 transition-transform duration-100 will-change-transform data-[state=checked]:translate-x-[19px]" />
                         </Switch.Root>
                       )}
                     </div>
@@ -245,7 +253,7 @@ function SubmitButton() {
   const { pending } = useFormStatus();
   return (
     <button
-      className="flex h-11 w-full items-center justify-center rounded-md bg-primary px-4 py-2 font-medium text-white"
+      className="flex h-11 w-full items-center justify-center rounded-md bg-ui-normal px-4 py-2 font-medium text-white"
       disabled={pending}
     >
       {pending ? <SpinnerRotate /> : "Add"}

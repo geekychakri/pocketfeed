@@ -61,7 +61,7 @@ const FeedDropdown = ({
     }
   };
   return (
-    <DropdownMenu.Root modal={false}>
+    <DropdownMenu.Root>
       <DropdownMenu.Trigger
         asChild
         className="group/feed-item z-[2] inline-flex size-[35px] flex-none items-center justify-center rounded-md hover:bg-ui-hover data-[state=open]:bg-ui-hover [&[data-state=open]>*]:opacity-100"

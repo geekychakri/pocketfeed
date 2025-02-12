@@ -55,7 +55,7 @@ export default function ProfileAvatar({
   console.log({ username });
   console.log({ avatarUrl });
   return (
-    <DropdownMenu.Root modal={false}>
+    <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
         <button className="flex items-center gap-2 rounded-full">
           <Avatar className="inline-flex h-[35px] w-[35px] flex-none cursor-pointer select-none items-center justify-center overflow-hidden rounded-full align-middle duration-150 hover:ring-4 hover:ring-ui-normal">

@@ -143,11 +143,7 @@ const DropdownMenuDemo = ({
 
   return (
     <>
-      <DropdownMenu.Root
-        open={isDropdownOpen}
-        onOpenChange={setIsDropdownOpen}
-        modal={false}
-      >
+      <DropdownMenu.Root open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
         <DropdownMenu.Trigger asChild>
           <button
             className="flex h-8 w-56 items-center justify-between rounded-full border px-3 text-sm outline-none"

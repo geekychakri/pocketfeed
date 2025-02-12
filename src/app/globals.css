@@ -62,10 +62,11 @@
 
   html {
     font-family: var(--font-inter);
-    caret-color: #f84f39;
-    accent-color: #f84f39;
+    caret-color: rgb(var(--brand-primary));
+    accent-color: rgb(var(--brand-primary));
 
     scrollbar-gutter: stable;
+    scrollbar-width: thin;
 
     /* color: #fc591e; */
 
@@ -75,9 +76,17 @@
     scrollbar-color: #f84f39 #eee; */
   }
 
+  /*Fix for radix select when using scrollbar gutter to prevent layout shift*/
+  @supports (scrollbar-gutter: stable) {
+    html body[data-scroll-locked] {
+      margin: 0 !important;
+    }
+  }
+
   /* html {
     animation: smoothscroll1 1s;
   }
+  
 
   html:focus-within {
     animation-name: smoothscroll2;
@@ -191,9 +200,9 @@ a:focus-visible,
 button:focus-visible,
 textarea:focus-visible {
   outline: none;
-  box-shadow:
-    0 0 0 2px #f84f39,
-    0 0 0 2px #f84f39;
+  /* box-shadow:
+    0 0 0 1px #f84f39,
+    0 0 0 1px #f84f39; */
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -201,6 +210,10 @@ textarea:focus-visible {
     --color-primary: 124, 79, 57;
   }
 } */
+
+.border-shadow {
+  box-shadow: 0 0 0 1px var(--border-non-interactive);
+}
 
 .body.markup a {
   text-decoration: underline;
@@ -233,24 +246,6 @@ textarea:focus-visible {
 }
 
 /* custom scrollbar */
-::-webkit-scrollbar {
-  width: 5px;
-}
-
-::-webkit-scrollbar-track {
-  background-color: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #f84f39;
-  /* border-radius: 10px;
-  border: 6px solid transparent; */
-  background-clip: content-box;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: #a8bbbf;
-}
 
 .overflow-wrap-anywhere {
   overflow-wrap: anywhere;
