@@ -180,8 +180,7 @@ export async function deleteFeed(prevState: any, formData: FormData) {
     const deletedFeed = await xata.db.feeds.delete(feedId);
 
     console.log("DELETED");
-
-    revalidatePath(`/folder/${folderName}`, "page"); //TODO:
+    // revalidatePath(`/folder/${folderName}`, "page");
     return { message: "success" };
   } catch (err) {
     return { message: "error" };
@@ -194,7 +193,7 @@ export async function moveToFolder(
   newFolder: string,
 ) {
   const folders = await xata.db.feeds.update(id, { folder: newFolder });
-  revalidatePath(`/folder/${currentFolder}`, "page");
+  // revalidatePath(`/folder/${currentFolder}`, "page");
   return { message: "success" };
 }
 

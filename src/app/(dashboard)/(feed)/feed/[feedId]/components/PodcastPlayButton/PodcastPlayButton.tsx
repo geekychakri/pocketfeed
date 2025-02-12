@@ -1,6 +1,6 @@
 "use client";
 import { useShowPodcastPlayer } from "@/store/podcastplayer";
-import { useState } from "react";
+import { useState, MouseEvent } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -59,7 +59,8 @@ export default function PodcastPlayButton({
         "z-[2] flex size-10 items-center justify-center gap-1 rounded-full bg-ui-normal px-4 py-2 text-base font-medium",
         className,
       )}
-      onClick={() => {
+      onClick={(e: MouseEvent<HTMLButtonElement>) => {
+        e.currentTarget.blur();
         if (activeEpisode == episodeNumber && isPlaying) {
           console.log("PREVIOUS CLICK");
           setIsPlayingFalse();

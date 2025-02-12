@@ -28,13 +28,13 @@ export default async function Read({ params }: { params: { link: string } }) {
   }
 
   return (
-    <main
-      className={`relative mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-28`}
-    >
-      <ArticleSettings />
-      <RouteBack text="Back" />
-      <h1 className="text-balance text-6xl font-semibold tracking-tighter !text-text-primary">
+    <main className={`mx-auto flex w-full max-w-3xl flex-col px-4`}>
+      {/* <ArticleSettings /> */}
+      <div className="h-14 w-full"></div>
+
+      <h1 className="relative flex h-14 items-center text-balance text-xl font-medium tracking-tight !text-text-primary">
         {article?.title}
+        <RouteBack className="absolute -left-9 h-14" />
       </h1>
       <Article content={article?.content as string} />
     </main>

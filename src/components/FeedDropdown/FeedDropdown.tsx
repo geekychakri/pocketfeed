@@ -1,6 +1,10 @@
 "use client";
 
-import React, { useEffect, startTransition } from "react";
+import React, { useEffect, startTransition, memo } from "react";
+
+import { useRouter } from "next/navigation";
+
+import useSound from "use-sound";
 
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { toast } from "sonner";
@@ -23,22 +27,31 @@ import { usePathname } from "next/navigation";
 import { deleteFeed, moveToFolder } from "@/app/actions";
 import { Folders, FoldersRecord } from "@/xata";
 
+// import { useFolderFeedStore } from "@/store/folder-feed";
+
+import { useFeedsDelete } from "@/hooks/useFeedsDelete";
+
 const FeedDropdown = ({
   feedId,
   folderName,
   folders,
+  sound,
 }: {
   feedId: string;
   folderName: string;
   folders: Folders[];
+  sound: () => void;
 }) => {
   const pathname = usePathname();
   const currentFolder = decodeURIComponent(pathname.split("/")[2]);
+
+  const deleteFeedStoreFn = useFeedsDelete();
 
   const moveToFolderAction = async (id: string, newFolder: string) => {
     try {
       const { message } = await moveToFolder(id, currentFolder, newFolder);
       if (message === "success") {
+        deleteFeedStoreFn(feedId);
         toast.success("Successfully moved!");
       } else {
         throw new Error("");
@@ -51,10 +64,10 @@ const FeedDropdown = ({
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger
         asChild
-        className="group/feed-item z-[2] inline-flex size-[35px] flex-none items-center justify-center rounded-md transition-[background-color] hover:bg-ui-hover data-[state=open]:bg-ui-hover [&[data-state=open]>*]:opacity-100"
+        className="group/feed-item z-[2] inline-flex size-[35px] flex-none items-center justify-center rounded-md hover:bg-ui-hover data-[state=open]:bg-ui-hover [&[data-state=open]>*]:opacity-100"
       >
         <button aria-label="Feed options">
-          <DotsHorizontalIcon className="opacity-50 transition-opacity group-hover/feed-item:opacity-100" />
+          <DotsHorizontalIcon className="opacity-50 transition-[transform,opacity] group-hover/feed-item:opacity-100 group-active/feed-item:scale-75" />
         </button>
       </DropdownMenu.Trigger>
 
@@ -64,7 +77,7 @@ const FeedDropdown = ({
           sideOffset={5}
         >
           <DropdownMenu.Item
-            className="data-[highlighted]:bg-danger group relative flex select-none items-center rounded-[3px] text-sm leading-none outline-none data-[disabled]:pointer-events-none"
+            className="group relative flex select-none items-center rounded-[3px] text-sm leading-none outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-danger"
             onSelect={(e) => {
               e.preventDefault();
             }}
@@ -123,16 +136,34 @@ function DeleteFeedForm({
   feedId: string;
   folderName: string;
 }) {
+  const router = useRouter();
   const [state, formAction] = useFormState(deleteFeed, {
     message: "",
   });
 
+  const [success] = useSound("/sounds/success.wav");
+
+  const deleteFeedStoreFn = useFeedsDelete();
+  console.log({ deleteFeedStoreFn });
+
+  console.log("RE RENDERED");
+
   useEffect(() => {
     if (state.message === "success") {
       console.log("AWEEEEEEEEEEESOMMEEEEEEEE");
-
-      // revalidateCachePath("/folder/Home", "page");
-      toast.success("Deleted");
+      deleteFeedStoreFn(feedId);
+      success();
+      toast.success("Deleted", {
+        style: {
+          background: "var(--bg-primary)",
+          borderWidth: "1px",
+          borderColor: "var(--border-non-interactive)",
+          color: "#fff",
+        },
+        duration: 20000,
+      });
+      // revalidateCachePath("/folder/Home");
+      // router.refresh();
     }
   }, [state]);
   return (

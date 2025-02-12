@@ -9,6 +9,8 @@ import { getXataClient } from "@/xata";
 import SearchFeed from "@/components/SearchFeed";
 import { FolderFeedList } from "@/components/FolderFeedList";
 
+// export const dynamic = "force-dynamic";
+
 const xata = getXataClient();
 const folders = ["Home", "Music"];
 
@@ -21,6 +23,8 @@ const getLastModified = async (url: string) => {
   const etag = res.headers.get("last-modified");
   return etag;
 };
+
+import { FolderFeedStoreProvider } from "@/context/folder-feed-provider";
 
 export default async function Folder({
   params,
@@ -49,10 +53,18 @@ export default async function Folder({
     })
     .sort("xata.createdAt", "desc")
     .getPaginated({
-      pagination: { size: 20 },
+      pagination: { size: 5 },
     });
   console.log({ page }); //TODO: filter by userID choose either auth or  currentuser
   //TODO: sort desc by new item
+
+  // const feeds = await xata.db.feeds
+  //   .filter({
+  //     folder: decodeURIComponent(folderName),
+  //     userId: userId,
+  //   })
+  //   .sort("xata.createdAt", "desc")
+  //   .getAll();
 
   const folders = await getFolders(userId as string);
 
@@ -60,7 +72,7 @@ export default async function Folder({
 
   const hasNextPage = page.hasNextPage();
 
-  console.log({ records: page.records });
+  // console.log({ records: page.records });
 
   // let etags = [];
   // for (const record of page.records) {
@@ -95,32 +107,36 @@ export default async function Folder({
           <div key={i} className="h-20 w-full rounded-md bg-[#eee]"></div>
         ))}
       </div> */}
-      <div className="flex flex-col">
-        {page.records.length >= 1 ? (
-          <FolderFeedList
-            initialFeeds={JSON.parse(JSON.stringify(page.records))}
-            initialPageInfo={pageInfo}
-            folders={JSON.parse(JSON.stringify(folders))}
-          />
-        ) : (
-          <div className="flex flex-col items-center justify-center gap-6">
-            <img
-              src="/empty-feed.svg"
-              className="w-[320px]"
-              alt="empty-feed-svg"
+      <FolderFeedStoreProvider
+        initialData={JSON.parse(JSON.stringify(page.records))}
+      >
+        <div className="flex flex-col">
+          {page.records.length >= 1 ? (
+            <FolderFeedList
+              initialFeeds={JSON.parse(JSON.stringify(page.records))}
+              initialPageInfo={pageInfo}
+              folders={JSON.parse(JSON.stringify(folders))}
             />
-            <div className="flex flex-col items-center gap-3">
-              <p className="text-xl font-medium">The folder is empty.</p>
-              <Link
-                href="/add"
-                className="rounded-md bg-[#181818] px-4 py-2 text-white"
-              >
-                Add a feed
-              </Link>
+          ) : (
+            <div className="flex flex-col items-center justify-center gap-6">
+              <img
+                src="/empty-feed.svg"
+                className="w-[320px]"
+                alt="empty-feed-svg"
+              />
+              <div className="flex flex-col items-center gap-3">
+                <p className="text-xl font-medium">The folder is empty.</p>
+                <Link
+                  href="/add"
+                  className="rounded-md bg-[#181818] px-4 py-2 text-white"
+                >
+                  Add a feed
+                </Link>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      </FolderFeedStoreProvider>
     </div>
   );
 }

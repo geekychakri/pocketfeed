@@ -46,6 +46,11 @@ function convertTimeStringToReadable(timeString: string) {
   if (!timeString.includes(":")) {
     const hours = Math.floor(+timeString / 3600); // Calculate hours
     const minutes = Math.floor((+timeString % 3600) / 60); // Calculate remaining minutes
+    console.log({ hours, minutes });
+
+    if (hours === 0 && minutes === 0) {
+      return `${timeString}s`;
+    }
     return hours === 0 ? `${minutes}m` : `${hours}h ${minutes}m`;
   }
 
@@ -64,6 +69,8 @@ function convertTimeStringToReadable(timeString: string) {
     return `${minutes}m`;
   } else if (minutes === 0) {
     return `${hours}h`;
+  } else if (hours === 0 && minutes === 0) {
+    return `${seconds}s`;
   } else {
     return `${hours}h ${minutes}m`;
   }
@@ -185,7 +192,7 @@ function FeedItem({
       <div className="flex items-center justify-between border-t border-border-primary py-[10px]">
         <span>
           <span className="flex flex-col gap-1">
-            <span className="text-balance font-medium tracking-tight !text-inherit">
+            <span className="text-balance tracking-tight !text-inherit">
               {decode(item.title)}
             </span>
             <span className="line-clamp-2 text-text-secondary">
@@ -216,7 +223,7 @@ function FeedItem({
       // prefetch={false}
     >
       <span className="flex flex-col gap-3">
-        <span className="font-medium">{decode(item.title)}</span>
+        <span className="">{decode(item.title)}</span>
         {/* <span className="line-clamp-2 text-text-secondary">
           {item.contentSnippet}
         </span> */}
@@ -294,7 +301,7 @@ export default async function Feed({ params }: { params: { feedId: string } }) {
         <RouteBack className="absolute -left-9" />
         <span className="text-lg font-medium">{feedList?.title}</span>
       </div>
-      <div className="[&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
+      <div className="*:transition-opacity [&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
         {/* <p>{params.feedname.split("-").join(" ")}</p> */}
         {/* {feedList.items
         .sort((a, b) => (dayjs(a.isoDate).isAfter(dayjs(b.isoDate)) ? -1 : 1)) //TODO:
@@ -312,7 +319,7 @@ export default async function Feed({ params }: { params: { feedId: string } }) {
           // </div>
           <div>
             <h1 className="mb-[10px] font-medium text-brand-primary">Today</h1>
-            <div className="[&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
+            <div className="*:transition-opacity [&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
               {categorizedFeedItemsList.today.map((item, i) => (
                 <FeedItem feedList={feedList} item={item} key={i} />
               ))}
@@ -332,7 +339,7 @@ export default async function Feed({ params }: { params: { feedId: string } }) {
             <h1 className="mb-[10px] font-medium text-brand-primary">
               Yesterday
             </h1>
-            <div className="[&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
+            <div className="*:transition-opacity [&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
               {categorizedFeedItemsList.yesterday.map((item, i) => (
                 <FeedItem feedList={feedList} item={item} key={i} />
               ))}
@@ -352,7 +359,7 @@ export default async function Feed({ params }: { params: { feedId: string } }) {
             <h1 className="mb-[10px] font-medium text-brand-primary">
               This Week
             </h1>
-            <div className="[&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
+            <div className="*:transition-opacity [&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
               {categorizedFeedItemsList.thisWeek.map((item, i) => (
                 <FeedItem feedList={feedList} item={item} key={i} />
               ))}
@@ -372,7 +379,7 @@ export default async function Feed({ params }: { params: { feedId: string } }) {
             <h1 className="mb-[10px] font-medium text-brand-primary">
               Last Week
             </h1>
-            <div className="[&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
+            <div className="*:transition-opacity [&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
               {categorizedFeedItemsList.lastWeek.map((item, i) => (
                 <FeedItem feedList={feedList} item={item} key={i} />
               ))}
@@ -384,7 +391,7 @@ export default async function Feed({ params }: { params: { feedId: string } }) {
             <h1 className="mb-[10px] font-medium text-brand-primary">
               This Month
             </h1>
-            <div className="[&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
+            <div className="*:transition-opacity [&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
               {categorizedFeedItemsList.thisMonth.map((item, i) => (
                 <FeedItem feedList={feedList} item={item} key={i} />
               ))}
@@ -404,7 +411,7 @@ export default async function Feed({ params }: { params: { feedId: string } }) {
             <h1 className="mb-[10px] font-medium text-brand-primary">
               Last Month
             </h1>
-            <div className="[&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
+            <div className="*:transition-opacity [&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
               {categorizedFeedItemsList.lastMonth.map((item, i) => (
                 <FeedItem feedList={feedList} item={item} key={i} />
               ))}
@@ -424,7 +431,7 @@ export default async function Feed({ params }: { params: { feedId: string } }) {
             <h1 className="mb-[10px] font-medium text-brand-primary">
               This Year
             </h1>
-            <div className="[&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
+            <div className="*:transition-opacity [&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
               {categorizedFeedItemsList.thisYear.map((item, i) => (
                 <FeedItem feedList={feedList} item={item} key={i} />
               ))}
@@ -444,7 +451,7 @@ export default async function Feed({ params }: { params: { feedId: string } }) {
             <h1 className="mb-[10px] font-medium text-brand-primary">
               Last Year
             </h1>
-            <div className="[&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
+            <div className="*:transition-opacity [&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
               {categorizedFeedItemsList.lastYear.map((item, i) => (
                 <FeedItem feedList={feedList} item={item} key={i} />
               ))}
@@ -469,7 +476,7 @@ export default async function Feed({ params }: { params: { feedId: string } }) {
                   <h1 className="mb-[10px] font-medium text-brand-primary">
                     {item}
                   </h1>
-                  <div className="[&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
+                  <div className="*:transition-opacity [&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
                     {categorizedFeedItemsList.older[item].map((item, i) => (
                       <FeedItem feedList={feedList} item={item} key={i} />
                     ))}
@@ -528,9 +535,7 @@ const PodcastCard = ({
     <div className="relative flex items-center justify-between border-t border-border-primary py-[10px]">
       <span className="flex flex-col gap-3">
         <span className="flex flex-col gap-1">
-          <span className="font-medium tracking-tight">
-            {decode(item.title)}
-          </span>
+          <span className="tracking-tight">{decode(item.title)}</span>
           {/* <span className="line-clamp-2 text-text-secondary">
             {item.contentSnippet}
           </span> */}

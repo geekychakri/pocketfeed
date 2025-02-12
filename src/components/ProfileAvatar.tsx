@@ -34,7 +34,7 @@ const AvatarDropdownItem = ({
   return (
     <Link href={to}>
       <DropdownMenu.Item
-        className="relative flex h-[25px] select-none items-center gap-2 rounded-[3px] px-2 py-5 text-sm leading-none text-[#555] outline-none duration-150 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[disabled]:text-mauve8 data-[highlighted]:text-black"
+        className="relative flex h-[25px] select-none items-center gap-2 rounded-[3px] px-2 py-5 text-sm leading-none text-text-primary outline-none duration-150 data-[disabled]:pointer-events-none data-[highlighted]:bg-ui-normal data-[disabled]:text-mauve8"
         onPointerEnter={() => setHovered(true)}
         onPointerLeave={() => setHovered(false)}
       >
@@ -57,27 +57,30 @@ export default function ProfileAvatar({
   return (
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger asChild>
-        <button className="size-[35px] rounded-full">
-          <Avatar className="inline-flex h-[35px] w-[35px] flex-none cursor-pointer select-none items-center justify-center overflow-hidden rounded-full bg-blackA1 align-middle duration-100 hover:ring-2 hover:ring-gray-200">
+        <button className="flex items-center gap-2 rounded-full">
+          <Avatar className="inline-flex h-[35px] w-[35px] flex-none cursor-pointer select-none items-center justify-center overflow-hidden rounded-full align-middle duration-150 hover:ring-4 hover:ring-ui-normal">
             <AvatarImage
-              className="h-full w-full rounded-[inherit] border-2 object-cover"
+              className="h-full w-full rounded-[inherit] object-cover"
               src={avatarUrl}
               alt={username}
             />
             <AvatarFallback
-              className="leading-1 flex h-full w-full items-center justify-center bg-white text-[15px] font-medium text-violet11"
+              className="leading-1 flex h-full w-full items-center justify-center bg-ui-normal text-[15px] font-medium"
               delayMs={600}
             >
               {getInitials(username)}
             </AvatarFallback>
           </Avatar>
+          <span className="truncate text-sm font-medium text-text-secondary">
+            {username}
+          </span>
         </button>
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content
-          className="z-40 min-w-[180px] rounded-md border bg-white p-[5px] will-change-[opacity,transform] data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
-          sideOffset={5}
+          className="z-40 min-w-[180px] rounded-md border border-ui-normal bg-background-primary p-[5px] text-text-primary will-change-[opacity,transform] data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
+          sideOffset={11}
           align="start"
         >
           <AvatarDropdownItem to={`/user/${username}`} Icon={UserIcon}>
@@ -86,7 +89,7 @@ export default function ProfileAvatar({
           <AvatarDropdownItem to="/settings" Icon={SettingsGearIcon}>
             <span>Settings</span>
           </AvatarDropdownItem>
-          <DropdownMenu.Separator className="my-[5px] h-[1px] bg-[#eee]" />
+          <DropdownMenu.Separator className="my-[5px] h-[1px] bg-border-non-interactive" />
           <AvatarDropdownItem to="/feedback" Icon={MessageCircleIcon}>
             <span>Feedback</span>
           </AvatarDropdownItem>
@@ -96,7 +99,7 @@ export default function ProfileAvatar({
 
           <SignOutButton />
 
-          <DropdownMenu.Arrow className="fill-primary" />
+          <DropdownMenu.Arrow className="fill-brand-primary" />
         </DropdownMenu.Content>
       </DropdownMenu.Portal>
     </DropdownMenu.Root>
