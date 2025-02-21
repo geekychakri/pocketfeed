@@ -32,10 +32,13 @@ export default async function Read({ params }: { params: { link: string } }) {
       {/* <ArticleSettings /> */}
       <div className="h-14 w-full"></div>
 
-      <h1 className="relative flex h-14 items-center text-balance text-xl font-medium tracking-tight !text-text-primary">
-        {article?.title}
-        <RouteBack className="absolute -left-9 h-14" />
-      </h1>
+      <div className="relative flex items-center">
+        <RouteBack className="absolute -left-9 border p-2" />
+        <h1 className="flex h-14 items-center text-balance border text-[20px] font-medium tracking-tight !text-text-primary">
+          {article?.title}
+        </h1>
+      </div>
+
       <Article content={article?.content as string} />
     </main>
   );

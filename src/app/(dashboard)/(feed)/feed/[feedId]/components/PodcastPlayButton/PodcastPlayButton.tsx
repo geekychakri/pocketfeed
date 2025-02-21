@@ -5,6 +5,7 @@ import { useState, MouseEvent } from "react";
 import { cn } from "@/lib/utils";
 
 import { PlayIcon, PauseIcon } from "@radix-ui/react-icons";
+import useSound from "use-sound";
 
 type PodcastPlayButtonType = {};
 
@@ -53,14 +54,17 @@ export default function PodcastPlayButton({
     setChaptersUrl,
   } = useShowPodcastPlayer();
 
+  const [tap] = useSound("/sounds/tap.wav");
+
   return (
     <button
       className={cn(
-        "z-[2] flex size-10 items-center justify-center gap-1 rounded-full bg-ui-normal px-4 py-2 text-base font-medium",
+        "z-[2] flex size-10 items-center justify-center gap-1 rounded-full bg-ui-normal px-4 py-2 text-base font-medium transition-transform will-change-transform active:scale-95",
         className,
       )}
       onClick={(e: MouseEvent<HTMLButtonElement>) => {
         e.currentTarget.blur();
+        tap();
         if (activeEpisode == episodeNumber && isPlaying) {
           console.log("PREVIOUS CLICK");
           setIsPlayingFalse();

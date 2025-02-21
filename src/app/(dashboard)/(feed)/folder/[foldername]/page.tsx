@@ -34,7 +34,7 @@ export default async function Folder({
   const userId = auth().userId || "";
   // const user = await currentUser();
   const folderName = decodeURIComponent(params.foldername);
-  console.log({ folderName });
+  // console.log({ folderName });
   // const [page, folders] = await Promise.all([
   //   xata.db.feeds
   //     .filter({
@@ -55,7 +55,7 @@ export default async function Folder({
     .getPaginated({
       pagination: { size: 5 },
     });
-  console.log({ page }); //TODO: filter by userID choose either auth or  currentuser
+  // console.log({ page }); //TODO: filter by userID choose either auth or  currentuser
   //TODO: sort desc by new item
 
   // const feeds = await xata.db.feeds
@@ -68,7 +68,7 @@ export default async function Folder({
 
   const folders = await getFolders(userId as string);
 
-  console.log({ folders: JSON.parse(JSON.stringify(folders)) });
+  // console.log({ folders: JSON.parse(JSON.stringify(folders)) });
 
   const hasNextPage = page.hasNextPage();
 
@@ -97,8 +97,8 @@ export default async function Folder({
   };
 
   return (
-    <div className="">
-      <h1 className="flex h-14 items-center font-semibold text-brand-primary">
+    <div className="px-4 py-14">
+      <h1 className="flex h-14 items-center text-lg font-semibold">
         {decodeURIComponent(folderName)}
       </h1>
 

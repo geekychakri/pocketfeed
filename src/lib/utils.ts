@@ -32,9 +32,12 @@ export function cleanUrl(url: string) {
   return cleanedUrl;
 }
 
-export function getInitials(name: string) {
+export function getInitials(name: string, type?: string) {
   if (!name) {
     return "";
+  }
+  if (type === "folder") {
+    return name.split(" ").map((word) => word[0])[0];
   }
   return name
     .split(" ")

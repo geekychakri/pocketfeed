@@ -61,12 +61,12 @@ const FeedDropdown = ({
     }
   };
   return (
-    <DropdownMenu.Root>
+    <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger
         asChild
         className="group/feed-item z-[2] inline-flex size-[35px] flex-none items-center justify-center rounded-md hover:bg-ui-hover data-[state=open]:bg-ui-hover [&[data-state=open]>*]:opacity-100"
       >
-        <button aria-label="Feed options">
+        <button aria-label="Feed options" onClick={() => sound()}>
           <DotsHorizontalIcon className="opacity-50 transition-[transform,opacity] group-hover/feed-item:opacity-100 group-active/feed-item:scale-75" />
         </button>
       </DropdownMenu.Trigger>

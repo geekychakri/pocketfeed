@@ -48,7 +48,7 @@ import { FolderFeedStoreContext } from "@/context/folder-feed-provider";
 
 export const useFolderFeedStore = (selector) => {
   const store = React.useContext(FolderFeedStoreContext);
-  console.log({ store });
+  // console.log({ store });
   if (!store) {
     throw new Error("Missing FolderFeedStoreContext.Provider");
   }

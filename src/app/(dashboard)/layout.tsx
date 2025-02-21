@@ -46,7 +46,7 @@ export default async function MainLayout({
 }>) {
   // const { show } = useShowPodcastPlayer();
   const { userId }: { userId: string | null } = auth();
-  console.log({ userId });
+  // console.log({ userId });
   const [user, folders] = await Promise.all([
     xata.db.users
       .filter({ userId: userId })
@@ -64,18 +64,19 @@ export default async function MainLayout({
   //   .select(["folder"])
   //   .getMany();
 
-  console.log(folders);
+  // console.log(folders);
+  // console.log({ user });
 
   const foldersList = folders.map((item) => ({
     id: item.id,
     folder: item.folder,
   })) as { id: string; folder: string }[];
 
-  console.log(foldersList);
+  // console.log(foldersList);
 
   // const
 
-  console.log(user);
+  // console.log(user);
 
   // const avatarUrl = user.avatar?.transform({
   //   width: 64,
@@ -83,9 +84,9 @@ export default async function MainLayout({
   //   format: "webp",
   // });
 
-  console.log({ username: user?.username });
+  // console.log({ username: user?.username });
   return (
-    <main className="flex">
+    <div className="flex">
       {/* <Navigation
         avatarUrl={user?.avatarUrl as string}
         username={user?.username as string}
@@ -139,11 +140,14 @@ export default async function MainLayout({
           />
         </div>
       </nav> */}
-      <SidebarNavigation foldersList={foldersList} user={user} />
+      <SidebarNavigation
+        foldersList={foldersList}
+        user={JSON.parse(JSON.stringify(user))}
+      />
       <div className="w-[240px]"></div>
       {/* {show && <PodcastPlayer />} */}
       {/* <PodcastPlayer /> */}
       {children}
-    </main>
+    </div>
   );
 }

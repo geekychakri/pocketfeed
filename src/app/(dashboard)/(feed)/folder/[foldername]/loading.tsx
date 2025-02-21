@@ -14,12 +14,10 @@
 //         </p> */}
 
 //         <div className="flex flex-col gap-4">
-//           <Skeleton width={250}></Skeleton>
-//           {Array.from({ length: 10 }, (_, i) => i + 1).map((_, i) => {
+//           <Skeleton width={150}></Skeleton>
+//           {Array.from({ length: 50 }, (_, i) => i + 1).map((_, i) => {
 //             return (
 //               <div key={i} className="flex flex-col gap-2">
-//                 <Skeleton width={150}></Skeleton>
-//                 <Skeleton className="flex-1"></Skeleton>
 //                 <Skeleton className="flex-1"></Skeleton>
 //               </div>
 //             );
@@ -31,10 +29,11 @@
 // }
 
 import { SpinnerRotate } from "@/components/SpinnerRotate";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 export default function Loading() {
   return (
-    <div className="flex h-screen items-center justify-center">
+    <div className="mx-auto flex h-screen w-full max-w-3xl flex-col items-center justify-center overflow-hidden">
       <SpinnerRotate />
     </div>
   );

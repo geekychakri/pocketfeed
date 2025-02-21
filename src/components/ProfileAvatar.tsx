@@ -52,8 +52,8 @@ export default function ProfileAvatar({
   avatarUrl: string;
   username: string;
 }) {
-  console.log({ username });
-  console.log({ avatarUrl });
+  // console.log({ username });
+  // console.log({ avatarUrl });
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>

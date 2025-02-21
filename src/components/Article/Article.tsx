@@ -12,7 +12,11 @@ import { usePathname } from "next/navigation";
 
 import { useParams } from "next/navigation";
 
+import RouteBack from "../RouteBack/RouteBack";
+
 import { Howl, Howler } from "howler";
+
+import { motion } from "framer-motion";
 
 import Script from "next/script";
 
@@ -155,13 +159,26 @@ export default function Article({ content }: { content: string }) {
         </Modal>
       </div> */}
 
-      <article
-        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }}
+      {/* <div className="relative flex items-center">
+        <RouteBack className="absolute -left-16 p-2" />
+        <h1 className="flex h-14 items-center text-balance text-xl font-medium tracking-tight !text-text-primary">
+          {article?.title}
+        </h1>
+      </div> */}
+      <RouteBack className="absolute -left-16 p-2" />
+
+      <motion.article
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6, ease: [0.8, -0.4, 0.5, 1] }}
+        dangerouslySetInnerHTML={{
+          __html: DOMPurify.sanitize(content),
+        }}
         ref={articleRef}
         // className="relative text-lg leading-normal"
-        className="prose break-words text-base tracking-tight text-text-primary prose-headings:text-text-primary prose-h2:font-semibold prose-a:text-brand-primary prose-a:no-underline hover:prose-a:underline prose-blockquote:text-text-primary prose-strong:text-text-primary prose-pre:rounded-md prose-pre:border prose-pre:border-border-non-interactive prose-pre:bg-background-secondary prose-pre:text-base prose-pre:text-text-secondary prose-inline-code:rounded-md prose-inline-code:border prose-inline-code:border-border-non-interactive prose-inline-code:bg-background-secondary prose-inline-code:px-1 prose-inline-code:py-[2px] prose-inline-code:text-text-secondary prose-inline-code:before:hidden prose-inline-code:after:hidden"
+        className="prose break-words text-base text-text-primary prose-headings:text-text-primary prose-h1:text-xl prose-h1:font-medium prose-h2:font-semibold prose-a:text-brand-primary prose-a:no-underline hover:prose-a:underline prose-blockquote:text-text-primary prose-strong:text-text-primary prose-pre:rounded-md prose-pre:border prose-pre:border-border-non-interactive prose-pre:bg-background-secondary prose-pre:text-base prose-pre:text-text-secondary prose-inline-code:rounded-md prose-inline-code:border prose-inline-code:border-border-non-interactive prose-inline-code:bg-background-secondary prose-inline-code:px-1 prose-inline-code:py-[2px] prose-inline-code:text-text-secondary prose-inline-code:before:hidden prose-inline-code:after:hidden"
         suppressHydrationWarning
-      ></article>
+      ></motion.article>
     </>
   );
 }

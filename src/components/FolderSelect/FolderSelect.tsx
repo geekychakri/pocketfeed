@@ -1,8 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, use } from "react";
 import * as Select from "@radix-ui/react-select";
 import { Label } from "@radix-ui/react-label";
+
+import getFolders from "@/lib/getFolders";
+
+import { useUser } from "@clerk/nextjs";
 
 import { cn } from "@/lib/utils";
 import {
@@ -78,7 +82,7 @@ const FolderSelect = () => {
           type="text"
           name="folder"
           placeholder="New folder name"
-          className="border-shadow w-full rounded-md bg-transparent px-4 py-2 duration-100"
+          className="border-shadow w-full rounded-md bg-transparent px-4 py-2 duration-150"
           required
         />
       )}

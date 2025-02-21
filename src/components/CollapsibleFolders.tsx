@@ -3,6 +3,8 @@
 import React from "react";
 import * as Collapsible from "@radix-ui/react-collapsible";
 
+import * as ContextMenu from "@radix-ui/react-context-menu";
+
 import { cn } from "@/lib/utils";
 
 import useSound from "use-sound";
@@ -15,11 +17,16 @@ import {
   TriangleDownIcon,
   ChevronRightIcon,
   ChevronDownIcon,
+  DotFilledIcon,
+  CheckIcon,
+  TrashIcon,
 } from "@radix-ui/react-icons";
 import Link from "next/link";
 
 import { FolderClosedIcon } from "@/icons/folder-closed";
 import { FolderOpenIcon } from "@/icons/folder-open";
+import { DeleteIcon } from "@/icons/delete";
+import { EditIcon } from "@/icons/edit";
 
 const CollapsibleFolders = ({
   foldersList,
@@ -30,6 +37,12 @@ const CollapsibleFolders = ({
 
   const [playFolderOpen] = useSound("/sounds/transition_open.wav");
   const [playFolderClose] = useSound("/sounds/transition_close.wav");
+
+  //CONTEXT MENU
+  const [bookmarksChecked, setBookmarksChecked] = React.useState(true);
+  const [urlsChecked, setUrlsChecked] = React.useState(false);
+  const [person, setPerson] = React.useState("pedro");
+  //CONTEXT MENU
 
   const pathname = usePathname();
   const currentFolderName = pathname.split("/")[2];
@@ -66,25 +79,50 @@ const CollapsibleFolders = ({
         <div className="px-3">
           {foldersList.map((folder, i) => {
             return (
-              <Link
-                href={`/folder/${folder.folder}`}
-                key={folder.id}
-                className={cn(
-                  "flex h-[30px] items-center gap-4 text-[14px] transition-colors hover:text-text-primary",
-                  currentFolderName === folder.folder
-                    ? "text-text-primary"
-                    : "text-text-secondary",
-                )}
-              >
-                <span>
-                  {currentFolderName === folder.folder ? (
-                    <FolderOpenIcon width={16} height={16} />
-                  ) : (
-                    <FolderClosedIcon width={16} height={16} />
-                  )}
-                </span>
-                <span>{folder.folder}</span>
-              </Link>
+              <ContextMenu.Root key={i}>
+                <ContextMenu.Trigger asChild>
+                  <Link
+                    href={`/folder/${folder.folder}`}
+                    key={folder.id}
+                    className={cn(
+                      "flex h-[30px] items-center gap-4 text-[14px] transition-colors hover:text-text-primary",
+                      currentFolderName === folder.folder
+                        ? "text-text-primary"
+                        : "text-text-secondary",
+                    )}
+                  >
+                    <span>
+                      {currentFolderName === folder.folder ? (
+                        <FolderOpenIcon width={16} height={16} />
+                      ) : (
+                        <FolderClosedIcon width={16} height={16} />
+                      )}
+                    </span>
+                    <span>{folder.folder}</span>
+                  </Link>
+                </ContextMenu.Trigger>
+                <ContextMenu.Portal>
+                  <ContextMenu.Content
+                    className="z-[100] min-w-[180px] overflow-hidden rounded-md bg-background-secondary p-[5px]"
+                    sideOffset={5}
+                    align="end"
+                  >
+                    <ContextMenu.Item className="group relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[5px] text-[13px] leading-none outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-ui-hover data-[disabled]:text-mauve8 data-[highlighted]:text-violet1">
+                      Edit{" "}
+                      <div className="ml-auto pl-5 text-mauve11 group-data-[disabled]:text-mauve8 group-data-[highlighted]:text-white">
+                        <EditIcon />
+                      </div>
+                    </ContextMenu.Item>
+
+                    <ContextMenu.Item className="group relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[5px] text-[13px] leading-none outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-ui-hover data-[disabled]:text-mauve8 data-[highlighted]:text-violet1">
+                      Delete{" "}
+                      <div className="ml-auto pl-5 text-mauve11 group-data-[disabled]:text-mauve8 group-data-[highlighted]:text-white">
+                        <DeleteIcon />
+                      </div>
+                    </ContextMenu.Item>
+                  </ContextMenu.Content>
+                </ContextMenu.Portal>
+              </ContextMenu.Root>
             );
           })}
         </div>

@@ -8,6 +8,8 @@ import { useShowPodcastPlayer as useShowYTPlayer } from "@/store/youtubeplayer";
 
 import { useShowPodcastPlayer } from "@/store/podcastplayer";
 
+import useSound from "use-sound";
+
 import { cn } from "@/lib/utils";
 
 import { useGlobalRef } from "@/store/globalRef";
@@ -21,6 +23,8 @@ export default function YouTubePlayButton({
   showText?: boolean;
 }) {
   const { openYoutubePlayer, setYoutubeId, isOpen } = useShowYTPlayer();
+
+  const [tap] = useSound("/sounds/tap.wav");
 
   const { audioPlayerRef } = useGlobalRef();
 
@@ -38,11 +42,11 @@ export default function YouTubePlayButton({
       onClick={() => {
         openYoutubePlayer();
         setYoutubeId(youtubeId);
-
         audioPlayerRef.current?.pause();
+        tap();
       }}
       className={cn(
-        "flex size-10 items-center justify-center gap-1 rounded-full bg-ui-normal px-4 py-2 text-base font-medium",
+        "flex size-10 items-center justify-center gap-1 rounded-full bg-ui-normal px-4 py-2 text-base font-medium transition-transform will-change-transform active:scale-95",
         className,
       )}
     >

@@ -35,6 +35,8 @@
     --border-focus-ring: #bbbbbb;
     --text-primary: #202020;
     --text-secondary: #646464;
+    --skeleton-highlight: #e8e8e8;
+    --danger: #d93036;
 
     /* --text-color: 0, 0, 0;
     --border-color: 136, 136, 136; */
@@ -57,6 +59,7 @@
     /* --text-primary: #f2f2f2; */
     --text-primary: #eeeeee;
     --text-secondary: #a0a0a0;
+    --skeleton-highlight: #363636;
     --danger: #d93036;
   }
 
@@ -98,7 +101,6 @@
   }
 
   body {
-    color: #1d1d1f;
     overflow-x: hidden;
     /* background-color: #fafafa;
     background-color: #fcfcfc; */
@@ -200,9 +202,9 @@ a:focus-visible,
 button:focus-visible,
 textarea:focus-visible {
   outline: none;
-  /* box-shadow:
-    0 0 0 1px #f84f39,
-    0 0 0 1px #f84f39; */
+  box-shadow:
+    0 0 0 1px rgb(var(--brand-primary)),
+    0 0 0 1px rgb(var(--brand-primary));
 }
 
 /* @media (prefers-color-scheme: dark) {

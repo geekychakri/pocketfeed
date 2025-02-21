@@ -36,7 +36,8 @@ export async function addFeeds(prevState: any, formData: FormData) {
   const results = qs.parse(
     Object.fromEntries(formData.entries()) as {},
   ) as FeedsType;
-  console.log(results);
+  console.log({ results });
+
   const feedId = nanoid();
   let feeds = [];
 
@@ -70,17 +71,36 @@ export async function addFeeds(prevState: any, formData: FormData) {
     });
   }
 
-  console.log(feeds);
+  console.log({ feeds });
   if (!(feeds.length >= 1)) {
     return {
       message: "Select at least one feed.",
     };
   }
 
-  const records = await xata.db.feeds.create(feeds);
+  const folderExists = await xata.db.folders
+    .filter({ userId, folder: results.folder })
+    .getFirst();
 
-  redirect(`/folder/${results.folder}`);
-  console.log("DONE");
+  if (!folderExists) {
+    const records = xata.db.feeds.create(feeds as []);
+    const newFolder = xata.db.folders.create({
+      userId,
+      folder: results.folder,
+      username: user?.username as string,
+    });
+    console.log({ newFolder });
+    const p = await Promise.all([records, newFolder]);
+    console.log({ p });
+
+    // const records = xata.db.feeds.create(feeds);
+    // const folders = xata.db.folders.create({
+    //   userId,
+    //   folder,
+    // });
+    redirect(`/folder/${results.folder}`);
+    console.log("DONE");
+  }
 }
 
 export async function createUser(email: string, username: string) {
@@ -127,6 +147,7 @@ export async function updateProfile(prevState: any, formData: FormData) {
 }
 
 export async function addNewFolder(prevState: any, formData: FormData) {
+  const user = await currentUser();
   const { userId }: { userId: string | null } = auth();
   const folder = formData.get("folder") as string;
   const folderExists = await xata.db.folders
@@ -137,6 +158,7 @@ export async function addNewFolder(prevState: any, formData: FormData) {
     const newFolder = await xata.db.folders.create({
       userId,
       folder,
+      username: user?.username as string,
     });
     console.log({ newFolder });
 

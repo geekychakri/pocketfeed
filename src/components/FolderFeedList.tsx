@@ -10,6 +10,8 @@ import FeedDropdown from "./FeedDropdown";
 import Button from "./ui/Button";
 import { SpinnerRotate } from "./SpinnerRotate";
 
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/UserAvatar";
+
 import { decode } from "html-entities";
 
 import useSound from "use-sound";
@@ -19,6 +21,7 @@ import { VList } from "virtua";
 import { useFolderFeedStore } from "@/store/folder-feed";
 
 import { useFeedsAdd } from "@/hooks/useFeedsAdd";
+import { getInitials } from "@/lib/utils";
 
 export function FolderFeedList({
   initialFeeds,
@@ -39,9 +42,9 @@ export function FolderFeedList({
   const folderName = pathname.split("/")[2];
 
   const addFeeds = useFeedsAdd();
-  console.log({ addFeeds });
+  // console.log({ addFeeds });
 
-  // const [tap] = useSound("/sounds/tap.wav");
+  const [tap] = useSound("/sounds/tap.wav");
   const loadMore = async () => {
     if (!pageInfo.hasNextPage || !pageInfo.cursor) return;
 
@@ -73,33 +76,41 @@ export function FolderFeedList({
   };
   return (
     <>
-      <div className="flex flex-col [&:focus-within_>*:not(:focus-within)]:opacity-50 [&:hover_>*:not(:hover)]:opacity-50">
+      <div className="flex flex-col empty:border-none">
         {feeds.map((item, i) => (
           <div
             // href={`/feed/${item.title?.trim().replace(/\s+/g, "-").toLowerCase()}`}
             // href={`/feed/${item.feedId}`}
             key={item.id}
-            className="relative isolate flex w-full items-center justify-between gap-4 border-t border-border-primary py-[10px] transition-opacity"
+            className="group/folder-feed relative isolate flex w-full items-center justify-between gap-4 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]"
+            // onBlur={(e) => alert("BLURREd")}
           >
             <span className="flex items-center gap-3">
-              <img
-                src={
-                  item.siteURL.includes("youtube.com")
-                    ? item.favicon
-                    : `https://www.google.com/s2/favicons?domain=${item.siteURL}&sz=128`
-                }
-                alt=""
-                className="size-7 rounded-full"
-              />
+              <Avatar className="inline-flex h-[30px] w-[30px] flex-none cursor-pointer select-none items-center justify-center overflow-hidden rounded-full bg-ui-normal">
+                <AvatarImage
+                  className="h-full w-full rounded-[inherit] object-cover"
+                  src={
+                    item.siteURL.includes("youtube.com")
+                      ? item.favicon
+                      : `https://www.google.com/s2/favicons?domain=${item.siteURL}&sz=128`
+                  }
+                  alt={item.title}
+                />
+                <AvatarFallback delayMs={400}>
+                  {getInitials(item.title, "folder")}
+                </AvatarFallback>
+              </Avatar>
 
-              <span className="line-clamp-1">{decode(item.title)}</span>
+              <span className="line-clamp-1 transition-[color] group-hover/folder-feed:text-brand-primary">
+                {decode(item.title)}
+              </span>
             </span>
 
             <FeedDropdown
               feedId={item.id as string}
               folderName={folderName}
               folders={JSON.parse(JSON.stringify(folders))}
-              // sound={tap}
+              sound={tap}
             />
             <Link
               href={`/feed/${item.feedId}`}
@@ -130,8 +141,8 @@ export function FolderFeedList({
         </Button>
       )}
 
-      {!pageInfo.hasNextPage && (
-        <p className="text-center text-gray-500">End of list!</p>
+      {!pageInfo.hasNextPage && feeds.length >= 1 && (
+        <p className="mt-5 text-text-secondary">End of list!</p>
       )}
     </>
   );
