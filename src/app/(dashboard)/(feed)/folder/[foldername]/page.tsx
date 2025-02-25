@@ -48,7 +48,7 @@ export default async function Folder({
   // ]);
   const page = await xata.db.feeds
     .filter({
-      folder: decodeURIComponent(folderName),
+      "folderName.folder": decodeURIComponent(folderName),
       userId: userId,
     })
     .sort("xata.createdAt", "desc")
@@ -67,6 +67,8 @@ export default async function Folder({
   //   .getAll();
 
   const folders = await getFolders(userId as string);
+
+  console.log({ folders });
 
   // console.log({ folders: JSON.parse(JSON.stringify(folders)) });
 

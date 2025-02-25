@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { Cross1Icon } from "@radix-ui/react-icons";
+import { Cross2Icon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
 
 export default function Modal({
@@ -12,7 +12,7 @@ export default function Modal({
   onOpenChange?: (open: boolean) => void;
   children: ReactNode;
 }) {
-  console.log({ open });
+  // console.log({ open });
   return (
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
       {children}
@@ -23,23 +23,32 @@ export default function Modal({
 export const ModalContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ title, children, ...props }, forwardedRef) => (
+>(({ title, children, className, ...props }, forwardedRef) => (
   <DialogPrimitive.Portal>
-    <DialogPrimitive.Overlay className="fixed inset-0 z-[120] bg-[#ffffffcc] backdrop-blur-[3px] data-[state=open]:animate-overlayShow" />
+    <DialogPrimitive.Overlay className="fixed inset-0 z-[120] bg-black/80 backdrop-blur-[1px] data-[state=open]:animate-overlayShow" />
     <DialogPrimitive.Content
       {...props}
       ref={forwardedRef}
-      className="fixed left-[50%] top-[50%] z-[130] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-lg border border-[#ededed] bg-[#f7f7f8] py-[25px] shadow-[0_8px_30px_0px_rgba(0,0,0,0.12)] focus:outline-none data-[state=open]:animate-contentShow"
+      className={cn(
+        "fixed left-[50%] top-[50%] z-[130] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-lg py-[25px] shadow-[0_8px_30px_0px_rgba(0,0,0,0.12)] focus:outline-none data-[state=open]:animate-contentShow",
+        className,
+      )}
     >
-      <div className="mb-[16px] flex items-center justify-between px-[25px]">
+      <div className="px-[25px]">
         <DialogPrimitive.Title className="text-lg font-medium">
           {title}
         </DialogPrimitive.Title>
-        <DialogPrimitive.Close aria-label="Close">
-          <Cross1Icon />
-        </DialogPrimitive.Close>
       </div>
+
       {children}
+      <DialogPrimitive.Close asChild>
+        <button
+          className="absolute right-2.5 top-2.5 inline-flex size-[25px] appearance-none items-center justify-center rounded-full text-text-primary hover:bg-ui-hover focus:outline-none"
+          aria-label="Close"
+        >
+          <Cross2Icon />
+        </button>
+      </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </DialogPrimitive.Portal>
 ));

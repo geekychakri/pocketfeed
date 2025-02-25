@@ -1,5 +1,5 @@
 "use server";
-import { redirect } from "next/navigation";
+import { redirect, permanentRedirect } from "next/navigation";
 import qs from "qs";
 import { nanoid } from "nanoid";
 
@@ -48,7 +48,7 @@ export async function addFeeds(prevState: any, formData: FormData) {
         return {
           rssURL: item?.rssURL,
           title: item?.title,
-          folder: results.folder,
+          // folder: results.folder,
           favicon: results.favicon,
           siteURL: results.siteURL,
           username: user?.username, //TODO:
@@ -60,7 +60,7 @@ export async function addFeeds(prevState: any, formData: FormData) {
     feeds = results?.feeds.map((item) => {
       return {
         rssURL: item?.rssURL,
-        folder: results.folder,
+        // folder: results.folder,
         favicon: results.favicon,
         siteURL: results.siteURL,
         title: item?.title,
@@ -83,15 +83,24 @@ export async function addFeeds(prevState: any, formData: FormData) {
     .getFirst();
 
   if (!folderExists) {
-    const records = xata.db.feeds.create(feeds as []);
-    const newFolder = xata.db.folders.create({
+    const newFolder = await xata.db.folders.create({
       userId,
       folder: results.folder,
       username: user?.username as string,
     });
-    console.log({ newFolder });
-    const p = await Promise.all([records, newFolder]);
-    console.log({ p });
+    const newFeeds = feeds.map((feed) => ({
+      ...feed,
+      folderName: {
+        id: newFolder.id,
+        userId,
+        folder: results.folder,
+        username: user?.username as string,
+      },
+    }));
+    const records = await xata.db.feeds.create(newFeeds as []);
+    // console.log({ newFolder });
+    // const p = await Promise.all([records, newFolder]);
+    // console.log({ p });
 
     // const records = xata.db.feeds.create(feeds);
     // const folders = xata.db.folders.create({
@@ -187,6 +196,24 @@ export async function deleteFolder(prevState: any, formData: FormData) {
   // redirect(`/folder/${folder}`);
 
   return { message: "success" };
+}
+
+export async function updateFolder(prevState: any, formData: FormData) {
+  const { userId }: { userId: string | null } = auth();
+  const newFolderName = formData.get("new-folder-name") as string;
+  const folderId = formData.get("folder-id") as string;
+
+  console.log({ folderId });
+
+  try {
+    // throw new Error("OOOPS");
+    const updateFolder = await xata.db.folders.update(folderId, {
+      folder: newFolderName,
+    });
+  } catch (e) {
+    return { message: "Something went wrong!", statusCode: 500 };
+  }
+  permanentRedirect(`/folder/${newFolderName}`);
 }
 
 export async function deleteFeed(prevState: any, formData: FormData) {

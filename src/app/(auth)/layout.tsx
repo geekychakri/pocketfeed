@@ -12,7 +12,7 @@ export default function RootLayout({
       <AuthNavigation />
       <main className="mx-auto flex w-full max-w-[520px] flex-col items-center justify-center gap-8 px-4 py-10">
         {children}
-        <Toaster
+        {/* <Toaster
           duration={3000}
           toastOptions={{
             style: {
@@ -20,7 +20,7 @@ export default function RootLayout({
             },
             className: "shadow-none text-base",
           }}
-        />
+        /> */}
       </main>
     </>
   );
