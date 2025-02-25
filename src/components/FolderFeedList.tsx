@@ -77,47 +77,66 @@ export function FolderFeedList({
   return (
     <>
       <div className="flex flex-col empty:border-none">
-        {feeds.map((item, i) => (
-          <div
-            // href={`/feed/${item.title?.trim().replace(/\s+/g, "-").toLowerCase()}`}
-            // href={`/feed/${item.feedId}`}
-            key={item.id}
-            className="group/folder-feed relative isolate flex w-full items-center justify-between gap-4 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]"
-            // onBlur={(e) => alert("BLURREd")}
-          >
-            <span className="flex items-center gap-3">
-              <Avatar className="inline-flex h-[30px] w-[30px] flex-none cursor-pointer select-none items-center justify-center overflow-hidden rounded-full bg-ui-normal">
-                <AvatarImage
-                  className="h-full w-full rounded-[inherit] object-cover"
-                  src={
-                    item.siteURL.includes("youtube.com")
-                      ? item.favicon
-                      : `https://www.google.com/s2/favicons?domain=${item.siteURL}&sz=128`
-                  }
-                  alt={item.title}
-                />
-                <AvatarFallback delayMs={400}>
-                  {getInitials(item.title, "folder")}
-                </AvatarFallback>
-              </Avatar>
+        {feeds.length >= 1 ? (
+          feeds.map((item, i) => (
+            <div
+              // href={`/feed/${item.title?.trim().replace(/\s+/g, "-").toLowerCase()}`}
+              // href={`/feed/${item.feedId}`}
+              key={item.id}
+              className="group/folder-feed relative isolate flex w-full items-center justify-between gap-4 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]"
+              // onBlur={(e) => alert("BLURREd")}
+            >
+              <span className="flex items-center gap-3">
+                <Avatar className="inline-flex h-[30px] w-[30px] flex-none cursor-pointer select-none items-center justify-center overflow-hidden rounded-full bg-ui-normal">
+                  <AvatarImage
+                    className="h-full w-full rounded-[inherit] object-cover"
+                    src={
+                      item.siteURL.includes("youtube.com")
+                        ? item.favicon
+                        : `https://www.google.com/s2/favicons?domain=${item.siteURL}&sz=128`
+                    }
+                    alt={item.title}
+                  />
+                  <AvatarFallback delayMs={400}>
+                    {getInitials(item.title, "folder")}
+                  </AvatarFallback>
+                </Avatar>
 
-              <span className="line-clamp-1 transition-[color] group-hover/folder-feed:text-brand-primary">
-                {decode(item.title)}
+                <span className="line-clamp-1 transition-[color] group-hover/folder-feed:text-brand-primary">
+                  {decode(item.title)}
+                </span>
               </span>
-            </span>
 
-            <FeedDropdown
-              feedId={item.id as string}
-              folderName={folderName}
-              folders={JSON.parse(JSON.stringify(folders))}
-              sound={tap}
+              <FeedDropdown
+                feedId={item.id as string}
+                folderName={folderName}
+                folders={JSON.parse(JSON.stringify(folders))}
+                sound={tap}
+              />
+              <Link
+                href={`/feed/${item.feedId}`}
+                className="absolute inset-0 z-[1]"
+              />
+            </div>
+          ))
+        ) : (
+          <div className="flex flex-col items-center justify-center gap-6">
+            <img
+              src="/empty-feed.svg"
+              className="w-[320px]"
+              alt="empty-feed-svg"
             />
-            <Link
-              href={`/feed/${item.feedId}`}
-              className="absolute inset-0 z-[1]"
-            />
+            <div className="flex flex-col items-center gap-3">
+              <p className="text-xl font-medium">The folder is empty.</p>
+              <Link
+                href="/add"
+                className="rounded-md bg-[#181818] px-4 py-2 text-white"
+              >
+                Add a feed
+              </Link>
+            </div>
           </div>
-        ))}
+        )}
       </div>
 
       {pageInfo.hasNextPage && (

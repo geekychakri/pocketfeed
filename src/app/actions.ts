@@ -241,8 +241,15 @@ export async function moveToFolder(
   currentFolder: string,
   newFolder: string,
 ) {
-  const folders = await xata.db.feeds.update(id, { folder: newFolder });
-  // revalidatePath(`/folder/${currentFolder}`, "page");
+  const userId = auth().userId;
+  const folder = await xata.db.folders
+    .filter({ userId, folder: newFolder })
+    .getFirst();
+
+  const folders = await xata.db.feeds.update(id, {
+    folderName: folder?.id,
+  });
+  // // revalidatePath(`/folder/${currentFolder}`, "page");
   return { message: "success" };
 }
 
