@@ -17,8 +17,9 @@ import {
 
 const folders = ["Home", "Tech", "Music", "News", "Podcast"]; //TODO:
 
-const FolderSelect = () => {
-  const [value, setValue] = React.useState("Home");
+const FolderSelect = ({ folders }: { folders: any }) => {
+  console.log({ folders });
+  const [value, setValue] = React.useState(folders[0]);
   const [showNewFolderInput, setShowNewFolderInput] = useState(false);
 
   return (
@@ -80,7 +81,7 @@ const FolderSelect = () => {
       {showNewFolderInput && (
         <input
           type="text"
-          name="folder"
+          name="newFolder"
           placeholder="New folder name"
           className="border-shadow w-full rounded-md bg-transparent px-4 py-2 duration-150"
           required

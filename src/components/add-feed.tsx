@@ -37,7 +37,7 @@ const initialState = {
   message: "",
 };
 
-export default function AddFeed() {
+export default function AddFeed({ folders }: { folders: any }) {
   const router = useRouter();
 
   const [urlValue, setUrlValue] = useState("");
@@ -241,7 +241,7 @@ export default function AddFeed() {
               <input type="hidden" value={rssData?.url} name="siteURL" />
 
               <div className="flex flex-col gap-3">
-                <FolderSelect />
+                <FolderSelect folders={folders} />
               </div>
             </div>
             <p aria-live="polite" className="sr-only">
