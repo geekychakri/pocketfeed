@@ -43,7 +43,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className={inter.className} suppressHydrationWarning>
+      <html lang="en" className={inter.variable} suppressHydrationWarning>
         <head>
           {/* <script
             src="https://unpkg.com/react-scan/dist/auto.global.js"
@@ -64,12 +64,13 @@ export default function RootLayout({
             </ThemeProvider>
           </NuqsAdapter>
           <Toaster
-            duration={3000}
+            theme="system"
+            duration={30000}
             toastOptions={{
               style: {
                 fontFamily: "var(--font-inter)",
+                background: "var(--background-secondary)",
               },
-              className: "shadow-none text-base",
             }}
           />
         </body>

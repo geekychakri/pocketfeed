@@ -46,6 +46,7 @@ export default function AddFeed({ folders }: { folders: any }) {
 
   const [playToggleOn] = useSound("sounds/toggle_on.wav");
   const [playToggleOff] = useSound("sounds/toggle_off.wav");
+  const [playCaution] = useSound("sounds/caution.wav");
 
   const [state, formAction] = useFormState(addFeeds, initialState);
 
@@ -90,6 +91,7 @@ export default function AddFeed({ folders }: { folders: any }) {
       if (error instanceof Error) message = error.message;
       else message = String(error);
       toast.error(message);
+      playCaution();
     } finally {
       setIsLoading(false);
     }
@@ -108,6 +110,7 @@ export default function AddFeed({ folders }: { folders: any }) {
     if (state?.message) {
       console.log("state msg");
       toast.error(state?.message);
+      playCaution();
     }
   }, [state]);
 
