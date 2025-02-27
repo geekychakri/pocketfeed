@@ -22,6 +22,7 @@ export default function YouTubePlayButton({
   className?: string;
   showText?: boolean;
 }) {
+  console.log({ youtubeId });
   const { openYoutubePlayer, setYoutubeId, isOpen } = useShowYTPlayer();
 
   const [tap] = useSound("/sounds/tap.wav");

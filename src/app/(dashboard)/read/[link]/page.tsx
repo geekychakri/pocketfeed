@@ -12,19 +12,59 @@ import { JSDOM } from "jsdom";
 import { Readability, isProbablyReaderable } from "@mozilla/readability";
 import ArticleSettings from "@/components/ArticleSettings";
 
+import { checkLinkIsBroken } from "@/lib/utils";
+import { LinkBrokenIcon } from "@/icons/link-broken";
+import { GlobeErrorIcon } from "@/icons/globe-error";
+
 export default async function Read({ params }: { params: { link: string } }) {
   let article;
+  try {
+    const articleUrl = decodeURIComponent(params.link);
+    console.log({ articleUrl });
 
-  const articleUrl = decodeURIComponent(params.link);
-  console.log({ articleUrl });
-  const dom = await JSDOM.fromURL(articleUrl);
+    const { error } = await checkLinkIsBroken(articleUrl);
 
-  if (isProbablyReaderable(dom.window.document)) {
-    const reader = new Readability(dom.window.document);
-    article = reader.parse();
-    console.log(article);
-  } else {
-    article = null;
+    if (error) {
+      return (
+        <div className="flex h-screen flex-1 flex-col items-center justify-center gap-6">
+          <LinkBrokenIcon className="size-20" />
+          <div className="flex flex-col items-center gap-2">
+            <span>Oops!</span>
+            <span>
+              The link{" "}
+              <a
+                href={articleUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="custom-underline"
+              >
+                {articleUrl}
+              </a>{" "}
+              seems broken.
+            </span>
+          </div>
+          <RouteBack text="Back" />
+        </div>
+      );
+    }
+
+    const dom = await JSDOM.fromURL(articleUrl);
+
+    if (isProbablyReaderable(dom.window.document)) {
+      const reader = new Readability(dom.window.document);
+      article = reader.parse();
+      console.log(article);
+    } else {
+      article = null;
+    }
+  } catch (err) {
+    return (
+      <div className="flex h-screen flex-1 flex-col items-center justify-center gap-6">
+        <GlobeErrorIcon className="size-20" />
+        <span>Something went wrong! Please try again later.</span>
+        <RouteBack text="Back" />
+      </div>
+    );
   }
 
   return (

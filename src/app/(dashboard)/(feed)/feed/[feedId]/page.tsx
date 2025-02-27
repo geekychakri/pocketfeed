@@ -23,6 +23,7 @@ import YouTubeModal from "./components/YouTubeModal";
 import { decode } from "html-entities";
 
 import PostModal from "@/components/PostModal";
+import { getYoutubeVideoId } from "@/lib/utils";
 
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
@@ -202,7 +203,12 @@ function FeedItem({
         </div>
 
         <div className="flex-none">
-          <YouTubePlayButton youtubeId={item.id.split(":")[2]} />
+          <YouTubePlayButton
+            youtubeId={
+              item.id?.split(":")?.[2] ||
+              (getYoutubeVideoId(item.link) as string)
+            }
+          />
           {/* <PostModal
             feedItem={JSON.stringify(item)}
             feedTitle={feedList.title}
@@ -236,12 +242,12 @@ function FeedItem({
         websiteLink={feedList.link}
       /> */}
       <Link
-        href={
-          item.link?.includes(new URL(feedList.link as string).hostname)
-            ? `/read/${encodeURIComponent(item.link as string)}`
-            : `/read/${encodeURIComponent(`${feedList.link}/${item.link}` as string)}`
-        }
-        // href={`/read/${encodeURIComponent(item.link as string)}`} //TODO::
+        // href={
+        //   item.link?.includes(new URL(feedList.link as string).hostname)
+        //     ? `/read/${encodeURIComponent(item.link as string)}`
+        //     : `/read/${encodeURIComponent(`${feedList.link}/${item.link}` as string)}`
+        // }
+        href={`/read/${encodeURIComponent(item.link as string)}`} //TODO::
         className="absolute inset-0 z-[1]"
       />
     </div>
@@ -297,6 +303,7 @@ export default async function Feed({ params }: { params: { feedId: string } }) {
         <RouteBack className="absolute -left-9 border" />
         <h1 className="border text-lg font-medium">{feedList?.title}</h1>
       </div>
+      <YouTubeModal />
       <div className="flex flex-col gap-4">
         {/* <p>{params.feedname.split("-").join(" ")}</p> */}
         {/* {feedList.items
@@ -475,8 +482,6 @@ export default async function Feed({ params }: { params: { feedId: string } }) {
           </>
         )}
       </div>
-
-      {feedList.link?.includes("youtube.com") && <YouTubeModal />}
       <a
         target="_blank"
         href={feedList.link}

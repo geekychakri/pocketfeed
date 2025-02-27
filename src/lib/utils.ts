@@ -194,3 +194,40 @@ export async function getYTChannelAvatar(channelId: string) {
     return null;
   }
 }
+
+export const getYoutubeVideoId = (url: string) => {
+  try {
+    const urlObj = new URL(url);
+
+    // Handle standard YouTube URL format: youtube.com/watch?v=ID
+    if (
+      urlObj.hostname.includes("youtube.com") &&
+      urlObj.pathname === "/watch"
+    ) {
+      return urlObj.searchParams.get("v");
+    }
+
+    // Handle shortened YouTube URL format: youtu.be/ID
+    if (urlObj.hostname === "youtu.be") {
+      return urlObj.pathname.substring(1);
+    }
+
+    return null;
+  } catch (e) {
+    return null;
+  }
+};
+
+export async function checkLinkIsBroken(link: string) {
+  try {
+    const res = await fetch(link, {
+      method: "HEAD",
+    });
+    if (res.status >= 400) {
+      throw new Error("Link is broken");
+    }
+    return { error: false };
+  } catch (err) {
+    return { error: true };
+  }
+}
