@@ -1,7 +1,32 @@
 import { motion } from "framer-motion";
 
 import { SVGProps } from "react";
+
+import { useSignIn } from "@clerk/nextjs";
+import { OAuthStrategy } from "@clerk/types";
+
 export default function SocialOauth() {
+  const { signIn, isLoaded } = useSignIn();
+
+  if (!signIn) return <div>Loading...</div>;
+
+  const signInWith = (strategy: OAuthStrategy) => {
+    return signIn
+      .authenticateWithRedirect({
+        strategy,
+        redirectUrl: "/sign-up/sso-callback",
+        redirectUrlComplete: "/",
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err: any) => {
+        // See https://clerk.com/docs/custom-flows/error-handling
+        // for more info on error handling
+        console.log(err.errors);
+        console.error(err, null, 2);
+      });
+  };
   return (
     <div className="flex w-full max-w-96 flex-col gap-4">
       <motion.p
@@ -47,7 +72,10 @@ export default function SocialOauth() {
         </span>
         Continue with Google
       </button>
-      <button className="flex items-center justify-center gap-3 rounded-md border bg-white px-4 py-2 font-medium">
+      <button
+        className="flex items-center justify-center gap-3 rounded-md border bg-white px-4 py-2 font-medium"
+        onClick={() => signInWith("oauth_github")}
+      >
         <span>
           <svg
             viewBox="0 0 256 250"

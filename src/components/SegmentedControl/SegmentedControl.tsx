@@ -30,7 +30,7 @@ const SegmentedControl = ({
   }, []);
 
   return (
-    <motion.ul className="flex border-b text-center">
+    <motion.ul className="flex border-b border-border-non-interactive text-center">
       {items.map((item, index) => {
         // const isActive = index === activeIndex;
         const isActive = item.href === pathname;
@@ -51,7 +51,7 @@ const SegmentedControl = ({
                 <motion.span
                   layoutId="highlight"
                   initial={false}
-                  className="absolute bottom-0 left-0 right-0 h-[2px] rounded-full bg-primary"
+                  className="absolute bottom-0 left-0 right-0 h-[2px] rounded-full bg-brand-primary"
                   style={{ originY: "0px" }}
                 ></motion.span>
               )}

@@ -83,18 +83,19 @@ export function FolderFeedList({
               // href={`/feed/${item.title?.trim().replace(/\s+/g, "-").toLowerCase()}`}
               // href={`/feed/${item.feedId}`}
               key={item.id}
-              className="group/folder-feed relative isolate flex w-full items-center justify-between gap-4 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]"
+              className="group/folder-feed relative isolate flex w-full items-center justify-between gap-4 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color] last:shadow-none"
               // onBlur={(e) => alert("BLURREd")}
             >
               <span className="flex items-center gap-3">
                 <Avatar className="inline-flex h-[30px] w-[30px] flex-none cursor-pointer select-none items-center justify-center overflow-hidden rounded-full bg-ui-normal">
                   <AvatarImage
                     className="h-full w-full rounded-[inherit] object-cover"
-                    src={
-                      item.siteURL.includes("youtube.com")
-                        ? item.favicon
-                        : `https://www.google.com/s2/favicons?domain=${item.siteURL}&sz=128`
-                    }
+                    // src={
+                    //   item.siteURL.includes("youtube.com")
+                    //     ? item.favicon
+                    //     : `https://www.google.com/s2/favicons?domain=${item.siteURL}&sz=128`
+                    // }
+                    src={item.favicon} //TODO:
                     alt={item.title}
                   />
                   <AvatarFallback delayMs={400}>
@@ -150,7 +151,7 @@ export function FolderFeedList({
         <Button
           onClick={loadMore}
           disabled={loading}
-          className="pointer-events-auto border border-border-primary bg-ui-normal px-2 py-4 text-sm text-text-primary transition-[background-color] hover:bg-ui-hover"
+          className="pointer-events-auto mt-[10px] border border-border-primary bg-ui-normal px-2 py-4 text-sm text-text-primary transition-[background-color] hover:bg-ui-hover"
         >
           {loading ? (
             <SpinnerRotate fill="currentColor" />

@@ -274,6 +274,10 @@ export default async function Feed({ params }: { params: { feedId: string } }) {
 
   console.log({ feedList });
 
+  if (feedList.items.length === 0) {
+    return <div>Feed is empty!</div>; //TODO:
+  }
+
   console.log({ feedItem: feedList.items.slice(0, 1) });
 
   console.log({ podcastChapters: feedList.items[0]["podcast:chapters"] });

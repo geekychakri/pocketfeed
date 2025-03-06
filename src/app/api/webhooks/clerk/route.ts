@@ -57,7 +57,7 @@ export async function POST(req: Request) {
   //   const { id } = evt.data;
   const eventType = evt.type;
   if (eventType === "user.created") {
-    const { id, email_addresses, username, image_url } = evt.data;
+    const { id, email_addresses, username, image_url, has_image } = evt.data;
 
     if (!id || !email_addresses) {
       return new Response("Error occurred -- missing data", {
@@ -77,14 +77,29 @@ export async function POST(req: Request) {
 
     const user = {
       userId: id,
-      email: email_addresses[0].email_address,
+      email: email_addresses[0]?.email_address,
       ...(username ? { username } : {}), //check for oauth TODO:
-      ...(image_url ? { avatar: image_url } : {}),
+      ...(has_image ? { avatarUrl: image_url } : {}),
     };
 
-    const userRecord = await xata.db.users.create(user);
-    console.log({ msg: "SUCCESSFUL" });
-  }
+    // const userRecord = await xata.db.users.create(user);
+    // console.log({ msg: "SUCCESSFUL" });
 
-  return new Response("", { status: 200 });
+    const results = await xata.transactions.run([
+      { insert: { table: "users", record: user } },
+      {
+        insert: {
+          table: "folders",
+          record: {
+            userId: id,
+            folder: "Home",
+            username: username as string,
+          },
+        },
+      },
+    ]);
+
+    console.log({ results });
+    return new Response("", { status: 200 });
+  }
 }

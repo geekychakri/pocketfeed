@@ -83,7 +83,7 @@ export async function addFeeds(prevState: any, formData: FormData) {
           favicon: results.favicon,
           siteURL: results.siteURL,
           username: user?.username, //TODO:
-          feedId,
+          feedId: nanoid(),
           userId,
         };
       });
@@ -96,7 +96,7 @@ export async function addFeeds(prevState: any, formData: FormData) {
         siteURL: results.siteURL,
         title: item?.title,
         username: user?.username,
-        feedId,
+        feedId: nanoid(),
         userId,
       };
     });
@@ -184,6 +184,8 @@ export async function addFeeds(prevState: any, formData: FormData) {
           username: user?.username as string,
         },
       }));
+
+      console.log({ newFeeds });
 
       const records = await xata.db.feeds.create(newFeeds as []);
 
@@ -424,6 +426,22 @@ export async function addPost(prevState: any, formData: FormData) {
     websiteLink,
     username: user?.username as string,
   });
+
+  return { message: "success" };
+}
+
+export async function deleteSubscriptions(prevState: any, formData: FormData) {
+  const { feedIdList } = qs.parse(
+    Object.fromEntries(formData.entries()) as {},
+  ) as {
+    feedIdList: {};
+  };
+  if (!feedIdList) {
+    return { message: "Select at least one feed." };
+  }
+  const idList = Object.values(feedIdList) as string[];
+  const data = await xata.db.feeds.delete(idList);
+  revalidatePath("/user/[username]/subscriptions", "page");
 
   return { message: "success" };
 }

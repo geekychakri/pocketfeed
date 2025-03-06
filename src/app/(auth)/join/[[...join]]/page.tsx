@@ -184,7 +184,7 @@ export default function Join() {
         </label>
         <label htmlFor="password" className="group flex flex-col gap-2">
           <span className="font-medium">Password (8+ chars)</span>
-          <span className="flex items-center rounded-md border duration-150 focus-within:shadow-[0_0_0_2px_#fcfcfc,0_0_0_4px_#f84f39] group-hover:border-primary">
+          <span className="group-hover:border-primary flex items-center rounded-md border duration-150 focus-within:shadow-[0_0_0_2px_#fcfcfc,0_0_0_4px_#f84f39]">
             <Input
               className="flex-1 border-none p-2 focus-visible:shadow-none"
               type={showPassword ? "text" : "password"}

@@ -46,10 +46,11 @@ export default async function MainLayout({
 }>) {
   // const { show } = useShowPodcastPlayer();
   const { userId }: { userId: string | null } = auth();
-  // console.log({ userId });
+  console.log({ userId });
+  // HANDLE NULL FILTER //TODO:
   const [user, folders] = await Promise.all([
     xata.db.users
-      .filter({ userId: userId })
+      .filter({ userId })
       .select(["avatarUrl", "username"])
       .getFirst(),
     getFolders(userId as string),
@@ -84,7 +85,7 @@ export default async function MainLayout({
   //   format: "webp",
   // });
 
-  // console.log({ username: user?.username });
+  console.log({ username: user });
   return (
     <div className="flex">
       {/* <Navigation
