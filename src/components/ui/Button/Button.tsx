@@ -18,7 +18,7 @@ export default forwardRef<
     <button
       ref={ref}
       className={cn(
-        "flex h-11 w-full items-center justify-center rounded-md border px-4 py-2 font-medium text-white",
+        "flex h-12 w-full items-center justify-center gap-3 rounded-md bg-ui-normal px-4 py-2 font-medium duration-150 hover:bg-ui-hover",
         className,
       )}
       // disabled={pending}

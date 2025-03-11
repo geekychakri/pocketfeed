@@ -4,6 +4,8 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import Player from "next-video/player";
 
+import { useRouter } from "next/navigation";
+
 export default function Test() {
   // const findPodcast = async () => {
   //   const res = await fetch("https://jser.dev/rss.xml");
@@ -15,6 +17,8 @@ export default function Test() {
 
   const [count, setCount] = useState(0);
   const [show, setShow] = useState(false);
+
+  const router = useRouter();
 
   const divRef = useRef(null);
 
@@ -50,6 +54,12 @@ export default function Test() {
       <div tabIndex={0}>2</div>
       <div tabIndex={4}>3</div>
       <div tabIndex={3}>4</div>
+
+      <div>Count - {count}</div>
+
+      <button onClick={() => setCount((c) => c + 1)}>Inc count</button>
+
+      <button onClick={() => window.location.reload()}>Refresh</button>
     </>
   );
 }

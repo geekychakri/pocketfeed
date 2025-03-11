@@ -33,6 +33,7 @@ const initialState = {
 };
 
 import useSound from "use-sound";
+import { FeedIcon } from "@/icons/feed";
 
 type FeedsType = PageRecordArray<Readonly<SelectedPick<FeedsRecord, ["*"]>>>;
 
@@ -57,6 +58,23 @@ export default function SubscriptionList({ feeds }: { feeds: FeedsType }) {
   useEffect(() => {
     console.log({ message: state.message });
   }, [state]);
+
+  if (feeds.length === 0) {
+    return (
+      <div className="flex min-h-[300px] flex-col items-center justify-center gap-8">
+        <div className="flex flex-col items-center justify-center gap-2">
+          <FeedIcon className="size-20" />
+          <span>No Subscriptions yet!</span>
+        </div>
+        <Link
+          href="/add"
+          className="flex items-center justify-center rounded-md bg-ui-normal px-4 py-2 font-medium text-white duration-100 hover:bg-ui-hover"
+        >
+          Add a feed
+        </Link>
+      </div>
+    );
+  }
 
   console.log("CHECKED");
   return (

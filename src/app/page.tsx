@@ -2,6 +2,8 @@
 import { useUser } from "@clerk/clerk-react";
 import { Instrument_Serif } from "next/font/google";
 
+import Link from "next/link";
+
 const InstrumentSerif = Instrument_Serif({ weight: "400", subsets: ["latin"] });
 
 export default function Home() {
@@ -31,9 +33,12 @@ export default function Home() {
         </div>
 
         <div className="flex gap-7 self-center">
-          <button className="w-56 rounded-md bg-[#181818] px-6 py-3 text-xl font-medium text-white">
+          <Link
+            href="/join"
+            className="w-56 rounded-md bg-[#181818] px-6 py-3 text-center text-xl font-medium text-white"
+          >
             Join for free
-          </button>
+          </Link>
           {/* <button className="text-xl">Watch Demo</button> */}
         </div>
       </header>

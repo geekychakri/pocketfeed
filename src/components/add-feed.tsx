@@ -154,7 +154,7 @@ export default function AddFeed({ folders }: { folders: any }) {
         {isRssDataEmpty && (
           <button
             className={cn(
-              "flex h-11 items-center justify-center rounded-md bg-ui-normal px-4 py-2 font-medium text-white duration-100 hover:bg-ui-hover",
+              "flex h-11 items-center justify-center rounded-md bg-ui-normal px-4 py-2 font-medium text-text-primary duration-100 hover:bg-ui-hover",
             )}
             disabled={isLoading}
           >

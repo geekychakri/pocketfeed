@@ -4,21 +4,28 @@ import { SVGProps } from "react";
 
 import { useSignIn } from "@clerk/nextjs";
 import { OAuthStrategy } from "@clerk/types";
+import Button from "./ui/Button";
+import { SpinnerRotate } from "./SpinnerRotate";
 
 export default function SocialOauth() {
   const { signIn, isLoaded } = useSignIn();
 
-  if (!signIn) return <div>Loading...</div>;
+  if (!signIn)
+    return (
+      <div className="flex h-40 items-center justify-center">
+        <SpinnerRotate />
+      </div>
+    );
 
   const signInWith = (strategy: OAuthStrategy) => {
     return signIn
       .authenticateWithRedirect({
         strategy,
         redirectUrl: "/sign-up/sso-callback",
-        redirectUrlComplete: "/",
+        redirectUrlComplete: "/folder/Home",
       })
       .then((res) => {
-        console.log(res);
+        console.log({ signUpRes: res });
       })
       .catch((err: any) => {
         // See https://clerk.com/docs/custom-flows/error-handling
@@ -28,14 +35,14 @@ export default function SocialOauth() {
       });
   };
   return (
-    <div className="flex w-full max-w-96 flex-col gap-4">
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="text-gray-500"
-      >
+    <motion.div
+      className="flex h-40 w-full max-w-96 flex-col gap-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+    >
+      <motion.p className="text-text-secondary">
         You signed in with{" "}
-        <span className="inline-flex items-center gap-1 font-medium text-black">
+        <span className="inline-flex items-center gap-1 font-medium">
           GitHub{" "}
           <span>
             <LineMdGithubLoop />
@@ -43,11 +50,11 @@ export default function SocialOauth() {
         </span>{" "}
         last time.
       </motion.p>
-      <button className="flex items-center justify-center gap-3 rounded-md border bg-white px-4 py-2 font-medium">
-        <span>
+      <Button>
+        <span className="flex-none">
           <svg
-            width="26"
-            height="32"
+            width="24"
+            height="24"
             viewBox="0 0 256 262"
             xmlns="http://www.w3.org/2000/svg"
             preserveAspectRatio="xMidYMid"
@@ -71,17 +78,17 @@ export default function SocialOauth() {
           </svg>
         </span>
         Continue with Google
-      </button>
-      <button
-        className="flex items-center justify-center gap-3 rounded-md border bg-white px-4 py-2 font-medium"
+      </Button>
+      <Button
+        // className="flex items-center justify-center gap-3 rounded-md bg-ui-normal px-4 py-2 font-medium"
         onClick={() => signInWith("oauth_github")}
       >
-        <span>
+        <span className="flex-none">
           <svg
             viewBox="0 0 256 250"
-            width="26"
-            height="32"
-            fill="#000"
+            width="24"
+            height="24"
+            fill="currentColor"
             xmlns="http://www.w3.org/2000/svg"
             preserveAspectRatio="xMidYMid"
           >
@@ -89,8 +96,8 @@ export default function SocialOauth() {
           </svg>
         </span>
         Continue with GitHub
-      </button>
-    </div>
+      </Button>
+    </motion.div>
   );
 }
 

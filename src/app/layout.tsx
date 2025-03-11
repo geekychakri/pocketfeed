@@ -65,7 +65,7 @@ export default function RootLayout({
           </NuqsAdapter>
           <Toaster
             theme="system"
-            duration={30000}
+            duration={3000}
             toastOptions={{
               style: {
                 fontFamily: "var(--font-inter)",

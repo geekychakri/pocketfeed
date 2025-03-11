@@ -15,6 +15,7 @@ import Input from "@/components/ui/Input";
 import { SpinnerRotate } from "@/components/SpinnerRotate";
 
 import SocialOauth from "@/components/SocialOauth";
+import Divider from "../../components/divider";
 
 export default function SignIn() {
   const { isLoaded, signIn, setActive } = useSignIn();
@@ -66,21 +67,20 @@ export default function SignIn() {
 
   return (
     <>
-      <div className="flex w-full max-w-96 flex-col gap-4">
+      <div className="flex flex-col gap-4">
         {/* <h1 className="text-center text-2xl font-medium tracking-tight text-gray-700">
           Logo
         </h1> */}
         <p className="flex flex-col gap-2">
           <span className="text-xl font-medium">Hey, welcome back</span>
-          <span className="text-sm text-gray-700">Good to see you again!</span>
+          <span className="text-sm text-text-secondary">
+            Good to see you again!
+          </span>
         </p>
       </div>
       <SocialOauth />
-      <div>or</div>
-      <form
-        className="flex w-full max-w-96 flex-col gap-6"
-        onSubmit={handleSubmit}
-      >
+      <Divider text="or continue using email" />
+      <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
         <label htmlFor="email" className="flex flex-col gap-2">
           <span className="font-medium">Email address</span>
           <Input
@@ -89,27 +89,29 @@ export default function SignIn() {
             required
             placeholder="john@doe.com"
             name="email"
+
             // value={email}
             // onChange={(e) => setEmail(e.target.value)}
           />
         </label>
         <label htmlFor="password" className="flex flex-col gap-2">
           <span className="font-medium">Password</span>
-          <span className="flex items-center rounded-md border duration-100 focus-within:shadow-[0_0_0_2px_#fcfcfc,0_0_0_4px_#f84f39] hover:border-primary">
+          <span className="border-shadow flex items-center rounded-md duration-150 focus-within:shadow-[0_0_0_1px_#fc591e,0_0_0_1px_#fc591e]">
             <Input
-              className="flex-1 border-none p-2 focus-visible:shadow-none"
+              className="flex-1 rounded-md border-none !shadow-none duration-150"
               type={showPassword ? "text" : "password"}
               id="password"
               required
               placeholder="••••••••"
               name="password"
+
               // value={password}
               // onChange={(e) => setPassword(e.target.value)}
             />
 
             <button
               type="button"
-              className="p-2"
+              className="p-4"
               onClick={() => setShowPassword((prev) => !prev)}
             >
               {showPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}
@@ -119,7 +121,7 @@ export default function SignIn() {
         {/* <button className="bg-primary font-medium text-white px-4 py-2 rounded-md">
           Sign in
         </button> */}
-        <Button type="submit">
+        <Button type="submit" className="border-none bg-ui-normal">
           {loginLoading ? (
             <span className="flex items-center gap-2">
               <SpinnerRotate />

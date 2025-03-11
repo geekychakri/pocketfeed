@@ -104,7 +104,7 @@ export default async function UserLayout({
           <div className="flex justify-between">
             <Avatar className="inline-flex h-[92px] w-[92px] flex-none select-none items-center justify-center overflow-hidden rounded-full bg-blackA1 align-middle">
               <AvatarImage
-                className="h-full w-full rounded-[inherit] border-2 object-cover"
+                className="h-full w-full rounded-[inherit] object-cover"
                 src={user.avatarUrl as string}
                 alt={user?.fullname as string}
               />
@@ -162,11 +162,11 @@ export default async function UserLayout({
         </div>
         <div className="flex gap-5">
           <Link href={`/user/${user.username}/followers`} className="text-sm">
-            {totalFollowersCount.summaries[0].total}{" "}
+            {totalFollowersCount?.summaries[0]?.total}{" "}
             <span className="text-gray-500">Followers</span>
           </Link>
           <Link href={`/user/${user.username}/follows`} className="text-sm">
-            {totalFollowingCount.summaries[0].total}{" "}
+            {totalFollowingCount?.summaries[0]?.total}{" "}
             <span className="text-gray-500">Following</span>
           </Link>
         </div>

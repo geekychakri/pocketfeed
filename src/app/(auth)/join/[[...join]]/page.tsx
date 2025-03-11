@@ -5,6 +5,10 @@ import { useSignUp } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
+import { motion } from "framer-motion";
+
+import useSound from "use-sound";
+
 import {
   EyeClosedIcon,
   EyeOpenIcon,
@@ -20,6 +24,8 @@ import { useNavigatorOnline } from "@/hooks/useNavigatorOnline";
 
 import { createUser } from "@/app/actions";
 import SocialOauth from "@/components/SocialOauth";
+import Divider from "../../components/divider";
+import RouteBack from "@/components/RouteBack/RouteBack";
 
 export default function Join() {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -29,6 +35,8 @@ export default function Join() {
   const [verifying, setVerifying] = useState(false);
   const [signUpLoading, setSignUpLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [isVerificationExpiredError, setIsVerificationExpiredError] =
+    useState(false);
   const [email, setEmail] = useState("");
 
   const [codeVerify, setCodeVerify] = useState(false);
@@ -36,6 +44,8 @@ export default function Join() {
   const [code, setCode] = useState("");
   const { isOffline } = useNavigatorOnline();
   const router = useRouter();
+
+  const [playCaution] = useSound("sounds/caution.wav");
 
   const emailInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -83,6 +93,7 @@ export default function Join() {
       console.error(JSON.stringify(err, null, 2));
       toast.error(err.errors[0].message);
       setSignUpLoading(false);
+      playCaution();
     }
   };
 
@@ -103,34 +114,72 @@ export default function Join() {
       // and redirect the user
       if (completeSignUp.status === "complete") {
         await setActive({ session: completeSignUp.createdSessionId });
-        router.push("/");
+        router.push("/folder/Home");
       } else {
         // If the status is not complete, check why. User may need to
         // complete further steps.
         console.error(JSON.stringify(completeSignUp, null, 2));
+        setCodeVerify(false);
       }
     } catch (err: any) {
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
       setCodeVerify(false);
       console.error("Error:", JSON.stringify(err, null, 2));
-      toast.error(err.errors[0].longMessage);
+      playCaution();
+
+      //handle verification expired
+      if (err.errors[0].code === "verification_expired") {
+        setIsVerificationExpiredError(true);
+      }
+      toast.error(err.errors[0].longMessage, {
+        onAutoClose: () => {
+          if (err.errors[0].code === "verification_expired") {
+            setVerifying(false);
+            setIsVerificationExpiredError(false);
+          }
+        },
+        onDismiss: () => {
+          if (err.errors[0].code === "verification_expired") {
+            setVerifying(false);
+            setIsVerificationExpiredError(false);
+          }
+        },
+      });
     }
   };
 
   // Display the verification form to capture the OTP code
   if (verifying) {
     return (
-      <div className="flex flex-col items-center gap-6 text-center">
-        <div>Logo</div>
-        <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
           <h1 className="text-xl font-medium">Please check your email.</h1>
-          <p>We’ve sent a code to {email}</p>
+          <p className="text-text-secondary">
+            <span>We’ve sent a code to</span>
+            &nbsp;
+            <span className="text-text-primary">{email}</span>
+          </p>
         </div>
 
         <form onSubmit={handleVerify} className="flex w-full flex-col gap-5">
-          <InputOTP onInputOTPChange={(val) => setCode(val)} />
-          <Button className="h-12">
+          {/* <InputOTP onInputOTPChange={(val) => setCode(val)} /> */}
+          <div className="flex flex-col gap-2">
+            <label htmlFor="verification-code">Verification code</label>
+            <Input
+              id="verification-code"
+              onChange={(e) => setCode(e.target.value)}
+              placeholder="6 digit code"
+              maxLength={6}
+              minLength={6}
+              required
+              disabled={isVerificationExpiredError}
+            />
+          </div>
+          <Button
+            className={`h-12 disabled:cursor-not-allowed disabled:opacity-50`}
+            disabled={isVerificationExpiredError}
+          >
             {codeVerify ? (
               <span className="flex items-center gap-2">
                 <SpinnerRotate />
@@ -147,8 +196,9 @@ export default function Join() {
 
   return (
     <>
+      <h1 className="text-xl">Sign up</h1>
       <SocialOauth />
-      <div>or</div>
+      <Divider text="or continue using email" />
       <form
         className="flex w-full max-w-96 flex-col gap-6"
         onSubmit={handleSubmit}
@@ -182,31 +232,29 @@ export default function Join() {
             // }
           />
         </label>
-        <label htmlFor="password" className="group flex flex-col gap-2">
-          <span className="font-medium">Password (8+ chars)</span>
-          <span className="group-hover:border-primary flex items-center rounded-md border duration-150 focus-within:shadow-[0_0_0_2px_#fcfcfc,0_0_0_4px_#f84f39]">
+        <label htmlFor="password" className="flex flex-col gap-2">
+          <span className="font-medium">Password</span>
+          <span className="border-shadow flex items-center rounded-md duration-150 focus-within:shadow-[0_0_0_1px_#fc591e,0_0_0_1px_#fc591e]">
             <Input
-              className="flex-1 border-none p-2 focus-visible:shadow-none"
+              className="flex-1 rounded-md border-none !shadow-none duration-150"
               type={showPassword ? "text" : "password"}
-              autoComplete="new-password"
               id="password"
               required
               placeholder="••••••••"
               name="password"
-              // value={password}
-              // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              //   setPassword(e.target.value)
-              // }
             />
+
             <button
               type="button"
-              className="p-2"
+              className="p-4"
               onClick={() => setShowPassword((prev) => !prev)}
             >
               {showPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}
             </button>
           </span>
         </label>
+
+        <div id="clerk-captcha" data-cl-size="flexible"></div>
         <Button type="submit">
           {signUpLoading ? (
             <span className="flex items-center gap-2">
