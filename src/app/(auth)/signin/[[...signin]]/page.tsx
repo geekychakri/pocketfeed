@@ -111,7 +111,7 @@ export default function SignIn() {
 
             <button
               type="button"
-              className="p-4"
+              className="rounded-md p-4"
               onClick={() => setShowPassword((prev) => !prev)}
             >
               {showPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}

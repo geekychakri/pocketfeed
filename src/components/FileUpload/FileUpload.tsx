@@ -1,6 +1,6 @@
 "use client";
 
-import Avatar from "boring-avatars";
+import BoringAvatar from "boring-avatars";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -8,6 +8,10 @@ import React, { useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import { toast } from "sonner";
 import { SpinnerRotate } from "../SpinnerRotate";
+import Button from "../ui/Button";
+
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/UserAvatar";
+import { getInitials } from "@/lib/utils";
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
@@ -26,24 +30,31 @@ function FileUpload({
     // setFile(file);
     // console.log(file);
     setIsLoading(true);
-    const formData = new FormData();
-    formData.append("avatar", file);
-    const res = await fetch("/api/uploadAvatar", {
-      method: "POST",
-      body: formData,
-    });
-    if (!res.ok) {
-      return; //TODO:
-    }
 
-    // setFile(URL.createObjectURL(file));
-    const data = (await res.json()) as { msg: string; imgUrl: string };
-    console.log(data);
-    setFile(data.imgUrl);
-    setIsLoading(false);
-    toast("Profile picture updated successfully!");
-    console.log(data);
-    router.refresh();
+    try {
+      const formData = new FormData();
+      formData.append("avatar", file);
+      const res = await fetch("/api/uploadAvatar", {
+        method: "POST",
+        body: formData,
+      });
+      if (!res.ok) {
+        throw new Error("Something went wrong!");
+      }
+
+      // setFile(URL.createObjectURL(file));
+      const data = (await res.json()) as { msg: string; imgUrl: string };
+      console.log(data);
+      setFile(data.imgUrl);
+      setIsLoading(false);
+      toast("Profile picture updated successfully!");
+      console.log(data);
+      router.refresh();
+    } catch (err) {
+      toast.error("Something went wrong!");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleRemove = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -60,21 +71,28 @@ function FileUpload({
       maxSize={1}
       onSizeError={() => console.log("Max size 1MB")}
     >
-      <div className="flex gap-6 rounded-md border p-8">
+      <div className="border-shadow flex gap-6 rounded-md p-8">
         <div className="relative">
-          <div className="h-16 w-16 flex-shrink-0 rounded-full border-2 border-gray-300 bg-yellow-200">
-            {avatarUrl ? (
-              <img
+          {avatarUrl ? (
+            <Avatar className="inline-flex h-16 w-16 flex-none cursor-pointer select-none items-center justify-center overflow-hidden rounded-full align-middle duration-150 hover:ring-4 hover:ring-ui-normal">
+              <AvatarImage
+                className="h-full w-full rounded-[inherit] object-cover"
                 src={file}
-                className="max-w-full rounded-full object-contain"
-                alt=""
+                alt={username}
               />
-            ) : (
-              <Avatar name={username} />
-            )}
-          </div>
+              <AvatarFallback
+                className="leading-1 flex h-full w-full items-center justify-center bg-ui-normal text-[15px] font-medium"
+                delayMs={600}
+              >
+                {getInitials(username)}
+              </AvatarFallback>
+            </Avatar>
+          ) : (
+            <BoringAvatar name={username} size={64} />
+          )}
+          {/* </div> */}
           {loading && (
-            <div className="z-2 absolute inset-0 flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-[rgba(255,255,255,0.7)]">
+            <div className="bg-background-secondary/50 absolute inset-0 flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full">
               <SpinnerRotate />
             </div>
           )}
@@ -86,10 +104,13 @@ function FileUpload({
             be about 500px wide and under 1MB
           </p>
           <div className="flex items-center gap-4 text-sm">
-            <button className="rounded-md bg-primary px-4 py-2 font-medium text-white">
-              Upload Image
-            </button>
-            <button onClickCapture={handleRemove}>Remove Image</button>
+            <Button
+              onClickCapture={handleRemove}
+              className="border-shadow bg-transparent"
+            >
+              Remove Image
+            </Button>
+            <Button>Upload Image</Button>
           </div>
         </div>
       </div>

@@ -9,9 +9,14 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, ...props }, ref) => {
     return (
       <textarea
+        autoCapitalize="sentences"
+        autoComplete="on"
+        autoCorrect="on"
+        dir="auto"
+        spellCheck
         ref={ref}
         className={cn(
-          "rounded-md border px-4 py-2 outline-none duration-150 hover:border-primary",
+          "border-shadow resize-none rounded-md border-none bg-transparent px-4 py-2 !outline-none transition",
           className,
         )}
         {...props}

@@ -35,7 +35,7 @@ export const ModalContent = React.forwardRef<
       )}
     >
       <div className="px-[25px]">
-        <DialogPrimitive.Title className="text-lg font-medium">
+        <DialogPrimitive.Title className="mb-4 text-lg font-medium">
           {title}
         </DialogPrimitive.Title>
       </div>

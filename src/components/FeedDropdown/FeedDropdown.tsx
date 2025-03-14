@@ -30,6 +30,7 @@ import { Folders, FoldersRecord } from "@/xata";
 // import { useFolderFeedStore } from "@/store/folder-feed";
 
 import { useFeedsDelete } from "@/hooks/useFeedsDelete";
+import { DeleteIcon } from "@/icons/delete";
 
 const FeedDropdown = ({
   feedId,
@@ -77,7 +78,7 @@ const FeedDropdown = ({
           sideOffset={5}
         >
           <DropdownMenu.Item
-            className="group relative flex select-none items-center rounded-[3px] text-sm leading-none outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-danger"
+            className="group relative flex select-none items-center rounded-[3px] text-sm leading-none outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-ui-normal data-[highlighted]:text-danger"
             onSelect={(e) => {
               e.preventDefault();
             }}
@@ -185,7 +186,7 @@ function DeleteFeedButton() {
       className="flex h-[25px] w-full items-center gap-1 px-2 py-4"
     >
       <span>
-        <TrashIcon />
+        <DeleteIcon />
       </span>
       <span>Unsubscribe</span>
     </button>

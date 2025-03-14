@@ -16,6 +16,7 @@ import { toast } from "sonner";
 
 import { SpinnerRotate } from "@/components/SpinnerRotate";
 import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
 
 import { cn, checkIfObjectIsEmpty, isHttpValid } from "@/lib/utils";
 import { addFeeds } from "@/app/actions";
@@ -130,12 +131,11 @@ export default function AddFeed({ folders }: { folders: any }) {
           <span className="text-sm font-medium text-brand-primary">
             Please enter a URL
           </span>
-          <input
+          <Input
             type="url"
             id="url"
             placeholder="https://www.example.com"
             autoComplete="off"
-            className="border-shadow rounded-md bg-transparent px-4 py-2 duration-150"
             onChange={(e) => {
               setRssData({});
               setUrlValue(e.target.value);
@@ -152,10 +152,10 @@ export default function AddFeed({ folders }: { folders: any }) {
         </label>
 
         {isRssDataEmpty && (
-          <button
-            className={cn(
-              "flex h-11 items-center justify-center rounded-md bg-ui-normal px-4 py-2 font-medium text-text-primary duration-100 hover:bg-ui-hover",
-            )}
+          <Button
+            // className={cn(
+            //   "flex h items-center justify-center rounded-md bg-ui-normal px-4 py-2 font-medium text-text-primary duration-100 hover:bg-ui-hover",
+            // )}
             disabled={isLoading}
           >
             {isLoading ? (
@@ -165,7 +165,7 @@ export default function AddFeed({ folders }: { folders: any }) {
             ) : (
               <span>Continue</span>
             )}
-          </button>
+          </Button>
         )}
       </form>
 
@@ -188,9 +188,9 @@ export default function AddFeed({ folders }: { folders: any }) {
                 return (
                   <div key={i} className="flex flex-col gap-1">
                     <div className="flex items-center gap-4">
-                      <input
+                      <Input
                         type="text"
-                        className="border-shadow flex-1 rounded bg-transparent p-2 duration-150"
+                        className="flex-1"
                         name={`feeds[${i}][title]`}
                         defaultValue={
                           rssData.url?.includes("youtube.com")
@@ -261,11 +261,11 @@ export default function AddFeed({ folders }: { folders: any }) {
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <button
-      className="flex h-11 w-full items-center justify-center rounded-md bg-ui-normal px-4 py-2 font-medium text-white"
+    <Button
+      // className="flex h-11 w-full items-center justify-center rounded-md bg-ui-normal px-4 py-2 font-medium text-white"
       disabled={pending}
     >
       {pending ? <SpinnerRotate /> : "Add"}
-    </button>
+    </Button>
   );
 }

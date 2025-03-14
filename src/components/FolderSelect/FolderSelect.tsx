@@ -14,6 +14,7 @@ import {
   ChevronDownIcon,
   ChevronUpIcon,
 } from "@radix-ui/react-icons";
+import Input from "../ui/Input";
 
 const folders = ["Home", "Tech", "Music", "News", "Podcast"]; //TODO:
 
@@ -41,7 +42,7 @@ const FolderSelect = ({ folders }: { folders: any }) => {
         required
       >
         <Select.Trigger
-          className="border-shadow inline-flex items-center justify-between gap-[5px] rounded-md px-4 py-2 outline-none"
+          className="border-shadow inline-flex h-12 items-center justify-between gap-[5px] rounded-md px-4 py-2 outline-none"
           aria-label="folder"
           id="folder"
         >
@@ -79,7 +80,7 @@ const FolderSelect = ({ folders }: { folders: any }) => {
         </Select.Portal>
       </Select.Root>
       {showNewFolderInput && (
-        <input
+        <Input
           type="text"
           name="newFolder"
           placeholder="New folder name"

@@ -33,7 +33,7 @@ export default forwardRef<
     <button
       ref={ref}
       className={cn(
-        "flex h-11 w-[160px] items-center justify-center rounded-md bg-primary px-4 py-2 font-medium text-white",
+        "flex h-12 w-[160px] items-center justify-center rounded-md bg-ui-normal px-4 py-2 font-medium hover:bg-ui-hover",
         className,
       )}
       aria-disabled={pending}

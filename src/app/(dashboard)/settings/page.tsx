@@ -6,8 +6,12 @@ import ProfileForm from "@/components/ProfileForm";
 
 import { auth } from "@clerk/nextjs/server";
 
+import Button from "@/components/ui/Button";
+
 import { getXataClient, UsersRecord } from "@/xata";
-import { XataFile } from "@xata.io/client";
+
+import SettingsFooter from "./components/settings-footer";
+
 const xata = getXataClient();
 
 export default async function Settings() {
@@ -36,20 +40,20 @@ export default async function Settings() {
   // const { fullname, website, bio } = user as UsersRecord;
   return (
     <main className="mx-auto flex w-full max-w-[520px] flex-col gap-8 py-20">
-      <h1 className="flex items-center gap-4 font-medium">
-        <RouteBack />
-        <span className="text-xl">Settings</span>
-      </h1>
-      <div className="flex items-center justify-between rounded-md border p-8">
+      <div className="relative flex items-center">
+        <RouteBack className="absolute -left-9" />
+        <h1 className="text-xl font-medium">Settings</h1>
+      </div>
+      <div className="border-shadow flex items-center justify-between rounded-md p-8">
         <div className="flex flex-col gap-2">
           <h2 className="font-medium">Membership Status</h2>
-          <span className="self-start rounded-md bg-[#eee] px-2 py-1 text-sm">
+          <span className="self-start rounded-sm bg-brand-primary/10 px-2 py-1 text-sm text-brand-primary">
             Free
           </span>
         </div>
-        <button className="inline rounded-md bg-primary px-4 py-2 font-medium text-white">
-          Change
-        </button>
+        <div>
+          <Button>Upgrade</Button>
+        </div>
       </div>
       <div>
         <FileUpload
@@ -57,10 +61,14 @@ export default async function Settings() {
           avatarUrl={user.avatarUrl as string}
         />
       </div>
+      <div className="h-[1px] border-t border-dotted border-border-non-interactive"></div>
       <ProfileForm userInfo={userInfo} />
-      <div className="flex flex-col gap-2">
-        <h2 className="font-medium">Integrations</h2>
-        <div className="rounded-md border p-8">
+      <div className="h-[1px] border-t border-dotted border-border-non-interactive"></div>
+      <div className="flex flex-col gap-5">
+        <h2 className="text-xl font-medium text-text-secondary">
+          Integrations
+        </h2>
+        <div className="border-shadow rounded-md p-8">
           <h3>Notion</h3>
         </div>
       </div>
@@ -72,13 +80,7 @@ export default async function Settings() {
           Import and Export - Bring your OPML
         </Link>
       </div>
-      <div className="flex gap-4 font-medium [&>*]:flex-1 [&>*]:rounded-md [&>*]:px-4 [&>*]:py-2 [&>*]:text-[15px]">
-        <button className="border">Logout</button>
-        {/* <button className="border">Reload app</button> */}
-        <button className="border-0 bg-[rgba(234,74,70,0.2)] text-[#ea4a46]">
-          Delete account
-        </button>
-      </div>
+      <SettingsFooter />
     </main>
   );
 }

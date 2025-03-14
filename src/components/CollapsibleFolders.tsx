@@ -132,20 +132,20 @@ function FolderItem({ folder }: { folder: any }) {
             align="end"
           >
             <ContextMenu.Item
-              className="group relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[5px] text-[13px] leading-none outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-ui-hover data-[disabled]:text-mauve8 data-[highlighted]:text-violet1"
+              className="group relative flex h-[28px] cursor-pointer select-none items-center rounded-[3px] px-2 text-[13px] leading-none outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-ui-hover data-[disabled]:text-mauve8"
               onSelect={() => {
                 setIsEditFolderOpen(true);
               }}
             >
               Edit{" "}
-              <div className="ml-auto pl-5 text-mauve11 group-data-[disabled]:text-mauve8 group-data-[highlighted]:text-white">
+              <div className="ml-auto pl-5 group-data-[disabled]:text-mauve8 group-data-[highlighted]:text-white">
                 <EditIcon />
               </div>
             </ContextMenu.Item>
 
-            <ContextMenu.Item className="group relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[5px] text-[13px] leading-none outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-ui-hover data-[disabled]:text-mauve8 data-[highlighted]:text-violet1">
+            <ContextMenu.Item className="group relative flex h-[28px] cursor-pointer select-none items-center rounded-[3px] px-2 text-[13px] leading-none outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-ui-hover data-[disabled]:text-mauve8 data-[highlighted]:text-[#eb5757]">
               Delete{" "}
-              <div className="ml-auto pl-5 text-mauve11 group-data-[disabled]:text-mauve8 group-data-[highlighted]:text-white">
+              <div className="ml-auto pl-5 group-data-[disabled]:text-mauve8 group-data-[highlighted]:text-[#eb5757]">
                 <DeleteIcon />
               </div>
             </ContextMenu.Item>

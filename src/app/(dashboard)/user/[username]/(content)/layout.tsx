@@ -101,15 +101,15 @@ export default async function UserLayout({
           <p>@{user.username}</p>
         </div>
         <div className="flex flex-col gap-4">
-          <div className="flex justify-between">
-            <Avatar className="inline-flex h-[92px] w-[92px] flex-none select-none items-center justify-center overflow-hidden rounded-full bg-blackA1 align-middle">
+          <div className="flex items-center justify-between">
+            <Avatar className="inline-flex h-[92px] w-[92px] flex-none select-none items-center justify-center overflow-hidden rounded-full bg-background-secondary align-middle">
               <AvatarImage
                 className="h-full w-full rounded-[inherit] object-cover"
                 src={user.avatarUrl as string}
                 alt={user?.fullname as string}
               />
               <AvatarFallback
-                className="leading-1 flex h-full w-full items-center justify-center bg-white text-[15px] font-medium text-violet11"
+                className="leading-1 flex h-full w-full items-center justify-center bg-background-secondary text-3xl font-medium"
                 delayMs={600}
               >
                 {getInitials((user.fullname || user.username) as string)}
@@ -119,7 +119,7 @@ export default async function UserLayout({
             <FollowButton isFollowing={followee?.id as string} />
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             <p className="flex items-center gap-2 font-medium">
               <span>{user.fullname || user.username}</span>
               <span>
@@ -140,9 +140,10 @@ export default async function UserLayout({
                 </svg>
               </span>
             </p>
+
             {user.bio && (
               <p
-                className="prose whitespace-pre text-text-secondary"
+                className="prose whitespace-pre text-pretty text-text-secondary prose-a:text-brand-primary prose-a:no-underline"
                 dangerouslySetInnerHTML={{
                   __html: convertTextToLinks(user.bio as string),
                 }}

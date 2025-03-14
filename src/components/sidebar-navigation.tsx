@@ -35,7 +35,7 @@ export default function SidebarNavigation({
   const segment = useSelectedLayoutSegment();
   // console.log({ segment });
   return (
-    <nav className="bg-background text-textColor fixed bottom-0 left-0 top-0 isolate z-30 flex h-screen w-[240px] flex-shrink-0 select-none flex-col self-start shadow-[1px_0_0_0_var(--border-non-interactive)]">
+    <nav className="text-textColor fixed bottom-0 left-0 top-0 isolate z-30 flex h-screen w-[240px] flex-shrink-0 select-none flex-col self-start bg-background-primary shadow-[1px_0_0_0_var(--border-non-interactive)]">
       <div className="flex h-14 items-center justify-between px-3">
         <h1 className="font-medium">
           <span className="text-primary">my</span>Pocket<span>Feed.</span>

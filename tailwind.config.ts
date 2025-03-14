@@ -30,8 +30,8 @@ const config = {
         ...mauve,
         ...violet,
         "brand-primary": "rgba(var(--brand-primary))",
-        "background-primary": "var(--background-primary)",
-        "background-secondary": "var(--background-secondary)",
+        "background-primary": "rgba(var(--background-primary))",
+        "background-secondary": "rgba(var(--background-secondary))",
         "ui-normal": "var(--ui-normal)",
         "ui-hover": "var(--ui-hover)",
         "ui-active": "var(--ui-active)",
@@ -41,7 +41,7 @@ const config = {
         "border-primary": "var(--border-primary)",
         "text-primary": "var(--text-primary)",
         "text-secondary": "var(--text-secondary)",
-        danger: "var(--danger)",
+        danger: "rgba(var(--danger))",
       },
       keyframes: {
         slideDownAndFade: {

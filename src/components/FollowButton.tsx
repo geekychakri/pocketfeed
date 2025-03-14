@@ -8,6 +8,7 @@ import { useAuth } from "@clerk/nextjs";
 import { usePathname, useRouter } from "next/navigation";
 
 import { toast } from "sonner";
+import Link from "next/link";
 
 export default function FollowButton({ isFollowing }: { isFollowing: string }) {
   const { isSignedIn, user, isLoaded } = useUser();
@@ -56,11 +57,18 @@ export default function FollowButton({ isFollowing }: { isFollowing: string }) {
     toast.success("No longer Following  username");
   };
   if (user?.username === pathname.split("/")[2]) {
-    return null;
+    return (
+      <Link
+        href="/settings"
+        className="h-9 content-center rounded-md bg-ui-normal px-4 text-sm duration-150 hover:bg-ui-hover"
+      >
+        Edit Profile
+      </Link>
+    );
   }
   return (
     <button
-      className="w-[200px] self-end rounded-md border bg-primary px-2 py-2 font-medium text-white"
+      className="bg-primary w-[200px] self-end rounded-md border px-2 py-2 font-medium text-white"
       onClick={follow ? handleUnFollow : handleFollow}
     >
       {follow ? "following" : "Follow"}

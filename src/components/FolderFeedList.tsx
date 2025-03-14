@@ -98,7 +98,7 @@ export function FolderFeedList({
                     src={item.favicon} //TODO:
                     alt={item.title}
                   />
-                  <AvatarFallback delayMs={400}>
+                  <AvatarFallback>
                     {getInitials(item.title, "folder")}
                   </AvatarFallback>
                 </Avatar>

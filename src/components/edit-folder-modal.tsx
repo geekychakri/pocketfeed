@@ -84,10 +84,7 @@ export default function EditFolderModal({
       </Modal.Button> */}
 
       <Modal.Content title="Edit folder" className="bg-background-primary">
-        <form
-          className="flex flex-col gap-4 px-[25px] py-4"
-          action={formAction}
-        >
+        <form className="flex flex-col gap-4 px-[25px]" action={formAction}>
           <Input
             defaultValue={folderData.folder}
             className="bg-background-secondary"
@@ -102,7 +99,13 @@ export default function EditFolderModal({
           />
 
           <div className="flex gap-5">
-            <Button className="border-shadow">Cancel</Button>
+            <Button
+              type="button"
+              onClick={() => setIsEditFolderOpen(false)}
+              className="border-shadow bg-transparent"
+            >
+              Cancel
+            </Button>
             <SaveButton />
           </div>
         </form>

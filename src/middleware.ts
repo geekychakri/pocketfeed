@@ -14,7 +14,7 @@ const isPublicRoute = createRouteMatcher([
 
 const isProtectedRoute = createRouteMatcher(["/folder(.*)"]);
 export default clerkMiddleware(async (auth, request) => {
-  console.log({ request });
+  // console.log({ request });
   console.log("Requested URL:", request.nextUrl.pathname);
   console.log("Is public route:", isPublicRoute(request));
   if (!isPublicRoute(request)) {

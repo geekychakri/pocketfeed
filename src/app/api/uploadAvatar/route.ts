@@ -35,7 +35,8 @@ export async function POST(request: Request) {
   console.log({ user });
 
   const userAvatarExists = await cloudinary.api.resource(
-    user.avatarPublicId as string,
+    // can't be null or undefined
+    user.avatarPublicId ?? ("" as string),
   );
 
   console.log({ userAvatarExists });
