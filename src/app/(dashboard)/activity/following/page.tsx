@@ -5,6 +5,7 @@ import { Link2Icon } from "@radix-ui/react-icons";
 import Link from "next/link";
 
 import { currentUser } from "@clerk/nextjs/server";
+import FollowingPostsList from "./components/following-posts-list";
 
 const xata = getXataClient();
 export default async function Page() {
@@ -20,13 +21,22 @@ export default async function Page() {
 
   console.log({ followedUserNames });
 
-  const posts = await xata.db.posts
+  const page = await xata.db.posts
     .filter({ username: { $any: followedUserNames } })
-    .getAll(); //TODO: sort the results by desc  order
+    .getPaginated({
+      pagination: {
+        size: 3,
+      },
+    }); //TODO: sort the results by desc  order
+  const hasNextPage = page.hasNextPage();
+  const pageInfo = {
+    hasNextPage,
+    cursor: page.meta.page.cursor, // Contains cursor information
+  };
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-8">
-        {posts.map((post, index) => {
+        {/* {posts.map((post, index) => {
           return (
             <div
               key={post.id}
@@ -49,7 +59,7 @@ export default async function Page() {
               >
                 <div className="flex flex-col gap-1">
                   <div className="flex justify-between">
-                    <h2 className="font-medium text-primary">
+                    <h2 className="text-primary font-medium">
                       {post.feedItemTitle}
                     </h2>
                     <Link2Icon className="size-5" />
@@ -60,7 +70,11 @@ export default async function Page() {
               </Link>
             </div>
           );
-        })}
+        })} */}
+        <FollowingPostsList
+          posts={page.records.toSerializable()}
+          initialPageInfo={pageInfo}
+        />
       </div>
     </div>
   );

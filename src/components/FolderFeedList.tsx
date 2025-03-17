@@ -27,10 +27,12 @@ export function FolderFeedList({
   initialFeeds,
   initialPageInfo,
   folders,
+  folderName,
 }: {
   initialFeeds: any;
   initialPageInfo: any;
   folders: any;
+  folderName: string;
 }) {
   const feeds = useFolderFeedStore((state) => state.feeds);
   // console.log({ folderStoreData });
@@ -38,8 +40,10 @@ export function FolderFeedList({
   const [pageInfo, setPageInfo] = useState(initialPageInfo);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const pathname = usePathname();
-  const folderName = pathname.split("/")[2];
+  // const pathname = usePathname();
+  // const folderName = pathname.split("/")[2];
+
+  console.log({ folderName });
 
   const addFeeds = useFeedsAdd();
   // console.log({ addFeeds });
@@ -51,7 +55,7 @@ export function FolderFeedList({
     setLoading(true);
     try {
       const response = await fetch(
-        `/api/loadMoreFeed?cursor=${encodeURIComponent(pageInfo.cursor)}`,
+        `/api/loadMoreFeed?cursor=${encodeURIComponent(pageInfo.cursor)}&folderName=${folderName}`,
       );
 
       if (!response.ok) {

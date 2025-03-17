@@ -1,18 +1,32 @@
 import { getXataClient } from "@/xata";
 import { NextResponse } from "next/server";
 
+import { auth } from "@clerk/nextjs/server";
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const cursor = searchParams.get("cursor");
+  const folderName = searchParams.get("folderName");
+
+  const { userId } = auth();
+
+  console.log({ folderName });
+
+  // const { userId } = auth();
 
   try {
     const xata = getXataClient();
-    const page = await xata.db.feeds.getPaginated({
-      pagination: {
-        size: 5,
-        after: cursor || undefined,
-      },
-    });
+    const page = await xata.db.feeds
+      .filter({
+        "folderName.folder": folderName,
+        userId: userId ?? "",
+      })
+      .sort("xata.createdAt", "desc")
+      .getPaginated({
+        pagination: {
+          size: 5,
+          after: cursor || undefined,
+        },
+      });
 
     return NextResponse.json({
       posts: page.records,

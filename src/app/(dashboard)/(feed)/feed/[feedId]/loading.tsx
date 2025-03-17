@@ -30,12 +30,8 @@
 //   );
 // }
 
-import { SpinnerRotate } from "@/components/SpinnerRotate";
+import LoadingUI from "@/components/loading-ui";
 
 export default function Loading() {
-  return (
-    <div className="flex h-screen items-center justify-center">
-      <SpinnerRotate />
-    </div>
-  );
+  return <LoadingUI />;
 }

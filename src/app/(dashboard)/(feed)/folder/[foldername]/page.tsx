@@ -118,6 +118,7 @@ export default async function Folder({
               initialFeeds={JSON.parse(JSON.stringify(page.records))}
               initialPageInfo={pageInfo}
               folders={JSON.parse(JSON.stringify(folders))}
+              folderName={folderName}
             />
           ) : (
             <div className="flex flex-col items-center justify-center gap-6">

@@ -78,7 +78,14 @@ export default function SidebarNavigation({
         </Link> */}
 
         {links.map(({ path, label, icon: Icon }, i) => {
-          const isActive = pathname === path;
+          // const isActive = pathname === path;
+          const isActive =
+            path === "/activity/discover"
+              ? pathname.startsWith("/activity")
+              : path === pathname;
+
+          // console.log({isActive})
+
           return (
             <Link
               href={path}

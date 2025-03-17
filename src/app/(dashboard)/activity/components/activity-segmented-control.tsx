@@ -3,34 +3,21 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { LayoutGroup, motion } from "framer-motion";
+import { motion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
 
-import { balloons } from "balloons-js";
-import { useEffect } from "react";
-
 type SegmentedControlProps = {
   items: { href: string; title: string }[];
-  birthday: string;
 };
 
-const SegmentedControl = ({
+const ActivitySegmentedControl = ({
   items,
-  birthday,
 }: SegmentedControlProps): JSX.Element => {
   const pathname = usePathname();
 
-  useEffect(() => {
-    if (birthday) {
-      if (new Date().getDate().toString() === birthday.split("-")[2]) {
-        balloons();
-      }
-    }
-  }, []);
-
   return (
-    <motion.ul className="flex border-b border-border-non-interactive text-center">
+    <motion.ul className="flex gap-8">
       {items.map((item, index) => {
         // const isActive = index === activeIndex;
         const isActive = item.href === pathname;
@@ -44,14 +31,14 @@ const SegmentedControl = ({
           >
             <Link
               href={item.href}
-              className={cn("inline-block w-full p-4 outline-none")}
-              // replace
+              className={cn("inline-block w-full py-2 outline-none")}
+              //   replace
             >
               {isActive && (
                 <motion.span
                   layoutId="highlight"
                   initial={false}
-                  className="absolute bottom-0 left-0 right-0 h-[2px] rounded-full bg-brand-primary"
+                  className="absolute bottom-0 left-0 right-0 h-[1px] rounded-full bg-brand-primary"
                   style={{ originY: "0px" }}
                 ></motion.span>
               )}
@@ -64,4 +51,4 @@ const SegmentedControl = ({
   );
 };
 
-export default SegmentedControl;
+export default ActivitySegmentedControl;
