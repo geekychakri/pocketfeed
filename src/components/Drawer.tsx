@@ -100,24 +100,26 @@ export default function VaulDrawer({ audioRef }: { audioRef: any }) {
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-30 bg-black/40" />
         <Drawer.Content
-          className="fixed bottom-2 left-2 right-2 top-2 z-40 flex border-none" //w-[310px]
+          className="fixed inset-4 z-40 flex outline-none" //w-[310px]
           // The gap between the edge of the screen and the drawer is 8px in this case.
           style={
-            { "--initial-transform": "calc(100% + 8px)" } as React.CSSProperties
+            {
+              "--initial-transform": "calc(100% + 50px)",
+            } as React.CSSProperties
           }
           aria-describedby={undefined}
         >
           {/* <button onClick={() => console.log(audioRef.current.currentTime)}>
             LOG CURRENT TIME
           </button> */}
-          <div className="drawer h-full grow overflow-y-auto overscroll-contain rounded-[8px] border border-border-interactive bg-background-primary">
-            <div className="overflow-wrap-anywhere mx-auto flex max-w-[720px] flex-col gap-10 px-3 py-6">
-              <div className="flex flex-wrap items-center justify-between gap-4">
-                <Drawer.Title className="text-lg font-medium">
+          <div className="drawer h-full grow overflow-y-auto overscroll-contain rounded-[8px] border border-dashed border-border-non-interactive bg-background-primary">
+            <div className="overflow-wrap-anywhere mx-auto flex max-w-[720px] flex-col px-3 py-6">
+              <div className="sticky top-[-3px] z-40 flex h-16 items-center justify-between gap-8 rounded-md border border-dashed border-border-non-interactive bg-background-primary px-4 py-2">
+                <Drawer.Title className="line-clamp-1 flex-1 text-lg font-medium">
                   {title}
                 </Drawer.Title>
                 {/* <button className="rounded-lg border px-4 py-2">Post</button> */}
-                <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
+                {/* <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
                   <Modal.Button asChild>
                     <button className="rounded-lg border px-4 py-2">
                       Post
@@ -149,7 +151,7 @@ export default function VaulDrawer({ audioRef }: { audioRef: any }) {
                       <Button>Post</Button>
                     </form>
                   </Modal.Content>
-                </Modal>
+                </Modal> */}
                 <PodcastPlayButton episodeNumber={episodeNumber} />
               </div>
 
@@ -160,17 +162,17 @@ export default function VaulDrawer({ audioRef }: { audioRef: any }) {
                 <Tabs.Root defaultValue="tab1">
                   <Tabs.List
                     aria-label="Podcast info"
-                    className="mb-8 flex gap-4"
+                    className="sticky top-14 z-30 mb-5 flex gap-4 border-b border-dashed border-border-interactive bg-background-primary py-4"
                   >
                     <Tabs.Trigger
                       value="tab1"
-                      className="font-semibold data-[state=active]:rounded-md data-[state=active]:bg-ui-normal data-[state=active]:px-4 data-[state=active]:py-2"
+                      className="rounded-md border border-dashed border-border-non-interactive bg-background-primary px-4 py-2 font-semibold text-text-secondary data-[state=active]:border-transparent data-[state=active]:bg-ui-normal data-[state=active]:text-text-primary"
                     >
                       Description
                     </Tabs.Trigger>
                     <Tabs.Trigger
                       value="tab2"
-                      className="font-semibold data-[state=active]:rounded-md data-[state=active]:bg-ui-normal data-[state=active]:px-4 data-[state=active]:py-2"
+                      className="rounded-md border border-dashed border-border-non-interactive bg-background-primary px-4 py-2 font-semibold text-text-secondary data-[state=active]:border-transparent data-[state=active]:bg-ui-normal data-[state=active]:text-text-primary"
                     >
                       Chapters
                     </Tabs.Trigger>
@@ -180,7 +182,7 @@ export default function VaulDrawer({ audioRef }: { audioRef: any }) {
                       dangerouslySetInnerHTML={{
                         __html: DOMPurify.sanitize(content),
                       }}
-                      className="prose-a:text-primary prose break-words text-lg text-text-primary prose-headings:text-text-primary prose-h2:font-semibold prose-a:no-underline hover:prose-a:underline prose-strong:text-text-primary prose-pre:rounded-md prose-pre:border prose-pre:border-border-non-interactive prose-pre:bg-background-secondary prose-pre:text-base prose-pre:text-text-secondary prose-inline-code:rounded-md prose-inline-code:border prose-inline-code:border-border-non-interactive prose-inline-code:bg-background-secondary prose-inline-code:px-1 prose-inline-code:py-[2px] prose-inline-code:text-text-secondary prose-inline-code:before:hidden prose-inline-code:after:hidden max-sm:text-base"
+                      className="prose break-words text-base leading-7 text-text-primary prose-headings:text-text-primary prose-h1:text-xl prose-h1:font-medium prose-h2:font-semibold prose-a:text-text-primary prose-a:no-underline hover:prose-a:text-text-secondary hover:prose-a:transition-[color] prose-blockquote:text-text-primary prose-strong:text-text-primary prose-pre:rounded-md prose-pre:border prose-pre:border-border-non-interactive prose-pre:bg-background-secondary prose-pre:text-base prose-pre:text-text-secondary prose-inline-code:rounded-md prose-inline-code:border prose-inline-code:border-border-non-interactive prose-inline-code:bg-background-secondary prose-inline-code:px-1 prose-inline-code:py-[2px] prose-inline-code:text-text-secondary prose-inline-code:before:hidden prose-inline-code:after:hidden max-sm:leading-6"
                       id="description"
                     ></div>
                   </Tabs.Content>
@@ -206,11 +208,11 @@ export default function VaulDrawer({ audioRef }: { audioRef: any }) {
             </div>
           </div>
           <button
-            className="absolute right-4 top-4"
+            className="absolute right-8 top-4 flex size-8 items-center justify-center rounded-full"
             onClick={() => setIsOpen(false)}
             title="Close"
           >
-            <Cross2Icon className="stroke-gray-500 stroke-2" />
+            <Cross2Icon className="size-6 stroke-inherit stroke-2" />
           </button>
         </Drawer.Content>
       </Drawer.Portal>

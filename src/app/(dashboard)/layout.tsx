@@ -145,9 +145,9 @@ export default async function MainLayout({
         foldersList={foldersList}
         user={JSON.parse(JSON.stringify(user))}
       />
-      <div className="w-[240px]"></div>
+      {/* <div className="w-[240px]"></div> */}
       {/* {show && <PodcastPlayer />} */}
-      {/* <PodcastPlayer /> */}
+      <PodcastPlayer />
       {children}
     </div>
   );

@@ -5,6 +5,7 @@ import useSWR from "swr";
 
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { SpinnerRotate } from "./SpinnerRotate";
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
@@ -106,16 +107,7 @@ export default function PodcastChapters({
   }
 
   if (isLoading) {
-    return (
-      <SkeletonTheme baseColor="#fafafa" highlightColor="#f5f5f5">
-        <Skeleton
-          count={10}
-          width={320}
-          height={70}
-          containerClassName="flex flex-col" //TODO:
-        />
-      </SkeletonTheme>
-    );
+    return <SpinnerRotate />;
   }
 
   if (!chaptersUrl) {
@@ -125,16 +117,16 @@ export default function PodcastChapters({
   // return <div>{JSON.stringify(data, null, 2)}</div>;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col justify-center gap-4">
       {data.chapters.map((chapter, i) => {
         const isActive =
-          audioRef.current.currentTime >= chapter.startTime &&
-          audioRef.current.currentTime <
+          audioRef.current?.currentTime >= chapter.startTime &&
+          audioRef.current?.currentTime <
             (chapter.endTime ? chapter.endTime : audioRef.current.duration);
 
         return (
           <button
-            className={`border-border-interactive w-full max-w-[320px] rounded-md border px-4 py-2 text-left duration-100 ${isActive ? "bg-background-secondary" : "bg-ui-normal"} hover:bg-background-secondary`}
+            className={`h-14 w-full rounded-md px-4 py-2 text-left duration-100 ${isActive ? "bg-background-secondary" : "bg-ui-normal"} hover:bg-background-secondary`}
             key={i}
             onClick={() => {
               // console.log(chapter);
@@ -150,7 +142,7 @@ export default function PodcastChapters({
               }
             }}
           >
-            <span className="flex flex-col gap-1">
+            <span className="flex justify-between gap-4">
               <span className="flex items-center gap-2">
                 {isActive ? <AnimatedMusicBars isPlaying={isPlaying} /> : null}
                 <span className="line-clamp-1">
@@ -158,7 +150,7 @@ export default function PodcastChapters({
                   {/* {chapter?.text} */}
                 </span>
               </span>
-              <span className="text-neutral-500">
+              <span className="flex-none text-text-secondary">
                 {toHHMMSS(chapter.startTime)}
               </span>
             </span>

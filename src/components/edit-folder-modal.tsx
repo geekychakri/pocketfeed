@@ -87,7 +87,7 @@ export default function EditFolderModal({
         <form className="flex flex-col gap-4 px-[25px]" action={formAction}>
           <Input
             defaultValue={folderData.folder}
-            className="bg-background-secondary"
+            className="bg-transparent"
             name="new-folder-name"
           />
 

@@ -36,7 +36,7 @@ const ActivitySegmentedControl = ({
             >
               {isActive && (
                 <motion.span
-                  layoutId="highlight"
+                  layoutId="activity-highlight"
                   initial={false}
                   className="absolute bottom-0 left-0 right-0 h-[1px] rounded-full bg-brand-primary"
                   style={{ originY: "0px" }}

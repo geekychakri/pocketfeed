@@ -182,8 +182,8 @@ export default function FollowingPostsList({
             className="flex flex-col gap-6 rounded-lg border border-border-primary p-4 text-text-primary"
           >
             <div className="flex flex-col gap-4">
-              <Link
-                href={`/user/${post.username}`}
+              <div
+                // href={`/user/${post.username}`}
                 className="flex items-center gap-1"
               >
                 <img
@@ -195,7 +195,7 @@ export default function FollowingPostsList({
                 <span className="text-gray-400">@{post.username}</span>
                 <span>·</span>
                 <span className="text-gray-400">2h</span>
-              </Link>
+              </div>
               <p>{post.body}</p>
             </div>
             <Link

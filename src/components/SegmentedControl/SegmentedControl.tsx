@@ -49,7 +49,7 @@ const SegmentedControl = ({
             >
               {isActive && (
                 <motion.span
-                  layoutId="highlight"
+                  layoutId="profile-highlight"
                   initial={false}
                   className="absolute bottom-0 left-0 right-0 h-[2px] rounded-full bg-brand-primary"
                   style={{ originY: "0px" }}

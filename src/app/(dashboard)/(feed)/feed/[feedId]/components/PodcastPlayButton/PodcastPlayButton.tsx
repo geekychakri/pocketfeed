@@ -59,7 +59,7 @@ export default function PodcastPlayButton({
   return (
     <button
       className={cn(
-        "z-[2] flex size-10 items-center justify-center gap-1 rounded-full bg-ui-normal px-4 py-2 text-base font-medium transition-transform will-change-transform active:scale-95",
+        "z-[2] flex size-11 flex-none items-center justify-center gap-1 rounded-full bg-ui-normal px-4 py-2 text-base font-medium transition-transform will-change-transform active:scale-95",
         className,
       )}
       onClick={(e: MouseEvent<HTMLButtonElement>) => {

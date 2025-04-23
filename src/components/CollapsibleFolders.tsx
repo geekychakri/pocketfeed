@@ -50,6 +50,8 @@ const CollapsibleFolders = ({
 
   const pathname = usePathname();
   const currentFolderName = pathname.split("/")[2];
+
+  // console.log("Collapsible folders");
   return (
     <Collapsible.Root
       open={open}
@@ -94,7 +96,9 @@ export default CollapsibleFolders;
 
 function FolderItem({ folder }: { folder: any }) {
   const pathname = usePathname();
-  const currentFolderName = pathname.split("/")[2];
+  const currentFolderName = decodeURIComponent(pathname.split("/")[2]);
+  // console.log({ currentFolderName });
+  // console.log({ folder: folder.folder });
   const [isEditFolderOpen, setIsEditFolderOpen] = useState(false);
   return (
     <>

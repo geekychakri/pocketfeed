@@ -231,3 +231,64 @@ export async function checkLinkIsBroken(link: string) {
     return { error: true };
   }
 }
+
+//Catch Block Error Message
+type ErrorWithMessage = {
+  message: string;
+};
+
+function isErrorWithMessage(error: unknown): error is ErrorWithMessage {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "message" in error &&
+    typeof (error as Record<string, unknown>).message === "string"
+  );
+}
+
+export function getErrorMessage(error: unknown) {
+  if (isErrorWithMessage(error)) return error.message;
+  return String(error);
+}
+
+export function convertTimeStringToReadable(timeString: string) {
+  if (!timeString) {
+    return null;
+  }
+
+  if (!timeString.includes(":")) {
+    const hours = Math.floor(+timeString / 3600); // Calculate hours
+    const minutes = Math.floor((+timeString % 3600) / 60); // Calculate remaining minutes
+    console.log({ hours, minutes });
+
+    if (hours === 0 && minutes === 0) {
+      return `${timeString}s`;
+    }
+    return hours === 0 ? `${minutes}m` : `${hours}h ${minutes}m`;
+  }
+
+  let hours, minutes, seconds;
+
+  if (timeString.split(":").length === 3) {
+    [hours, minutes, seconds] = timeString.split(":").map(Number);
+  } else {
+    hours = 0;
+    [minutes, seconds] = timeString.split(":").map(Number);
+  }
+
+  console.log({ hours });
+
+  if (hours === 0) {
+    return `${minutes}m`;
+  } else if (minutes === 0) {
+    return `${hours}h`;
+  } else if (hours === 0 && minutes === 0) {
+    return `${seconds}s`;
+  } else {
+    return `${hours}h ${minutes}m`;
+  }
+}
+
+export function checkObjectIsEmpty(value: object): boolean {
+  return Object.keys(value).length === 0 && value.constructor === Object; // 👈 constructor check
+}

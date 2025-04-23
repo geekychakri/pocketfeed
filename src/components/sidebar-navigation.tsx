@@ -17,6 +17,10 @@ import { useSelectedLayoutSegment } from "next/navigation";
 import { UsersRecord } from "@/xata";
 import { SelectedPick } from "@xata.io/client";
 import RouteBack from "./RouteBack/RouteBack";
+import { useFullscreen } from "@/store/read-fullscreen";
+import { useEffect, useState } from "react";
+
+import useStore from "@/store/useStore";
 
 const links = [
   { label: "Activity", path: "/activity/discover", icon: ExploreIcon },
@@ -32,33 +36,61 @@ export default function SidebarNavigation({
 }) {
   const pathname = usePathname();
   // console.log(pathname);
-  const segment = useSelectedLayoutSegment();
-  // console.log({ segment });
-  return (
-    <nav className="text-textColor fixed bottom-0 left-0 top-0 isolate z-30 flex h-screen w-[240px] flex-shrink-0 select-none flex-col self-start bg-background-primary shadow-[1px_0_0_0_var(--border-non-interactive)]">
-      <div className="flex h-14 items-center justify-between px-3">
-        <h1 className="font-medium">
-          <span className="text-primary">my</span>Pocket<span>Feed.</span>
-        </h1>
-      </div>
+  // const segment = useSelectedLayoutSegment();
 
-      <div className="flex h-14 items-center justify-between gap-3 px-3 shadow-[0_-1px_0_0_var(--border-non-interactive)]">
-        <Link
-          href="/add"
-          className="flex h-9 flex-1 items-center justify-center rounded-md bg-ui-normal"
-        >
-          Add feed
-        </Link>
-        <Link
-          href="/search/feeds"
-          className="flex h-9 items-center rounded-md px-3 transition-colors hover:bg-ui-normal"
-          aria-label="Search"
-        >
-          <SearchIcon className="flex-none" />
-        </Link>
-      </div>
-      <div className="flex flex-1 flex-col gap-1 px-3 py-[10px] shadow-[0_-1px_0_0_var(--border-non-interactive)]">
-        {/* <Link
+  // console.log({ segment });
+  // const { fullscreen } = useFullscreen();
+  // console.log({ fullscreen });
+
+  const fullscreen = useStore(useFullscreen, (state) => state.fullscreen);
+
+  console.log({ fullscreen });
+
+  useEffect(() => {
+    window.requestAnimationFrame(() =>
+      window.requestAnimationFrame(() => useFullscreen.persist.rehydrate()),
+    );
+  }, []);
+
+  // useEffect(() => {
+  //   setCustomFullScreen(fullscreen)
+  // },[])
+
+  // if (
+  //   fullscreen === null ||
+  //   (fullscreen === undefined && pathname.startsWith("/read"))
+  // ) {
+  //   return null;
+  // }
+
+  return (
+    <>
+      <nav
+        className={`text-textColor fixed bottom-0 left-0 top-0 isolate z-30 flex h-screen w-[240px] flex-shrink-0 select-none flex-col self-start bg-background-primary shadow-[1px_0_0_0_var(--border-non-interactive)] transition-[transform] duration-300 ${fullscreen && pathname.startsWith("/read") ? "-translate-x-full" : "translate-x-0"}`}
+      >
+        <div className="flex h-14 items-center justify-between px-3">
+          <h1 className="font-medium">
+            <span className="text-primary">my</span>Pocket<span>Feed.</span>
+          </h1>
+        </div>
+
+        <div className="flex h-14 items-center justify-between gap-3 px-3 shadow-[0_-1px_0_0_var(--border-non-interactive)]">
+          <Link
+            href="/add"
+            className="flex h-9 flex-1 items-center justify-center rounded-md bg-ui-normal"
+          >
+            Add feed
+          </Link>
+          <Link
+            href="/search/feeds"
+            className="flex h-9 items-center rounded-md px-3 transition-colors hover:bg-ui-normal"
+            aria-label="Search"
+          >
+            <SearchIcon className="flex-none" />
+          </Link>
+        </div>
+        <div className="flex flex-1 flex-col gap-1 px-3 py-[10px] shadow-[0_-1px_0_0_var(--border-non-interactive)]">
+          {/* <Link
           href="/activity/discover"
           className="flex h-10 items-center gap-3 rounded-md px-2 py-[10px] hover:bg-ui-hover active:bg-ui-hover"
         >
@@ -77,41 +109,45 @@ export default function SidebarNavigation({
           <span>Bookmarks</span>
         </Link> */}
 
-        {links.map(({ path, label, icon: Icon }, i) => {
-          // const isActive = pathname === path;
-          const isActive =
-            path === "/activity/discover"
-              ? pathname.startsWith("/activity")
-              : path === pathname;
+          {links.map(({ path, label, icon: Icon }, i) => {
+            // const isActive = pathname === path;
+            const isActive =
+              path === "/activity/discover"
+                ? pathname.startsWith("/activity")
+                : path === pathname;
 
-          // console.log({isActive})
+            // console.log({isActive})
 
-          return (
-            <Link
-              href={path}
-              key={i}
-              className={cn(
-                "flex h-10 items-center gap-3 rounded-md px-3 py-[10px] transition-[background-color] hover:bg-ui-hover",
-                isActive && "bg-ui-hover",
-              )}
-            >
-              <span>
-                <Icon />
-              </span>
-              <span>{label}</span>
-            </Link>
-          );
-        })}
+            return (
+              <Link
+                href={path}
+                key={i}
+                className={cn(
+                  "flex h-10 items-center gap-3 rounded-md px-3 py-[10px] transition-[background-color] hover:bg-ui-hover",
+                  isActive && "bg-ui-hover",
+                )}
+              >
+                <span>
+                  <Icon />
+                </span>
+                <span>{label}</span>
+              </Link>
+            );
+          })}
 
-        <CollapsibleFolders foldersList={foldersList} />
-      </div>
+          <CollapsibleFolders foldersList={foldersList} />
+        </div>
 
-      <div className="flex h-14 items-center gap-2 px-3 shadow-[0_-1px_0_0_var(--border-non-interactive)]">
-        <ProfileAvatar
-          avatarUrl={user?.avatarUrl as string}
-          username={user?.username as string}
-        />
-      </div>
-    </nav>
+        <div className="flex h-14 items-center gap-2 px-3 shadow-[0_-1px_0_0_var(--border-non-interactive)]">
+          <ProfileAvatar
+            avatarUrl={user?.avatarUrl as string}
+            username={user?.username as string}
+          />
+        </div>
+      </nav>
+      <div
+        className={`transition-all ${fullscreen && pathname.startsWith("/read") ? "w-0" : "w-[240px]"}`}
+      ></div>
+    </>
   );
 }

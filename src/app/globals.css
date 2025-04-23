@@ -69,7 +69,7 @@
     caret-color: rgb(var(--brand-primary));
     accent-color: rgb(var(--brand-primary));
 
-    scrollbar-gutter: stable;
+    /* scrollbar-gutter: stable; */
     /* scrollbar-width: thin; */
 
     /* color: #fc591e; */
@@ -78,6 +78,7 @@
     scrollbar-width: none;
     scrollbar-width: thin;
     scrollbar-color: #f84f39 #eee; */
+    overflow: hidden;
   }
 
   /*Fix for radix select when using scrollbar gutter to prevent layout shift*/
@@ -98,7 +99,7 @@
   } */
 
   [id] {
-    scroll-margin-top: 30px;
+    scroll-margin-top: 70px;
   }
 
   body {
@@ -228,10 +229,11 @@ textarea:focus-visible {
 
 .drawer {
   scrollbar-gutter: stable;
+  /* scrollbar-width: thin; */
 }
 
 .drawer::-webkit-scrollbar {
-  width: 20px !important;
+  width: 16px !important;
 }
 
 .drawer::-webkit-scrollbar-track {
@@ -239,14 +241,15 @@ textarea:focus-visible {
 }
 
 .drawer::-webkit-scrollbar-thumb {
-  background-color: #d6dee1 !important;
-  border-radius: 20px !important;
-  border: 6px solid transparent !important;
-  background-clip: content-box !important;
+  background-color: var(--text-secondary);
+  border-radius: 20px;
+  border: 6px solid transparent;
+  -webkit-background-clip: content-box;
+  background-clip: content-box;
 }
 
 .drawer::-webkit-scrollbar-thumb:hover {
-  background-color: #a8bbbf !important;
+  background-color: var(--text-primary);
 }
 
 /* custom scrollbar */
@@ -363,16 +366,16 @@ textarea::-webkit-scrollbar-thumb:hover {
   background-color: var(--ui-hover);
 }
 
-::-webkit-scrollbar {
-  width: 18px;
+/* ::-webkit-scrollbar {
+  width: 16px;
 }
 
 ::-webkit-scrollbar-track {
-  background-color: transparent;
+  background-color: rgb(var(--background-secondary));
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--ui-normal);
+  background-color: var(--text-primary);
   border-radius: 20px;
   border: 6px solid transparent;
   -webkit-background-clip: content-box;
@@ -380,11 +383,42 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--ui-hover);
-}
+  background-color: var(--text-secondary);
+} */
 
 /* for file upload hide on initial load */
 input[type="file"] {
   position: absolute;
   opacity: 0;
+}
+
+/* custom copy code button*/
+
+.copy-code-btn {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: -17px 10px;
+  background: rgb(var(--background-primary));
+  border: 2px solid var(--border-interactive);
+  border-radius: 6px;
+}
+
+.article-content {
+  content-visibility: auto;
+}
+
+.feed-layout {
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+}
+
+/* Vaul */
+[data-vaul-drawer] {
+  will-change: auto !important;
 }

@@ -12,7 +12,7 @@ import { revalidatePath } from "next/cache";
 
 import Parser from "rss-parser";
 
-import { cleanUrl } from "@/lib/utils";
+import { cleanUrl, getErrorMessage } from "@/lib/utils";
 
 import urlMetadata from "url-metadata";
 
@@ -442,6 +442,38 @@ export async function deleteSubscriptions(prevState: any, formData: FormData) {
   const idList = Object.values(feedIdList) as string[];
   const data = await xata.db.feeds.delete(idList);
   revalidatePath("/user/[username]/subscriptions", "page");
+
+  return { message: "success" };
+}
+
+export async function addBookmarkAction(formData: FormData) {
+  try {
+    const userId = auth().userId as string;
+    if (!userId) {
+      throw new Error("You must be signed in to add a bookmark");
+    }
+    const bookmarkLink = formData.get("bookmarkLink") as string;
+    const bookmarkType = formData.get("bookmarkType") as string;
+
+    const data = await xata.db.bookmarks.create({
+      userId,
+      bookmarkLink,
+      bookmarkType,
+    });
+
+    return { message: "success", bookmarkId: data.id };
+  } catch (err) {
+    //send error to 3rd party services like sentry //TODO:
+    return { message: getErrorMessage(err), bookmarkId: "" };
+  }
+}
+
+export async function deleteBookmarkAction(formData: FormData) {
+  const bookmarkId = formData.get("bookmarkId") as string;
+
+  console.log({ bookmarkId });
+
+  const data = await xata.db.bookmarks.delete(bookmarkId);
 
   return { message: "success" };
 }

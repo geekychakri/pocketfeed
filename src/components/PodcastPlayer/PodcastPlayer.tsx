@@ -8,6 +8,13 @@ import { PauseIcon } from "@radix-ui/react-icons";
 import { Share2Icon } from "@radix-ui/react-icons";
 import styles from "./PodcastPlayer.module.css";
 
+import { useFullscreen } from "@/store/read-fullscreen";
+
+import { usePathname } from "next/navigation";
+import { useSelectedLayoutSegment } from "next/navigation";
+
+import useStore from "@/store/useStore";
+
 import { clsx } from "clsx";
 import { Drawer } from "vaul";
 
@@ -41,6 +48,12 @@ type PodcastPlayerProps = {
 
 const PodcastPlayer = () => {
   const [snap, setSnap] = useState<number | string | null>(snapPoints[0]);
+
+  const fullscreen = useStore(useFullscreen, (state) => state.fullscreen);
+
+  const segment = useSelectedLayoutSegment();
+
+  console.log({ segment });
 
   const { audioPlayerRef } = useGlobalRef(); //TODO:
 
@@ -127,7 +140,7 @@ const PodcastPlayer = () => {
 
   return (
     <div
-      className={`${styles.audioPlayer} bg-background-primary border-border-non-interactive fixed -bottom-72 left-[240px] right-0 z-[10] flex flex-col gap-1 border-t p-4 ${show === "hide" ? "translate-y-80" : ""}`}
+      className={`${styles.audioPlayer} fixed -bottom-72 ${fullscreen && segment === "read" ? "left-0" : "left-[240px]"} right-0 z-[10] flex flex-col gap-1 border-t border-border-non-interactive bg-background-primary p-4 ${show === "hide" ? "translate-y-80" : ""}`}
     >
       <div className="absolute -top-[14px] flex cursor-pointer gap-2 self-end">
         {/* <button>
@@ -140,7 +153,7 @@ const PodcastPlayer = () => {
             // setIsPlaying(false);
             audioPlayerRef.current?.pause();
           }}
-          className="border-border-interactive bg-background-secondary flex size-6 items-center justify-center rounded-full border"
+          className="flex size-6 items-center justify-center rounded-full border border-border-interactive bg-background-secondary"
         >
           <Cross2Icon className="size-4" />
         </button>
@@ -249,13 +262,7 @@ const PodcastPlayer = () => {
           >
             <slot name="media" slot="media"></slot>
 
-            <svg class="bg-shape1" viewBox="0 0 193 115">
-              <path fill="#fff" d="M50.117 51.13c-40.5-6.5-28 13.5-44 30.5-32.5 51.5 75 32.001 77 13.5 2-18.5 45-19.5 86-3.5 41 16.001 16.5-21 12.5-68s-37-14.5-66.5 16.5-24.5 17.5-65 11Z"/>
-            </svg>
-
-            <svg class="bg-shape2" viewBox="0 0 178 138">
-              <path fill="#fff" d="M26.386 103.374C-14.708 79.891-.175 60.583 18.869 34.491c43.6-58.446 66.15-36.529 139.819 20.352 73.668 56.88-88.202 102.802-73.668 74.623 14.533-28.18-17.54-2.61-58.634-26.092Z"/>
-            </svg>
+          
 
             <style>
               .controls {
@@ -689,6 +696,7 @@ const PodcastPlayer = () => {
                 width: calc(100% - 30px);
                 height: 10px;
                 bottom: -3px;
+                z-index: 1;
               }
 
               .big-time-range:focus-visible {

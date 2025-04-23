@@ -164,11 +164,11 @@ export default async function UserLayout({
         <div className="flex gap-5">
           <Link href={`/user/${user.username}/followers`} className="text-sm">
             {totalFollowersCount?.summaries[0]?.total}{" "}
-            <span className="text-gray-500">Followers</span>
+            <span className="text-text-secondary">Followers</span>
           </Link>
           <Link href={`/user/${user.username}/follows`} className="text-sm">
             {totalFollowingCount?.summaries[0]?.total}{" "}
-            <span className="text-gray-500">Following</span>
+            <span className="text-text-secondary">Following</span>
           </Link>
         </div>
       </div>

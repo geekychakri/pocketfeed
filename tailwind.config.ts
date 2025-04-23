@@ -25,6 +25,18 @@ const config = {
       },
     },
     extend: {
+      typography: {
+        DEFAULT: {
+          css: {
+            a: {
+              "background-image": "linear-gradient(#fc591e, #fc591e)",
+              "background-size": "100% 1px",
+              "background-position": "left bottom",
+              "background-repeat": "no-repeat",
+            },
+          },
+        },
+      },
       colors: {
         ...blackA,
         ...mauve,

@@ -83,8 +83,8 @@ export function SpinnerRotate(props: SVGProps<SVGSVGElement>) {
     // </svg>
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="20px"
-      height="20px"
+      width="24px"
+      height="24px"
       viewBox="0 0 24 24"
       {...props}
     >
