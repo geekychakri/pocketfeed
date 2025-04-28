@@ -83,13 +83,13 @@ export default function SidebarNavigation({
           </Link>
           <Link
             href="/search/feeds"
-            className="flex h-9 items-center rounded-md px-3 transition-colors hover:bg-ui-normal"
+            className="flex size-9 flex-none items-center justify-center rounded-md px-3 transition-colors hover:bg-ui-normal"
             aria-label="Search"
           >
             <SearchIcon className="flex-none" />
           </Link>
         </div>
-        <div className="flex flex-1 flex-col gap-1 px-3 py-[10px] shadow-[0_-1px_0_0_var(--border-non-interactive)]">
+        <div className="flex flex-1 flex-col gap-1 py-[10px] shadow-[0_-1px_0_0_var(--border-non-interactive)]">
           {/* <Link
           href="/activity/discover"
           className="flex h-10 items-center gap-3 rounded-md px-2 py-[10px] hover:bg-ui-hover active:bg-ui-hover"
@@ -119,23 +119,26 @@ export default function SidebarNavigation({
             // console.log({isActive})
 
             return (
-              <Link
-                href={path}
-                key={i}
-                className={cn(
-                  "flex h-10 items-center gap-3 rounded-md px-3 py-[10px] transition-[background-color] hover:bg-ui-hover",
-                  isActive && "bg-ui-hover",
-                )}
-              >
-                <span>
-                  <Icon />
-                </span>
-                <span>{label}</span>
-              </Link>
+              <div key={i} className="px-3">
+                <Link
+                  href={path}
+                  className={cn(
+                    "flex h-11 items-center gap-3 rounded-md px-3 py-[10px] transition-[background-color] hover:bg-ui-hover",
+                    isActive && "bg-ui-hover",
+                  )}
+                >
+                  <span>
+                    <Icon />
+                  </span>
+                  <span>{label}</span>
+                </Link>
+              </div>
             );
           })}
 
-          <CollapsibleFolders foldersList={foldersList} />
+          <div className="">
+            <CollapsibleFolders foldersList={foldersList} />
+          </div>
         </div>
 
         <div className="flex h-14 items-center gap-2 px-3 shadow-[0_-1px_0_0_var(--border-non-interactive)]">

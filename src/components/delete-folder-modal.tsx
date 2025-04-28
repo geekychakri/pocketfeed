@@ -9,7 +9,7 @@ import Textarea from "@/components/ui/Textarea";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 
-import { updateFolder } from "@/app/actions";
+import { deleteFolder } from "@/app/actions";
 
 import { cn } from "@/lib/utils";
 
@@ -25,20 +25,20 @@ const initialState = {
   statusCode: 200,
 };
 
-export default function EditFolderModal({
-  isEditFolderOpen,
-  setIsEditFolderOpen,
-  folderData,
+export default function DeleteFolderModal({
+  isDeleteFolderOpen,
+  setIsDeleteFolderOpen,
+  folderId,
 }: {
-  isEditFolderOpen: boolean;
+  isDeleteFolderOpen: boolean;
   // setIsEditFolderOpen: (open: boolean) => void;
-  setIsEditFolderOpen: any;
-  folderData: { id: string; folder: string };
+  setIsDeleteFolderOpen: any;
+  folderId: string;
 }) {
   //   const parsedFeedItem = JSON.parse(feedItem);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [state, formAction] = useFormState(updateFolder, initialState);
+  const [state, formAction] = useFormState(deleteFolder, initialState);
 
   const editInputRef = useRef<HTMLInputElement>(null);
 
@@ -67,46 +67,40 @@ export default function EditFolderModal({
   // }, []);
 
   useEffect(() => {
-    if (isEditFolderOpen) {
-      setIsEditFolderOpen(false);
+    if (isDeleteFolderOpen) {
+      setIsDeleteFolderOpen(false);
     }
     if (state?.statusCode === 500) {
-      setIsEditFolderOpen(false);
+      setIsDeleteFolderOpen(false);
+
       toast.error(state.message);
       console.log(state.message);
     }
   }, [pathname, state]);
 
   return (
-    <Modal open={isEditFolderOpen} onOpenChange={setIsEditFolderOpen}>
+    <Modal open={isDeleteFolderOpen} onOpenChange={setIsDeleteFolderOpen}>
       {/* <Modal.Button asChild>
         <button className={cn("rounded-lg border px-4 py-2")}>Post</button>
       </Modal.Button> */}
 
-      <Modal.Content title="Edit folder" className="bg-background-primary">
+      <Modal.Content
+        title="Are you sure you want to delete?"
+        className="bg-background-primary"
+      >
+        <Modal.Description>This cannot be undone!</Modal.Description>
         <form className="flex flex-col gap-4 px-[25px]" action={formAction}>
-          <Input
-            defaultValue={folderData.folder}
-            className="bg-transparent"
-            name="new-folder-name"
-          />
-
-          <input
-            type="text"
-            defaultValue={folderData.id}
-            name="folder-id"
-            hidden
-          />
+          <input type="text" defaultValue={folderId} name="folderId" hidden />
 
           <div className="flex gap-5">
             <Button
               type="button"
-              onClick={() => setIsEditFolderOpen(false)}
+              onClick={() => setIsDeleteFolderOpen(false)}
               className="border-shadow bg-transparent"
             >
               Cancel
             </Button>
-            <SaveButton />
+            <DeleteButton />
           </div>
         </form>
       </Modal.Content>
@@ -117,16 +111,17 @@ export default function EditFolderModal({
 import { useFormStatus } from "react-dom";
 import { SpinnerRotate } from "./SpinnerRotate";
 
-export function SaveButton() {
+export function DeleteButton() {
   const { pending } = useFormStatus();
 
   return (
     <Button
       type="submit"
       disabled={pending}
-      className="border-shadow bg-ui-normal duration-100 hover:bg-ui-hover"
+      className="bg-danger"
+      variant="delete"
     >
-      {pending ? <SpinnerRotate /> : "Save"}
+      {pending ? <SpinnerRotate /> : "Delete"}
     </Button>
   );
 }

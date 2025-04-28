@@ -326,13 +326,20 @@ export async function deleteFolder(prevState: any, formData: FormData) {
   const { userId }: { userId: string | null } = auth();
   const folderId = formData.get("folderId") as string;
   console.log({ folderId });
-  const deletedFolder = await xata.db.folders.delete(folderId); //Filter Delete TODO:
+
+  try {
+    const deletedFolder = await xata.db.folders.delete(folderId); //Filter Delete TODO:
+  } catch (err) {
+    return { message: "Something went wrong!", statusCode: 500 };
+  }
 
   // if (!res.ok) {
   //   return { message: 'Please enter a valid email' }
   // }
 
   // redirect(`/folder/${folder}`);
+
+  permanentRedirect("/folder/Home");
 
   return { message: "success" };
 }

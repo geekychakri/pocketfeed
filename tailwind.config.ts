@@ -95,6 +95,14 @@ const config = {
           "0%,70%,100%": { opacity: "1" },
           "20%,50%": { opacity: "0" },
         },
+        "scroll-fade-in": {
+          from: { opacity: "0" },
+          to: { opacity: "1" },
+        },
+        "scroll-fade-out": {
+          from: { opacity: "1" },
+          to: { opacity: "0" },
+        },
         "collapsible-slide-up": {
           from: { height: "var(--radix-collapsible-content-height)" },
           to: { height: "0" },
@@ -118,7 +126,9 @@ const config = {
         contentShow: "contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)",
         "caret-blink": "caret-blink 1.2s ease-out infinite",
         "collapsible-slide-up": "collapsible-slide-up 100ms ease-out",
-        "collapsible-slide-down": "collapsible-slide-down 100ms ease-out;",
+        "collapsible-slide-down": "collapsible-slide-down 100ms ease-out",
+        "scroll-fade-in": "scroll-fade-in 200ms forwards ease-out",
+        "scroll-fade-out": "scroll-fade-out 200ms forwards ease-out",
       },
     },
   },

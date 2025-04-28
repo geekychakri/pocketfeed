@@ -53,8 +53,22 @@ export const ModalContent = React.forwardRef<
   </DialogPrimitive.Portal>
 ));
 
+const ModalDescription = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Description>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
+>(({ className, ...props }, ref) => (
+  <DialogPrimitive.Description
+    ref={ref}
+    className={cn("mb-5 px-[25px] text-sm", className)}
+    {...props}
+  />
+));
+
+ModalDescription.displayName = DialogPrimitive.Description.displayName;
+
 ModalContent.displayName = DialogPrimitive.Content.displayName;
 
 Modal.Button = DialogPrimitive.Trigger;
 Modal.Close = DialogPrimitive.Close;
 Modal.Content = ModalContent;
+Modal.Description = ModalDescription;
