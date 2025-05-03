@@ -8,6 +8,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 
 import SearchResultSkeleton from "@/components/SearchResultsSkeleton";
+import { SpinnerRotate } from "@/components/SpinnerRotate";
 
 export default async function Page(props: {
   params: { category: string };
@@ -24,7 +25,14 @@ export default async function Page(props: {
       <GlobalSearch category={category} />
       {/* <SearchResultSkeleton /> */}
 
-      <Suspense key={query} fallback={<SearchResultSkeleton />}>
+      <Suspense
+        key={query}
+        fallback={
+          <div className="flex items-center justify-center">
+            <SpinnerRotate />
+          </div>
+        }
+      >
         <SearchResults query={query} category={category} />
       </Suspense>
     </main>

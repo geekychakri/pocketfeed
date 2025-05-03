@@ -54,7 +54,7 @@ export default function GlobalSearch({ category }: { category: string }) {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <span className="flex items-center rounded-md border duration-100 focus-within:shadow-[0_0_0_2px_#fcfcfc,0_0_0_4px_#f84f39] hover:border-primary">
+        <span className="border-shadow flex items-center rounded-md duration-100 focus-within:shadow-[0_0_0_1px_#fc591e,0_0_0_1px_#fc591e] hover:shadow-[0_0_0_1px_#fc591e,0_0_0_1px_#fc591e]">
           <span className="p-2">
             <MagnifyingGlassIcon className="size-7" />
           </span>
@@ -72,22 +72,27 @@ export default function GlobalSearch({ category }: { category: string }) {
         </span>
       </div>
 
-      <div className="flex flex-col gap-3">
-        <div className="flex gap-4">
-          <Link
-            href="/search/feeds"
-            className={pathname === "/search/feeds" ? "text-primary" : ""}
-          >
-            Feeds
-          </Link>
-          <Link
-            href="/search/users"
-            className={pathname === "/search/users" ? "text-primary" : ""}
-          >
-            Users
-          </Link>
-        </div>
-        <hr className="w-full" />
+      <div className="flex gap-4 border-b border-dashed border-border-non-interactive py-3">
+        <Link
+          href="/search/feeds"
+          className={
+            pathname === "/search/feeds"
+              ? "text-brand-primary"
+              : "text-text-secondary"
+          }
+        >
+          Feeds
+        </Link>
+        <Link
+          href="/search/users"
+          className={
+            pathname === "/search/users"
+              ? "text-brand-primary"
+              : "text-text-secondary"
+          }
+        >
+          Users
+        </Link>
       </div>
     </div>
   );

@@ -210,14 +210,20 @@ textarea:focus-visible {
     0 0 0 1px rgb(var(--brand-primary));
 }
 
+input a button textarea {
+  outline: none;
+}
+
 /* @media (prefers-color-scheme: dark) {
   :root {
     --color-primary: 124, 79, 57;
   }
 } */
 
-.border-shadow {
-  box-shadow: 0 0 0 1px var(--border-non-interactive);
+@layer utilities {
+  .border-shadow {
+    box-shadow: 0 0 0 1px var(--border-non-interactive);
+  }
 }
 
 .body.markup a {
