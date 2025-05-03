@@ -1,6 +1,12 @@
 "use client";
 
-import { ReactElement, ReactNode, useState, ComponentType } from "react";
+import {
+  ReactElement,
+  ReactNode,
+  useState,
+  ComponentType,
+  useRef,
+} from "react";
 
 import Link from "next/link";
 
@@ -17,10 +23,25 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/UserAvatar";
 import SignOutButton from "@/components/SignOutButton";
 import { UserIcon } from "@/icons/animated/UserIcon";
 import { SettingsGearIcon } from "@/icons/animated/SettingsGearIcon";
-import { MessageCircleIcon } from "@/icons/animated/MessageCircleIcon";
+import { MessageCircleMoreIcon } from "@/icons/animated/MessageCircleMoreIcon";
 import { PartyPopperIcon } from "@/icons/animated/PartyPopperIcon";
 import { getInitials } from "@/lib/utils";
 
+import type {
+  HTMLAttributes,
+  RefAttributes,
+  MutableRefObject,
+  ForwardRefExoticComponent,
+} from "react";
+import { LogoutIcon } from "@/icons/animated/LogoutIcon";
+
+interface UserIconProps extends HTMLAttributes<HTMLSpanElement> {
+  size?: number;
+}
+interface UserIconHandle {
+  startAnimation: () => void;
+  stopAnimation: () => void;
+}
 const AvatarDropdownItem = ({
   to,
   children,
@@ -28,20 +49,30 @@ const AvatarDropdownItem = ({
 }: {
   to: string;
   children: ReactNode;
-  Icon: ComponentType;
+  Icon: ForwardRefExoticComponent<
+    UserIconProps & RefAttributes<UserIconHandle>
+  >;
 }) => {
   const [hovered, setHovered] = useState(false);
+
+  const iconRef = useRef<UserIconHandle>(null);
   return (
-    <Link href={to}>
-      <DropdownMenu.Item
-        className="relative flex h-[25px] select-none items-center gap-2 rounded-[3px] px-2 py-5 text-sm leading-none text-text-primary outline-none duration-150 data-[disabled]:pointer-events-none data-[highlighted]:bg-ui-normal data-[disabled]:text-mauve8"
-        onPointerEnter={() => setHovered(true)}
-        onPointerLeave={() => setHovered(false)}
+    <DropdownMenu.Item
+      className="relative flex h-[25px] select-none items-center justify-between gap-2 rounded-[3px] px-2 py-5 text-sm leading-none text-text-primary duration-150 data-[disabled]:pointer-events-none data-[highlighted]:bg-ui-normal data-[disabled]:text-mauve8 data-[highlighted]:shadow-none"
+      asChild
+      // onMouseEnter={() => iconRef.current?.startAnimation()}
+      // onMouseLeave={() => iconRef.current?.stopAnimation()}
+    >
+      <Link
+        href={to}
+        onMouseEnter={() => iconRef.current?.startAnimation()}
+        onMouseLeave={() => iconRef.current?.stopAnimation()}
       >
-        <Icon data-hovered={hovered} />
+        {/* <Icon data-hovered={hovered} /> */}
         {children}
-      </DropdownMenu.Item>
-    </Link>
+        <Icon ref={iconRef} />
+      </Link>
+    </DropdownMenu.Item>
   );
 };
 
@@ -90,7 +121,7 @@ export default function ProfileAvatar({
             <span>Settings</span>
           </AvatarDropdownItem>
           <DropdownMenu.Separator className="my-[5px] h-[1px] bg-border-non-interactive" />
-          <AvatarDropdownItem to="/feedback" Icon={MessageCircleIcon}>
+          <AvatarDropdownItem to="/feedback" Icon={MessageCircleMoreIcon}>
             <span>Feedback</span>
           </AvatarDropdownItem>
           <AvatarDropdownItem to="/pricing" Icon={PartyPopperIcon}>

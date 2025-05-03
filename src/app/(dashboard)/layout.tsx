@@ -87,7 +87,7 @@ export default async function MainLayout({
 
   console.log({ username: user });
   return (
-    <div className="flex">
+    <main className="feed-layout flex h-screen w-full overflow-y-auto">
       {/* <Navigation
         avatarUrl={user?.avatarUrl as string}
         username={user?.username as string}
@@ -148,7 +148,8 @@ export default async function MainLayout({
       {/* <div className="w-[240px]"></div> */}
       {/* {show && <PodcastPlayer />} */}
       <PodcastPlayer />
-      {children}
-    </div>
+
+      <div className="mx-auto w-full max-w-[750px]">{children}</div>
+    </main>
   );
 }

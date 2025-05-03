@@ -19,7 +19,7 @@ export default forwardRef<
     <button
       ref={ref}
       className={cn(
-        "flex h-12 w-full items-center justify-center gap-3 rounded-md bg-ui-normal px-4 py-2 font-medium transition-all",
+        "grid h-12 place-items-center gap-3 rounded-md bg-ui-normal px-4 py-2 font-medium transition-all",
         variant === "delete" ? "hover:opacity-90" : "hover:bg-ui-hover",
         className,
       )}

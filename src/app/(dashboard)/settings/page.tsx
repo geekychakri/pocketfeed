@@ -39,7 +39,7 @@ export default async function Settings() {
 
   // const { fullname, website, bio } = user as UsersRecord;
   return (
-    <main className="mx-auto flex w-full max-w-[520px] flex-col gap-8 py-20">
+    <div className="mx-auto flex w-full max-w-[520px] flex-col gap-8 py-20">
       <div className="relative flex items-center">
         <RouteBack className="absolute -left-9" />
         <h1 className="text-xl font-medium">Settings</h1>
@@ -81,6 +81,6 @@ export default async function Settings() {
         </Link>
       </div>
       <SettingsFooter />
-    </main>
+    </div>
   );
 }

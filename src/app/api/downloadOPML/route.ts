@@ -12,29 +12,63 @@ export async function GET(request: Request) {
   console.log({ user });
   const feeds = await xata.db.feeds
     .filter({ username: user?.username })
+    .select(["*", "folderName.folder"])
     .getAll(); //TODO: getAll or getMany or filter by userId
-  console.log({ feeds });
+  // console.log({ feeds: feeds[0] });
+
+  const feedsByFolder = {} as {};
+  // feeds.forEach((feed) => {
+  //   if (!feedsByFolder[feed.folderName.folder]) {
+  //     feedsByFolder[feed.folderName.folder] = [];
+  //   }
+  //   feedsByFolder[feed.folderName.folder].push(feed);
+  // });
+
+  for (let feed of feeds) {
+    // if (!feedsByFolder[feed.folderName.folder]) {
+    //   feedsByFolder[feed.folderName.folder] = [];
+    // }
+    // feedsByFolder[feed.folderName.folder].push(feed);
+    const { folderName } = feed;
+    feedsByFolder[folderName.folder] = feedsByFolder[folderName.folder] ?? [];
+    feedsByFolder[folderName.folder].push(feed);
+  }
+
+  console.log(feedsByFolder);
 
   function createOPML(feeds: any) {
     const opmlObject = {
       opml: {
         $: { version: "1.0" },
         head: {
-          title: "Feed Reader Subscriptions",
+          title: "Your Pocket Feed Subscriptions",
+          dateCreated: new Date().toString(),
         },
         body: {
-          outline: {
-            $: { text: "Feeds", title: "Feeds" },
-            outline: feeds.map((feed: any) => ({
+          // outline: {
+          //   $: { text: "Feeds", title: "Feeds" },
+          //   outline: feeds.map((feed: any) => ({
+          //     $: {
+          //       type: "rss",
+          //       text: feed.title,
+          //       title: feed.title,
+          //       xmlUrl: feed.xmlUrl,
+          //       htmlUrl: feed.htmlUrl,
+          //     },
+          //   })),
+          // },
+          outline: Object.keys(feedsByFolder).map((folderName: string) => ({
+            $: { title: folderName, text: folderName },
+            outline: feedsByFolder[folderName].map((feed: any) => ({
               $: {
                 type: "rss",
                 text: feed.title,
                 title: feed.title,
-                xmlUrl: feed.xmlUrl,
-                htmlUrl: feed.htmlUrl,
+                xmlUrl: feed.rssURL,
+                htmlUrl: feed.siteURL,
               },
             })),
-          },
+          })),
         },
       },
     };

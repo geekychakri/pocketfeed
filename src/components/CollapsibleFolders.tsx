@@ -198,7 +198,7 @@ const FolderItem = ({
                   <FolderClosedIcon width={16} height={16} />
                 )}
               </span>
-              <span>{folder.folder}</span>
+              <span className="line-clamp-1">{folder.folder}</span>
             </span>
 
             <DropdownMenu.Root>
@@ -250,6 +250,7 @@ const FolderItem = ({
             <Link
               href={`/folder/${folder.folder}`}
               className="absolute inset-0 z-[1] rounded-md"
+              title={folder.folder}
             />
           </div>
         </ContextMenu.Trigger>

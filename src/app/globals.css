@@ -392,6 +392,10 @@ input[type="file"] {
   opacity: 0;
 }
 
+.koSAMj:focus-within {
+  outline: none !important;
+}
+
 /* custom copy code button*/
 
 .copy-code-btn {

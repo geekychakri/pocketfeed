@@ -1,22 +1,47 @@
 "use client";
 
+import type { Variants } from "framer-motion";
 import { motion, useAnimation } from "framer-motion";
 import type { HTMLAttributes } from "react";
 import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
 import { cn } from "@/lib/utils";
 
-export interface SettingsGearIconHandle {
+export interface MessageCircleMoreIconHandle {
   startAnimation: () => void;
   stopAnimation: () => void;
 }
 
-interface SettingsGearIconProps extends HTMLAttributes<HTMLDivElement> {
+interface MessageCircleMoreIconProps extends HTMLAttributes<HTMLDivElement> {
   size?: number;
 }
 
-const SettingsGearIcon = forwardRef<
-  SettingsGearIconHandle,
-  SettingsGearIconProps
+const dotVariants: Variants = {
+  normal: {
+    opacity: 1,
+  },
+  animate: (custom: number) => ({
+    opacity: [1, 0, 0, 1, 1, 0, 0, 1],
+    transition: {
+      opacity: {
+        times: [
+          0,
+          0.1,
+          0.1 + custom * 0.1,
+          0.1 + custom * 0.1 + 0.1,
+          0.5,
+          0.6,
+          0.6 + custom * 0.1,
+          0.6 + custom * 0.1 + 0.1,
+        ],
+        duration: 1.5,
+      },
+    },
+  }),
+};
+
+const MessageCircleMoreIcon = forwardRef<
+  MessageCircleMoreIconHandle,
+  MessageCircleMoreIconProps
 >(({ onMouseEnter, onMouseLeave, className, size = 18, ...props }, ref) => {
   const controls = useAnimation();
   const isControlledRef = useRef(false);
@@ -59,7 +84,7 @@ const SettingsGearIcon = forwardRef<
       onMouseLeave={handleMouseLeave}
       {...props}
     >
-      <motion.svg
+      <svg
         xmlns="http://www.w3.org/2000/svg"
         width={size}
         height={size}
@@ -69,24 +94,31 @@ const SettingsGearIcon = forwardRef<
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        transition={{ type: "spring", stiffness: 50, damping: 10 }}
-        variants={{
-          normal: {
-            rotate: 0,
-          },
-          animate: {
-            rotate: 180,
-          },
-        }}
-        animate={controls}
       >
-        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
-        <circle cx="12" cy="12" r="3" />
-      </motion.svg>
+        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+        <motion.path
+          d="M8 12h.01"
+          variants={dotVariants}
+          animate={controls}
+          custom={0}
+        />
+        <motion.path
+          d="M12 12h.01"
+          variants={dotVariants}
+          animate={controls}
+          custom={1}
+        />
+        <motion.path
+          d="M16 12h.01"
+          variants={dotVariants}
+          animate={controls}
+          custom={2}
+        />
+      </svg>
     </span>
   );
 });
 
-SettingsGearIcon.displayName = "SettingsGearIcon";
+MessageCircleMoreIcon.displayName = "MessageCircleMoreIcon";
 
-export { SettingsGearIcon };
+export { MessageCircleMoreIcon };

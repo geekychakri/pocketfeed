@@ -8,6 +8,8 @@ export default function ImportFeeds() {
   //   const feeds = useOPMLFeed((state) => state.feeds);
   const { feeds } = useOPMLFeed();
 
+  console.log({ feeds });
+
   console.log(useOPMLFeed());
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -16,28 +18,28 @@ export default function ImportFeeds() {
     console.log(body);
   };
   return (
-    <main className="flex flex-col gap-12 w-full max-w-[520px] mx-auto py-20">
+    <div className="mx-auto flex w-full max-w-[520px] flex-col gap-12 py-20">
       <div className="flex items-center gap-4">
         <RouteBack />
         <h1 className="text-xl font-semibold">Import Feeds</h1>
       </div>
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
         {feeds.map((feed, i) => (
-          <div key={i} className="flex flex-col gap-3 border p-6 rounded-md">
+          <div key={i} className="flex flex-col gap-3 rounded-md border p-6">
             <div className="flex flex-col gap-1">
               <p>{feed?.name}</p>
-              <p className="text-gray-500 text-sm overflow-hidden whitespace-nowrap overflow-ellipsis">
+              <p className="overflow-hidden overflow-ellipsis whitespace-nowrap text-sm text-gray-500">
                 {feed.url}
               </p>
             </div>
             <div className="flex flex-col gap-1">
-              <label htmlFor="folder" className="text-gray-500 text-sm">
+              <label htmlFor="folder" className="text-sm text-gray-500">
                 Select folder
               </label>
               <select
                 name={feed.name}
                 id="folder"
-                className="p-2 rounded-md text-sm"
+                className="rounded-md p-2 text-sm"
               >
                 <option value="Home">Home</option>
                 <option value="Tech">Tech</option>
@@ -47,12 +49,12 @@ export default function ImportFeeds() {
           </div>
         ))}
         <button
-          className="font-medium bg-primary disabled:opacity-50 text-white px-4 py-2 rounded-md"
+          className="bg-primary rounded-md px-4 py-2 font-medium text-white disabled:opacity-50"
           disabled={feeds.length === 0}
         >
           Add
         </button>
       </form>
-    </main>
+    </div>
   );
 }

@@ -3,9 +3,9 @@ import { redirect, permanentRedirect } from "next/navigation";
 import qs from "qs";
 import { nanoid } from "nanoid";
 
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 
-import { currentUser } from "@clerk/nextjs/server";
+// import { currentUser } from "@clerk/nextjs/server";
 
 import { getXataClient } from "@/xata";
 import { revalidatePath } from "next/cache";
