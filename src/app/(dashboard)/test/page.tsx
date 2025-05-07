@@ -75,26 +75,36 @@
 
 "use client";
 
-import { useFullscreen } from "@/store/read-fullscreen";
-import { useEffect, useState } from "react";
+// import { useFullscreen } from "@/store/read-fullscreen";
+// import { useEffect, useState } from "react";
 
-import useStore from "@/store/useStore";
+// import useStore from "@/store/useStore";
+
+// export default function Test() {
+//   const [show, setShow] = useState(false);
+//   // const { fullscreen, toggleFullscreen } = useFullscreen();
+//   const fullscreen = useStore(useFullscreen, (state) => state.fullscreen);
+//   // console.log({ fullscreen });
+//   // useEffect(() => {
+//   //   setShow(true);
+//   // }, []);
+//   return (
+//     <div>
+//       <div
+//         className={`${fullscreen ? "opacity-0" : "opacity-1"} transition-all duration-1000`}
+//       >
+//         Hello
+//       </div>
+//     </div>
+//   );
+// }
+
+"use client";
+
+// import TestChild from "./components/test-child";
 
 export default function Test() {
-  const [show, setShow] = useState(false);
-  // const { fullscreen, toggleFullscreen } = useFullscreen();
-  const fullscreen = useStore(useFullscreen, (state) => state.fullscreen);
-  // console.log({ fullscreen });
-  // useEffect(() => {
-  //   setShow(true);
-  // }, []);
-  return (
-    <div>
-      <div
-        className={`${fullscreen ? "opacity-0" : "opacity-1"} transition-all duration-1000`}
-      >
-        Hello
-      </div>
-    </div>
-  );
+  console.log("RENDERED");
+  //
+  return <div>hey</div>;
 }

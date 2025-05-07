@@ -54,7 +54,7 @@ export default function PodcastPlayButton({
     setChaptersUrl,
   } = useShowPodcastPlayer();
 
-  const [tap] = useSound("/sounds/tap.wav");
+  // const [tap] = useSound("/sounds/tap.wav");
 
   return (
     <button
@@ -64,7 +64,7 @@ export default function PodcastPlayButton({
       )}
       onClick={(e: MouseEvent<HTMLButtonElement>) => {
         e.currentTarget.blur();
-        tap();
+        // tap();
         if (activeEpisode == episodeNumber && isPlaying) {
           console.log("PREVIOUS CLICK");
           setIsPlayingFalse();

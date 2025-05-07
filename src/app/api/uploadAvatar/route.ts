@@ -25,7 +25,7 @@ export async function POST(request: Request) {
   const fileBuffer = await file.arrayBuffer();
   const buffer = new Uint8Array(fileBuffer);
 
-  const { userId }: { userId: string | null } = auth();
+  const { userId }: { userId: string | null } = await auth();
 
   console.log({ userId });
   const user = (await xata.db.users

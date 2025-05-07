@@ -1,20 +1,5 @@
 import type { Metadata } from "next";
 
-import dynamic from "next/dynamic";
-import "./../globals.css";
-
-import Navigation from "@/components/Navigation";
-
-import Link from "next/link";
-
-import { GlobeIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
-
-import { BookmarkIcon } from "@/icons/bookmark";
-
-const PodcastPlayer = dynamic(() => import("@/components/PodcastPlayer"), {
-  ssr: false,
-});
-
 export const metadata: Metadata = {
   title: "Pocket Feed",
   description: "All of your favorite content in one place.",
@@ -31,13 +16,11 @@ const xata = getXataClient();
 // });
 
 import getFolders from "@/lib/getFolders";
-import NavigationItem from "@/components/NavigationItem";
-import { ActivityIcon } from "@/icons/animated/ActivityIcon";
-import { FavoriteIcon } from "@/icons/animated/Favorite";
-import ProfileAvatar from "@/components/ProfileAvatar";
-import CollapsibleFolders from "@/components/CollapsibleFolders";
-import { ExploreIcon } from "@/icons/explore";
+
 import SidebarNavigation from "@/components/sidebar-navigation";
+import PodcastLoader from "@/components/podcast-loader";
+
+import { ClerkProvider } from "@clerk/nextjs";
 
 export default async function MainLayout({
   children,
@@ -45,7 +28,7 @@ export default async function MainLayout({
   children: React.ReactNode;
 }>) {
   // const { show } = useShowPodcastPlayer();
-  const { userId }: { userId: string | null } = auth();
+  const { userId }: { userId: string | null } = await auth();
   console.log({ userId });
   // HANDLE NULL FILTER //TODO:
   const [user, folders] = await Promise.all([
@@ -87,13 +70,14 @@ export default async function MainLayout({
 
   console.log({ username: user });
   return (
-    <main className="feed-layout flex h-screen w-full overflow-y-auto">
-      {/* <Navigation
+    <ClerkProvider dynamic>
+      <main className="feed-layout flex h-screen w-full overflow-y-auto">
+        {/* <Navigation
         avatarUrl={user?.avatarUrl as string}
         username={user?.username as string}
         foldersList={foldersList}
       /> */}
-      {/* <nav className="bg-background text-textColor fixed bottom-0 left-0 top-0 isolate z-30 flex h-screen w-[240px] flex-shrink-0 select-none flex-col self-start border-r border-border-primary">
+        {/* <nav className="bg-background text-textColor fixed bottom-0 left-0 top-0 isolate z-30 flex h-screen w-[240px] flex-shrink-0 select-none flex-col self-start border-r border-border-primary">
         <div className="flex h-14 items-center px-4">
           <h1 className="font-medium">
             <span className="text-primary">my</span>Pocket<span>Feed.</span>
@@ -141,15 +125,17 @@ export default async function MainLayout({
           />
         </div>
       </nav> */}
-      <SidebarNavigation
-        foldersList={foldersList}
-        user={JSON.parse(JSON.stringify(user))}
-      />
-      {/* <div className="w-[240px]"></div> */}
-      {/* {show && <PodcastPlayer />} */}
-      <PodcastPlayer />
+        <SidebarNavigation
+          foldersList={foldersList}
+          user={JSON.parse(JSON.stringify(user))}
+        />
+        {/* <div className="w-[240px]"></div> */}
+        {/* {show && <PodcastPlayer />} */}
 
-      <div className="mx-auto w-full max-w-[750px]">{children}</div>
-    </main>
+        <PodcastLoader />
+
+        <div className="mx-auto w-full max-w-[750px]">{children}</div>
+      </main>
+    </ClerkProvider>
   );
 }

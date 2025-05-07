@@ -16,21 +16,22 @@ import { toast } from "sonner";
 
 import { useSound } from "use-sound";
 
-export default function Bookmark({
-  bookmarked,
+import useSWR from "swr";
+import { SpinnerRotate } from "../SpinnerRotate";
+
+const fetcher = (...args) => fetch(...args).then((res) => res.json());
+
+export default function BookmarkPodcast({
   bookmarkLink,
   bookmarkType,
-  bookmarkId,
   bookmarkTitle,
 }: {
-  bookmarked: boolean | null;
   bookmarkLink: string;
   bookmarkTitle: string;
   bookmarkType: string;
-  bookmarkId: string | null;
 }) {
-  const [isBookmarked, setIsBookmarked] = useState(bookmarked);
-  const [savedBookmarkId, setSavedBookmarkId] = useState(bookmarkId);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [savedBookmarkId, setSavedBookmarkId] = useState("");
   const [optimisticBookmarked, addOptimisticBookmark] = useOptimistic(
     isBookmarked,
     (_, newHasBookmarked: boolean) => newHasBookmarked,
@@ -38,9 +39,35 @@ export default function Bookmark({
 
   const [playBookmarked] = useSound("/sounds/success.wav");
 
-  console.log({ isBookmarked });
+  const { data } = useSWR(
+    `/api/checkBookmarkExists?bookmarkLink=${encodeURIComponent(bookmarkLink)}`,
+    fetcher,
+    {
+      // onSuccess: (data) => {
+      //   setIsBookmarked(data.isBookmarkExists);
+      //   setSavedBookmarkId(data?.bookmarkId);
+      // },
+      keepPreviousData: true,
+      // revalidateIfStale: true,
+      // revalidateOnMount: true,
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    },
+  );
 
   useHotkeys("B", () => {});
+
+  console.log({ podcastBookmarkExists: data });
+
+  console.log({ isBookmarked });
+
+  console.log({ savedBookmarkId });
+
+  if (!data) {
+    return <SpinnerRotate className="size-4" />;
+  }
+
   return (
     <CustomTooltip
       content={
@@ -52,8 +79,8 @@ export default function Bookmark({
       <form
         action={async (formData: FormData) => {
           console.log(formData);
-          if (!isBookmarked) {
-            addOptimisticBookmark(!isBookmarked);
+          if (!data.isBookmarkExists) {
+            addOptimisticBookmark(!data.isBookmarkExists);
             playBookmarked();
             const { message, bookmarkId } = await addBookmarkAction(formData);
             if (message === "success") {
@@ -93,10 +120,10 @@ export default function Bookmark({
           name="bookmarkTitle"
           hidden
         />
-        {savedBookmarkId && (
+        {data?.bookmarkId && (
           <input
             type="text"
-            defaultValue={savedBookmarkId}
+            defaultValue={data?.bookmarkId}
             name="bookmarkId"
             hidden
           />

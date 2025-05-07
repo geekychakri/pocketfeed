@@ -20,7 +20,8 @@ const parser = new Parser({
   },
 });
 
-export default async function Feed({ params }: { params: { feedId: string } }) {
+export default async function Feed(props: { params: Promise<{ feedId: string }> }) {
+  const params = await props.params;
   // await new Promise((resolve) => setTimeout(resolve, 30000));
   const user = await currentUser();
 

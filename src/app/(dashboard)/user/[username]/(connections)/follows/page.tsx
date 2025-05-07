@@ -1,7 +1,8 @@
 import { getXataClient } from "@/xata";
 import Link from "next/link";
 
-export default async function Following({ params }: { params: any }) {
+export default async function Following(props: { params: Promise<any> }) {
+  const params = await props.params;
   console.log({ params });
   const username = params.username;
   const xata = await getXataClient();

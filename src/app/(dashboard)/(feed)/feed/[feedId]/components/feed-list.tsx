@@ -103,7 +103,7 @@ export default function FeedList({
           //   ))}
           // </>
           <div className="group/lastWeek">
-            <h1 className="group-hover/lastWeek :text-text-primary mb-[5px] font-medium text-brand-primary transition-[color]">
+            <h1 className="mb-[5px] font-medium text-brand-primary transition-[color] group-hover/lastWeek:text-text-primary">
               Last Week
             </h1>
 

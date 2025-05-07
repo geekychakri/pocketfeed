@@ -38,7 +38,7 @@ async function checkBookmarkExists(
 
     // Return true if a record is found, false otherwise
     return {
-      type: "suceess",
+      type: "success",
       id: record?.id as string,
       isBookmarkExists: record !== null,
     };
@@ -48,8 +48,9 @@ async function checkBookmarkExists(
   }
 }
 
-export default async function Read({ params }: { params: { link: string } }) {
-  const userId = auth().userId as string;
+export default async function Read(props: { params: Promise<{ link: string }> }) {
+  const params = await props.params;
+  const userId = (await auth()).userId as string;
   let article, articleUrl;
 
   let bookmarkItem!: {
@@ -141,6 +142,7 @@ export default async function Read({ params }: { params: { link: string } }) {
       <ReadNav
         articleSiteName={article?.siteName}
         articleUrl={articleUrl}
+        articleTitle={article?.title as string}
         bookmarkExists={bookmarkItem.isBookmarkExists}
         bookmarkId={bookmarkItem.id}
       />

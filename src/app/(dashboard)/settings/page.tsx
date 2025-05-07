@@ -15,7 +15,7 @@ import SettingsFooter from "./components/settings-footer";
 const xata = getXataClient();
 
 export default async function Settings() {
-  const { userId }: { userId: string | null } = auth();
+  const { userId }: { userId: string | null } = await auth();
   console.log({ userId });
   const user = (await xata.db.users
     .filter({ userId: userId })

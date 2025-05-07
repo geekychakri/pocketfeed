@@ -15,14 +15,19 @@ import FollowButton from "@/components/FollowButton";
 
 const xata = getXataClient();
 
-export default async function UserLayout({
-  children,
-  params,
-}: Readonly<{
-  children: React.ReactNode;
-  params: any;
-}>) {
-  const { userId }: { userId: string | null } = auth();
+export default async function UserLayout(
+  props: Readonly<{
+    children: React.ReactNode;
+    params: any;
+  }>
+) {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
+  const { userId }: { userId: string | null } = await auth();
   const loggedInUserId = userId as string;
   // const loggedInUser = await currentUser();
   // console.log({ userId });

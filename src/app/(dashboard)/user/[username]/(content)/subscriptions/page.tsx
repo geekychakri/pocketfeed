@@ -17,7 +17,8 @@ import SubscriptionList from "./subscription-list";
 
 const xata = getXataClient();
 
-export default async function SubscriptionPage({ params }: { params: any }) {
+export default async function SubscriptionPage(props: { params: Promise<any> }) {
+  const params = await props.params;
   const username = params.username;
   // const user = await currentUser();
   // console.log({ user });

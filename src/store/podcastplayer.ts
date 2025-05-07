@@ -1,5 +1,8 @@
 import { create } from "zustand";
 
+import { createWithEqualityFn } from "zustand/traditional";
+
+import { shallow } from "zustand/shallow";
 type ShowPodcastPlayer = {
   show: boolean | string;
   openPodcastPlayer: () => void;
@@ -34,42 +37,46 @@ type ShowPodcastPlayer = {
   setChaptersUrl: (val: string | undefined) => void;
 };
 
-export const useShowPodcastPlayer = create<ShowPodcastPlayer>((set) => ({
-  show: false,
-  title: "",
-  audioUrl: "",
-  albumCover: "",
-  content: "",
-  episodeNumber: "",
-  currentTime: 0,
-  setCurrentTime: (currentTime: number) => set((state) => ({ currentTime })),
-  setEpisodeNumber: (episodeNumber: string | undefined) =>
-    set((state) => ({ episodeNumber })),
-  setContent: (content: string | undefined) => set((state) => ({ content })),
-  activeEpisode: "",
-  isPlaying: false,
-  setIsPlayingTrue: () => set((state) => ({ isPlaying: true })),
-  setIsPlayingFalse: () => set((state) => ({ isPlaying: false })),
-  setActiveEpisode: (activeEpisode: string | undefined) =>
-    set((state) => ({ activeEpisode })),
-  openPodcastPlayer: () => set((state) => ({ show: true })),
-  closePodcastPlayer: () => set((state) => ({ show: false })),
-  hidePodcastPlayer: () => set((state) => ({ show: "hide" })),
-  setTitle: (title: string | undefined) => set((state) => ({ title })),
-  setAudioUrl: (audioUrl: string | undefined) => set((state) => ({ audioUrl })),
-  setAlbumCover: (albumCover: string | undefined) =>
-    set((state) => ({ albumCover })),
-  author: "",
-  setAuthor: (author: string | undefined) => set((state) => ({ author })),
-  albumName: "",
-  setAlbumName: (albumName: string | undefined) =>
-    set((state) => ({ albumName })),
-  feedUrl: "",
-  setFeedUrl: (feedUrl: string | undefined) => set((state) => ({ feedUrl })),
-  chaptersUrl: "",
-  setChaptersUrl: (chaptersUrl: string | undefined) =>
-    set((state) => ({ chaptersUrl })),
-  // podcastTitle: "",
-  // setPodcastTitle: (podcastTitle: string | undefined) =>
-  //   set((state) => ({ podcastTitle })),
-}));
+export const useShowPodcastPlayer = createWithEqualityFn<ShowPodcastPlayer>()(
+  (set) => ({
+    show: false,
+    title: "",
+    audioUrl: "",
+    albumCover: "",
+    content: "",
+    episodeNumber: "",
+    currentTime: 0,
+    setCurrentTime: (currentTime: number) => set((state) => ({ currentTime })),
+    setEpisodeNumber: (episodeNumber: string | undefined) =>
+      set((state) => ({ episodeNumber })),
+    setContent: (content: string | undefined) => set((state) => ({ content })),
+    activeEpisode: "",
+    isPlaying: false,
+    setIsPlayingTrue: () => set((state) => ({ isPlaying: true })),
+    setIsPlayingFalse: () => set((state) => ({ isPlaying: false })),
+    setActiveEpisode: (activeEpisode: string | undefined) =>
+      set((state) => ({ activeEpisode })),
+    openPodcastPlayer: () => set((state) => ({ show: true })),
+    closePodcastPlayer: () => set((state) => ({ show: false })),
+    hidePodcastPlayer: () => set((state) => ({ show: "hide" })),
+    setTitle: (title: string | undefined) => set((state) => ({ title })),
+    setAudioUrl: (audioUrl: string | undefined) =>
+      set((state) => ({ audioUrl })),
+    setAlbumCover: (albumCover: string | undefined) =>
+      set((state) => ({ albumCover })),
+    author: "",
+    setAuthor: (author: string | undefined) => set((state) => ({ author })),
+    albumName: "",
+    setAlbumName: (albumName: string | undefined) =>
+      set((state) => ({ albumName })),
+    feedUrl: "",
+    setFeedUrl: (feedUrl: string | undefined) => set((state) => ({ feedUrl })),
+    chaptersUrl: "",
+    setChaptersUrl: (chaptersUrl: string | undefined) =>
+      set((state) => ({ chaptersUrl })),
+    // podcastTitle: "",
+    // setPodcastTitle: (podcastTitle: string | undefined) =>
+    //   set((state) => ({ podcastTitle })),
+  }),
+  shallow,
+);

@@ -14,7 +14,7 @@ export default async function SearchResults({
   category: string;
 }) {
   console.log({ typeofCategory: category });
-  const userId = auth().userId || "";
+  const userId = (await auth()).userId || "";
   const feedsList = query
     ? await xata.db[category]
         .filter({

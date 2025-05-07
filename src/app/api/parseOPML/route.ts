@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     const formData = await request.formData();
     const file = formData.get("opmlFile") as File;
     const user = await currentUser();
-    const userId = auth().userId as string;
+    const userId = (await auth()).userId as string;
 
     const buffer = Buffer.from(await file.arrayBuffer());
 

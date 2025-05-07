@@ -26,9 +26,11 @@ export default function ReadNav({
   articleUrl,
   bookmarkExists,
   bookmarkId,
+  articleTitle,
 }: {
   articleSiteName: string | undefined;
   articleUrl: string;
+  articleTitle: string;
   bookmarkExists: boolean | null;
   bookmarkId: string | null;
 }) {
@@ -101,6 +103,7 @@ export default function ReadNav({
           bookmarkLink={articleUrl}
           bookmarkType="article"
           bookmarkId={bookmarkId}
+          bookmarkTitle={articleTitle}
         />
 
         <CustomTooltip

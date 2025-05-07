@@ -62,7 +62,7 @@ async function checkIfFeedAlreadyExists(feeds: any, userId: string) {
 
 export async function addFeeds(prevState: any, formData: FormData) {
   const user = await currentUser();
-  const userId = auth().userId as string;
+  const userId = (await auth()).userId as string;
   console.log({ username: user?.username });
   const results = qs.parse(
     Object.fromEntries(formData.entries()) as {},
@@ -272,7 +272,7 @@ export async function updateProfile(prevState: any, formData: FormData) {
 
   console.log({ fullname, website, bio });
 
-  const { userId }: { userId: string | null } = auth();
+  const { userId }: { userId: string | null } = await auth();
 
   try {
     const user = await xata.db.users.filter({ userId: userId }).getFirst();
@@ -296,7 +296,7 @@ export async function updateProfile(prevState: any, formData: FormData) {
 
 export async function addNewFolder(prevState: any, formData: FormData) {
   const user = await currentUser();
-  const { userId }: { userId: string | null } = auth();
+  const { userId }: { userId: string | null } = await auth();
   const folder = formData.get("folder") as string;
   const folderExists = await xata.db.folders
     .filter({ userId, folder })
@@ -323,7 +323,7 @@ export async function addNewFolder(prevState: any, formData: FormData) {
 }
 
 export async function deleteFolder(prevState: any, formData: FormData) {
-  const { userId }: { userId: string | null } = auth();
+  const { userId }: { userId: string | null } = await auth();
   const folderId = formData.get("folderId") as string;
   console.log({ folderId });
 
@@ -345,7 +345,7 @@ export async function deleteFolder(prevState: any, formData: FormData) {
 }
 
 export async function updateFolder(prevState: any, formData: FormData) {
-  const { userId }: { userId: string | null } = auth();
+  const { userId }: { userId: string | null } = await auth();
   const newFolderName = formData.get("new-folder-name") as string;
   const folderId = formData.get("folder-id") as string;
 
@@ -365,7 +365,7 @@ export async function updateFolder(prevState: any, formData: FormData) {
 export async function deleteFeed(prevState: any, formData: FormData) {
   console.log("DELETE FEED");
   try {
-    const { userId }: { userId: string | null } = auth();
+    const { userId }: { userId: string | null } = await auth();
     const feedId = formData.get("feedId") as string;
     const folderName = formData.get("folderName") as string;
 
@@ -387,7 +387,7 @@ export async function moveToFolder(
   currentFolder: string,
   newFolder: string,
 ) {
-  const userId = auth().userId;
+  const userId = (await auth()).userId;
   const folder = await xata.db.folders
     .filter({ userId, folder: newFolder })
     .getFirst();
@@ -455,17 +455,19 @@ export async function deleteSubscriptions(prevState: any, formData: FormData) {
 
 export async function addBookmarkAction(formData: FormData) {
   try {
-    const userId = auth().userId as string;
+    const userId = (await auth()).userId as string;
     if (!userId) {
       throw new Error("You must be signed in to add a bookmark");
     }
     const bookmarkLink = formData.get("bookmarkLink") as string;
     const bookmarkType = formData.get("bookmarkType") as string;
+    const bookmarkTitle = formData.get("bookmarkTitle") as string;
 
     const data = await xata.db.bookmarks.create({
       userId,
       bookmarkLink,
       bookmarkType,
+      bookmarkTitle,
     });
 
     return { message: "success", bookmarkId: data.id };
@@ -475,12 +477,39 @@ export async function addBookmarkAction(formData: FormData) {
   }
 }
 
+// export async function deleteBookmarkAction(formData: FormData) {
+//   const bookmarkId = formData.get("bookmarkId") as string;
+
+//   console.log({ bookmarkId });
+
+//   const data = await xata.db.bookmarks.delete(bookmarkId);
+
+//   return { message: "success" };
+// }
+
 export async function deleteBookmarkAction(formData: FormData) {
-  const bookmarkId = formData.get("bookmarkId") as string;
+  // console.log("DELETE FEED");
+  try {
+    const { userId }: { userId: string | null } = await auth();
+    const bookmarkId = formData.get("bookmarkId") as string;
 
-  console.log({ bookmarkId });
+    console.log({ bookmarkId });
 
-  const data = await xata.db.bookmarks.delete(bookmarkId);
+    const deletedFeed = await xata.db.bookmarks.delete(bookmarkId);
 
-  return { message: "success" };
+    console.log("DELETED");
+    // revalidatePath(`/folder/${folderName}`, "page");
+    return { message: "success" };
+  } catch (err) {
+    return { message: "error" };
+  }
+}
+
+export async function testAction() {
+  console.log("TEST FEED");
+  try {
+    return { message: "success" };
+  } catch (err) {
+    return { message: "error" };
+  }
 }

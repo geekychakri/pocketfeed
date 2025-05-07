@@ -8,7 +8,7 @@ export async function POST(
   request: Request,
   { params }: { params: Promise<{ action: string }> },
 ) {
-  const followerId = auth().userId as string;
+  const followerId = (await auth()).userId as string;
   const action = (await params).action;
 
   const { followeeName } = await request.json();

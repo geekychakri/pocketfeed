@@ -2,7 +2,8 @@ import { getXataClient } from "@/xata";
 
 import Link from "next/link";
 
-export default async function Followers({ params }: { params: any }) {
+export default async function Followers(props: { params: Promise<any> }) {
+  const params = await props.params;
   console.log({ params });
   const username = params.username;
   const xata = await getXataClient();
@@ -18,7 +19,6 @@ export default async function Followers({ params }: { params: any }) {
       </div>
       {followers.map((item, i) => {
         return (
-          <div key={i}></div>
           // <Link
           //   href={`/user/${item.followerName}`}
           //   key={item.id}
@@ -26,6 +26,7 @@ export default async function Followers({ params }: { params: any }) {
           // >
           //   {item.followerName}
           // </Link>
+          <div key={i}></div>
         );
       })}
     </div>

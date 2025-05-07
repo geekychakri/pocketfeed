@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import { memo } from "react";
+
 import { Drawer } from "vaul";
 
 import { Cross2Icon, ReaderIcon } from "@radix-ui/react-icons";
@@ -25,6 +27,7 @@ import Textarea from "@/components/ui/Textarea";
 import Button from "@/components/ui/Button";
 
 import { addPost } from "@/app/actions";
+import BookmarkPodcast from "./PodcastPlayer/bookmark-podcast";
 
 DOMPurify.addHook("beforeSanitizeAttributes", function (node) {
   // Check if the node is an anchor tag
@@ -57,14 +60,20 @@ const initialState = {
   message: "",
 };
 
-export default function VaulDrawer({ audioRef }: { audioRef: any }) {
+function VaulDrawer({ audioRef }: { audioRef: any }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [chapters, setChapters] = useState<
     { timestamp: string; text: string }[]
   >([]);
   const { title, content, episodeNumber, audioUrl, feedUrl } =
-    useShowPodcastPlayer();
+    useShowPodcastPlayer((state) => ({
+      title: state.title,
+      content: state.content,
+      episodeNumber: state.episodeNumber,
+      audioUrl: state.audioUrl,
+      feedUrl: state.feedUrl,
+    }));
 
   const [state, formAction] = useFormState(addPost, initialState);
 
@@ -93,6 +102,7 @@ export default function VaulDrawer({ audioRef }: { audioRef: any }) {
 
       open={isOpen}
       onOpenChange={setIsOpen}
+      autoFocus={isOpen}
     >
       <Drawer.Trigger className="relative flex size-6 items-center justify-center rounded-full border border-border-interactive bg-background-secondary">
         <ReaderIcon className="size-4" />
@@ -153,6 +163,12 @@ export default function VaulDrawer({ audioRef }: { audioRef: any }) {
                   </Modal.Content>
                 </Modal> */}
                 <PodcastPlayButton episodeNumber={episodeNumber} />
+
+                <BookmarkPodcast
+                  bookmarkLink={audioUrl}
+                  bookmarkTitle={title}
+                  bookmarkType="podcast"
+                />
               </div>
 
               {/* <Drawer.Description className="mb-2 text-zinc-600"> */}
@@ -219,3 +235,5 @@ export default function VaulDrawer({ audioRef }: { audioRef: any }) {
     </Drawer.Root>
   );
 }
+
+export default memo(VaulDrawer);

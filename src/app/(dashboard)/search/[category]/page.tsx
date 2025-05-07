@@ -11,12 +11,12 @@ import SearchResultSkeleton from "@/components/SearchResultsSkeleton";
 import { SpinnerRotate } from "@/components/SpinnerRotate";
 
 export default async function Page(props: {
-  params: { category: string };
+  params: Promise<{ category: string }>;
   searchParams?: Promise<{
     query?: string;
   }>;
 }) {
-  const category = props.params.category;
+  const category = (await props.params).category;
   console.log({ category });
   const searchParams = await props.searchParams;
   const query = searchParams?.query || "";
