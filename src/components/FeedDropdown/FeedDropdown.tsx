@@ -65,7 +65,7 @@ const FeedDropdown = ({
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger
         asChild
-        className="group/feed-item z-[2] inline-flex size-[35px] flex-none items-center justify-center rounded-md hover:bg-ui-hover data-[state=open]:bg-ui-hover [&[data-state=open]>*]:opacity-100"
+        className="group/feed-item z-2 inline-flex size-[35px] flex-none items-center justify-center rounded-md hover:bg-ui-hover data-[state=open]:bg-ui-hover [&[data-state=open]>*]:opacity-100"
       >
         <button aria-label="Feed options" onClick={() => sound()}>
           <DotsHorizontalIcon className="opacity-50 transition-[transform,opacity] group-hover/feed-item:opacity-100 group-active/feed-item:scale-75" />
@@ -78,7 +78,7 @@ const FeedDropdown = ({
           sideOffset={5}
         >
           <DropdownMenu.Item
-            className="group relative flex select-none items-center rounded-[3px] text-sm leading-none outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-ui-normal data-[highlighted]:text-danger"
+            className="group relative flex select-none items-center rounded-[3px] text-sm leading-none outline-none data-disabled:pointer-events-none data-highlighted:bg-ui-normal data-highlighted:text-danger"
             onSelect={(e) => {
               e.preventDefault();
             }}
@@ -87,7 +87,7 @@ const FeedDropdown = ({
           </DropdownMenu.Item>
 
           <DropdownMenu.Sub>
-            <DropdownMenu.SubTrigger className="line-none group relative flex h-[25px] select-none items-center gap-1 rounded-[3px] px-2 py-4 text-sm leading-none outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-ui-normal data-[highlighted]:data-[state=open]:bg-ui-normal data-[state=open]:bg-ui-normal data-[highlighted]:data-[state=open]:text-text-primary data-[highlighted]:text-text-primary data-[state=open]:text-text-primary">
+            <DropdownMenu.SubTrigger className="line-none group relative flex h-[25px] select-none items-center gap-1 rounded-[3px] px-2 py-4 text-sm leading-none outline-none data-disabled:pointer-events-none data-highlighted:bg-ui-normal data-highlighted:data-[state=open]:bg-ui-normal data-[state=open]:bg-ui-normal data-highlighted:data-[state=open]:text-text-primary data-highlighted:text-text-primary data-[state=open]:text-text-primary">
               <span>
                 <DoubleArrowRightIcon />
               </span>
@@ -105,7 +105,7 @@ const FeedDropdown = ({
                     return (
                       <DropdownMenu.Item
                         key={item.id}
-                        className="group relative flex h-[25px] select-none items-center rounded-[3px] px-2 py-4 text-sm leading-none outline-none data-[highlighted]:bg-ui-normal"
+                        className="group relative flex h-[25px] select-none items-center rounded-[3px] px-2 py-4 text-sm leading-none outline-none data-highlighted:bg-ui-normal"
                         onSelect={async (e) => {
                           e.preventDefault();
                           console.log(item.folder);

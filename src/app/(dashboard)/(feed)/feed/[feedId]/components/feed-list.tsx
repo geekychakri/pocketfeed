@@ -281,7 +281,7 @@ function FeedItem({
       </span>
       {/* <PostModal
         feedItem={JSON.stringify(item)}
-        className="z-[2]"
+        className="z-2"
         feedTitle={feedList.title}
         websiteLink={feedList.link}
       /> */}
@@ -292,7 +292,7 @@ function FeedItem({
         //     : `/read/${encodeURIComponent(`${feedList.link}/${item.link}` as string)}`
         // }
         href={`/read/${encodeURIComponent(item.link as string)}`} //TODO::
-        className="absolute inset-0 z-[1]"
+        className="absolute inset-0 z-1"
       />
     </div>
   );
@@ -372,7 +372,7 @@ const PodcastCard = ({
             .trim()
             .replace(/[^a-zA-Z0-9\s]/g, "")
             .replace(/\s+/g, "-")}`}
-          className="absolute inset-0 z-[1]"
+          className="absolute inset-0 z-1"
         /> */}
     </div>
   );

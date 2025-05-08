@@ -73,7 +73,7 @@ export default function BookmarkList({
           return (
             <div
               key={bookmark.id}
-              className="relative flex justify-between gap-2 py-[10px] [&:not(:last-child)]:shadow-[0_1px_0_0_var(--border-non-interactive)]"
+              className="relative flex justify-between gap-2 py-[10px] not-last:shadow-[0_1px_0_0_var(--border-non-interactive)]"
             >
               <span className="flex flex-col gap-2">
                 <span> {bookmark.bookmarkTitle}</span>

@@ -113,7 +113,7 @@ export default function SubscriptionList({ feeds }: { feeds: FeedsType }) {
                   </span>
                   <label
                     htmlFor={feed.id}
-                    className="z-[2] flex size-[50px] items-center justify-center rounded-full duration-150 hover:bg-ui-hover"
+                    className="z-2 flex size-[50px] items-center justify-center rounded-full duration-150 hover:bg-ui-hover"
                   >
                     {/* <input id="test" type="checkbox" className="size-4" /> */}
                     <Checkbox.Root
@@ -138,7 +138,7 @@ export default function SubscriptionList({ feeds }: { feeds: FeedsType }) {
                 /> */}
                   <Link
                     href={`/feed/${feed.feedId}`}
-                    className="absolute inset-0 z-[1]"
+                    className="absolute inset-0 z-1"
                   />
                 </div>
               ))}
@@ -165,7 +165,7 @@ function SubscriptionListStatusBar({ feeds }: { feeds: FeedsType }) {
           setIsSticky(false);
         }
       }}
-      className={`sticky -top-[1px] z-[10] flex h-[56px] items-center justify-between bg-background-primary transition-[box-shadow] ${isSticky && "shadow-[0_1px_0_0_var(--border-non-interactive)]"}`}
+      className={`sticky -top-[1px] z-10 flex h-[56px] items-center justify-between bg-background-primary transition-[box-shadow] ${isSticky && "shadow-[0_1px_0_0_var(--border-non-interactive)]"}`}
     >
       <h2>
         {feeds.length}{" "}

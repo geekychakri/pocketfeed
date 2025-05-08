@@ -66,7 +66,7 @@ export default function SidebarNavigation({
   return (
     <>
       <nav
-        className={`text-textColor fixed bottom-0 left-0 top-0 isolate z-30 flex h-screen w-[240px] flex-shrink-0 select-none flex-col self-start bg-background-primary shadow-[1px_0_0_0_var(--border-non-interactive)] transition-[transform] duration-300 ${fullscreen && pathname.startsWith("/read") ? "-translate-x-full" : "translate-x-0"}`}
+        className={`text-textColor fixed bottom-0 left-0 top-0 isolate z-30 flex h-screen w-[240px] shrink-0 select-none flex-col self-start bg-background-primary shadow-[1px_0_0_0_var(--border-non-interactive)] transition-[transform] duration-300 ${fullscreen && pathname.startsWith("/read") ? "-translate-x-full" : "translate-x-0"}`}
       >
         <div className="flex h-14 items-center justify-between px-3">
           <h1 className="font-medium">

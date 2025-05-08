@@ -185,7 +185,7 @@ export default function Article({
 
       {/* <div className="relative flex items-center">
         <RouteBack className="absolute -left-16 p-2" />
-        <h1 className="flex h-14 items-center text-balance text-xl font-medium tracking-tight !text-text-primary">
+        <h1 className="flex h-14 items-center text-balance text-xl font-medium tracking-tight text-text-primary!">
           {article?.title}
         </h1>
       </div> */}

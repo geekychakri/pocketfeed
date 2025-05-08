@@ -124,7 +124,7 @@ const PodcastPlayer = () => {
 
   return (
     <div
-      className={`audioPlayer fixed -bottom-72 ${fullscreen && segment === "read" ? "left-0" : "left-[240px]"} right-0 z-[10] flex flex-col gap-1 border-t border-border-non-interactive bg-background-primary p-4 ${show === "hide" ? "translate-y-80" : ""}`}
+      className={`fixed -bottom-72 ${fullscreen && segment === "read" ? "left-0" : "left-[240px]"} animation-slide-up-player ease-out-player border-border-non-interactive bg-background-primary animate-player-slide-up right-0 z-10 flex flex-col gap-1 border-t p-4 transition-[translate] duration-700 ${show === "hide" ? "translate-y-80" : ""}`}
     >
       <div className="absolute -top-[14px] flex cursor-pointer gap-2 self-end">
         {/* <button>
@@ -142,7 +142,7 @@ const PodcastPlayer = () => {
             // setIsPlaying(false);
             audioPlayerRef.current?.pause();
           }}
-          className="flex size-6 items-center justify-center rounded-full border border-border-interactive bg-background-secondary"
+          className="border-border-interactive bg-background-secondary flex size-6 items-center justify-center rounded-full border"
         >
           <Cross2Icon className="size-4" />
         </button>
@@ -159,7 +159,7 @@ const PodcastPlayer = () => {
           slot="media"
           src={audioUrl}
           playsInline
-          // autoPlay
+          autoPlay
           ref={audioPlayerRef}
           onPlay={() => setIsPlayingTrue()}
           onPause={() => setIsPlayingFalse()}

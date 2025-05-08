@@ -150,7 +150,7 @@ export default async function Read(props: { params: Promise<{ link: string }> })
       {/* <div className="relative mx-auto mt-7 flex w-full max-w-3xl flex-col">
         <div className="relative flex items-center">
           <RouteBack className="absolute -left-9 p-2" />
-          <h1 className="flex h-14 items-center text-balance text-[20px] font-medium tracking-tight !text-text-primary">
+          <h1 className="flex h-14 items-center text-balance text-[20px] font-medium tracking-tight text-text-primary!">
             {article?.title}
           </h1>
         </div>
@@ -159,7 +159,7 @@ export default async function Read(props: { params: Promise<{ link: string }> })
       <div className="mx-auto w-full max-w-[60ch] px-4 pb-14 pt-7">
         <div className="relative flex items-center">
           {/* <RouteBack className="absolute -left-9 p-2" /> */}
-          <h1 className="flex h-14 items-center text-balance text-xl font-medium tracking-tight !text-text-primary">
+          <h1 className="flex h-14 items-center text-balance text-xl font-medium tracking-tight text-text-primary!">
             {article?.title}
           </h1>
         </div>

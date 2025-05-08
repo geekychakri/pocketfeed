@@ -7,7 +7,7 @@ export default function MyForm() {
     <form>
       <OTPInput
         maxLength={6}
-        containerClassName="group flex items-center has-[:disabled]:opacity-30"
+        containerClassName="group flex items-center has-disabled:opacity-30"
         onComplete={() => console.log("COMPLETED")}
         render={({ slots }) => (
           <div className="flex">

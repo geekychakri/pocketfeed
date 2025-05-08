@@ -92,7 +92,7 @@ function FileUpload({
           )}
           {/* </div> */}
           {loading && (
-            <div className="bg-background-secondary/50 absolute inset-0 flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full">
+            <div className="bg-background-secondary/50 absolute inset-0 flex h-16 w-16 shrink-0 items-center justify-center rounded-full">
               <SpinnerRotate />
             </div>
           )}

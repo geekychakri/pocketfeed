@@ -81,6 +81,8 @@ function VaulDrawer({ audioRef }: { audioRef: any }) {
 
   console.log({ content });
 
+  console.log({ title });
+
   useEffect(() => {
     const result = extractTimestampTags(content);
     console.log({ result });
@@ -104,7 +106,7 @@ function VaulDrawer({ audioRef }: { audioRef: any }) {
       onOpenChange={setIsOpen}
       autoFocus={isOpen}
     >
-      <Drawer.Trigger className="relative flex size-6 items-center justify-center rounded-full border border-border-interactive bg-background-secondary">
+      <Drawer.Trigger className="border-border-interactive bg-background-secondary relative flex size-6 items-center justify-center rounded-full border">
         <ReaderIcon className="size-4" />
       </Drawer.Trigger>
       <Drawer.Portal>
@@ -122,9 +124,9 @@ function VaulDrawer({ audioRef }: { audioRef: any }) {
           {/* <button onClick={() => console.log(audioRef.current.currentTime)}>
             LOG CURRENT TIME
           </button> */}
-          <div className="drawer h-full grow overflow-y-auto overscroll-contain rounded-[8px] border border-dashed border-border-non-interactive bg-background-primary">
+          <div className="drawer border-border-non-interactive bg-background-primary h-full grow overflow-y-auto overscroll-contain rounded-[8px] border border-dashed">
             <div className="overflow-wrap-anywhere mx-auto flex max-w-[720px] flex-col px-3 py-6">
-              <div className="sticky top-[-3px] z-40 flex h-16 items-center justify-between gap-8 rounded-md border border-dashed border-border-non-interactive bg-background-primary px-4 py-2">
+              <div className="border-border-non-interactive bg-background-primary sticky top-[-3px] z-40 flex h-16 items-center justify-between gap-8 rounded-md border border-dashed px-4 py-2">
                 <Drawer.Title className="line-clamp-1 flex-1 text-lg font-medium">
                   {title}
                 </Drawer.Title>
@@ -178,17 +180,17 @@ function VaulDrawer({ audioRef }: { audioRef: any }) {
                 <Tabs.Root defaultValue="tab1">
                   <Tabs.List
                     aria-label="Podcast info"
-                    className="sticky top-14 z-30 mb-5 flex gap-4 border-b border-dashed border-border-interactive bg-background-primary py-4"
+                    className="border-border-interactive bg-background-primary sticky top-14 z-30 mb-5 flex gap-4 border-b border-dashed py-4"
                   >
                     <Tabs.Trigger
                       value="tab1"
-                      className="rounded-md border border-dashed border-border-non-interactive bg-background-primary px-4 py-2 font-semibold text-text-secondary data-[state=active]:border-transparent data-[state=active]:bg-ui-normal data-[state=active]:text-text-primary"
+                      className="border-border-non-interactive bg-background-primary text-text-secondary data-[state=active]:bg-ui-normal data-[state=active]:text-text-primary rounded-md border border-dashed px-4 py-2 font-semibold data-[state=active]:border-transparent"
                     >
                       Description
                     </Tabs.Trigger>
                     <Tabs.Trigger
                       value="tab2"
-                      className="rounded-md border border-dashed border-border-non-interactive bg-background-primary px-4 py-2 font-semibold text-text-secondary data-[state=active]:border-transparent data-[state=active]:bg-ui-normal data-[state=active]:text-text-primary"
+                      className="border-border-non-interactive bg-background-primary text-text-secondary data-[state=active]:bg-ui-normal data-[state=active]:text-text-primary rounded-md border border-dashed px-4 py-2 font-semibold data-[state=active]:border-transparent"
                     >
                       Chapters
                     </Tabs.Trigger>
@@ -198,7 +200,7 @@ function VaulDrawer({ audioRef }: { audioRef: any }) {
                       dangerouslySetInnerHTML={{
                         __html: DOMPurify.sanitize(content),
                       }}
-                      className="prose break-words text-base leading-7 text-text-primary prose-headings:text-text-primary prose-h1:text-xl prose-h1:font-medium prose-h2:font-semibold prose-a:text-text-primary prose-a:no-underline hover:prose-a:text-text-secondary hover:prose-a:transition-[color] prose-blockquote:text-text-primary prose-strong:text-text-primary prose-pre:rounded-md prose-pre:border prose-pre:border-border-non-interactive prose-pre:bg-background-secondary prose-pre:text-base prose-pre:text-text-secondary prose-inline-code:rounded-md prose-inline-code:border prose-inline-code:border-border-non-interactive prose-inline-code:bg-background-secondary prose-inline-code:px-1 prose-inline-code:py-[2px] prose-inline-code:text-text-secondary prose-inline-code:before:hidden prose-inline-code:after:hidden max-sm:leading-6"
+                      className="prose text-text-primary prose-headings:text-text-primary prose-h1:text-xl prose-h1:font-medium prose-h2:font-semibold prose-a:text-text-primary prose-a:no-underline hover:prose-a:text-text-secondary hover:prose-a:transition-[color] prose-blockquote:text-text-primary prose-strong:text-text-primary prose-pre:rounded-md prose-pre:border prose-pre:border-border-non-interactive prose-pre:bg-background-secondary prose-pre:text-base prose-pre:text-text-secondary prose-inline-code:rounded-md prose-inline-code:border prose-inline-code:border-border-non-interactive prose-inline-code:bg-background-secondary prose-inline-code:px-1 prose-inline-code:py-[2px] prose-inline-code:text-text-secondary prose-inline-code:before:hidden prose-inline-code:after:hidden text-base leading-7 break-words max-sm:leading-6"
                       id="description"
                     ></div>
                   </Tabs.Content>
@@ -215,7 +217,7 @@ function VaulDrawer({ audioRef }: { audioRef: any }) {
                   dangerouslySetInnerHTML={{
                     __html: DOMPurify.sanitize(content),
                   }}
-                  className="prose-a:text-primary prose break-words text-lg text-text-primary prose-headings:text-text-primary prose-h2:font-semibold prose-a:no-underline hover:prose-a:underline prose-strong:text-text-primary prose-pre:rounded-md prose-pre:border prose-pre:border-border-non-interactive prose-pre:bg-background-secondary prose-pre:text-base prose-pre:text-text-secondary prose-inline-code:rounded-md prose-inline-code:border prose-inline-code:border-border-non-interactive prose-inline-code:bg-background-secondary prose-inline-code:px-1 prose-inline-code:py-[2px] prose-inline-code:text-text-secondary prose-inline-code:before:hidden prose-inline-code:after:hidden max-sm:text-base"
+                  className="prose-a:text-primary prose text-text-primary prose-headings:text-text-primary prose-h2:font-semibold prose-a:no-underline hover:prose-a:underline prose-strong:text-text-primary prose-pre:rounded-md prose-pre:border prose-pre:border-border-non-interactive prose-pre:bg-background-secondary prose-pre:text-base prose-pre:text-text-secondary prose-inline-code:rounded-md prose-inline-code:border prose-inline-code:border-border-non-interactive prose-inline-code:bg-background-secondary prose-inline-code:px-1 prose-inline-code:py-[2px] prose-inline-code:text-text-secondary prose-inline-code:before:hidden prose-inline-code:after:hidden text-lg break-words max-sm:text-base"
                   id="description"
                 ></div>
               )}
@@ -224,7 +226,7 @@ function VaulDrawer({ audioRef }: { audioRef: any }) {
             </div>
           </div>
           <button
-            className="absolute right-8 top-4 flex size-8 items-center justify-center rounded-full"
+            className="absolute top-4 right-8 flex size-8 items-center justify-center rounded-full"
             onClick={() => setIsOpen(false)}
             title="Close"
           >

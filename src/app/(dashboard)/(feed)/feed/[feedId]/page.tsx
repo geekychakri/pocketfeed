@@ -20,7 +20,9 @@ const parser = new Parser({
   },
 });
 
-export default async function Feed(props: { params: Promise<{ feedId: string }> }) {
+export default async function Feed(props: {
+  params: Promise<{ feedId: string }>;
+}) {
   const params = await props.params;
   // await new Promise((resolve) => setTimeout(resolve, 30000));
   const user = await currentUser();
@@ -84,7 +86,7 @@ export default async function Feed(props: { params: Promise<{ feedId: string }> 
         target="_blank"
         href={feedList.link}
         rel="noreferrer noopener"
-        className="mt-10 flex items-center gap-1 self-start rounded-md transition-[color] hover:text-text-secondary"
+        className="hover:text-text-secondary mt-10 flex items-center gap-1 self-start rounded-md transition-[color]"
       >
         <span className="custom-underline">Visit original page</span>
         {/* <ArrowTopRightIcon /> */}

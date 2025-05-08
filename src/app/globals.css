@@ -1,25 +1,61 @@
-@font-face {
-  font-family: "Monaspace";
-  src: url("../../public/SyntaxHighlightLightOwl.woff2") format("woff2");
-}
+@import "tailwindcss";
 
 /* light theme */
-@font-palette-values --kung-fury {
-  font-family: "Monaspace";
-  override-colors:
-    0 hsl(225 100% 40%),
-    /* curlies and tags */ 1 hsl(250 100% 80%),
-    /* ? */ 2 hsl(225 100% 40%),
-    /* function */ 3 hsl(225 100% 40%),
-    /* ? */ 4 hsl(270 50% 40%),
-    /* () */ 5 hsl(210 40% 2%),
-    /* property name */ 6 hsl(210 10% 30%),
-    /* ? */ 7 hsl(327 100% 54%) /* numbers */;
+@config '../../tailwind.config.ts';
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@utility text-balance {
+  text-wrap: balance;
+  color: #ff5a1f;
+}
+
+@utility animation-pause {
+  animation-play-state: paused;
+}
+
+@utility animation-run {
+  animation-play-state: running;
+}
+
+@utility border-shadow {
+  box-shadow: 0 0 0 1px var(--border-non-interactive);
+}
+
+@layer base {
+  @font-face {
+    font-family: "Monaspace";
+    src: url("../../public/SyntaxHighlightLightOwl.woff2") format("woff2");
+  }
+  @font-palette-values --kung-fury {
+    font-family: "Monaspace";
+    override-colors:
+      0 hsl(225 100% 40%),
+      /* curlies and tags */ 1 hsl(250 100% 80%),
+      /* ? */ 2 hsl(225 100% 40%),
+      /* function */ 3 hsl(225 100% 40%),
+      /* ? */ 4 hsl(270 50% 40%),
+      /* () */ 5 hsl(210 40% 2%),
+      /* property name */ 6 hsl(210 10% 30%),
+      /* ? */ 7 hsl(327 100% 54%) /* numbers */;
+  }
+}
 
 @layer base {
   [data-theme="light"] {
@@ -131,28 +167,14 @@
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-    color: #ff5a1f;
+  .custom-underline {
+    background-image: linear-gradient(#fc591e, #fc591e);
+    background-size: 100% 1px;
+    background-position: left bottom;
+    background-repeat: no-repeat;
   }
 
-  .animation-pause {
-    animation-play-state: paused;
-  }
-
-  .animation-run {
-    animation-play-state: running;
-  }
-}
-
-.custom-underline {
-  background-image: linear-gradient(#fc591e, #fc591e);
-  background-size: 100% 1px;
-  background-position: left bottom;
-  background-repeat: no-repeat;
-}
-
-/* article {
+  /* article {
   p,
   table,
   ul,
@@ -181,49 +203,44 @@
   }
 } */
 
-::selection {
-  background: #ff5a1f;
-  color: #fff;
-}
+  ::selection {
+    background: #ff5a1f;
+    color: #fff;
+  }
 
-/* react drag drop  */
-/* .juBESy > input {
+  /* react drag drop  */
+  /* .juBESy > input {
   opacity: 0;
   position: absolute;
 } */
 
-/* .outline-none {
+  /* .outline-none {
   outline: none !important;
 } */
 
-input {
-  font-size: 16px;
-}
+  input {
+    font-size: 16px;
+  }
 
-input:focus-visible,
-a:focus-visible,
-button:focus-visible,
-textarea:focus-visible {
-  outline: none;
-  box-shadow:
-    0 0 0 1px rgb(var(--brand-primary)),
-    0 0 0 1px rgb(var(--brand-primary));
-}
+  input:focus-visible,
+  a:focus-visible,
+  button:focus-visible,
+  textarea:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 1px rgb(var(--brand-primary)),
+      0 0 0 1px rgb(var(--brand-primary));
+  }
 
-input a button textarea {
-  outline: none;
-}
+  input a button textarea {
+    outline: none;
+  }
 
-/* @media (prefers-color-scheme: dark) {
+  /* @media (prefers-color-scheme: dark) {
   :root {
     --color-primary: 124, 79, 57;
   }
 } */
-
-@layer utilities {
-  .border-shadow {
-    box-shadow: 0 0 0 1px var(--border-non-interactive);
-  }
 }
 
 .body.markup a {
@@ -435,14 +452,22 @@ input[type="file"] {
 
 /*Audio Player*/
 
-.audioPlayer {
-  /* animation: 3s linear 5s 1 normal forwards running slideUp; */
-  /* animation-name: slideUp;
-  animation-fill-mode: forwards;
-  animation-timing-function: linear;
-  animation-fill-mode: forwards; */
+@theme {
+  --ease-out-player: cubic-bezier(0.5, 0, 0.5, 1);
+  --animate-player-slide-up: slide-up 700ms ease-out forwards;
+  @keyframes slide-up {
+    0% {
+      bottom: -288px;
+    }
+    100% {
+      bottom: 0;
+    }
+  }
+}
+
+/* .audioPlayer {
   animation-name: slideUp;
-  /* animation-delay: 0.5s; */
+
   animation-duration: 0.8s;
   animation-fill-mode: forwards;
   animation-timing-function: ease-out;
@@ -450,15 +475,11 @@ input[type="file"] {
 }
 
 @keyframes slideUp {
-  /* 100%,
-  5%,
-  80% {
-    bottom: 0;
-  } */
+ 
   0% {
     bottom: -288px;
   }
   100% {
     bottom: 0;
   }
-}
+} */

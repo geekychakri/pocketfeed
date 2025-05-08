@@ -211,7 +211,7 @@ export default function PodcastChapters({
 function AnimatedMusicBars({ isPlaying }: { isPlaying: boolean }) {
   return (
     <div
-      className={`music-bars flex-none ${isPlaying ? "*:!animation-play" : "*:!animation-pause"}`}
+      className={`music-bars flex-none ${isPlaying ? "*:!animation-play" : "*:animation-pause!"}`}
     >
       <span />
       <span />

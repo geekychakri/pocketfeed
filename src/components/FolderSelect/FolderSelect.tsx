@@ -53,7 +53,7 @@ const FolderSelect = ({ folders }: { folders: any }) => {
         </Select.Trigger>
         <Select.Portal>
           <Select.Content
-            className="border-shadow w-[--radix-select-trigger-width] overflow-hidden rounded-md bg-background-secondary shadow-[0px_8px_30px_rgba(0,0,0,.12)]"
+            className="border-shadow w-(--radix-select-trigger-width) overflow-hidden rounded-md bg-background-secondary shadow-[0px_8px_30px_rgba(0,0,0,.12)]"
             position="popper"
             sideOffset={10}
           >
@@ -99,7 +99,7 @@ const SelectItem = React.forwardRef<
   return (
     <Select.Item
       className={cn(
-        "data-[highlighted]:bg-primary relative flex h-[25px] select-none items-center rounded-[3px] py-4 pl-[25px] pr-[35px] text-sm leading-none data-[disabled]:pointer-events-none data-[highlighted]:bg-ui-hover data-[disabled]:text-mauve8 data-[highlighted]:outline-none",
+        "data-highlighted:bg-primary relative flex h-[25px] select-none items-center rounded-[3px] py-4 pl-[25px] pr-[35px] text-sm leading-none data-disabled:pointer-events-none data-highlighted:bg-ui-hover data-disabled:text-mauve8 data-highlighted:outline-none",
         className,
       )}
       {...props}

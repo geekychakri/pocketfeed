@@ -120,7 +120,7 @@ export function FolderFeedList({
               />
               <Link
                 href={`/feed/${item.feedId}`}
-                className="absolute inset-0 z-[1]"
+                className="absolute inset-0 z-1"
               />
             </div>
           ))

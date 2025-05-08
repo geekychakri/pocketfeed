@@ -77,7 +77,7 @@ export default async function MainLayout({
         username={user?.username as string}
         foldersList={foldersList}
       /> */}
-        {/* <nav className="bg-background text-textColor fixed bottom-0 left-0 top-0 isolate z-30 flex h-screen w-[240px] flex-shrink-0 select-none flex-col self-start border-r border-border-primary">
+        {/* <nav className="bg-background text-textColor fixed bottom-0 left-0 top-0 isolate z-30 flex h-screen w-[240px] shrink-0 select-none flex-col self-start border-r border-border-primary">
         <div className="flex h-14 items-center px-4">
           <h1 className="font-medium">
             <span className="text-primary">my</span>Pocket<span>Feed.</span>

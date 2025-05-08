@@ -13,7 +13,7 @@ export default function InputOTP({ onInputOTPChange }: InputOTPProps) {
       autoFocus
       maxLength={6}
       inputMode="numeric"
-      containerClassName="group flex items-center self-center has-[:disabled]:opacity-30"
+      containerClassName="group flex items-center self-center has-disabled:opacity-30"
       onComplete={() => console.log("COMPLETED")}
       onChange={(val) => onInputOTPChange(val)}
       render={({ slots }) => (

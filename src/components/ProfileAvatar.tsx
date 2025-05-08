@@ -58,7 +58,7 @@ const AvatarDropdownItem = ({
   const iconRef = useRef<UserIconHandle>(null);
   return (
     <DropdownMenu.Item
-      className="relative flex h-[25px] select-none items-center justify-between gap-2 rounded-[3px] px-2 py-5 text-sm leading-none text-text-primary duration-150 data-[disabled]:pointer-events-none data-[highlighted]:bg-ui-normal data-[disabled]:text-mauve8 data-[highlighted]:shadow-none"
+      className="relative flex h-[25px] select-none items-center justify-between gap-2 rounded-[3px] px-2 py-5 text-sm leading-none text-text-primary duration-150 data-disabled:pointer-events-none data-highlighted:bg-ui-normal data-disabled:text-mauve8 data-highlighted:shadow-none"
       asChild
       // onMouseEnter={() => iconRef.current?.startAnimation()}
       // onMouseLeave={() => iconRef.current?.stopAnimation()}

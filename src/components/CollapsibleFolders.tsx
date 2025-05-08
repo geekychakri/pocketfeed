@@ -137,7 +137,7 @@ const CollapsibleFolders = ({
           </ScrollArea.Viewport>
           {/* </VList> */}
           <ScrollArea.Scrollbar
-            className="z-[40] flex touch-none select-none p-0.5 transition-colors ease-out hover:bg-background-primary data-[orientation=vertical]:w-2.5 data-[state=hidden]:animate-scroll-fade-out data-[state=visible]:animate-scroll-fade-in"
+            className="z-40 flex touch-none select-none p-0.5 transition-colors ease-out hover:bg-background-primary data-[orientation=vertical]:w-2.5 data-[state=hidden]:animate-scroll-fade-out data-[state=visible]:animate-scroll-fade-in"
             orientation="vertical"
           >
             <ScrollArea.Thumb className="relative flex-1 rounded-[10px] bg-background-secondary before:absolute before:left-1/2 before:top-1/2 before:size-full before:min-h-11 before:min-w-5 before:-translate-x-1/2 before:-translate-y-1/2" />
@@ -145,7 +145,7 @@ const CollapsibleFolders = ({
         </ScrollArea.Root>
         <div
           ref={scrollAwareRef}
-          className={`pointer-events-none absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-background-primary ${isScrollAtBottom ? "opacity-0" : "opacity-100"} transition-opacity`}
+          className={`pointer-events-none absolute bottom-0 left-0 h-24 w-full bg-linear-to-t from-background-primary ${isScrollAtBottom ? "opacity-0" : "opacity-100"} transition-opacity`}
         ></div>
       </Collapsible.Content>
     </Collapsible.Root>
@@ -204,7 +204,7 @@ const FolderItem = ({
             <DropdownMenu.Root>
               <DropdownMenu.Trigger asChild>
                 <button
-                  className="z-[2] flex size-9 flex-none items-center justify-center rounded-md transition-opacity hover:bg-ui-hover"
+                  className="z-2 flex size-9 flex-none items-center justify-center rounded-md transition-opacity hover:bg-ui-hover"
                   aria-label="Customise options"
                 >
                   <DotsHorizontalIcon className="opacity-50" />
@@ -213,22 +213,22 @@ const FolderItem = ({
 
               <DropdownMenu.Portal>
                 <DropdownMenu.Content
-                  className="z-[2000] min-w-[180px] overflow-hidden rounded-md border border-dashed border-border-interactive bg-background-secondary p-[5px] data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
+                  className="z-2000 min-w-[180px] overflow-hidden rounded-md border border-dashed border-border-interactive bg-background-secondary p-[5px] data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
                   sideOffset={5}
                 >
                   <DropdownMenu.Item
-                    className="group relative flex h-[28px] cursor-pointer select-none items-center rounded-[3px] px-2 text-[13px] leading-none outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-ui-hover data-[disabled]:text-mauve8"
+                    className="group relative flex h-[28px] cursor-pointer select-none items-center rounded-[3px] px-2 text-[13px] leading-none outline-none data-disabled:pointer-events-none data-highlighted:bg-ui-hover data-disabled:text-mauve8"
                     onSelect={() => {
                       setIsEditFolderOpen(true);
                     }}
                   >
                     Edit{" "}
-                    <div className="ml-auto pl-5 group-data-[disabled]:text-mauve8 group-data-[highlighted]:text-white">
+                    <div className="ml-auto pl-5 group-data-disabled:text-mauve8 group-data-highlighted:text-white">
                       <EditIcon />
                     </div>
                   </DropdownMenu.Item>
                   <DropdownMenu.Item
-                    className="group relative flex h-[28px] cursor-pointer select-none items-center rounded-[3px] px-2 text-[13px] leading-none outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-ui-hover data-[disabled]:text-mauve8 data-[highlighted]:text-[#eb5757]"
+                    className="group relative flex h-[28px] cursor-pointer select-none items-center rounded-[3px] px-2 text-[13px] leading-none outline-none data-disabled:pointer-events-none data-highlighted:bg-ui-hover data-disabled:text-mauve8 data-highlighted:text-[#eb5757]"
                     // onSelect={async (e) => {
                     //   e.preventDefault();
                     //   const message = await deleteFolder(folder.id);
@@ -239,7 +239,7 @@ const FolderItem = ({
                     }}
                   >
                     Delete{" "}
-                    <span className="ml-auto pl-5 group-data-[disabled]:text-mauve8 group-data-[highlighted]:text-[#eb5757]">
+                    <span className="ml-auto pl-5 group-data-disabled:text-mauve8 group-data-highlighted:text-[#eb5757]">
                       <DeleteIcon />
                     </span>
                   </DropdownMenu.Item>
@@ -249,27 +249,27 @@ const FolderItem = ({
 
             <Link
               href={`/folder/${folder.folder}`}
-              className="absolute inset-0 z-[1] rounded-md"
+              className="absolute inset-0 z-1 rounded-md"
               title={folder.folder}
             />
           </div>
         </ContextMenu.Trigger>
         <ContextMenu.Portal>
-          <ContextMenu.Content className="z-[100] min-w-[180px] overflow-hidden rounded-md border border-dashed border-border-interactive bg-background-secondary p-[5px]">
+          <ContextMenu.Content className="z-100 min-w-[180px] overflow-hidden rounded-md border border-dashed border-border-interactive bg-background-secondary p-[5px]">
             <ContextMenu.Item
-              className="group relative flex h-[28px] cursor-pointer select-none items-center rounded-[3px] px-2 text-[13px] leading-none outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-ui-hover data-[disabled]:text-mauve8"
+              className="group relative flex h-[28px] cursor-pointer select-none items-center rounded-[3px] px-2 text-[13px] leading-none outline-none data-disabled:pointer-events-none data-highlighted:bg-ui-hover data-disabled:text-mauve8"
               onSelect={() => {
                 setIsEditFolderOpen(true);
               }}
             >
               Edit{" "}
-              <div className="ml-auto pl-5 group-data-[disabled]:text-mauve8 group-data-[highlighted]:text-white">
+              <div className="ml-auto pl-5 group-data-disabled:text-mauve8 group-data-highlighted:text-white">
                 <EditIcon />
               </div>
             </ContextMenu.Item>
 
             <ContextMenu.Item
-              className="group relative flex h-[28px] cursor-pointer select-none items-center rounded-[3px] px-2 text-[13px] leading-none text-danger outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-ui-hover"
+              className="group relative flex h-[28px] cursor-pointer select-none items-center rounded-[3px] px-2 text-[13px] leading-none text-danger outline-none data-disabled:pointer-events-none data-highlighted:bg-ui-hover"
               // onSelect={async (e) => {
               //   e.preventDefault();
               //   const message = await deleteFolder(folder.id);
@@ -280,7 +280,7 @@ const FolderItem = ({
               }}
             >
               Delete{" "}
-              <span className="ml-auto pl-5 group-data-[disabled]:text-mauve8 group-data-[highlighted]:text-[#eb5757]">
+              <span className="ml-auto pl-5 group-data-disabled:text-mauve8 group-data-highlighted:text-[#eb5757]">
                 <DeleteIcon />
               </span>
             </ContextMenu.Item>
@@ -295,14 +295,14 @@ const FolderItem = ({
 // function DeleteFolderItem({ folderId }: { folderId: string }) {
 //   return (
 //     <ContextMenu.Item
-//       className="group relative flex h-[28px] cursor-pointer select-none items-center rounded-[3px] px-2 text-[13px] leading-none outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-ui-hover data-[disabled]:text-mauve8 data-[highlighted]:text-[#eb5757]"
+//       className="group relative flex h-[28px] cursor-pointer select-none items-center rounded-[3px] px-2 text-[13px] leading-none outline-none data-disabled:pointer-events-none data-highlighted:bg-ui-hover data-disabled:text-mauve8 data-highlighted:text-[#eb5757]"
 //       onSelect={async () => {
 //         const message = await deleteFolder(folderId);
 //         console.log({ message });
 //       }}
 //     >
 //       Delete{" "}
-//       <span className="ml-auto pl-5 group-data-[disabled]:text-mauve8 group-data-[highlighted]:text-[#eb5757]">
+//       <span className="ml-auto pl-5 group-data-disabled:text-mauve8 group-data-highlighted:text-[#eb5757]">
 //         <DeleteIcon />
 //       </span>
 //     </ContextMenu.Item>

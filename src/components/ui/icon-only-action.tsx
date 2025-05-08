@@ -28,7 +28,7 @@ export default forwardRef<
           props.className,
         )}
       >
-        <span className="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 bg-blue-100/20 [@media(pointer:fine)]:hidden"></span>
+        <span className="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 bg-blue-100/20 pointer-fine:hidden"></span>
         {props.children}
       </a>
     );
@@ -42,7 +42,7 @@ export default forwardRef<
         props.className,
       )}
     >
-      <span className="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 [@media(pointer:fine)]:hidden"></span>
+      <span className="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 pointer-fine:hidden"></span>
       {props.children}
     </button>
   );

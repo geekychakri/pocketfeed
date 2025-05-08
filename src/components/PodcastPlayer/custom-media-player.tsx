@@ -1,6 +1,6 @@
 import "media-chrome/react";
 import "media-chrome/react/menu";
-
+import { useRef, useEffect } from "react";
 import { MediaTheme } from "media-chrome/react/media-theme";
 
 import { memo } from "react";
@@ -14,6 +14,16 @@ function CustomMediaPlayer({
   title: string;
   albumName: string;
 }) {
+  const templateRef = useRef<HTMLTemplateElement | null>(null);
+
+  // After component mounts, get the template element
+  useEffect(() => {
+    // The template element is already in the DOM, just get a reference to it
+    const template = document.getElementById(
+      "media-theme-sutro-audio",
+    ) as HTMLTemplateElement;
+    templateRef.current = template;
+  }, []);
   return (
     <>
       <template
@@ -571,16 +581,18 @@ function CustomMediaPlayer({
         }}
       />
 
-      <MediaTheme
-        template="media-theme-sutro-audio"
-        mediatitle={title}
-        mediabyline={albumName}
-        // style={{
-        //   "--media-primary-color": "",
-        // }}
-      >
-        {children}
-      </MediaTheme>
+      {templateRef.current && (
+        <MediaTheme
+          template={templateRef.current}
+          mediatitle={title}
+          mediabyline={albumName}
+          // style={{
+          //   "--media-primary-color": "",
+          // }}
+        >
+          {children}
+        </MediaTheme>
+      )}
     </>
   );
 }

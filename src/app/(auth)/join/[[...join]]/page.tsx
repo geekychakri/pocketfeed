@@ -236,7 +236,7 @@ export default function Join() {
           <span className="font-medium">Password</span>
           <span className="border-shadow flex items-center rounded-md duration-150 focus-within:shadow-[0_0_0_1px_#fc591e,0_0_0_1px_#fc591e]">
             <Input
-              className="flex-1 rounded-md border-none !shadow-none duration-150"
+              className="flex-1 rounded-md border-none shadow-none! duration-150"
               type={showPassword ? "text" : "password"}
               id="password"
               required

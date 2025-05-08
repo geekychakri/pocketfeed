@@ -16,7 +16,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         spellCheck
         ref={ref}
         className={cn(
-          "border-shadow resize-none rounded-md border-none bg-transparent px-4 py-2 !outline-none transition",
+          "border-shadow resize-none rounded-md border-none bg-transparent px-4 py-2 outline-none! transition",
           className,
         )}
         {...props}

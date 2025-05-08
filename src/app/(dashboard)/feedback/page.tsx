@@ -9,7 +9,7 @@ export default function Feedback() {
           everyone. Let us know what you think!
         </p>
       </div>
-      <div className="flex flex-col gap-5 [&>*]:self-start">
+      <div className="flex flex-col gap-5 *:self-start">
         <a href="#" className="custom-underline">
           Feature Requests
         </a>

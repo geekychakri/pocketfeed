@@ -233,7 +233,7 @@ export default function AddFeed({ folders }: { folders: any }) {
                       name={`feeds[${i}][rssURL]`}
                     />
 
-                    <p className="overflow-hidden overflow-ellipsis whitespace-nowrap text-sm text-gray-500">
+                    <p className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-gray-500">
                       {item.url}
                     </p>
                   </div>
