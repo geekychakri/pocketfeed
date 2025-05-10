@@ -150,7 +150,7 @@ export default function PodcastChapters({
                   {/* {chapter?.text} */}
                 </span>
               </span>
-              <span className="flex-none text-text-secondary">
+              <span className="text-text-secondary flex-none">
                 {toHHMMSS(chapter.startTime)}
               </span>
             </span>
@@ -211,7 +211,7 @@ export default function PodcastChapters({
 function AnimatedMusicBars({ isPlaying }: { isPlaying: boolean }) {
   return (
     <div
-      className={`music-bars flex-none ${isPlaying ? "*:!animation-play" : "*:animation-pause!"}`}
+      className={`*:bg-brand-primary *:animate-bounce-bar flex size-[13px] flex-none justify-between content-[""] *:size-[3px] *:h-full *:origin-bottom *:rounded-[3px] *:nth-of-type-2:delay-[-2.2s] *:nth-of-type-3:delay-[-3.7s] ${isPlaying ? "*:!animation-play" : "*:animation-pause!"}`}
     >
       <span />
       <span />

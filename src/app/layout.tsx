@@ -50,7 +50,7 @@ export default function RootLayout({
             async
           /> */}
         </head>
-        <body className="bg-background-primary tracking-tight text-text-primary">
+        <body className="bg-background-primary text-text-primary tracking-tight selection:bg-[#ff5a1f] selection:text-[#fff]">
           <a href="#main" className="sr-only">
             Skip to content
           </a>

@@ -24,7 +24,7 @@ export default function Home() {
             content
           </span> */}
             <span>
-              More <span className="text-primary">Focus</span>.
+              More <span className="text-brand-primary">Focus</span>.
             </span>
           </h1>
           <h2 className="text-center text-2xl text-gray-400">

@@ -71,7 +71,7 @@ export default async function MainLayout({
   console.log({ username: user });
   return (
     <ClerkProvider dynamic>
-      <main className="feed-layout flex h-screen w-full overflow-y-auto">
+      <main className="scrollbar-gutter-stable scrollbar-width-thin flex h-screen w-full overflow-y-auto">
         {/* <Navigation
         avatarUrl={user?.avatarUrl as string}
         username={user?.username as string}

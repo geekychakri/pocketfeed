@@ -3,6 +3,12 @@
 /* light theme */
 @config '../../tailwind.config.ts';
 
+@plugin "@tailwindcss/typography";
+
+@plugin "tailwindcss-animate";
+
+@custom-variant prose-inline-code (&.prose :where(:not(pre)>code):not(:where([class~="not-prose"] *)));
+
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still
@@ -11,15 +17,6 @@
   If we ever want to remove these styles, we need to add an explicit border
   color utility to any element that depends on these defaults.
 */
-@layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
-  }
-}
 
 @utility text-balance {
   text-wrap: balance;
@@ -39,6 +36,14 @@
 }
 
 @layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+
   @font-face {
     font-family: "Monaspace";
     src: url("../../public/SyntaxHighlightLightOwl.woff2") format("woff2");
@@ -55,9 +60,6 @@
       /* property name */ 6 hsl(210 10% 30%),
       /* ? */ 7 hsl(327 100% 54%) /* numbers */;
   }
-}
-
-@layer base {
   [data-theme="light"] {
     /* --color-primary: 248, 79, 57; */
     --brand-primary: 252, 89, 30;
@@ -69,14 +71,11 @@
     --border-non-interactive: #d9d9d9;
     --border-interactive: #cecece;
     --border-focus-ring: #bbbbbb;
+    --border-primary: #d9d9d9;
     --text-primary: #202020;
     --text-secondary: #646464;
     --skeleton-highlight: #e8e8e8;
     --danger: 235, 87, 87;
-
-    /* --text-color: 0, 0, 0;
-    --border-color: 136, 136, 136; */
-    /* #fc5200 */
   }
 
   [data-theme="dark"] {
@@ -164,6 +163,118 @@
     -webkit-text-size-adjust: none;
     text-size-adjust: none;
   }
+
+  input {
+    font-size: 16px;
+  }
+
+  input:focus-visible,
+  a:focus-visible,
+  button:focus-visible,
+  textarea:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 1px rgb(var(--brand-primary)),
+      0 0 0 1px rgb(var(--brand-primary));
+  }
+
+  input a button textarea {
+    outline: none;
+  }
+
+  .body.markup a {
+    text-decoration: underline;
+    text-decoration-color: #f84f39;
+  }
+
+  textarea {
+    /* min-block-size: 3.5rlh;
+    min-inline-size: 20ch;
+    max-inline-size: 50ch; */
+
+    /* field-sizing: content; */
+  }
+
+  pre {
+    scrollbar-width: thin !important;
+    scrollbar-color: rgb(var(--color-primary)) #eee !important;
+  }
+
+  pre code {
+    font-family: "Monaspace", monospace !important;
+    /* font-palette: --kung-fury !important; */
+  }
+
+  textarea::-webkit-scrollbar {
+    width: 18px;
+  }
+
+  textarea::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  textarea::-webkit-scrollbar-thumb {
+    background-color: var(--ui-normal);
+    border-radius: 20px;
+    border: 6px solid transparent;
+    -webkit-background-clip: content-box;
+    background-clip: content-box;
+  }
+
+  textarea::-webkit-scrollbar-thumb:hover {
+    background-color: var(--ui-hover);
+  }
+
+  .drawer::-webkit-scrollbar {
+    width: 16px !important;
+  }
+
+  .drawer::-webkit-scrollbar-track {
+    background-color: transparent !important;
+  }
+
+  .drawer::-webkit-scrollbar-thumb {
+    background-color: var(--text-secondary);
+    border-radius: 20px;
+    border: 6px solid transparent;
+    -webkit-background-clip: content-box;
+    background-clip: content-box;
+  }
+
+  .drawer::-webkit-scrollbar-thumb:hover {
+    background-color: var(--text-primary);
+  }
+
+  input[type="file"] {
+    position: absolute;
+    opacity: 0;
+  }
+
+  .koSAMj:focus-within {
+    outline: none !important;
+  }
+
+  /* Vaul */
+  [data-vaul-drawer] {
+    will-change: auto !important;
+  }
+}
+
+@theme inline {
+  --color-brand-primary: rgba(var(--brand-primary));
+  --color-background-primary: rgba(var(--background-primary));
+  --color-background-secondary: rgba(var(--background-secondary));
+  --color-ui-normal: var(--ui-normal);
+  --color-ui-hover: var(--ui-hover);
+  --color-ui-active: var(--ui-active);
+  --color-border-non-interactive: var(--border-non-interactive);
+  --color-border-interactive: var(--border-interactive);
+  --color-border-focus-ring: var(--border-focus-ring);
+  --color-border-primary: var(--border-primary);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-skeleton-highlight: var(--skeleton-highlight);
+  --color-danger: rgba(var(--danger));
 }
 
 @layer utilities {
@@ -203,10 +314,10 @@
   }
 } */
 
-  ::selection {
+  /* ::selection {
     background: #ff5a1f;
     color: #fff;
-  }
+  } */
 
   /* react drag drop  */
   /* .juBESy > input {
@@ -218,24 +329,6 @@
   outline: none !important;
 } */
 
-  input {
-    font-size: 16px;
-  }
-
-  input:focus-visible,
-  a:focus-visible,
-  button:focus-visible,
-  textarea:focus-visible {
-    outline: none;
-    box-shadow:
-      0 0 0 1px rgb(var(--brand-primary)),
-      0 0 0 1px rgb(var(--brand-primary));
-  }
-
-  input a button textarea {
-    outline: none;
-  }
-
   /* @media (prefers-color-scheme: dark) {
   :root {
     --color-primary: 124, 79, 57;
@@ -243,92 +336,11 @@
 } */
 }
 
-.body.markup a {
-  text-decoration: underline;
-  text-decoration-color: #f84f39;
-}
+/* custom scrollbar */
 
 /* custom scrollbar */
 
-.drawer {
-  scrollbar-gutter: stable;
-  /* scrollbar-width: thin; */
-}
-
-.drawer::-webkit-scrollbar {
-  width: 16px !important;
-}
-
-.drawer::-webkit-scrollbar-track {
-  background-color: transparent !important;
-}
-
-.drawer::-webkit-scrollbar-thumb {
-  background-color: var(--text-secondary);
-  border-radius: 20px;
-  border: 6px solid transparent;
-  -webkit-background-clip: content-box;
-  background-clip: content-box;
-}
-
-.drawer::-webkit-scrollbar-thumb:hover {
-  background-color: var(--text-primary);
-}
-
-/* custom scrollbar */
-
-.overflow-wrap-anywhere {
-  overflow-wrap: anywhere;
-}
-
-.music-bars {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  width: 13px;
-  height: 13px;
-
-  span {
-    width: 3px;
-    height: 100%;
-    background-color: #f84f39;
-    border-radius: 3px;
-    transform-origin: bottom;
-    animation: bounce 2.2s ease infinite alternate;
-    content: "";
-    &:nth-of-type(2) {
-      animation-delay: -2.2s; /* Start at the end of animation */
-    }
-
-    &:nth-of-type(3) {
-      animation-delay: -3.7s; /* Start mid-way of return of animation */
-    }
-  }
-}
-
-@keyframes bounce {
-  10% {
-    transform: scaleY(0.3); /* start by scaling to 30% */
-  }
-
-  30% {
-    transform: scaleY(1); /* scale up to 100% */
-  }
-
-  60% {
-    transform: scaleY(0.5); /* scale down to 50% */
-  }
-
-  80% {
-    transform: scaleY(0.75); /* scale up to 75% */
-  }
-
-  100% {
-    transform: scaleY(0.6); /* scale down to 60% */
-  }
-}
-
-@keyframes smoothscroll1 {
+/* @keyframes smoothscroll1 {
   from,
   to {
     scroll-behavior: smooth;
@@ -349,45 +361,7 @@
   html:focus-within {
     scroll-behavior: auto;
   }
-}
-
-textarea {
-  /* min-block-size: 3.5rlh;
-  min-inline-size: 20ch;
-  max-inline-size: 50ch; */
-
-  /* field-sizing: content; */
-}
-
-pre {
-  scrollbar-width: thin !important;
-  scrollbar-color: rgb(var(--color-primary)) #eee !important;
-}
-
-pre code {
-  font-family: "Monaspace", monospace !important;
-  /* font-palette: --kung-fury !important; */
-}
-
-textarea::-webkit-scrollbar {
-  width: 18px;
-}
-
-textarea::-webkit-scrollbar-track {
-  background-color: transparent;
-}
-
-textarea::-webkit-scrollbar-thumb {
-  background-color: var(--ui-normal);
-  border-radius: 20px;
-  border: 6px solid transparent;
-  -webkit-background-clip: content-box;
-  background-clip: content-box;
-}
-
-textarea::-webkit-scrollbar-thumb:hover {
-  background-color: var(--ui-hover);
-}
+} */
 
 /* ::-webkit-scrollbar {
   width: 16px;
@@ -410,57 +384,205 @@ textarea::-webkit-scrollbar-thumb:hover {
 } */
 
 /* for file upload hide on initial load */
-input[type="file"] {
-  position: absolute;
-  opacity: 0;
-}
-
-.koSAMj:focus-within {
-  outline: none !important;
-}
 
 /* custom copy code button*/
 
-.copy-code-btn {
-  position: absolute;
-  width: 32px;
-  height: 32px;
-  top: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: -17px 10px;
-  background: rgb(var(--background-primary));
-  border: 2px solid var(--border-interactive);
-  border-radius: 6px;
+@layer components {
+  .copy-code-btn {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: -17px 10px;
+    background: rgb(var(--background-primary));
+    border: 2px solid var(--border-interactive);
+    border-radius: 6px;
+  }
 }
 
-.article-content {
+@utility content-visibility-auto {
   content-visibility: auto;
 }
 
-.feed-layout {
+@utility scrollbar-gutter-stable {
   scrollbar-gutter: stable;
+}
+
+@utility scrollbar-width-thin {
   scrollbar-width: thin;
 }
-
-/* Vaul */
-[data-vaul-drawer] {
-  will-change: auto !important;
-}
-
-/*Audio Player*/
 
 @theme {
   --ease-out-player: cubic-bezier(0.5, 0, 0.5, 1);
   --animate-player-slide-up: slide-up 700ms ease-out forwards;
+  --animate-slideDownAndFade: slideDownAndFade 400ms
+    cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slideLeftAndFade: slideLeftAndFade 400ms
+    cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slideUpAndFade: slideUpAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slideRightAndFade: slideRightAndFade 400ms
+    cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-overlayShow: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-contentShow: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-caret-blink: caret-blink 1.2s ease-out infinite;
+  --animate-collapsible-slide-up: collapsible-slide-up 100ms ease-out;
+  --animate-collapsible-slide-down: collapsible-slide-down 100ms ease-out;
+  --animate-scroll-fade-in: scroll-fade-in 200ms forwards ease-out;
+  --animate-scroll-fade-out: scroll-fade-out 200ms forwards ease-out;
+  --animate-bounce-bar: bounce-bar 2.2s ease infinite alternate;
+
   @keyframes slide-up {
     0% {
       bottom: -288px;
     }
     100% {
       bottom: 0;
+    }
+  }
+
+  @keyframes slideDownAndFade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes slideLeftAndFade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes slideUpAndFade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes slideRightAndFade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+
+  @keyframes overlayShow {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes contentShow {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -48%) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
+  @keyframes caret-blink {
+    0%,
+    70%,
+    100% {
+      opacity: 1;
+    }
+    20%,
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes scroll-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes scroll-fade-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes collapsible-slide-up {
+    from {
+      height: var(--radix-collapsible-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+
+  @keyframes collapsible-slide-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-collapsible-content-height);
+    }
+  }
+  @keyframes bounce-bar {
+    10% {
+      transform: scaleY(0.3); /* start by scaling to 30% */
+    }
+
+    30% {
+      transform: scaleY(1); /* scale up to 100% */
+    }
+
+    60% {
+      transform: scaleY(0.5); /* scale down to 50% */
+    }
+
+    80% {
+      transform: scaleY(0.75); /* scale up to 75% */
+    }
+
+    100% {
+      transform: scaleY(0.6); /* scale down to 60% */
     }
   }
 }

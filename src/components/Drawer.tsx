@@ -124,8 +124,8 @@ function VaulDrawer({ audioRef }: { audioRef: any }) {
           {/* <button onClick={() => console.log(audioRef.current.currentTime)}>
             LOG CURRENT TIME
           </button> */}
-          <div className="drawer border-border-non-interactive bg-background-primary h-full grow overflow-y-auto overscroll-contain rounded-[8px] border border-dashed">
-            <div className="overflow-wrap-anywhere mx-auto flex max-w-[720px] flex-col px-3 py-6">
+          <div className="drawer scrollbar-gutter-stable border-border-non-interactive bg-background-primary h-full grow overflow-y-auto overscroll-contain rounded-[8px] border border-dashed">
+            <div className="mx-auto flex max-w-[720px] flex-col px-3 py-6 wrap-anywhere">
               <div className="border-border-non-interactive bg-background-primary sticky top-[-3px] z-40 flex h-16 items-center justify-between gap-8 rounded-md border border-dashed px-4 py-2">
                 <Drawer.Title className="line-clamp-1 flex-1 text-lg font-medium">
                   {title}
@@ -166,11 +166,11 @@ function VaulDrawer({ audioRef }: { audioRef: any }) {
                 </Modal> */}
                 <PodcastPlayButton episodeNumber={episodeNumber} />
 
-                <BookmarkPodcast
+                {/* <BookmarkPodcast
                   bookmarkLink={audioUrl}
                   bookmarkTitle={title}
                   bookmarkType="podcast"
-                />
+                /> */}
               </div>
 
               {/* <Drawer.Description className="mb-2 text-zinc-600"> */}
