@@ -50,7 +50,7 @@ export default function SocialOauth() {
         </span>{" "}
         last time.
       </motion.p>
-      <Button>
+      <Button className="flex items-center justify-center">
         <span className="flex-none">
           <svg
             width="24"
@@ -77,10 +77,10 @@ export default function SocialOauth() {
             />
           </svg>
         </span>
-        Continue with Google
+        <span>Continue with Google</span>
       </Button>
       <Button
-        // className="flex items-center justify-center gap-3 rounded-md bg-ui-normal px-4 py-2 font-medium"
+        className="flex items-center justify-center"
         onClick={() => signInWith("oauth_github")}
       >
         <span className="flex-none">

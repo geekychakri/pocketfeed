@@ -89,7 +89,7 @@ const NewPasswordPage: NextPage = () => {
     <div className="px-4">
       <div className="mb-8 flex flex-col gap-2">
         <h1 className="text-2xl">Reset Your Password</h1>
-        <span className="text-gray-500">
+        <span className="text-text-secondary">
           Type in your email and we will send you a password reset code.
         </span>
       </div>
@@ -99,7 +99,7 @@ const NewPasswordPage: NextPage = () => {
       >
         {!successfulCreation && (
           <>
-            <span className="flex flex-col gap-1">
+            <span className="flex flex-col gap-2">
               <label htmlFor="email">Please provide your email address</label>
               <Input
                 id="email"
@@ -112,7 +112,9 @@ const NewPasswordPage: NextPage = () => {
 
             <Button>Send Password Reset Code</Button>
             <span className="flex gap-1">
-              <span className="text-gray-500">Already have an account?</span>
+              <span className="text-text-secondary">
+                Already have an account?
+              </span>
               <Link href="/signin" className="custom-underline">
                 Sign in
               </Link>

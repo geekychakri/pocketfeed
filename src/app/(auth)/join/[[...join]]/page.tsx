@@ -199,6 +199,7 @@ export default function Join() {
       <h1 className="text-xl">Sign up</h1>
       <SocialOauth />
       <Divider text="or continue using email" />
+
       <form
         className="flex w-full max-w-96 flex-col gap-6"
         onSubmit={handleSubmit}
@@ -212,6 +213,7 @@ export default function Join() {
             placeholder="john@doe.com"
             name="email"
             ref={emailInputRef}
+            // className="border-shadow"
             // value={emailAddress}
             // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             //   setEmailAddress(e.target.value)
@@ -226,17 +228,18 @@ export default function Join() {
             required
             placeholder="johndoe"
             name="username"
+            // className="border-shadow"
             // value={username}
             // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             //   setUsername(e.target.value)
             // }
           />
         </label>
-        <label htmlFor="password" className="flex flex-col gap-2">
+        {/* <label htmlFor="password" className="flex flex-col gap-2">
           <span className="font-medium">Password</span>
-          <span className="border-shadow flex items-center rounded-md duration-150 focus-within:shadow-[0_0_0_1px_#fc591e,0_0_0_1px_#fc591e]">
+          <span className="border-shadow focus-within:outline-brand-primary flex items-center rounded-md focus-within:outline-[0.375rem] focus-within:outline-double">
             <Input
-              className="flex-1 rounded-md border-none shadow-none! duration-150"
+              className="flex-1 rounded-md border-none shadow-none! outline-none"
               type={showPassword ? "text" : "password"}
               id="password"
               required
@@ -248,18 +251,57 @@ export default function Join() {
               type="button"
               className="p-4"
               onClick={() => setShowPassword((prev) => !prev)}
+              // aria-label={showPassword ? "Hide password" : "Show password"}
+              aria-pressed={showPassword}
             >
+              <span className="sr-only">Show Password</span>
               {showPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}
             </button>
           </span>
-        </label>
+        </label> */}
+        <div className="flex flex-col gap-2">
+          <label htmlFor="password" className="font-medium">
+            Password
+          </label>
+
+          <div className="border-shadow focus-within:outline-brand-primary flex items-center rounded-md focus-within:outline-[0.375rem] focus-within:outline-double">
+            <Input
+              className="flex-1 border-none shadow-none! outline-none forced-colors:rounded-tr-none forced-colors:rounded-br-none"
+              type={showPassword ? "text" : "password"}
+              id="password"
+              required
+              placeholder="••••••••"
+              name="password"
+              autoComplete="new-password"
+            />
+
+            <Button
+              type="button"
+              className="rounded-none rounded-tr-md rounded-br-md p-4"
+              onClick={() => setShowPassword((prev) => !prev)}
+              aria-pressed={showPassword}
+            >
+              <span className="sr-only">Show Password</span>
+              {showPassword ? (
+                <EyeOpenIcon aria-hidden={true} />
+              ) : (
+                <EyeClosedIcon aria-hidden={true} />
+              )}
+            </Button>
+          </div>
+          <div className="sr-only" aria-live="assertive">
+            {showPassword
+              ? "Your password is shown!"
+              : "Your password is hidden!"}
+          </div>
+        </div>
 
         <div id="clerk-captcha" data-cl-size="flexible"></div>
-        <Button type="submit">
+        <Button type="submit" className="flex items-center justify-center">
           {signUpLoading ? (
             <span className="flex items-center gap-2">
               <SpinnerRotate />
-              <span>Creating...</span>
+              <span>Creating</span>
             </span>
           ) : (
             "Create a free account"

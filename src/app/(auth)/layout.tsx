@@ -10,7 +10,10 @@ export default function RootLayout({
   return (
     <>
       <AuthNavigation />
-      <main className="mx-auto flex w-full max-w-96 flex-col gap-8 px-4 py-10">
+      <main
+        id="main"
+        className="mx-auto flex w-full max-w-96 flex-col gap-8 px-4 py-10"
+      >
         {children}
       </main>
     </>

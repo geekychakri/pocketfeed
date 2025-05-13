@@ -38,12 +38,12 @@ export default function ImportExportOPML() {
       <div className="flex flex-col gap-4">
         <h2 className="font-semibold">Export</h2>
 
-        <div className="flex items-center justify-between rounded-lg border border-dashed border-border-interactive p-6">
+        <div className="border-border-interactive flex items-center justify-between rounded-lg border border-dashed p-6">
           <p className="flex-1">Subscriptions</p>
           <Button
             // className="bg-primary rounded-md px-4 py-2 font-medium text-white"
             data-loading={loading}
-            className="group/download-opml text-brand-primary"
+            className="group/download-opml text-brand-primary grid place-items-center"
             onClick={handleTest}
           >
             <span className="[grid-area:1/1] group-data-[loading=true]/download-opml:invisible">
@@ -52,7 +52,7 @@ export default function ImportExportOPML() {
 
             <SpinnerRotate
               aria-label="Downloading"
-              className="invisible text-text-primary [grid-area:1/1] group-data-[loading=true]/download-opml:visible"
+              className="text-text-primary invisible [grid-area:1/1] group-data-[loading=true]/download-opml:visible"
             />
           </Button>
 

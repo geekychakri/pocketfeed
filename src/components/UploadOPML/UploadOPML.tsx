@@ -88,7 +88,7 @@ function FileUpload() {
         // classes="outline-none"
         required={true}
       >
-        <div className="flex items-center justify-between rounded-lg border border-dashed border-border-interactive p-6">
+        <div className="border-border-interactive flex items-center justify-between rounded-lg border border-dashed p-6">
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-4">
               <button className="border-shadow rounded-md px-4 py-2 font-medium outline-none">
@@ -102,7 +102,7 @@ function FileUpload() {
             <Button
               data-loading={loading}
               type="submit"
-              className={`group/import-opml ${file && file?.name ? "text-brand-primary" : "text-text-secondary"}`}
+              className={`group/import-opml grid place-items-center ${file && file?.name ? "text-brand-primary" : "text-text-secondary"}`}
               onClickCapture={(e) => e.stopPropagation()}
             >
               <span className="[grid-area:1/1] group-data-[loading=true]/import-opml:invisible">
@@ -111,7 +111,7 @@ function FileUpload() {
 
               <SpinnerRotate
                 aria-label="Downloading"
-                className="invisible text-text-primary [grid-area:1/1] group-data-[loading=true]/import-opml:visible"
+                className="text-text-primary invisible [grid-area:1/1] group-data-[loading=true]/import-opml:visible"
               />
             </Button>
           </div>

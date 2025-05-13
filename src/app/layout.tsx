@@ -51,7 +51,7 @@ export default function RootLayout({
           /> */}
         </head>
         <body className="bg-background-primary text-text-primary tracking-tight selection:bg-[#ff5a1f] selection:text-[#fff]">
-          <a href="#main" className="sr-only">
+          <a href="#main" id="skip-link">
             Skip to content
           </a>
           <NuqsAdapter>
@@ -68,8 +68,10 @@ export default function RootLayout({
             duration={3000}
             toastOptions={{
               style: {
+                fontSize: "15px",
                 fontFamily: "var(--font-inter)",
-                background: "var(--background-secondary)",
+                background: "rgba(var(--background-secondary))",
+                boxShadow: "0 0 0 1px var(--border-interactive)",
               },
             }}
           />

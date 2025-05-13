@@ -17,6 +17,8 @@ import { SpinnerRotate } from "@/components/SpinnerRotate";
 import SocialOauth from "@/components/SocialOauth";
 import Divider from "../../components/divider";
 
+import useSound from "use-sound";
+
 export default function SignIn() {
   const { isLoaded, signIn, setActive } = useSignIn();
   // const [email, setEmail] = useState("");
@@ -24,6 +26,8 @@ export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
   const router = useRouter();
+
+  const [playCaution] = useSound("sounds/caution.wav");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -54,13 +58,16 @@ export default function SignIn() {
         // If the status is not complete, check why. User may need to
         // complete further steps.
         console.error(JSON.stringify(signInAttempt, null, 2));
+        toast.error(JSON.stringify(signInAttempt, null, 2));
         setLoginLoading(false);
+        playCaution();
       }
     } catch (err: any) {
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
       console.error(JSON.stringify(err, null, 2));
       toast.error(err.errors[0].message);
+      playCaution();
       setLoginLoading(false);
     }
   };
@@ -73,7 +80,7 @@ export default function SignIn() {
         </h1> */}
         <p className="flex flex-col gap-2">
           <span className="text-xl font-medium">Hey, welcome back</span>
-          <span className="text-sm text-text-secondary">
+          <span className="text-text-secondary text-sm">
             Good to see you again!
           </span>
         </p>
@@ -94,34 +101,46 @@ export default function SignIn() {
             // onChange={(e) => setEmail(e.target.value)}
           />
         </label>
-        <label htmlFor="password" className="flex flex-col gap-2">
-          <span className="font-medium">Password</span>
-          <span className="border-shadow flex items-center rounded-md duration-150 focus-within:shadow-[0_0_0_1px_#fc591e,0_0_0_1px_#fc591e]">
+        <div className="flex flex-col gap-2">
+          <label htmlFor="password" className="font-medium">
+            Password
+          </label>
+
+          <div className="border-shadow focus-within:outline-brand-primary flex items-center rounded-md focus-within:outline-[0.375rem] focus-within:outline-double">
             <Input
-              className="flex-1 rounded-md border-none shadow-none! duration-150"
+              className="flex-1 border-none shadow-none! outline-none forced-colors:rounded-tr-none forced-colors:rounded-br-none"
               type={showPassword ? "text" : "password"}
               id="password"
               required
               placeholder="••••••••"
               name="password"
-
-              // value={password}
-              // onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
             />
 
-            <button
+            <Button
               type="button"
-              className="rounded-md p-4"
+              className="rounded-none rounded-tr-md rounded-br-md p-4"
               onClick={() => setShowPassword((prev) => !prev)}
+              aria-pressed={showPassword}
             >
-              {showPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}
-            </button>
-          </span>
-        </label>
+              <span className="sr-only">Show Password</span>
+              {showPassword ? (
+                <EyeOpenIcon aria-hidden={true} />
+              ) : (
+                <EyeClosedIcon aria-hidden={true} />
+              )}
+            </Button>
+          </div>
+          <div className="sr-only" aria-live="assertive">
+            {showPassword
+              ? "Your password is shown!"
+              : "Your password is hidden!"}
+          </div>
+        </div>
         {/* <button className="bg-primary font-medium text-white px-4 py-2 rounded-md">
           Sign in
         </button> */}
-        <Button type="submit" className="border-none bg-ui-normal">
+        <Button type="submit" className="flex items-center justify-center">
           {loginLoading ? (
             <span className="flex items-center gap-2">
               <SpinnerRotate />
