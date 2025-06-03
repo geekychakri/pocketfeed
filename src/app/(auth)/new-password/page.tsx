@@ -115,7 +115,7 @@ const NewPasswordPage: NextPage = () => {
               <span className="text-text-secondary">
                 Already have an account?
               </span>
-              <Link href="/signin" className="custom-underline">
+              <Link href="/signin" className="custom-underline font-medium">
                 Sign in
               </Link>
             </span>

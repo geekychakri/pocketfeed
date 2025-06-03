@@ -15,9 +15,14 @@ import { CheckIcon, TrashIcon } from "@radix-ui/react-icons";
 import Button from "@/components/ui/Button";
 import SubscriptionList from "./subscription-list";
 
+import { Suspense } from "react";
+import LoadingUI from "@/components/loading-ui";
+
 const xata = getXataClient();
 
-export default async function SubscriptionPage(props: { params: Promise<any> }) {
+export default async function SubscriptionPage(props: {
+  params: Promise<any>;
+}) {
   const params = await props.params;
   const username = params.username;
   // const user = await currentUser();

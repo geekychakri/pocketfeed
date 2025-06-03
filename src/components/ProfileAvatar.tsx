@@ -58,7 +58,8 @@ const AvatarDropdownItem = ({
   const iconRef = useRef<UserIconHandle>(null);
   return (
     <DropdownMenu.Item
-      className="relative flex h-[25px] select-none items-center justify-between gap-2 rounded-[3px] px-2 py-5 text-sm leading-none text-text-primary duration-150 data-disabled:pointer-events-none data-highlighted:bg-ui-normal data-disabled:text-mauve8 data-highlighted:shadow-none"
+      // className="text-text-primary data-highlighted:bg-ui-normal data-disabled:text-mauve8 relative flex h-[25px] items-center justify-between gap-2 rounded-[3px] px-2 py-5 text-sm leading-none duration-150 select-none data-disabled:pointer-events-none data-highlighted:shadow-none"
+      className="text-text-primary data-highlighted:bg-ui-normal data-disabled:text-mauve8 relative flex h-[25px] cursor-pointer items-center justify-between gap-2 rounded-[3px] px-2 py-5 text-sm leading-none duration-150 outline-none select-none data-disabled:pointer-events-none"
       asChild
       // onMouseEnter={() => iconRef.current?.startAnimation()}
       // onMouseLeave={() => iconRef.current?.stopAnimation()}
@@ -89,20 +90,20 @@ export default function ProfileAvatar({
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger asChild>
         <button className="flex items-center gap-2 rounded-full">
-          <Avatar className="inline-flex h-[35px] w-[35px] flex-none cursor-pointer select-none items-center justify-center overflow-hidden rounded-full align-middle duration-150 hover:ring-4 hover:ring-ui-normal">
+          <Avatar className="hover:ring-ui-normal inline-flex h-[35px] w-[35px] flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full align-middle duration-150 select-none hover:ring-4">
             <AvatarImage
               className="h-full w-full rounded-[inherit] object-cover"
               src={avatarUrl}
               alt={username}
             />
             <AvatarFallback
-              className="leading-1 flex h-full w-full items-center justify-center bg-ui-normal text-[15px] font-medium"
+              className="bg-ui-normal flex h-full w-full items-center justify-center text-[15px] leading-1 font-medium"
               delayMs={600}
             >
               {getInitials(username)}
             </AvatarFallback>
           </Avatar>
-          <span className="truncate text-sm font-medium text-text-secondary">
+          <span className="text-text-secondary truncate text-sm font-medium">
             {username}
           </span>
         </button>
@@ -110,7 +111,7 @@ export default function ProfileAvatar({
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content
-          className="z-40 min-w-[180px] rounded-md border border-ui-normal bg-background-primary p-[5px] text-text-primary will-change-[opacity,transform] data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
+          className="border-shadow bg-background-primary text-text-primary data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-40 min-w-[180px] rounded-md p-[5px]"
           sideOffset={11}
           align="start"
         >
@@ -120,7 +121,7 @@ export default function ProfileAvatar({
           <AvatarDropdownItem to="/settings" Icon={SettingsGearIcon}>
             <span>Settings</span>
           </AvatarDropdownItem>
-          <DropdownMenu.Separator className="my-[5px] h-[1px] bg-border-non-interactive" />
+          <DropdownMenu.Separator className="bg-border-non-interactive my-[5px] h-[1px]" />
           <AvatarDropdownItem to="/feedback" Icon={MessageCircleMoreIcon}>
             <span>Feedback</span>
           </AvatarDropdownItem>

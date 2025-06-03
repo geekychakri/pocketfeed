@@ -32,7 +32,17 @@
 }
 
 @utility border-shadow {
-  box-shadow: 0 0 0 1px var(--border-interactive);
+  box-shadow: 0 0 0 1px var(--border-interactive) inset;
+}
+
+@utility custom-underline {
+  background-image: linear-gradient(
+    rgb(var(--brand-primary)),
+    rgb(var(--brand-primary))
+  );
+  background-size: 100% 1px;
+  background-position: left bottom;
+  background-repeat: no-repeat;
 }
 
 @layer base {
@@ -64,16 +74,25 @@
     /* --color-primary: 248, 79, 57; */
 
     --brand-primary: 252, 89, 30;
-    --background-primary: 252, 252, 252;
-    --background-secondary: 249, 249, 249;
-    --ui-normal: #242424;
+    --background-primary: 252, 252, 247;
+    --background-secondary: 245, 245, 240;
+    /* --ui-normal: #242424;
     --ui-hover: #181818;
-    --ui-active: #e0e0e0;
-    --border-non-interactive: #d9d9d9;
+    --ui-active: #e0e0e0; */
+    /* --ui-normal: #0307120d; */
+    --ui-normal: #ecece6;
+    --ui-hover: #e4e4dd;
+    --ui-active: #ddddd5;
+    --cta: #212121;
+    --cta-hover: #111111;
+    /* --border-non-interactive: #d9d9d9;
     --border-interactive: #898989;
+    --border-focus-ring: #bbbbbb; */
+    --border-non-interactive: #e8e8e9;
+    --border-interactive: #e5e5e5;
     --border-focus-ring: #bbbbbb;
     --border-primary: #d9d9d9;
-    --text-primary: #202020;
+    --text-primary: #333;
     --text-secondary: #646464;
     --skeleton-highlight: #e8e8e8;
     --danger: 235, 87, 87;
@@ -86,11 +105,21 @@
     --background-primary: 34, 34, 34;
     --background-secondary: 51, 51, 51;
     /* --ui-normal: #222222; */
-    --ui-normal: #eee;
+    /* --ui-normal: #eee;
     --ui-hover: #fff;
+    --ui-active: #313131; */
+
+    --ui-normal: #333333;
+    --ui-hover: #2a2a2a;
     --ui-active: #313131;
-    --border-non-interactive: #3a3a3a;
+    --cta: #eee;
+    --cta-hover: #fff;
+    /* --border-non-interactive: #3a3a3a;
     --border-interactive: #747474;
+    --border-focus-ring: #606060;
+    --border-primary: #2e2e2e; */
+    --border-non-interactive: #3a3a3a;
+    --border-interactive: #333;
     --border-focus-ring: #606060;
     --border-primary: #2e2e2e;
     /* --text-primary: #f2f2f2; */
@@ -115,7 +144,7 @@
     scrollbar-width: none;
     scrollbar-width: thin;
     scrollbar-color: #f84f39 #eee; */
-    /* overflow: hidden; */
+    overflow: hidden;
   }
 
   /*Fix for radix select when using scrollbar gutter to prevent layout shift*/
@@ -176,21 +205,20 @@
   textarea:focus-visible {
     /* outline: none !important;
     box-shadow: 0 0 0 1px rgb(var(--brand-primary)) !important; */
-    outline: 0.375rem double rgb(var(--brand-primary));
+    outline: 2px solid rgb(var(--brand-primary));
     /* box-shadow: 0 0 0 0.25rem rgb(var(--brand-primary)); */
     border-radius: 0.125rem;
   }
 
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover,
-  input:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0px 40rem rgb(var(--background-primary)) inset !important;
-  }
-
-  input:autofill,
-  input:autofill:hover,
-  input:autofill:focus {
-    box-shadow: 0 0 0px 40rem rgb(var(--background-primary)) inset !important;
+  input:is(
+      :-webkit-autofill,
+      :autofill,
+      :-webkit-autofill:hover,
+      :autofill:hover,
+      :-webkit-autofill:focus,
+      :autofill:focus
+    ) {
+    -webkit-box-shadow: 0 0 0px 40rem var(--ui-normal) inset !important;
   }
 
   .body.markup a {
@@ -278,6 +306,8 @@
   --color-ui-normal: var(--ui-normal);
   --color-ui-hover: var(--ui-hover);
   --color-ui-active: var(--ui-active);
+  --color-cta: var(--cta);
+  --color-cta-hover: var(--cta-hover);
   --color-border-non-interactive: var(--border-non-interactive);
   --color-border-interactive: var(--border-interactive);
   --color-border-focus-ring: var(--border-focus-ring);
@@ -289,13 +319,6 @@
 }
 
 @layer utilities {
-  .custom-underline {
-    background-image: linear-gradient(#fc591e, #fc591e);
-    background-size: 100% 1px;
-    background-position: left bottom;
-    background-repeat: no-repeat;
-  }
-
   /* article {
   p,
   table,
@@ -520,11 +543,15 @@
   @keyframes contentShow {
     from {
       opacity: 0;
-      transform: translate(-50%, -48%) scale(0.96);
+      translate:
+        -50%,
+        -48%;
     }
     to {
       opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
+      translate:
+        -50%,
+        -50%;
     }
   }
 

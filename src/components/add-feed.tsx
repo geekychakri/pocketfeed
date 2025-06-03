@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useActionState } from "react";
 import { useFormStatus, useFormState } from "react-dom";
 
 import qs from "qs";
@@ -49,7 +49,7 @@ export default function AddFeed({ folders }: { folders: any }) {
   const [playToggleOff] = useSound("sounds/toggle_off.wav");
   const [playCaution] = useSound("sounds/caution.wav");
 
-  const [state, formAction] = useFormState(addFeeds, initialState);
+  const [state, formAction, isPending] = useActionState(addFeeds, initialState);
 
   console.log({ state });
 
@@ -128,7 +128,7 @@ export default function AddFeed({ folders }: { folders: any }) {
       </div>
       <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
         <label htmlFor="url" className="flex flex-col gap-2">
-          <span className="text-sm font-medium text-brand-primary">
+          <span className="text-brand-primary text-sm font-medium">
             Please enter a URL
           </span>
           <Input
@@ -156,6 +156,7 @@ export default function AddFeed({ folders }: { folders: any }) {
             // className={cn(
             //   "flex h items-center justify-center rounded-md bg-ui-normal px-4 py-2 font-medium text-text-primary duration-100 hover:bg-ui-hover",
             // )}
+            className="border-shadow flex items-center justify-center"
             disabled={isLoading}
           >
             {isLoading ? (
@@ -208,7 +209,7 @@ export default function AddFeed({ folders }: { folders: any }) {
                         //   />
                         <Switch.Root
                           name={`feeds[${i}][isChecked]`}
-                          className="relative h-[25px] w-[42px] cursor-default rounded-full bg-ui-normal outline-none data-[state=checked]:bg-[rgba(252,89,30,0.2)]"
+                          className="bg-ui-normal relative h-[25px] w-[42px] cursor-default rounded-full outline-none data-[state=checked]:bg-[rgba(252,89,30,0.2)]"
                           id={`select-feed-${i}`}
                           style={{
                             WebkitTapHighlightColor: "rgba(0, 0, 0, 0)",
@@ -222,7 +223,7 @@ export default function AddFeed({ folders }: { folders: any }) {
                           defaultChecked={i === 0 ? true : false}
                           // required={i === 0 ? true : false}
                         >
-                          <Switch.Thumb className="block h-[21px] w-[21px] translate-x-0.5 rounded-full bg-brand-primary shadow-[0_2px_2px] shadow-blackA4 transition-transform duration-100 will-change-transform data-[state=checked]:translate-x-[19px]" />
+                          <Switch.Thumb className="bg-brand-primary shadow-blackA4 block h-[21px] w-[21px] translate-x-0.5 rounded-full shadow-[0_2px_2px] transition-transform duration-100 will-change-transform data-[state=checked]:translate-x-[19px]" />
                         </Switch.Root>
                       )}
                     </div>
@@ -233,7 +234,7 @@ export default function AddFeed({ folders }: { folders: any }) {
                       name={`feeds[${i}][rssURL]`}
                     />
 
-                    <p className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-gray-500">
+                    <p className="overflow-hidden text-sm text-ellipsis whitespace-nowrap text-gray-500">
                       {item.url}
                     </p>
                   </div>
@@ -250,22 +251,15 @@ export default function AddFeed({ folders }: { folders: any }) {
             <p aria-live="polite" className="sr-only">
               {state?.message}
             </p>
-            <SubmitButton />
+            <Button
+              className="border-shadow flex items-center justify-center"
+              disabled={isPending}
+            >
+              {isPending ? <SpinnerRotate /> : "Add"}
+            </Button>
           </form>
         </div>
       )}
     </div>
-  );
-}
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button
-      // className="flex h-11 w-full items-center justify-center rounded-md bg-ui-normal px-4 py-2 font-medium text-white"
-      disabled={pending}
-    >
-      {pending ? <SpinnerRotate /> : "Add"}
-    </Button>
   );
 }

@@ -22,6 +22,8 @@ import { revalidateCachePath } from "@/lib/revalidateCachePath";
 
 import { useFormStatus, useFormState } from "react-dom";
 
+import { useActionState } from "react";
+
 import { usePathname } from "next/navigation";
 
 import { deleteFeed, moveToFolder } from "@/app/actions";
@@ -31,17 +33,17 @@ import { Folders, FoldersRecord } from "@/xata";
 
 import { useFeedsDelete } from "@/hooks/useFeedsDelete";
 import { DeleteIcon } from "@/icons/delete";
+import Button from "../ui/Button";
+import { SpinnerRotate } from "../SpinnerRotate";
 
 const FeedDropdown = ({
   feedId,
   folderName,
   folders,
-  sound,
 }: {
   feedId: string;
   folderName: string;
   folders: Folders[];
-  sound: () => void;
 }) => {
   const pathname = usePathname();
   const currentFolder = decodeURIComponent(pathname.split("/")[2]);
@@ -65,20 +67,20 @@ const FeedDropdown = ({
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger
         asChild
-        className="group/feed-item z-2 inline-flex size-[35px] flex-none items-center justify-center rounded-md hover:bg-ui-hover data-[state=open]:bg-ui-hover [&[data-state=open]>*]:opacity-100"
+        className="group/feed-item hover:bg-ui-hover data-[state=open]:bg-ui-hover z-2 inline-flex size-[35px] flex-none items-center justify-center rounded-md [&[data-state=open]>*]:opacity-100"
       >
-        <button aria-label="Feed options" onClick={() => sound()}>
-          <DotsHorizontalIcon className="opacity-50 transition-[transform,opacity] group-hover/feed-item:opacity-100 group-active/feed-item:scale-75" />
+        <button aria-label="Feed options">
+          <DotsHorizontalIcon className="size-4 opacity-50 transition-[opacity] group-hover/feed-item:opacity-100" />
         </button>
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content
-          className="min-w-[180px] rounded-md border border-border-primary bg-background-primary p-[5px] will-change-[opacity,transform] data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
+          className="bg-background-primary data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade border-shadow min-w-[180px] rounded-md p-[5px] will-change-[opacity,transform]"
           sideOffset={5}
         >
           <DropdownMenu.Item
-            className="group relative flex select-none items-center rounded-[3px] text-sm leading-none outline-none data-disabled:pointer-events-none data-highlighted:bg-ui-normal data-highlighted:text-danger"
+            className="group data-highlighted:bg-ui-hover data-highlighted:text-danger relative flex items-center rounded-[3px] text-sm leading-none outline-none select-none data-disabled:pointer-events-none"
             onSelect={(e) => {
               e.preventDefault();
             }}
@@ -86,42 +88,44 @@ const FeedDropdown = ({
             <DeleteFeedForm feedId={feedId} folderName={folderName} />
           </DropdownMenu.Item>
 
-          <DropdownMenu.Sub>
-            <DropdownMenu.SubTrigger className="line-none group relative flex h-[25px] select-none items-center gap-1 rounded-[3px] px-2 py-4 text-sm leading-none outline-none data-disabled:pointer-events-none data-highlighted:bg-ui-normal data-highlighted:data-[state=open]:bg-ui-normal data-[state=open]:bg-ui-normal data-highlighted:data-[state=open]:text-text-primary data-highlighted:text-text-primary data-[state=open]:text-text-primary">
-              <span>
-                <DoubleArrowRightIcon />
-              </span>
-              Move To...
-            </DropdownMenu.SubTrigger>
-            <DropdownMenu.Portal>
-              <DropdownMenu.SubContent
-                className="min-w-[180px] rounded-md border border-[#2e2e2e] bg-background-primary p-[5px] will-change-[opacity,transform] data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
-                sideOffset={2}
-                alignOffset={-5}
-              >
-                {folders
-                  .filter((item) => item.folder !== currentFolder)
-                  .map((item, i) => {
-                    return (
-                      <DropdownMenu.Item
-                        key={item.id}
-                        className="group relative flex h-[25px] select-none items-center rounded-[3px] px-2 py-4 text-sm leading-none outline-none data-highlighted:bg-ui-normal"
-                        onSelect={async (e) => {
-                          e.preventDefault();
-                          console.log(item.folder);
-                          await moveToFolderAction(
-                            feedId,
-                            item.folder as string,
-                          );
-                        }}
-                      >
-                        {item.folder}
-                      </DropdownMenu.Item>
-                    );
-                  })}
-              </DropdownMenu.SubContent>
-            </DropdownMenu.Portal>
-          </DropdownMenu.Sub>
+          {folders.length > 1 ? (
+            <DropdownMenu.Sub>
+              <DropdownMenu.SubTrigger className="line-none group data-highlighted:bg-ui-hover data-highlighted:data-[state=open]:bg-ui-normal data-[state=open]:bg-ui-normal data-highlighted:data-[state=open]:text-text-primary data-highlighted:text-text-primary data-[state=open]:text-text-primary relative flex h-[25px] items-center gap-1 rounded-[3px] px-2 py-4 text-sm leading-none outline-none select-none data-disabled:pointer-events-none">
+                <span>
+                  <DoubleArrowRightIcon />
+                </span>
+                Move To...
+              </DropdownMenu.SubTrigger>
+              <DropdownMenu.Portal>
+                <DropdownMenu.SubContent
+                  className="bg-background-primary data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade border-shadow min-w-[180px] rounded-md p-[5px]"
+                  sideOffset={2}
+                  alignOffset={-5}
+                >
+                  {folders
+                    .filter((item) => item.folder !== currentFolder)
+                    .map((item, i) => {
+                      return (
+                        <DropdownMenu.Item
+                          key={item.id}
+                          className="group data-highlighted:bg-ui-hover relative flex h-[25px] items-center rounded-[3px] px-2 py-4 text-sm leading-none outline-none select-none"
+                          onSelect={async (e) => {
+                            e.preventDefault();
+                            console.log(item.folder);
+                            await moveToFolderAction(
+                              feedId,
+                              item.folder as string,
+                            );
+                          }}
+                        >
+                          {item.folder}
+                        </DropdownMenu.Item>
+                      );
+                    })}
+                </DropdownMenu.SubContent>
+              </DropdownMenu.Portal>
+            </DropdownMenu.Sub>
+          ) : null}
 
           {/* <DropdownMenu.Arrow className="fill-white" /> */}
         </DropdownMenu.Content>
@@ -138,7 +142,7 @@ function DeleteFeedForm({
   folderName: string;
 }) {
   const router = useRouter();
-  const [state, formAction] = useFormState(deleteFeed, {
+  const [state, formAction, isPending] = useActionState(deleteFeed, {
     message: "",
   });
 
@@ -149,47 +153,49 @@ function DeleteFeedForm({
 
   console.log("RE RENDERED");
 
+  console.log({ state });
+
   useEffect(() => {
     if (state.message === "success") {
       console.log("AWEEEEEEEEEEESOMMEEEEEEEE");
       deleteFeedStoreFn(feedId);
       success();
-      toast.success("Deleted", {
-        style: {
-          background: "var(--bg-primary)",
-          borderWidth: "1px",
-          borderColor: "var(--border-non-interactive)",
-          color: "#fff",
-        },
-        duration: 20000,
-      });
+      toast.success("Deleted");
       // revalidateCachePath("/folder/Home");
       // router.refresh();
+    } else if (state.message === "error") {
+      toast.error("Something went wrong!");
     }
   }, [state]);
   return (
     <form action={formAction} className="w-full">
       <input type="hidden" name="feedId" value={feedId} />
       <input type="hidden" name="folderName" value={folderName} />
-      <DeleteFeedButton />
+      {/* <DeleteFeedButton /> */}
+
+      <Button
+        type="submit"
+        aria-disabled={isPending}
+        className={`text-danger flex h-[25px] w-full items-center gap-1 bg-transparent px-2 py-4`}
+        variant="delete"
+      >
+        {isPending ? (
+          <>
+            <span>
+              <SpinnerRotate className="size-4" />
+            </span>
+            <span>Unsubscribing</span>
+          </>
+        ) : (
+          <>
+            <span>
+              <DeleteIcon />
+            </span>
+            <span>Unsubscribe</span>
+          </>
+        )}
+      </Button>
     </form>
-  );
-}
-
-function DeleteFeedButton() {
-  const { pending } = useFormStatus();
-
-  return (
-    <button
-      type="submit"
-      aria-disabled={pending}
-      className="flex h-[25px] w-full items-center gap-1 px-2 py-4"
-    >
-      <span>
-        <DeleteIcon />
-      </span>
-      <span>Unsubscribe</span>
-    </button>
   );
 }
 

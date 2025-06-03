@@ -14,7 +14,17 @@ import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { SpinnerRotate } from "@/components/SpinnerRotate";
 
-import SocialOauth from "@/components/SocialOauth";
+// import SocialOauth from "@/components/SocialOauth";
+import dynamic from "next/dynamic";
+
+const SocialOauth = dynamic(() => import("@/components/SocialOauth"), {
+  ssr: false,
+  loading: () => (
+    <div className="flex h-28 items-center justify-center">
+      {/* <SpinnerRotate /> */}
+    </div>
+  ),
+});
 import Divider from "../../components/divider";
 
 import useSound from "use-sound";
@@ -106,9 +116,9 @@ export default function SignIn() {
             Password
           </label>
 
-          <div className="border-shadow focus-within:outline-brand-primary flex items-center rounded-md focus-within:outline-[0.375rem] focus-within:outline-double">
+          <div className="border-shadow focus-within:outline-brand-primary flex items-center rounded-md focus-within:outline-2">
             <Input
-              className="flex-1 border-none shadow-none! outline-none forced-colors:rounded-tr-none forced-colors:rounded-br-none"
+              className="flex-1 border-none shadow-none! outline-none autofill:rounded-none autofill:rounded-tl-md autofill:rounded-bl-md forced-colors:rounded-tr-none forced-colors:rounded-br-none"
               type={showPassword ? "text" : "password"}
               id="password"
               required
@@ -140,23 +150,29 @@ export default function SignIn() {
         {/* <button className="bg-primary font-medium text-white px-4 py-2 rounded-md">
           Sign in
         </button> */}
-        <Button type="submit" className="flex items-center justify-center">
+        <Button
+          type="submit"
+          className="bg-cta text-background-primary hover:bg-cta-hover flex items-center justify-center"
+        >
           {loginLoading ? (
             <span className="flex items-center gap-2">
               <SpinnerRotate />
-              <span>Signing In...</span>
+              <span>Signing In</span>
             </span>
           ) : (
             "Sign In"
           )}
         </Button>
         <div className="flex flex-col gap-4 self-start">
-          <Link href="/new-password" className="custom-underline self-start">
+          <Link
+            href="/new-password"
+            className="custom-underline self-start font-medium"
+          >
             Forgot your password?
           </Link>
           <span className="flex gap-1">
             <span>Don&apos;t have an account?</span>
-            <Link href="/join" className="custom-underline">
+            <Link href="/join" className="custom-underline font-medium">
               Join
             </Link>
           </span>

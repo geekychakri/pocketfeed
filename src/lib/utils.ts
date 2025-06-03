@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { number } from "zod";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -291,4 +292,11 @@ export function convertTimeStringToReadable(timeString: string) {
 
 export function checkObjectIsEmpty(value: object): boolean {
   return Object.keys(value).length === 0 && value.constructor === Object; // 👈 constructor check
+}
+
+export function compactNumber(value: number) {
+  return new Intl.NumberFormat("en-US", {
+    notation: "compact",
+    maximumSignificantDigits: 3,
+  }).format(value);
 }

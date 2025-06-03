@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
+// import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Pocket Feed",
-  description: "All of your favorite content in one place.",
-};
+// export const metadata: Metadata = {
+//   title: "Pocket Feed",
+//   description: "All of your favorite content in one place.",
+// };
 
 import { FoldersRecord, getXataClient, UsersRecord } from "@/xata";
 import { auth } from "@clerk/nextjs/server";
@@ -21,6 +21,8 @@ import SidebarNavigation from "@/components/sidebar-navigation";
 import PodcastLoader from "@/components/podcast-loader";
 
 import { ClerkProvider } from "@clerk/nextjs";
+import TestNav from "@/components/test-nav";
+import CollapsibleFolders from "@/components/CollapsibleFolders";
 
 export default async function MainLayout({
   children,
@@ -56,12 +58,6 @@ export default async function MainLayout({
     folder: item.folder,
   })) as { id: string; folder: string }[];
 
-  // console.log(foldersList);
-
-  // const
-
-  // console.log(user);
-
   // const avatarUrl = user.avatar?.transform({
   //   width: 64,
   //   height: 64,
@@ -69,73 +65,20 @@ export default async function MainLayout({
   // });
 
   console.log({ username: user });
+
   return (
-    <ClerkProvider dynamic>
-      <main className="scrollbar-gutter-stable scrollbar-width-thin flex h-screen w-full overflow-y-auto">
-        {/* <Navigation
-        avatarUrl={user?.avatarUrl as string}
-        username={user?.username as string}
+    <main className="scrollbar-gutter-stable scrollbar-width-thin flex h-screen w-full overflow-y-auto">
+      <SidebarNavigation
         foldersList={foldersList}
-      /> */}
-        {/* <nav className="bg-background text-textColor fixed bottom-0 left-0 top-0 isolate z-30 flex h-screen w-[240px] shrink-0 select-none flex-col self-start border-r border-border-primary">
-        <div className="flex h-14 items-center px-4">
-          <h1 className="font-medium">
-            <span className="text-primary">my</span>Pocket<span>Feed.</span>
-          </h1>
-        </div>
+        user={JSON.parse(JSON.stringify(user))}
+      >
+        <CollapsibleFolders foldersList={foldersList} />
+      </SidebarNavigation>
 
-        <div className="flex h-14 items-center justify-between gap-4 border-t border-border-primary px-4">
-          <Link
-            href="/add"
-            className="flex-1 rounded-[4px] border border-border-primary bg-ui-normal px-4 py-1 text-center font-medium shadow-sm duration-75 hover:bg-ui-hover"
-          >
-            Add feed
-          </Link>
-          <Link href="/search/feeds" className="flex-none">
-            <MagnifyingGlassIcon className="size-6 flex-none" />
-          </Link>
-        </div>
-        <div className="flex flex-1 flex-col gap-1 border-t border-border-primary px-4 py-[10px]">
-          <Link
-            href="/activity/discover"
-            className="flex h-10 items-center gap-3 rounded-md px-2 py-[10px] hover:bg-ui-hover active:bg-ui-hover"
-          >
-            <span>
-              <ExploreIcon />
-            </span>
-            <span className="text-base">Activity</span>
-          </Link>
-          <Link
-            href="/bookmarks"
-            className="flex h-10 items-center gap-3 rounded-md px-2 py-[10px] hover:bg-ui-hover"
-          >
-            <span>
-              <BookmarkIcon />
-            </span>
-            <span>Bookmarks</span>
-          </Link>
-
-          <CollapsibleFolders foldersList={foldersList} />
-        </div>
-
-        <div className="flex h-14 items-center gap-2 border-t border-border-primary px-4">
-          <ProfileAvatar
-            avatarUrl={user?.avatarUrl as string}
-            username={user?.username as string}
-          />
-        </div>
-      </nav> */}
-        <SidebarNavigation
-          foldersList={foldersList}
-          user={JSON.parse(JSON.stringify(user))}
-        />
-        {/* <div className="w-[240px]"></div> */}
-        {/* {show && <PodcastPlayer />} */}
-
-        <PodcastLoader />
-
-        <div className="mx-auto w-full max-w-[750px]">{children}</div>
-      </main>
-    </ClerkProvider>
+      <PodcastLoader />
+      <ClerkProvider dynamic>
+        <div className="flex-1">{children}</div>
+      </ClerkProvider>
+    </main>
   );
 }

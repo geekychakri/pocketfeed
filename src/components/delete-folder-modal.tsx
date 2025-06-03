@@ -18,6 +18,10 @@ import { useRouter, usePathname } from "next/navigation";
 
 import { revalidateCachePath } from "@/lib/revalidateCachePath";
 
+import { SpinnerRotate } from "./SpinnerRotate";
+
+import { useActionState } from "react";
+
 import { toast } from "sonner";
 
 const initialState = {
@@ -38,7 +42,10 @@ export default function DeleteFolderModal({
   //   const parsedFeedItem = JSON.parse(feedItem);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [state, formAction] = useFormState(deleteFolder, initialState);
+  const [state, formAction, isPending] = useActionState(
+    deleteFolder,
+    initialState,
+  );
 
   const editInputRef = useRef<HTMLInputElement>(null);
 
@@ -86,7 +93,7 @@ export default function DeleteFolderModal({
 
       <Modal.Content
         title="Are you sure you want to delete?"
-        className="bg-background-primary"
+        className="bg-background-primary border-shadow"
       >
         <Modal.Description>This cannot be undone!</Modal.Description>
         <form className="flex flex-col gap-4 px-[25px]" action={formAction}>
@@ -96,11 +103,18 @@ export default function DeleteFolderModal({
             <Button
               type="button"
               onClick={() => setIsDeleteFolderOpen(false)}
-              className="border-shadow bg-transparent"
+              className="border-shadow w-full bg-transparent"
             >
               Cancel
             </Button>
-            <DeleteButton />
+            <Button
+              type="submit"
+              disabled={isPending}
+              className="bg-danger flex w-full items-center justify-center text-white"
+              variant="delete"
+            >
+              {isPending ? <SpinnerRotate /> : "Delete"}
+            </Button>
           </div>
         </form>
       </Modal.Content>
@@ -108,20 +122,20 @@ export default function DeleteFolderModal({
   );
 }
 
-import { useFormStatus } from "react-dom";
-import { SpinnerRotate } from "./SpinnerRotate";
+// import { useFormStatus } from "react-dom";
+// import { SpinnerRotate } from "./SpinnerRotate";
 
-export function DeleteButton() {
-  const { pending } = useFormStatus();
+// export function DeleteButton() {
+//   const { pending } = useFormStatus();
 
-  return (
-    <Button
-      type="submit"
-      disabled={pending}
-      className="bg-danger"
-      variant="delete"
-    >
-      {pending ? <SpinnerRotate /> : "Delete"}
-    </Button>
-  );
-}
+//   return (
+//     <Button
+//       type="submit"
+//       disabled={pending}
+//       className="bg-danger"
+//       variant="delete"
+//     >
+//       {pending ? <SpinnerRotate /> : "Delete"}
+//     </Button>
+//   );
+// }

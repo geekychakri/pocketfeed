@@ -1,12 +1,14 @@
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-
 type TooltipProps = {
   children: React.ReactNode;
   content: React.ReactNode;
   open?: boolean;
   defaultOpen?: boolean;
-  onOpenChange?: () => void;
-};
+  onOpenChange?: (open: boolean) => void;
+} & Omit<
+  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>,
+  "content"
+>;
 
 export function CustomTooltip({
   children,
@@ -28,7 +30,7 @@ export function CustomTooltip({
           side="top"
           align="center"
           {...props}
-          className="select-none rounded bg-background-secondary px-[10px] py-[5px] text-[13px] font-medium leading-none data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade"
+          className="bg-background-secondary border-shadow data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade z-[100] rounded px-[10px] py-[5px] text-[13px] leading-none font-medium select-none"
         >
           {content}
           {/* <TooltipPrimitive.Arrow

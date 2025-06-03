@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { useSignUp } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 
 import { motion } from "framer-motion";
 
@@ -23,7 +24,14 @@ import { SpinnerRotate } from "@/components/SpinnerRotate";
 import { useNavigatorOnline } from "@/hooks/useNavigatorOnline";
 
 import { createUser } from "@/app/actions";
-import SocialOauth from "@/components/SocialOauth";
+const SocialOauth = dynamic(() => import("@/components/SocialOauth"), {
+  ssr: false,
+  loading: () => (
+    <div className="flex h-28 items-center justify-center">
+      {/* <SpinnerRotate /> */}
+    </div>
+  ),
+});
 import Divider from "../../components/divider";
 import RouteBack from "@/components/RouteBack/RouteBack";
 
@@ -173,12 +181,12 @@ export default function Join() {
               maxLength={6}
               minLength={6}
               required
-              disabled={isVerificationExpiredError}
+              disabled={isVerificationExpiredError || codeVerify}
             />
           </div>
           <Button
-            className={`h-12 disabled:cursor-not-allowed disabled:opacity-50`}
-            disabled={isVerificationExpiredError}
+            className={`border-shadow bg-cta text-background-primary hover:bg-cta-hover flex items-center justify-center disabled:cursor-not-allowed disabled:opacity-50`}
+            disabled={isVerificationExpiredError || codeVerify}
           >
             {codeVerify ? (
               <span className="flex items-center gap-2">
@@ -264,7 +272,7 @@ export default function Join() {
             Password
           </label>
 
-          <div className="border-shadow focus-within:outline-brand-primary flex items-center rounded-md focus-within:outline-[0.375rem] focus-within:outline-double">
+          <div className="border-shadow focus-within:outline-brand-primary flex items-center rounded-md focus-within:outline-2">
             <Input
               className="flex-1 border-none shadow-none! outline-none forced-colors:rounded-tr-none forced-colors:rounded-br-none"
               type={showPassword ? "text" : "password"}
@@ -297,7 +305,10 @@ export default function Join() {
         </div>
 
         <div id="clerk-captcha" data-cl-size="flexible"></div>
-        <Button type="submit" className="flex items-center justify-center">
+        <Button
+          type="submit"
+          className="bg-cta text-background-primary hover:bg-cta-hover flex items-center justify-center"
+        >
           {signUpLoading ? (
             <span className="flex items-center gap-2">
               <SpinnerRotate />
@@ -309,7 +320,7 @@ export default function Join() {
         </Button>
         <span className="flex gap-1">
           <span>Already have an account?</span>
-          <Link href="/signin" className="custom-underline">
+          <Link href="/signin" className="custom-underline font-medium">
             Sign in
           </Link>
         </span>

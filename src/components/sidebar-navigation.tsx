@@ -16,9 +16,8 @@ import { useSelectedLayoutSegment } from "next/navigation";
 
 import { UsersRecord } from "@/xata";
 import { SelectedPick } from "@xata.io/client";
-import RouteBack from "./RouteBack/RouteBack";
 import { useFullscreen } from "@/store/read-fullscreen";
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 
 import useStore from "@/store/useStore";
 
@@ -30,9 +29,11 @@ const links = [
 export default function SidebarNavigation({
   foldersList,
   user,
+  children,
 }: {
   foldersList: { id: string; folder: string }[];
   user: SelectedPick<UsersRecord, ("avatarUrl" | "username")[]> | null;
+  children: React.ReactNode;
 }) {
   const pathname = usePathname();
   // console.log(pathname);
@@ -66,7 +67,7 @@ export default function SidebarNavigation({
   return (
     <>
       <nav
-        className={`text-textColor fixed bottom-0 left-0 top-0 isolate z-30 flex h-screen w-[240px] shrink-0 select-none flex-col self-start bg-background-primary shadow-[1px_0_0_0_var(--border-non-interactive)] transition-[transform] duration-300 ${fullscreen && pathname.startsWith("/read") ? "-translate-x-full" : "translate-x-0"}`}
+        className={`text-textColor bg-background-primary fixed top-0 bottom-0 left-0 isolate z-30 flex h-screen w-[240px] shrink-0 flex-col self-start shadow-[1px_0_0_0_var(--border-non-interactive)] transition-[translate] duration-300 select-none ${fullscreen && pathname.startsWith("/read") ? "-translate-x-full" : "translate-x-0"}`}
       >
         <div className="flex h-14 items-center justify-between px-3">
           <h1 className="font-medium">
@@ -77,38 +78,19 @@ export default function SidebarNavigation({
         <div className="flex h-14 items-center justify-between gap-3 px-3 shadow-[0_-1px_0_0_var(--border-non-interactive)]">
           <Link
             href="/add"
-            className="flex h-9 flex-1 items-center justify-center rounded-md bg-ui-normal"
+            className="bg-ui-normal border-shadow hover:bg-ui-hover flex h-9 flex-1 items-center justify-center rounded-md font-medium transition-[background-color]"
           >
             Add feed
           </Link>
           <Link
             href="/search/feeds"
-            className="flex size-9 flex-none items-center justify-center rounded-md px-3 transition-colors hover:bg-ui-normal"
+            className="hover:bg-ui-hover flex size-9 flex-none items-center justify-center rounded-md px-3 transition-[background-color]"
             aria-label="Search"
           >
             <SearchIcon className="flex-none" />
           </Link>
         </div>
         <div className="flex flex-1 flex-col gap-1 py-[10px] shadow-[0_-1px_0_0_var(--border-non-interactive)]">
-          {/* <Link
-          href="/activity/discover"
-          className="flex h-10 items-center gap-3 rounded-md px-2 py-[10px] hover:bg-ui-hover active:bg-ui-hover"
-        >
-          <span>
-            <ExploreIcon />
-          </span>
-          <span className="text-base">Activity</span>
-        </Link>
-        <Link
-          href="/bookmarks"
-          className="flex h-10 items-center gap-3 rounded-md px-2 py-[10px] hover:bg-ui-hover"
-        >
-          <span>
-            <BookmarkIcon />
-          </span>
-          <span>Bookmarks</span>
-        </Link> */}
-
           {links.map(({ path, label, icon: Icon }, i) => {
             // const isActive = pathname === path;
             const isActive =
@@ -123,8 +105,8 @@ export default function SidebarNavigation({
                 <Link
                   href={path}
                   className={cn(
-                    "flex h-11 items-center gap-3 rounded-md px-3 py-[10px] transition-[background-color] hover:bg-ui-hover",
-                    isActive && "bg-ui-hover",
+                    "hover:bg-ui-hover flex h-11 items-center gap-3 rounded-md px-3 py-[10px] transition-[background-color]",
+                    isActive && "bg-ui-hover font-medium",
                   )}
                 >
                   <span>
@@ -136,9 +118,7 @@ export default function SidebarNavigation({
             );
           })}
 
-          <div className="">
-            <CollapsibleFolders foldersList={foldersList} />
-          </div>
+          <div className="">{children}</div>
         </div>
 
         <div className="flex h-14 items-center gap-2 px-3 shadow-[0_-1px_0_0_var(--border-non-interactive)]">

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import * as Collapsible from "@radix-ui/react-collapsible";
 
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
@@ -29,6 +29,7 @@ import EditFolderModal from "@/components/edit-folder-modal";
 import { useWatchScrollAreaOverflow } from "@/hooks/use-watch-scroll-area";
 
 import DeleteFolderModal from "./delete-folder-modal";
+import Button from "./ui/Button";
 
 const CollapsibleFolders = ({
   foldersList,
@@ -39,6 +40,8 @@ const CollapsibleFolders = ({
 
   const [playFolderOpen] = useSound("/sounds/transition_open.wav");
   const [playFolderClose] = useSound("/sounds/transition_close.wav");
+
+  const [tap] = useSound("/sounds/tap.wav");
 
   const [isScrollAtBottom, setIsScrollAtBottom] = useState(false);
 
@@ -67,10 +70,11 @@ const CollapsibleFolders = ({
     >
       <Collapsible.Trigger asChild className="group/collapsible">
         <div className="px-3">
-          <button
+          <Button
             className={cn(
-              "flex h-11 w-full items-center justify-between gap-3 rounded-md py-[10px] pl-3 hover:bg-ui-hover",
-              pathname.includes("/folder") && "bg-ui-hover",
+              "hover:bg-ui-normal flex w-full items-center justify-between gap-3 rounded-md bg-transparent px-0 py-[10px] pl-3 font-normal",
+              pathname.includes("/folder") &&
+                "bg-ui-normal hover:bg-ui-hover font-medium",
             )}
           >
             <span className="flex items-center gap-3">
@@ -84,12 +88,12 @@ const CollapsibleFolders = ({
                 )}
               />
             </span>
-          </button>
+          </Button>
         </div>
       </Collapsible.Trigger>
 
-      <Collapsible.Content className="relative overflow-hidden data-[state=closed]:animate-collapsible-slide-up data-[state=open]:animate-collapsible-slide-down">
-        <ScrollArea.Root className="relative h-[225px] overflow-hidden shadow-[0_2px_10px] shadow-blackA4">
+      <Collapsible.Content className="data-[state=closed]:animate-collapsible-slide-up data-[state=open]:animate-collapsible-slide-down relative overflow-hidden">
+        <ScrollArea.Root className="bg-background-primary relative h-[225px] overflow-hidden shadow-[0_2px_10px]">
           {/* <VList style={{ height: 225 }} className="overflow-hidden"> */}
           <ScrollArea.Viewport
             ref={scrollViewportRef}
@@ -129,6 +133,7 @@ const CollapsibleFolders = ({
                       key={i}
                       folder={folder}
                       currentFolderName={currentFolderName}
+                      sound={tap}
                     />
                   );
                 })}
@@ -137,29 +142,29 @@ const CollapsibleFolders = ({
           </ScrollArea.Viewport>
           {/* </VList> */}
           <ScrollArea.Scrollbar
-            className="z-40 flex touch-none select-none p-0.5 transition-colors ease-out hover:bg-background-primary data-[orientation=vertical]:w-2.5 data-[state=hidden]:animate-scroll-fade-out data-[state=visible]:animate-scroll-fade-in"
+            className="hover:bg-background-primary data-[state=hidden]:animate-scroll-fade-out data-[state=visible]:animate-scroll-fade-in z-40 flex touch-none p-0.5 transition-colors ease-out select-none data-[orientation=vertical]:w-2.5"
             orientation="vertical"
           >
-            <ScrollArea.Thumb className="relative flex-1 rounded-[10px] bg-background-secondary before:absolute before:left-1/2 before:top-1/2 before:size-full before:min-h-11 before:min-w-5 before:-translate-x-1/2 before:-translate-y-1/2" />
+            <ScrollArea.Thumb className="bg-background-secondary relative flex-1 rounded-[10px] before:absolute before:top-1/2 before:left-1/2 before:size-full before:min-h-11 before:min-w-5 before:-translate-x-1/2 before:-translate-y-1/2" />
           </ScrollArea.Scrollbar>
         </ScrollArea.Root>
         <div
           ref={scrollAwareRef}
-          className={`pointer-events-none absolute bottom-0 left-0 h-24 w-full bg-linear-to-t from-background-primary ${isScrollAtBottom ? "opacity-0" : "opacity-100"} transition-opacity`}
+          className={`from-background-primary pointer-events-none absolute bottom-0 left-0 h-24 w-full bg-linear-to-t ${isScrollAtBottom ? "opacity-0" : "opacity-100"} transition-opacity`}
         ></div>
       </Collapsible.Content>
     </Collapsible.Root>
   );
 };
 
-export default CollapsibleFolders;
-
 const FolderItem = ({
   folder,
   currentFolderName,
+  sound,
 }: {
   folder: any;
   currentFolderName: string;
+  sound: () => void;
 }) => {
   // const pathname = usePathname();
   // const currentFolderName = decodeURIComponent(pathname.split("/")[2]);
@@ -174,17 +179,17 @@ const FolderItem = ({
         setIsEditFolderOpen={setIsEditFolderOpen}
         folderData={folder}
       />
-      <DeleteFolderModal
+      {/* <DeleteFolderModal
         isDeleteFolderOpen={isDeleteFolderOpen}
         setIsDeleteFolderOpen={setIsDeleteFolderOpen}
         folderId={folder.id}
-      />
+      /> */}
       <ContextMenu.Root>
         <ContextMenu.Trigger asChild>
           <div
             key={folder.id}
             className={cn(
-              "relative flex h-9 items-center gap-4 pl-3 text-[14px] transition-colors hover:text-text-primary",
+              "hover:text-text-primary relative flex h-9 items-center gap-4 pl-3 text-sm transition-colors",
               currentFolderName === folder.folder
                 ? "text-text-primary"
                 : "text-text-secondary",
@@ -202,33 +207,33 @@ const FolderItem = ({
             </span>
 
             <DropdownMenu.Root>
-              <DropdownMenu.Trigger asChild>
-                <button
-                  className="z-2 flex size-9 flex-none items-center justify-center rounded-md transition-opacity hover:bg-ui-hover"
-                  aria-label="Customise options"
-                >
-                  <DotsHorizontalIcon className="opacity-50" />
+              <DropdownMenu.Trigger
+                asChild
+                className="group/folder-item hover:bg-ui-hover data-[state=open]:bg-ui-hover z-2 inline-flex size-[35px] flex-none items-center justify-center rounded-md [&[data-state=open]>*]:opacity-100"
+              >
+                <button aria-label="Folder options">
+                  <DotsHorizontalIcon className="size-4 opacity-50 transition-[opacity] group-hover/folder-item:opacity-100" />
                 </button>
               </DropdownMenu.Trigger>
 
               <DropdownMenu.Portal>
                 <DropdownMenu.Content
-                  className="z-2000 min-w-[180px] overflow-hidden rounded-md border border-dashed border-border-interactive bg-background-secondary p-[5px] data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
+                  className="border-shadow bg-background-primary data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-2000 min-w-[180px] overflow-hidden rounded-md p-[5px]"
                   sideOffset={5}
                 >
                   <DropdownMenu.Item
-                    className="group relative flex h-[28px] cursor-pointer select-none items-center rounded-[3px] px-2 text-[13px] leading-none outline-none data-disabled:pointer-events-none data-highlighted:bg-ui-hover data-disabled:text-mauve8"
+                    className="group data-highlighted:bg-ui-hover data-disabled:text-mauve8 relative flex h-[28px] cursor-pointer items-center rounded-[3px] px-2 text-[13px] leading-none outline-none select-none data-disabled:pointer-events-none"
                     onSelect={() => {
                       setIsEditFolderOpen(true);
                     }}
                   >
                     Edit{" "}
-                    <div className="ml-auto pl-5 group-data-disabled:text-mauve8 group-data-highlighted:text-white">
+                    <div className="group-data-disabled:text-mauve8 ml-auto pl-5">
                       <EditIcon />
                     </div>
                   </DropdownMenu.Item>
                   <DropdownMenu.Item
-                    className="group relative flex h-[28px] cursor-pointer select-none items-center rounded-[3px] px-2 text-[13px] leading-none outline-none data-disabled:pointer-events-none data-highlighted:bg-ui-hover data-disabled:text-mauve8 data-highlighted:text-[#eb5757]"
+                    className="group text-danger data-highlighted:bg-ui-hover data-disabled:text-mauve8 relative flex h-[28px] cursor-pointer items-center rounded-[3px] px-2 text-[13px] leading-none outline-none select-none data-disabled:pointer-events-none data-highlighted:text-[#eb5757]"
                     // onSelect={async (e) => {
                     //   e.preventDefault();
                     //   const message = await deleteFolder(folder.id);
@@ -239,7 +244,7 @@ const FolderItem = ({
                     }}
                   >
                     Delete{" "}
-                    <span className="ml-auto pl-5 group-data-disabled:text-mauve8 group-data-highlighted:text-[#eb5757]">
+                    <span className="group-data-disabled:text-mauve8 ml-auto pl-5 group-data-highlighted:text-[#eb5757]">
                       <DeleteIcon />
                     </span>
                   </DropdownMenu.Item>
@@ -255,21 +260,21 @@ const FolderItem = ({
           </div>
         </ContextMenu.Trigger>
         <ContextMenu.Portal>
-          <ContextMenu.Content className="z-100 min-w-[180px] overflow-hidden rounded-md border border-dashed border-border-interactive bg-background-secondary p-[5px]">
+          <ContextMenu.Content className="border-shadow bg-background-primary z-100 min-w-[180px] overflow-hidden rounded-md p-[5px]">
             <ContextMenu.Item
-              className="group relative flex h-[28px] cursor-pointer select-none items-center rounded-[3px] px-2 text-[13px] leading-none outline-none data-disabled:pointer-events-none data-highlighted:bg-ui-hover data-disabled:text-mauve8"
+              className="group data-highlighted:bg-ui-hover data-disabled:text-mauve8 relative flex h-[28px] cursor-pointer items-center rounded-[3px] px-2 text-[13px] leading-none outline-none select-none data-disabled:pointer-events-none"
               onSelect={() => {
                 setIsEditFolderOpen(true);
               }}
             >
               Edit{" "}
-              <div className="ml-auto pl-5 group-data-disabled:text-mauve8 group-data-highlighted:text-white">
+              <div className="group-data-disabled:text-mauve8 ml-auto pl-5">
                 <EditIcon />
               </div>
             </ContextMenu.Item>
 
             <ContextMenu.Item
-              className="group relative flex h-[28px] cursor-pointer select-none items-center rounded-[3px] px-2 text-[13px] leading-none text-danger outline-none data-disabled:pointer-events-none data-highlighted:bg-ui-hover"
+              className="group text-danger data-highlighted:bg-ui-hover relative flex h-[28px] cursor-pointer items-center rounded-[3px] px-2 text-[13px] leading-none outline-none select-none data-disabled:pointer-events-none"
               // onSelect={async (e) => {
               //   e.preventDefault();
               //   const message = await deleteFolder(folder.id);
@@ -280,7 +285,7 @@ const FolderItem = ({
               }}
             >
               Delete{" "}
-              <span className="ml-auto pl-5 group-data-disabled:text-mauve8 group-data-highlighted:text-[#eb5757]">
+              <span className="group-data-disabled:text-mauve8 ml-auto pl-5 group-data-highlighted:text-[#eb5757]">
                 <DeleteIcon />
               </span>
             </ContextMenu.Item>
@@ -292,19 +297,4 @@ const FolderItem = ({
   );
 };
 
-// function DeleteFolderItem({ folderId }: { folderId: string }) {
-//   return (
-//     <ContextMenu.Item
-//       className="group relative flex h-[28px] cursor-pointer select-none items-center rounded-[3px] px-2 text-[13px] leading-none outline-none data-disabled:pointer-events-none data-highlighted:bg-ui-hover data-disabled:text-mauve8 data-highlighted:text-[#eb5757]"
-//       onSelect={async () => {
-//         const message = await deleteFolder(folderId);
-//         console.log({ message });
-//       }}
-//     >
-//       Delete{" "}
-//       <span className="ml-auto pl-5 group-data-disabled:text-mauve8 group-data-highlighted:text-[#eb5757]">
-//         <DeleteIcon />
-//       </span>
-//     </ContextMenu.Item>
-//   );
-// }
+export default CollapsibleFolders;

@@ -3,5 +3,5 @@ export default function FeedLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <>{children}</>;
+  return <div className="mx-auto w-full max-w-[750px]">{children}</div>;
 }

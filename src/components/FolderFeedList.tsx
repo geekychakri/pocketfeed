@@ -48,7 +48,6 @@ export function FolderFeedList({
   const addFeeds = useFeedsAdd();
   // console.log({ addFeeds });
 
-  const [tap] = useSound("/sounds/tap.wav");
   const loadMore = async () => {
     if (!pageInfo.hasNextPage || !pageInfo.cursor) return;
 
@@ -87,11 +86,11 @@ export function FolderFeedList({
               // href={`/feed/${item.title?.trim().replace(/\s+/g, "-").toLowerCase()}`}
               // href={`/feed/${item.feedId}`}
               key={item.id}
-              className="group/folder-feed relative isolate flex w-full items-center justify-between gap-4 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color] last:shadow-none"
+              className="group/folder-feed relative isolate flex w-full items-center justify-between gap-4 py-[10px] font-medium shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color] last:shadow-none"
               // onBlur={(e) => alert("BLURREd")}
             >
               <span className="flex items-center gap-3">
-                <Avatar className="inline-flex h-[30px] w-[30px] flex-none cursor-pointer select-none items-center justify-center overflow-hidden rounded-full bg-ui-normal">
+                <Avatar className="bg-ui-normal inline-flex h-[30px] w-[30px] flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full select-none">
                   <AvatarImage
                     className="h-full w-full rounded-[inherit] object-cover"
                     // src={
@@ -107,7 +106,7 @@ export function FolderFeedList({
                   </AvatarFallback>
                 </Avatar>
 
-                <span className="line-clamp-1 transition-[color] group-hover/folder-feed:text-brand-primary">
+                <span className="group-hover/folder-feed:text-brand-primary line-clamp-1 transition-[color]">
                   {decode(item.title)}
                 </span>
               </span>
@@ -116,7 +115,6 @@ export function FolderFeedList({
                 feedId={item.id as string}
                 folderName={folderName}
                 folders={JSON.parse(JSON.stringify(folders))}
-                sound={tap}
               />
               <Link
                 href={`/feed/${item.feedId}`}
@@ -155,7 +153,7 @@ export function FolderFeedList({
         <Button
           onClick={loadMore}
           disabled={loading}
-          className="pointer-events-auto mt-[10px] border border-border-primary bg-ui-normal px-2 py-4 text-sm text-text-primary transition-[background-color] hover:bg-ui-hover"
+          className="bg-ui-normal text-text-primary hover:bg-ui-hover border-shadow pointer-events-auto mt-[10px] flex items-center justify-center px-2 py-4 text-sm transition-[background-color]"
         >
           {loading ? (
             <SpinnerRotate fill="currentColor" />
@@ -166,7 +164,7 @@ export function FolderFeedList({
       )}
 
       {!pageInfo.hasNextPage && feeds.length >= 1 && (
-        <p className="mt-5 text-text-secondary">End of list!</p>
+        <p className="text-text-secondary mt-5">End of list!</p>
       )}
     </>
   );

@@ -86,6 +86,13 @@ const PodcastPlayer = () => {
           },
         ],
       });
+
+      navigator.mediaSession.setActionHandler("play", async () => {
+        if (show !== "hide") {
+          openPodcastPlayer();
+          audioPlayerRef.current?.play();
+        }
+      });
     }
   }, [title, albumCover]);
 

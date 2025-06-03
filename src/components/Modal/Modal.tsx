@@ -25,12 +25,12 @@ export const ModalContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ title, children, className, ...props }, forwardedRef) => (
   <DialogPrimitive.Portal>
-    <DialogPrimitive.Overlay className="fixed inset-0 z-120 bg-black/80 backdrop-blur-[1px] data-[state=open]:animate-overlayShow" />
+    <DialogPrimitive.Overlay className="bg-background-secondary/50 data-[state=open]:animate-overlayShow fixed inset-0 z-120 backdrop-blur-[1px]" />
     <DialogPrimitive.Content
       {...props}
       ref={forwardedRef}
       className={cn(
-        "fixed left-[50%] top-[50%] z-130 max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-lg py-[25px] shadow-[0_8px_30px_0px_rgba(0,0,0,0.12)] focus:outline-none data-[state=open]:animate-contentShow",
+        "data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] z-130 max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-lg py-[25px] shadow-[0_8px_30px_0px_rgba(0,0,0,0.12)] focus:outline-none",
         className,
       )}
     >
@@ -43,7 +43,7 @@ export const ModalContent = React.forwardRef<
       {children}
       <DialogPrimitive.Close asChild>
         <button
-          className="absolute right-2.5 top-2.5 inline-flex size-[25px] appearance-none items-center justify-center rounded-full text-text-primary hover:bg-ui-hover focus:outline-none"
+          className="text-text-primary hover:bg-ui-hover absolute top-2.5 right-2.5 inline-flex size-[25px] cursor-pointer appearance-none items-center justify-center rounded-full focus:outline-none"
           aria-label="Close"
         >
           <Cross2Icon />

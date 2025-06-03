@@ -287,7 +287,7 @@ export async function updateProfile(prevState: any, formData: FormData) {
       bio,
       birthday,
     });
-
+    revalidatePath("/user/[username]/(content)", "layout");
     return { message: "Profile updated successfully!" };
   } catch (err) {
     return { message: "Something went wrong!" };
@@ -365,6 +365,7 @@ export async function updateFolder(prevState: any, formData: FormData) {
 export async function deleteFeed(prevState: any, formData: FormData) {
   console.log("DELETE FEED");
   try {
+    throw new Error("");
     const { userId }: { userId: string | null } = await auth();
     const feedId = formData.get("feedId") as string;
     const folderName = formData.get("folderName") as string;
@@ -502,6 +503,56 @@ export async function deleteBookmarkAction(formData: FormData) {
     return { message: "success" };
   } catch (err) {
     return { message: "error" };
+  }
+}
+
+export async function followUser(followeeName: string) {
+  try {
+    const followerId = (await auth()).userId as string;
+    const user = await currentUser();
+    const followerName = user?.username as string;
+
+    const followeeUser = await xata.db.users
+      .filter({ username: followeeName })
+      .getFirst();
+
+    const result = await xata.db.follows.create({
+      followerId,
+      followeeId: followeeUser?.userId as string,
+      followerName,
+      followeeName,
+    });
+
+    console.log({ result });
+    revalidatePath("/user/[username]/(content)", "layout");
+    return { message: "success", recordId: result.id };
+  } catch (err) {
+    console.log(err);
+    return { message: "" };
+  }
+}
+
+export async function unFollowUser(recordId: string) {
+  console.log({ recordId });
+  try {
+    // const followerId = (await auth()).userId as string;
+
+    // const followeeUser = await xata.db.users
+    //   .filter({ username: followeeName })
+    //   .getFirst();
+
+    // const record = await xata.db.follows
+    //   .filter({ followerId, followeeId: followeeUser?.userId as string })
+    //   .getFirst();
+
+    const result = await xata.db.follows.delete(recordId as string);
+
+    revalidatePath("/user/[username]/(content)", "layout");
+
+    return { message: "success" };
+  } catch (err) {
+    console.log(err);
+    return { message: "" };
   }
 }
 

@@ -48,7 +48,9 @@ async function checkBookmarkExists(
   }
 }
 
-export default async function Read(props: { params: Promise<{ link: string }> }) {
+export default async function Read(props: {
+  params: Promise<{ link: string }>;
+}) {
   const params = await props.params;
   const userId = (await auth()).userId as string;
   let article, articleUrl;
@@ -122,7 +124,7 @@ export default async function Read(props: { params: Promise<{ link: string }> })
   }
 
   return (
-    <main className="flex-1">
+    <main className="w-full flex-1">
       {/* <ArticleSettings /> */}
       {/* <nav className="sticky top-0 z-10 flex h-14 items-center justify-between gap-3 border-b border-border-non-interactive bg-background-primary px-4">
         <p className="text-text-secondary">{article?.siteName}</p>
@@ -143,8 +145,8 @@ export default async function Read(props: { params: Promise<{ link: string }> })
         articleSiteName={article?.siteName}
         articleUrl={articleUrl}
         articleTitle={article?.title as string}
-        bookmarkExists={bookmarkItem.isBookmarkExists}
-        bookmarkId={bookmarkItem.id}
+        bookmarkExists={bookmarkItem?.isBookmarkExists}
+        bookmarkId={bookmarkItem?.id}
       />
 
       {/* <div className="relative mx-auto mt-7 flex w-full max-w-3xl flex-col">
@@ -156,10 +158,10 @@ export default async function Read(props: { params: Promise<{ link: string }> })
         </div>
         <Article content={article?.content as string} />
       </div> */}
-      <div className="mx-auto w-full max-w-[60ch] px-4 pb-14 pt-7">
+      <div className="mx-auto w-full max-w-[60ch] px-4 pt-7 pb-14">
         <div className="relative flex items-center">
           {/* <RouteBack className="absolute -left-9 p-2" /> */}
-          <h1 className="flex h-14 items-center text-balance text-xl font-medium tracking-tight text-text-primary!">
+          <h1 className="text-text-primary! flex h-14 items-center text-xl font-medium tracking-tight text-balance">
             {article?.title}
           </h1>
         </div>

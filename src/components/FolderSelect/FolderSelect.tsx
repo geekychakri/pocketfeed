@@ -53,11 +53,11 @@ const FolderSelect = ({ folders }: { folders: any }) => {
         </Select.Trigger>
         <Select.Portal>
           <Select.Content
-            className="border-shadow w-(--radix-select-trigger-width) overflow-hidden rounded-md bg-background-secondary shadow-[0px_8px_30px_rgba(0,0,0,.12)]"
+            className="border-shadow bg-background-secondary w-(--radix-select-trigger-width) overflow-hidden rounded-md shadow-[0px_8px_30px_rgba(0,0,0,.12)]"
             position="popper"
             sideOffset={10}
           >
-            <Select.ScrollUpButton className="flex h-[25px] cursor-default items-center justify-center bg-ui-active shadow-md">
+            <Select.ScrollUpButton className="bg-ui-active flex h-[25px] cursor-default items-center justify-center shadow-md">
               <ChevronUpIcon />
             </Select.ScrollUpButton>
             <Select.Viewport className="p-[5px]">
@@ -73,7 +73,7 @@ const FolderSelect = ({ folders }: { folders: any }) => {
               </SelectItem>
             </Select.Viewport>
 
-            <Select.ScrollDownButton className="flex h-[25px] cursor-default items-center justify-center bg-ui-active shadow-inner">
+            <Select.ScrollDownButton className="bg-ui-active flex h-[25px] cursor-default items-center justify-center shadow-inner">
               <ChevronDownIcon />
             </Select.ScrollDownButton>
           </Select.Content>
@@ -84,7 +84,7 @@ const FolderSelect = ({ folders }: { folders: any }) => {
           type="text"
           name="newFolder"
           placeholder="New folder name"
-          className="border-shadow w-full rounded-md bg-transparent px-4 py-2 duration-150"
+          className="border-shadow w-full rounded-md bg-transparent px-4 py-2"
           required
         />
       )}
@@ -99,7 +99,7 @@ const SelectItem = React.forwardRef<
   return (
     <Select.Item
       className={cn(
-        "data-highlighted:bg-primary relative flex h-[25px] select-none items-center rounded-[3px] py-4 pl-[25px] pr-[35px] text-sm leading-none data-disabled:pointer-events-none data-highlighted:bg-ui-hover data-disabled:text-mauve8 data-highlighted:outline-none",
+        "data-highlighted:bg-primary data-highlighted:bg-ui-hover data-disabled:text-mauve8 relative flex h-[25px] items-center rounded-[3px] py-4 pr-[35px] pl-[25px] text-sm leading-none select-none data-disabled:pointer-events-none data-highlighted:outline-none",
         className,
       )}
       {...props}
