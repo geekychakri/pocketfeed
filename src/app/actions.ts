@@ -488,7 +488,7 @@ export async function addBookmarkAction(formData: FormData) {
 //   return { message: "success" };
 // }
 
-export async function deleteBookmarkAction(formData: FormData) {
+export async function deleteBookmarkAction(prevState: any, formData: FormData) {
   // console.log("DELETE FEED");
   try {
     const { userId }: { userId: string | null } = await auth();

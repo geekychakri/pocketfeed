@@ -78,7 +78,7 @@ export default function BookmarkList({
               <span className="flex flex-col gap-2">
                 <span> {bookmark.bookmarkTitle}</span>
 
-                <span className="text-sm text-text-secondary">
+                <span className="text-text-secondary text-sm">
                   {bookmark.bookmarkLink}
                 </span>
               </span>
@@ -97,7 +97,7 @@ export default function BookmarkList({
         <Button
           onClick={loadMore}
           disabled={loading}
-          className="pointer-events-auto mt-[10px] w-full border border-border-primary bg-ui-normal text-sm text-text-primary transition-[background-color] hover:bg-ui-hover"
+          className="border-border-primary bg-ui-normal text-text-primary hover:bg-ui-hover pointer-events-auto mt-[10px] flex w-full items-center justify-center border text-sm transition-[background-color]"
         >
           {loading ? (
             <SpinnerRotate fill="currentColor" />
@@ -107,7 +107,7 @@ export default function BookmarkList({
         </Button>
       )}
       {!pageInfo.hasNextPage && bookmarks.length >= 1 && (
-        <p className="mt-5 text-text-secondary">End of list!</p>
+        <p className="text-text-secondary mt-5">End of list!</p>
       )}
     </>
   );

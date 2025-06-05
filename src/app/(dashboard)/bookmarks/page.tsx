@@ -23,7 +23,7 @@ export default async function Bookmarks() {
     cursor: page.meta.page.cursor, // Contains cursor information
   };
   return (
-    <div className="py-20">
+    <div className="mx-auto w-full max-w-[750px] py-20">
       <div className="relative mb-5 flex items-center">
         <RouteBack className="absolute -left-9" />
         <h1 className="text-lg font-medium">Bookmarks</h1>
