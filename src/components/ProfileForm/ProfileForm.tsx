@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useActionState } from "react";
 import { useFormState } from "react-dom";
 import { UsersRecord } from "@/xata";
 
@@ -12,7 +12,11 @@ import SubmitButton from "@/components/SubmitButton";
 import Input from "@/components/ui/Input";
 import Textarea from "@/components/ui/Textarea";
 
+import { SpinnerRotate } from "../SpinnerRotate";
+import Button from "../ui/Button";
+
 const initialState = {
+  type: "",
   message: "",
 };
 
@@ -26,18 +30,23 @@ export default function ProfileForm({ userInfo }: { userInfo: UsersRecord }) {
   const { username, email, fullname, website, bio, birthday } =
     userInfo as UsersRecord;
 
-  const [formState, formAction] = useFormState(updateProfile, initialState);
+  const [formState, formAction, isPending] = useActionState(
+    updateProfile,
+    initialState,
+  );
 
   useEffect(() => {
-    if (formState?.message) {
+    if (formState?.type === "success") {
       console.log("state msg");
+      toast.success(formState?.message);
+    } else if (formState.type === "error") {
       toast.error(formState?.message);
     }
   }, [formState]);
 
   return (
     <div className="flex flex-col gap-5">
-      <h2 className="text-xl text-text-secondary">Profile</h2>
+      <h2 className="text-text-secondary text-xl">Profile</h2>
 
       <form action={formAction} className="flex flex-col gap-6">
         {/* <label htmlFor="username" className="flex flex-col gap-2">
@@ -109,7 +118,14 @@ export default function ProfileForm({ userInfo }: { userInfo: UsersRecord }) {
         {/* <button className="rounded-md bg-primary px-4 py-2 font-medium text-white">
         Save
       </button> */}
-        <SubmitButton>Save</SubmitButton>
+        {/* <SubmitButton>Save</SubmitButton> */}
+        <Button
+          type="submit"
+          aria-disabled={isPending}
+          className="flex h-11 cursor-pointer items-center justify-center rounded-md"
+        >
+          <span>{isPending ? <SpinnerRotate /> : "Save"}</span>
+        </Button>
       </form>
     </div>
   );
@@ -129,7 +145,7 @@ function ProfileBio({ bio }: { bio: string }) {
     <label htmlFor="bio" className="flex flex-col gap-2">
       <span className="flex justify-between">
         <span className="font-medium">Bio</span>
-        <span className="text-sm tabular-nums text-text-secondary">
+        <span className="text-text-secondary text-sm tabular-nums">
           {text.length} / {MAX_TEXT_LENGTH}
         </span>
       </span>

@@ -9,12 +9,12 @@ const xata = getXataClient();
 
 export async function GET(request: Request) {
   const user = await currentUser();
-  console.log({ user });
+  // console.log({ user });
   const feeds = await xata.db.feeds
     .filter({ username: user?.username })
     .select(["*", "folderName.folder"])
     .getAll(); //TODO: getAll or getMany or filter by userId
-  // console.log({ feeds: feeds[0] });
+  console.dir(feeds);
 
   const feedsByFolder = {} as {};
   // feeds.forEach((feed) => {

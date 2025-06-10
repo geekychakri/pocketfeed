@@ -74,14 +74,14 @@ function FileUpload({
       <div className="border-shadow flex gap-6 rounded-md p-8">
         <div className="relative">
           {avatarUrl ? (
-            <Avatar className="inline-flex h-16 w-16 flex-none cursor-pointer select-none items-center justify-center overflow-hidden rounded-full align-middle duration-150 hover:ring-4 hover:ring-ui-normal">
+            <Avatar className="hover:ring-ui-normal bg-ui-normal ring-ui-normal inline-flex h-16 w-16 flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full align-middle ring-1 transition-shadow select-none hover:ring-4">
               <AvatarImage
                 className="h-full w-full rounded-[inherit] object-cover"
                 src={file}
                 alt={username}
               />
               <AvatarFallback
-                className="leading-1 flex h-full w-full items-center justify-center bg-ui-normal text-[15px] font-medium"
+                // className="bg-ui-normal flex h-full w-full items-center justify-center text-[15px] leading-1 font-medium"
                 delayMs={600}
               >
                 {getInitials(username)}

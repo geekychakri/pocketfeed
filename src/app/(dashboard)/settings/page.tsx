@@ -29,8 +29,8 @@ export default async function Settings() {
 
   console.log(user);
 
-  const { avatar, ...rest } = user;
-  const userInfo = rest;
+  const { avatarUrl, ...userInfo } = user;
+
   // const userInfo = (({ fullname, website, bio }) => ({
   //   fullname,
   //   website,
@@ -47,7 +47,7 @@ export default async function Settings() {
       <div className="border-shadow flex items-center justify-between rounded-md p-8">
         <div className="flex flex-col gap-2">
           <h2 className="font-medium">Membership Status</h2>
-          <span className="self-start rounded-sm bg-brand-primary/10 px-2 py-1 text-sm text-brand-primary">
+          <span className="bg-brand-primary/10 text-brand-primary self-start rounded-sm px-2 py-1 text-sm">
             Free
           </span>
         </div>
@@ -58,20 +58,20 @@ export default async function Settings() {
       <div>
         <FileUpload
           username={userInfo.username as string}
-          avatarUrl={user.avatarUrl as string}
+          avatarUrl={avatarUrl as string}
         />
       </div>
-      <div className="h-[1px] border-t border-dotted border-border-non-interactive"></div>
+      <div className="border-border-non-interactive h-[1px] border-t border-dotted"></div>
       <ProfileForm userInfo={userInfo} />
-      <div className="h-[1px] border-t border-dotted border-border-non-interactive"></div>
-      <div className="flex flex-col gap-5">
+      <div className="border-border-non-interactive h-[1px] border-t border-dotted"></div>
+      {/* <div className="flex flex-col gap-5">
         <h2 className="text-xl font-medium text-text-secondary">
           Integrations
         </h2>
         <div className="border-shadow rounded-md p-8">
           <h3>Notion</h3>
         </div>
-      </div>
+      </div> */}
       <div>
         <Link
           href="/settings/import_export"

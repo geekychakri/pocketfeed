@@ -288,9 +288,9 @@ export async function updateProfile(prevState: any, formData: FormData) {
       birthday,
     });
     revalidatePath("/user/[username]/(content)", "layout");
-    return { message: "Profile updated successfully!" };
+    return { type: "success", message: "Profile updated successfully!" };
   } catch (err) {
-    return { message: "Something went wrong!" };
+    return { type: "error", message: "Something went wrong!" };
   }
 }
 

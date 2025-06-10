@@ -90,7 +90,7 @@ export default function ProfileAvatar({
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger asChild>
         <button className="flex items-center gap-2 rounded-full">
-          <Avatar className="hover:ring-ui-normal inline-flex h-[35px] w-[35px] flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full align-middle duration-150 select-none hover:ring-4">
+          <Avatar className="hover:ring-ui-normal ring-ui-normal inline-flex h-[35px] w-[35px] flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full align-middle ring-1 duration-150 select-none hover:ring-4">
             <AvatarImage
               className="h-full w-full rounded-[inherit] object-cover"
               src={avatarUrl}

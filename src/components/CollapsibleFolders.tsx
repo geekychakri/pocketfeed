@@ -179,11 +179,11 @@ const FolderItem = ({
         setIsEditFolderOpen={setIsEditFolderOpen}
         folderData={folder}
       />
-      {/* <DeleteFolderModal
+      <DeleteFolderModal
         isDeleteFolderOpen={isDeleteFolderOpen}
         setIsDeleteFolderOpen={setIsDeleteFolderOpen}
         folderId={folder.id}
-      /> */}
+      />
       <ContextMenu.Root>
         <ContextMenu.Trigger asChild>
           <div
