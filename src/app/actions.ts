@@ -5,6 +5,8 @@ import { nanoid } from "nanoid";
 
 import { auth, currentUser } from "@clerk/nextjs/server";
 
+import { updateProfileSchema } from "@/lib/zod/schemas/update-profile";
+
 // import { currentUser } from "@clerk/nextjs/server";
 
 import { getXataClient } from "@/xata";
@@ -15,6 +17,10 @@ import Parser from "rss-parser";
 import { cleanUrl, getErrorMessage } from "@/lib/utils";
 
 import urlMetadata from "url-metadata";
+import { fromZodError } from "@/lib/api/errors";
+import { ZodError } from "zod";
+
+import type { updateProfileActionResponse } from "@/types";
 
 const xata = getXataClient();
 
@@ -61,138 +67,142 @@ async function checkIfFeedAlreadyExists(feeds: any, userId: string) {
 }
 
 export async function addFeeds(prevState: any, formData: FormData) {
-  const user = await currentUser();
-  const userId = (await auth()).userId as string;
-  console.log({ username: user?.username });
-  const results = qs.parse(
-    Object.fromEntries(formData.entries()) as {},
-  ) as FeedsType;
-  console.log({ results });
+  try {
+    const user = await currentUser();
+    const userId = (await auth()).userId as string;
+    console.log({ username: user?.username });
+    const results = qs.parse(
+      Object.fromEntries(formData.entries()) as {},
+    ) as FeedsType;
+    console.log({ results });
 
-  const feedId = nanoid();
-  let feeds = [];
+    const feedId = nanoid();
+    let feeds = [];
 
-  if (results.feeds?.length > 1) {
-    feeds = results?.feeds
-      .filter((item) => Boolean(item.isChecked))
-      .map((item) => {
+    if (results.feeds?.length > 1) {
+      feeds = results?.feeds
+        .filter((item) => Boolean(item.isChecked))
+        .map((item) => {
+          return {
+            rssURL: item?.rssURL,
+            title: item?.title,
+            // folder: results.folder,
+            favicon: results.favicon,
+            siteURL: results.siteURL,
+            username: user?.username, //TODO:
+            feedId: nanoid(),
+            userId,
+          };
+        });
+    } else {
+      feeds = results?.feeds.map((item) => {
         return {
           rssURL: item?.rssURL,
-          title: item?.title,
           // folder: results.folder,
           favicon: results.favicon,
           siteURL: results.siteURL,
-          username: user?.username, //TODO:
+          title: item?.title,
+          username: user?.username,
           feedId: nanoid(),
           userId,
         };
       });
-  } else {
-    feeds = results?.feeds.map((item) => {
-      return {
-        rssURL: item?.rssURL,
-        // folder: results.folder,
-        favicon: results.favicon,
-        siteURL: results.siteURL,
-        title: item?.title,
-        username: user?.username,
-        feedId: nanoid(),
-        userId,
-      };
-    });
-  }
-
-  // console.log({ feeds });
-
-  if (!(feeds.length >= 1)) {
-    return {
-      message: "Select at least one feed.",
-    };
-  }
-
-  //CHECK IF FEED EXISTS //TODO: SPLIT IT
-  const rssUrls = feeds.map((feed) => feed.rssURL);
-
-  // console.log(rssUrls);
-
-  const existingRecords = await xata.db.feeds
-    .filter({
-      userId,
-      rssURL: { $any: rssUrls },
-    })
-    .getAll();
-
-  // console.log({ existingRecords });
-
-  const existingRssUrls = new Set(
-    existingRecords.map((record) => record.rssURL),
-  );
-
-  // console.log({ existingRssUrls });
-  const uniqueRecords = feeds.filter(
-    (record) => !existingRssUrls.has(record.rssURL),
-  );
-  console.log({ uniqueRecords });
-
-  if (uniqueRecords.length >= 1) {
-    if (results.newFolder) {
-      const folderExists = await xata.db.folders
-        .filter({ userId, folder: { $iContains: results.newFolder } })
-        .getFirst();
-
-      if (folderExists) {
-        return { message: "Folder with this name already exists." };
-      }
-
-      const newFolder = await xata.db.folders.create({
-        userId,
-        folder: results.newFolder,
-        username: user?.username as string,
-      });
-      const newFeeds = uniqueRecords.map((feed) => ({
-        ...feed,
-        folderName: {
-          id: newFolder.id,
-          userId,
-          folder: results.folder,
-          username: user?.username as string,
-        },
-      }));
-      const records = await xata.db.feeds.create(newFeeds as []);
-      // console.log({ newFolder });
-      // const p = await Promise.all([records, newFolder]);
-      // console.log({ p });
-
-      // const records = xata.db.feeds.create(feeds);
-      // const folders = xata.db.folders.create({
-      //   userId,
-      //   folder,
-      // });
-      redirect(`/folder/${results.newFolder}`);
-      console.log("DONE");
-    } else {
-      const folder = await xata.db.folders
-        .filter({ userId, folder: results.folder })
-        .getFirst();
-
-      const newFeeds = uniqueRecords.map((feed) => ({
-        ...feed,
-        folderName: {
-          id: folder?.id,
-          userId,
-          folder: folder?.folder,
-          username: user?.username as string,
-        },
-      }));
-
-      console.log({ newFeeds });
-
-      const records = await xata.db.feeds.create(newFeeds as []);
-
-      redirect(`/folder/${results.folder}`);
     }
-  } else {
-    return { message: "Feed already exists!" };
+
+    // console.log({ feeds });
+
+    if (!(feeds.length >= 1)) {
+      return {
+        message: "Select at least one feed.",
+      };
+    }
+
+    //CHECK IF FEED EXISTS //TODO: SPLIT IT
+    const rssUrls = feeds.map((feed) => feed.rssURL);
+
+    // console.log(rssUrls);
+
+    const existingRecords = await xata.db.feeds
+      .filter({
+        userId,
+        rssURL: { $any: rssUrls },
+      })
+      .getAll();
+
+    // console.log({ existingRecords });
+
+    const existingRssUrls = new Set(
+      existingRecords.map((record) => record.rssURL),
+    );
+
+    // console.log({ existingRssUrls });
+    const uniqueRecords = feeds.filter(
+      (record) => !existingRssUrls.has(record.rssURL),
+    );
+    console.log({ uniqueRecords });
+
+    if (uniqueRecords.length >= 1) {
+      if (results.newFolder) {
+        const folderExists = await xata.db.folders
+          .filter({ userId, folder: { $iContains: results.newFolder } })
+          .getFirst();
+
+        if (folderExists) {
+          return { message: "Folder with this name already exists." };
+        }
+
+        const newFolder = await xata.db.folders.create({
+          userId,
+          folder: results.newFolder,
+          username: user?.username as string,
+        });
+        const newFeeds = uniqueRecords.map((feed) => ({
+          ...feed,
+          folderName: {
+            id: newFolder.id,
+            userId,
+            folder: results.folder,
+            username: user?.username as string,
+          },
+        }));
+        const records = await xata.db.feeds.create(newFeeds as []);
+        // console.log({ newFolder });
+        // const p = await Promise.all([records, newFolder]);
+        // console.log({ p });
+
+        // const records = xata.db.feeds.create(feeds);
+        // const folders = xata.db.folders.create({
+        //   userId,
+        //   folder,
+        // });
+        redirect(`/folder/${results.newFolder}`);
+        console.log("DONE");
+      } else {
+        const folder = await xata.db.folders
+          .filter({ userId, folder: results.folder })
+          .getFirst();
+
+        const newFeeds = uniqueRecords.map((feed) => ({
+          ...feed,
+          folderName: {
+            id: folder?.id,
+            userId,
+            folder: folder?.folder,
+            username: user?.username as string,
+          },
+        }));
+
+        console.log({ newFeeds });
+
+        const records = await xata.db.feeds.create(newFeeds as []);
+
+        redirect(`/folder/${results.folder}`);
+      }
+    } else {
+      return { message: "Feed already exists!" };
+    }
+  } catch (err) {
+    return { message: "Something went wrong!" };
   }
 
   // if (results.newFolder) {
@@ -264,7 +274,37 @@ export async function createUser(email: string, username: string) {
   }
 }
 
-export async function updateProfile(prevState: any, formData: FormData) {
+export async function updateProfile(
+  prevState: updateProfileActionResponse | null,
+  formData: FormData,
+): Promise<updateProfileActionResponse> {
+  const rawFormData = {
+    fullname: formData.get("fullname") as string,
+    website: formData.get("website") as string,
+    bio: formData.get("bio") as string,
+    birthday: formData.get("birthday") as string,
+  };
+  console.log(rawFormData);
+  const { userId }: { userId: string | null } = await auth();
+  if (!userId) {
+    return {
+      type: "error",
+      message: "You must be signed in to update your profile!",
+    };
+  }
+  const data = updateProfileSchema.safeParse(rawFormData);
+
+  console.log({ data });
+
+  if (!data.success) {
+    console.log(data.error.flatten().fieldErrors);
+    return {
+      type: "error",
+      message: "Please fix the errors in the form.",
+      errors: data.error.flatten().fieldErrors,
+      inputs: rawFormData,
+    };
+  }
   const fullname = formData.get("fullname") as string;
   const website = cleanUrl(formData.get("website") as string);
   const bio = formData.get("bio") as string;
@@ -272,15 +312,8 @@ export async function updateProfile(prevState: any, formData: FormData) {
 
   console.log({ fullname, website, bio });
 
-  const { userId }: { userId: string | null } = await auth();
-
   try {
     const user = await xata.db.users.filter({ userId: userId }).getFirst();
-    // await user?.update({
-    //   fullname,
-    //   website,
-    //   bio,
-    // });
     const updateUser = await xata.db.users.update(user?.id as string, {
       fullname,
       website,

@@ -2,6 +2,8 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { number } from "zod";
 
+import { toast } from "sonner";
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -299,4 +301,12 @@ export function compactNumber(value: number) {
     notation: "compact",
     maximumSignificantDigits: 3,
   }).format(value);
+}
+
+export function toastError(message: string) {
+  return toast.error(message, {
+    style: {
+      color: "rgba(var(--danger))",
+    },
+  });
 }

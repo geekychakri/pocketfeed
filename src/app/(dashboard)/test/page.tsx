@@ -73,8 +73,6 @@
 //   return <div ref={(node) => console.log(node)}>Test</div>;
 // };
 
-"use client";
-
 // import { useFullscreen } from "@/store/read-fullscreen";
 // import { useEffect, useState } from "react";
 
@@ -99,12 +97,18 @@
 //   );
 // }
 
-"use client";
-
 // import TestChild from "./components/test-child";
 
 export default function Test() {
   console.log("RENDERED");
   //
-  return <div>hey</div>;
+  return (
+    <div>
+      hey
+      <form>
+        <input type="text" name="firstname" />
+        <button>Submit</button>
+      </form>
+    </div>
+  );
 }

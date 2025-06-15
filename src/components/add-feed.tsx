@@ -18,7 +18,7 @@ import { SpinnerRotate } from "@/components/SpinnerRotate";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 
-import { cn, checkIfObjectIsEmpty, isHttpValid } from "@/lib/utils";
+import { cn, checkIfObjectIsEmpty, isHttpValid, toastError } from "@/lib/utils";
 import { addFeeds } from "@/app/actions";
 
 import useSound from "use-sound";
@@ -88,11 +88,11 @@ export default function AddFeed({ folders }: { folders: any }) {
       });
       setRssData(data);
     } catch (error) {
+      playCaution();
       let message;
       if (error instanceof Error) message = error.message;
       else message = String(error);
-      toast.error(message);
-      playCaution();
+      toastError(message);
     } finally {
       setIsLoading(false);
     }

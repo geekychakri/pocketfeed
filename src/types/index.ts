@@ -62,3 +62,19 @@ export type FeedItemType = {
     image: string;
   };
 };
+
+export type UserProfileFormData = {
+  fullname: string;
+  website: string;
+  bio: string;
+  birthday: string;
+};
+
+export type updateProfileActionResponse = {
+  type: string;
+  message: string;
+  errors?: {
+    [K in keyof UserProfileFormData]?: string[];
+  };
+  inputs?: UserProfileFormData;
+};
