@@ -7,7 +7,8 @@
     "dev-tunnel": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "inngest:dev": "npx inngest-cli@latest dev --no-discovery -u http://localhost:3000/api/inngest"
   },
   "dependencies": {
     "@braintree/browser-detection": "^2.0.1",
@@ -43,6 +44,7 @@
     "cloudinary": "^2.5.1",
     "clsx": "^2.1.0",
     "cmdk": "^1.0.0",
+    "cookies-next": "^6.0.0",
     "dayjs": "^1.11.13",
     "dompurify": "^3.1.7",
     "extend": "^3.0.2",
@@ -54,6 +56,7 @@
     "howler": "^2.2.4",
     "html-entities": "^2.5.2",
     "htmlparser2": "^9.1.0",
+    "inngest": "^3.39.1",
     "input-otp": "^1.2.4",
     "isomorphic-dompurify": "^2.16.0",
     "linkinator": "^6.1.2",
@@ -69,6 +72,7 @@
     "player.style": "^0.0.10",
     "qs": "^6.12.2",
     "react": "^19.1.0",
+    "react-aria-components": "^1.10.1",
     "react-dom": "^19.1.0",
     "react-drag-drop-files": "^3.0.1",
     "react-error-boundary": "^6.0.0",
@@ -83,7 +87,7 @@
     "sonner": "^1.4.41",
     "string-strip-html": "^13.4.8",
     "svix": "^1.35.0",
-    "swr": "^2.2.5",
+    "swr": "^2.3.3",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
     "url": "^0.11.3",

@@ -98,17 +98,107 @@
 // }
 
 // import TestChild from "./components/test-child";
+"use client";
+import { useEffect, useState } from "react";
+
+import useSWR from "swr";
+
+import {
+  useSetCookie,
+  useGetCookie,
+  useDeleteCookie,
+} from "cookies-next/client";
+import AriaFileUpload from "@/components/aria-file-upload";
+
+class StatusError extends Error {
+  info: string | undefined;
+  status: number | undefined;
+}
+
+async function fetcher<JSON = any>(
+  input: RequestInfo,
+  init?: RequestInit,
+): Promise<JSON> {
+  const res = await fetch(input, init);
+  if (!res.ok) {
+    const error = new StatusError("An error occurred while fetching the data.");
+    // Attach extra info to the error object.
+    error.info = await res.json();
+    error.status = res.status;
+    throw error;
+  }
+  return res.json();
+}
+
+// export default function Test() {
+//   const [inngestExecutionId, setInngestExecutionId] = useState<string | null>(
+//     "",
+//   );
+
+//   const setCookie = useSetCookie();
+//   const getCookie = useGetCookie();
+//   const deleteCookie = useDeleteCookie();
+
+//   const inngestId = getCookie("inngestExecutionId");
+
+//   console.log({ inngestId });
+
+//   const [isCompleted, setIsCompleted] = useState(false);
+
+//   const {
+//     data,
+//     error: embedError,
+//     isLoading,
+//   } = useSWR(
+//     inngestExecutionId || inngestId
+//       ? `/api/getInngestStatus/${inngestExecutionId || inngestId}`
+//       : null,
+//     fetcher,
+//     {
+//       // keepPreviousData: true,
+//       refreshInterval: isCompleted ? 0 : 1000,
+//       dedupingInterval: 0,
+//       revalidateOnFocus: false,
+//       // revalidateOnMount: true,
+//       onSuccess(data, key, config) {
+//         if (data?.status === "Completed") {
+//           // setInngestExecutionId(null);
+//           setIsCompleted(true);
+//           // deleteCookie("inngestExecutionId");
+//         }
+//       },
+//     },
+//   );
+
+//   console.log({ data });
+
+//   const handleClick = async () => {
+//     const res = await fetch("/api/hello");
+//     const data = await res.json();
+//     console.log(data);
+//     setInngestExecutionId(data.id);
+//     setCookie("inngestExecutionId", data.id);
+//   };
+
+//   useEffect(() => {
+//     if (data?.status === "Completed") {
+//       deleteCookie("inngestExecutionId");
+//     }
+//   }, [data]);
+
+//   return (
+//     <div>
+//       <button onClick={handleClick}>Submit</button>
+//       <div>Status - {isLoading ? "..." : data?.status}</div>
+//     </div>
+//   );
+// }
 
 export default function Test() {
-  console.log("RENDERED");
-  //
   return (
     <div>
-      hey
-      <form>
-        <input type="text" name="firstname" />
-        <button>Submit</button>
-      </form>
+      Test
+      <AriaFileUpload />
     </div>
   );
 }

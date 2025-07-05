@@ -1,5 +1,6 @@
 "use client"; // Error boundaries must be Client Components
 
+import Button from "@/components/ui/Button";
 import { useEffect } from "react";
 
 export default function Error({
@@ -15,16 +16,22 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="p-4">
-      <h2>Something went wrong!</h2>
-      <button
+    <div className="mx-auto flex w-full max-w-[750px] flex-col items-center gap-6 py-20">
+      <p className="flex flex-col items-center gap-1 text-xl">
+        <span>
+          Something went wrong, but don&apos;t fret. It&apos;s not your fault.
+        </span>
+        <span>Let&apos;s try again.</span>
+      </p>
+      <Button
+        className="bg-cta hover:bg-cta-hover text-white"
         onClick={
           // Attempt to recover by trying to re-render the segment
           () => reset()
         }
       >
         Try again
-      </button>
+      </Button>
     </div>
   );
 }

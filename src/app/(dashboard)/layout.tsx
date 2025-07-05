@@ -31,7 +31,7 @@ export default async function MainLayout({
 }>) {
   // const { show } = useShowPodcastPlayer();
   const { userId }: { userId: string | null } = await auth();
-  console.log({ userId });
+  // console.log({ userId });
   // HANDLE NULL FILTER //TODO:
   const [user, folders] = await Promise.all([
     xata.db.users
@@ -64,7 +64,7 @@ export default async function MainLayout({
   //   format: "webp",
   // });
 
-  console.log({ username: user });
+  // console.log({ username: user });
 
   return (
     <main className="scrollbar-gutter-stable scrollbar-width-thin flex h-screen w-full overflow-y-auto">

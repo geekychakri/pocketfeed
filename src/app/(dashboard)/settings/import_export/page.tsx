@@ -8,9 +8,11 @@ import Button from "@/components/ui/Button";
 import { useState } from "react";
 import RouteBack from "@/components/RouteBack/RouteBack";
 import { SpinnerRotate } from "@/components/SpinnerRotate";
+import Link from "next/link";
 
 export default function ImportExportOPML() {
   const [loading, setLoading] = useState(false);
+
   const handleTest = async () => {
     setLoading(true);
     try {
@@ -38,7 +40,7 @@ export default function ImportExportOPML() {
       <div className="flex flex-col gap-4">
         <h2 className="font-semibold">Export</h2>
 
-        <div className="border-border-interactive flex items-center justify-between rounded-lg border border-dashed p-6">
+        <div className="border-shadow flex items-center justify-between rounded-lg p-6">
           <p className="flex-1">Subscriptions</p>
           <Button
             // className="bg-primary rounded-md px-4 py-2 font-medium text-white"
@@ -55,23 +57,14 @@ export default function ImportExportOPML() {
               className="text-text-primary invisible [grid-area:1/1] group-data-[loading=true]/download-opml:visible"
             />
           </Button>
-
-          {/* <button
-            data-loading={loading}
-            className="group grid h-12 place-items-center gap-3 rounded-md bg-ui-normal px-4 py-2 font-medium transition-all"
-            onClick={handleTest}
-          >
-            <SpinnerRotate
-              aria-label="Downloading"
-              className="invisible [grid-area:1/-1] group-data-[loading=true]:visible"
-            />
-
-            <span className="[grid-area:1/-1] group-data-[loading=true]:invisible">
-              Download
-            </span>
-          </button> */}
         </div>
       </div>
+      <Link
+        href="/settings/import_history"
+        className="custom-underline self-start"
+      >
+        Check Import History
+      </Link>
     </div>
   );
 }
