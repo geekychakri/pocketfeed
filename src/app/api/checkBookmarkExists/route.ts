@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
     return Response.json(data);
   } catch (error) {
     console.error("Error checking item existence:", error);
-    const data = { type: "error", id: null, isBookmarkExists: null };
+    const data = { type: "error", bookmarkId: null, isBookmarkExists: null };
     return Response.json(data);
   }
 }

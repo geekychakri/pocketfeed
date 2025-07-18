@@ -27,11 +27,9 @@ const links = [
 ];
 
 export default function SidebarNavigation({
-  foldersList,
   user,
   children,
 }: {
-  foldersList: { id: string; folder: string }[];
   user: SelectedPick<UsersRecord, ("avatarUrl" | "username")[]> | null;
   children: React.ReactNode;
 }) {

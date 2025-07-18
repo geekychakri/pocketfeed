@@ -28,6 +28,9 @@ import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 
 import { useInView, InView } from "react-intersection-observer";
 
+import { useUser } from "@clerk/nextjs";
+import { useParams } from "next/navigation";
+
 const initialState = {
   message: "",
 };
@@ -39,6 +42,10 @@ type FeedsType = PageRecordArray<Readonly<SelectedPick<FeedsRecord, ["*"]>>>;
 
 export default function SubscriptionList({ feeds }: { feeds: FeedsType }) {
   const [state, formAction] = useFormState(deleteSubscriptions, initialState);
+
+  const { user: loggedInUser } = useUser();
+  const params = useParams();
+  const displayedUserName = params.username;
 
   // const [isHidden, setIsHidden] = useState(true);
 
@@ -64,14 +71,16 @@ export default function SubscriptionList({ feeds }: { feeds: FeedsType }) {
       <div className="flex min-h-[300px] flex-col items-center justify-center gap-8">
         <div className="flex flex-col items-center justify-center gap-2">
           <FeedIcon className="size-20" />
-          <span>No Subscriptions yet!</span>
+          <span>No subscriptions yet!</span>
         </div>
-        <Link
-          href="/add"
-          className="flex items-center justify-center rounded-md bg-ui-normal px-4 py-2 font-medium text-white duration-100 hover:bg-ui-hover"
-        >
-          Add a feed
-        </Link>
+        {loggedInUser?.username === displayedUserName && (
+          <Link
+            href="/add"
+            className="bg-ui-normal hover:bg-ui-hover flex items-center justify-center rounded-md px-4 py-2 font-medium text-white duration-100"
+          >
+            Add a feed
+          </Link>
+        )}
       </div>
     );
   }
@@ -92,7 +101,7 @@ export default function SubscriptionList({ feeds }: { feeds: FeedsType }) {
                   className="group/folder-feed relative isolate flex w-full items-center justify-between py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]"
                 >
                   <span className="flex items-center gap-3">
-                    <Avatar className="inline-flex h-[30px] w-[30px] flex-none cursor-pointer select-none items-center justify-center overflow-hidden rounded-full bg-ui-normal">
+                    <Avatar className="bg-ui-normal inline-flex h-[30px] w-[30px] flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full select-none">
                       <AvatarImage
                         className="h-full w-full rounded-[inherit] object-cover"
                         // src={
@@ -107,17 +116,17 @@ export default function SubscriptionList({ feeds }: { feeds: FeedsType }) {
                         {getInitials(feed.title as string, "folder")}
                       </AvatarFallback>
                     </Avatar>
-                    <span className="line-clamp-1 transition-[color] group-hover/folder-feed:text-brand-primary">
+                    <span className="group-hover/folder-feed:text-brand-primary line-clamp-1 transition-[color]">
                       {decode(feed.title)}
                     </span>
                   </span>
                   <label
                     htmlFor={feed.id}
-                    className="z-2 flex size-[50px] items-center justify-center rounded-full duration-150 hover:bg-ui-hover"
+                    className="hover:bg-ui-hover z-2 flex size-[50px] items-center justify-center rounded-full duration-150"
                   >
                     {/* <input id="test" type="checkbox" className="size-4" /> */}
                     <Checkbox.Root
-                      className="flex size-[20px] cursor-auto appearance-none items-center justify-center rounded bg-ui-normal outline-none"
+                      className="bg-ui-normal flex size-[20px] cursor-auto appearance-none items-center justify-center rounded outline-none"
                       // defaultChecked
                       name={`feedIdList[${feed.id}]`}
                       value={feed.id}
@@ -165,7 +174,7 @@ function SubscriptionListStatusBar({ feeds }: { feeds: FeedsType }) {
           setIsSticky(false);
         }
       }}
-      className={`sticky -top-[1px] z-10 flex h-[56px] items-center justify-between bg-background-primary transition-[box-shadow] ${isSticky && "shadow-[0_1px_0_0_var(--border-non-interactive)]"}`}
+      className={`bg-background-primary sticky -top-[1px] z-10 flex h-[56px] items-center justify-between transition-[box-shadow] ${isSticky && "shadow-[0_1px_0_0_var(--border-non-interactive)]"}`}
     >
       <h2>
         {feeds.length}{" "}
@@ -187,7 +196,7 @@ function SubmitButton() {
     // </button>
     <button
       //   form="subscriptionForm"
-      className="flex size-[50px] items-center justify-center rounded-full duration-150 hover:bg-ui-hover"
+      className="hover:bg-ui-hover flex size-[50px] items-center justify-center rounded-full duration-150"
       type="submit"
       disabled={pending}
     >

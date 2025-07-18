@@ -13,20 +13,19 @@ export default async function Followers(props: { params: Promise<any> }) {
   console.log({ followee: followers });
   return (
     <div className="flex flex-col gap-2">
-      <div>
+      {/* <div>
         <p>{username}</p>
         <p className="text-text-secondary">{followers.length} followers</p>
-      </div>
+      </div> */}
       {followers.map((item, i) => {
         return (
-          // <Link
-          //   href={`/user/${item.followerName}`}
-          //   key={item.id}
-          //   className="rounded-md border bg-gray-300 p-2"
-          // >
-          //   {item.followerName}
-          // </Link>
-          <div key={i}></div>
+          <Link
+            href={`/user/${item.followerName}`}
+            key={item.id}
+            className="rounded-md border bg-gray-300 p-2"
+          >
+            {item.followerName}
+          </Link>
         );
       })}
     </div>

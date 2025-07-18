@@ -106,7 +106,7 @@ function VaulDrawer({ audioRef }: { audioRef: any }) {
       onOpenChange={setIsOpen}
       autoFocus={isOpen}
     >
-      <Drawer.Trigger className="border-border-interactive bg-background-secondary relative flex size-6 items-center justify-center rounded-full border">
+      <Drawer.Trigger className="border-border-interactive bg-background-secondary relative flex size-7 items-center justify-center rounded-full border">
         <ReaderIcon className="size-4" />
       </Drawer.Trigger>
       <Drawer.Portal>

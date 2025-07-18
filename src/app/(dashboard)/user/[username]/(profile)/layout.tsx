@@ -1,4 +1,4 @@
-import UserProfile from "./components/user-profile";
+import UserProfile from "../components/user-profile";
 
 import RouteBack from "@/components/RouteBack/RouteBack";
 

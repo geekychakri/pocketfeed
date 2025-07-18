@@ -26,11 +26,9 @@ const getLastModified = async (url: string) => {
 
 import { FolderFeedStoreProvider } from "@/context/folder-feed-provider";
 
-export default async function Folder(
-  props: {
-    params: Promise<{ foldername: string }>;
-  }
-) {
+export default async function Folder(props: {
+  params: Promise<{ foldername: string }>;
+}) {
   const params = await props.params;
   const userId = (await auth()).userId || "";
   // const user = await currentUser();
@@ -116,7 +114,7 @@ export default async function Folder(
         <div className="flex flex-col">
           {page.records.length >= 1 ? (
             <FolderFeedList
-              initialFeeds={JSON.parse(JSON.stringify(page.records))}
+              // initialFeeds={JSON.parse(JSON.stringify(page.records))}
               initialPageInfo={pageInfo}
               folders={JSON.parse(JSON.stringify(folders))}
               folderName={folderName}

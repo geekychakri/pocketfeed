@@ -23,6 +23,8 @@ import PodcastLoader from "@/components/podcast-loader";
 import { ClerkProvider } from "@clerk/nextjs";
 import TestNav from "@/components/test-nav";
 import CollapsibleFolders from "@/components/CollapsibleFolders";
+import ReparentComponent2 from "@/components/reparent-component-2";
+import ReparentChild from "@/components/reparent-child";
 
 export default async function MainLayout({
   children,
@@ -68,14 +70,12 @@ export default async function MainLayout({
 
   return (
     <main className="scrollbar-gutter-stable scrollbar-width-thin flex h-screen w-full overflow-y-auto">
-      <SidebarNavigation
-        foldersList={foldersList}
-        user={JSON.parse(JSON.stringify(user))}
-      >
+      <SidebarNavigation user={JSON.parse(JSON.stringify(user))}>
         <CollapsibleFolders foldersList={foldersList} />
       </SidebarNavigation>
 
       <PodcastLoader />
+      {/* <ReparentChild /> */}
       <ClerkProvider dynamic>
         <div className="flex-1">{children}</div>
       </ClerkProvider>

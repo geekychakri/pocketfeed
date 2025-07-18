@@ -22,25 +22,19 @@ import useSWR, { mutate } from "swr";
 import { SpinnerRotate } from "../SpinnerRotate";
 import { boolean } from "zod";
 import { usePathname } from "next/navigation";
-import { revalidateCachePath } from "@/lib/revalidateCachePath";
-import { cn } from "@/lib/utils";
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
-export default function BookmarkPodcast({
+export default function BookmarkPageBookmark({
   bookmarkFeedItem,
   bookmarkLink,
   bookmarkType,
   bookmarkTitle,
-  btnClassName,
-  iconClassName,
 }: {
   bookmarkFeedItem: any;
   bookmarkLink: string;
   bookmarkTitle: string;
   bookmarkType: string;
-  btnClassName?: string;
-  iconClassName?: string;
 }) {
   const [isBookmarked, setIsBookmarked] = useState<null | boolean>(null);
   const [savedBookmarkId, setSavedBookmarkId] = useState("");
@@ -50,9 +44,7 @@ export default function BookmarkPodcast({
   );
 
   const [playBookmarked] = useSound("/sounds/success.wav");
-
-  const pathname = usePathname();
-  console.log({ pathname });
+  const deleteBookmarkFn = useDeleteBookmark();
 
   const { data, isLoading, isValidating } = useSWR(
     `/api/checkBookmarkExists?bookmarkLink=${encodeURIComponent(bookmarkLink)}`,
@@ -74,7 +66,7 @@ export default function BookmarkPodcast({
 
   useHotkeys("B", () => {});
 
-  console.log({ podcastBookmarkExists: data });
+  // console.log({ podcastBookmarkExists: data });
 
   // console.log({ isBookmarked });
 
@@ -85,43 +77,13 @@ export default function BookmarkPodcast({
 
   // console.log({ optimisticBookmarked });
 
-  if (pathname === "/bookmarks" && (isLoading || isValidating)) {
-    return (
-      <button
-        className={cn(
-          "relative flex size-6 cursor-pointer items-center justify-center rounded-full",
-          btnClassName,
-        )}
-      >
-        <BookmarkBoldIcon className={cn("size-5 cursor-wait", iconClassName)} />
-      </button>
-    );
-  } else if (isLoading || isValidating) {
-    return (
-      <button
-        className={cn(
-          "relative flex size-6 cursor-pointer items-center justify-center rounded-full",
-          btnClassName,
-        )}
-      >
-        <BookmarkIcon className={cn("size-5 cursor-wait", iconClassName)} />;
-      </button>
-    );
+  if (isLoading || isValidating) {
+    return <SpinnerRotate className="size-5" />;
   }
 
   return (
-    <>
-      {/* {pathname === "/bookmarks" ? (
-        <ConditionalHook
-          data={data}
-          bookmarkFeedItem={bookmarkFeedItem}
-          bookmarkLink={bookmarkLink}
-          bookmarkType={bookmarkType}
-          bookmarkTitle={bookmarkType}
-        />
-      ) : ( */}
+    <CustomTooltip content={<span>Bookmark</span>}>
       <form
-        id="bookmarkForm"
         action={async (formData: FormData) => {
           console.log(formData);
           if (!data.isBookmarkExists) {
@@ -133,10 +95,7 @@ export default function BookmarkPodcast({
               `/api/checkBookmarkExists?bookmarkLink=${encodeURIComponent(bookmarkLink)}`,
               addBookmarkAction(formData),
               {
-                optimisticData: (data) => ({
-                  ...data,
-                  isBookmarkExists: true,
-                }),
+                optimisticData: (data) => ({ ...data, isBookmarkExists: true }),
                 rollbackOnError: true,
                 populateCache(result, currentData) {
                   console.log({ result });
@@ -159,7 +118,7 @@ export default function BookmarkPodcast({
 
             await mutate(
               `/api/checkBookmarkExists?bookmarkLink=${encodeURIComponent(bookmarkLink)}`,
-              deleteBookmarkAction("", formData),
+              deleteBookmarkAction(formData),
               {
                 optimisticData: (data) => ({
                   ...data,
@@ -177,7 +136,6 @@ export default function BookmarkPodcast({
               console.log({ onDeleteData: data });
               // setIsBookmarked(false);
               // deleteBookmarkFn(data.bookmarkId);
-              revalidateCachePath("/bookmarks"); //TODO:
             } else {
               // setIsBookmarked(true);
               toast.error("Something went wrong!");
@@ -217,12 +175,8 @@ export default function BookmarkPodcast({
             hidden
           />
         )}
-      </form>
-      <CustomTooltip content={<span>Bookmark</span>}>
         <IconOnlyAction
           type="submit"
-          form="bookmarkForm"
-          className={btnClassName}
           // onClick={() => {
           //   startTransition(() => {
           //     addOptimisticBookmark(undefined);
@@ -231,126 +185,12 @@ export default function BookmarkPodcast({
           // }}
         >
           {data.isBookmarkExists ? (
-            <BookmarkBoldIcon className={cn("size-5", iconClassName)} />
+            <BookmarkBoldIcon className="size-5" />
           ) : (
-            <BookmarkIcon className={cn("size-5", iconClassName)} />
+            <BookmarkIcon className="size-5" />
           )}
         </IconOnlyAction>
-      </CustomTooltip>
-    </>
-  );
-}
-
-function ConditionalHook({
-  data,
-  bookmarkFeedItem,
-  bookmarkLink,
-  bookmarkType,
-  bookmarkTitle,
-}: {
-  data: any;
-  bookmarkFeedItem: any;
-  bookmarkLink: string;
-  bookmarkTitle: string;
-  bookmarkType: string;
-}) {
-  // const deleteBookmarkFn = useDeleteBookmark();
-  return (
-    <form
-      id="bookmarkForm"
-      action={async (formData: FormData) => {
-        console.log(formData);
-        if (!data.isBookmarkExists) {
-          // addOptimisticBookmark(!data.isBookmarkExists);
-          // playBookmarked();
-          // const { message, bookmarkId } = await addBookmarkAction(formData);
-
-          await mutate(
-            `/api/checkBookmarkExists?bookmarkLink=${encodeURIComponent(bookmarkLink)}`,
-            addBookmarkAction(formData),
-            {
-              optimisticData: (data) => ({ ...data, isBookmarkExists: true }),
-              rollbackOnError: true,
-              populateCache(result, currentData) {
-                console.log({ result });
-                return { ...currentData, ...result };
-              },
-              revalidate: false,
-            },
-          );
-          if (data.type === "success") {
-            // setIsBookmarked(true);
-            // setSavedBookmarkId(data.bookmarkId);
-          } else {
-            // setIsBookmarked(false);
-            toast.error("Something went wrong!");
-          }
-        } else {
-          console.log("DELETE BOOKMARK RAN");
-          // addOptimisticBookmark(!data.isBookmarkExists);
-          // const { message } = await deleteBookmarkAction(formData);
-
-          await mutate(
-            `/api/checkBookmarkExists?bookmarkLink=${encodeURIComponent(bookmarkLink)}`,
-            deleteBookmarkAction(formData),
-            {
-              optimisticData: (data) => ({
-                ...data,
-                isBookmarkExists: false,
-              }),
-              rollbackOnError: true,
-              populateCache(result, currentData) {
-                console.log({ result });
-                return { ...currentData, ...result };
-              },
-              revalidate: false,
-            },
-          );
-          if (data.type === "success") {
-            console.log({ onDeleteData: data });
-            // setIsBookmarked(false);
-            // deleteBookmarkFn(data.bookmarkId);
-
-            revalidateCachePath("/bookmarks");
-          } else {
-            // setIsBookmarked(true);
-            toast.error("Something went wrong!");
-          }
-        }
-      }}
-    >
-      <input
-        type="text"
-        defaultValue={bookmarkLink}
-        name="bookmarkLink"
-        hidden
-      />
-      <input
-        type="text"
-        defaultValue={bookmarkType}
-        name="bookmarkType"
-        hidden
-      />
-      <input
-        type="text"
-        defaultValue={bookmarkTitle}
-        name="bookmarkTitle"
-        hidden
-      />
-      <input
-        type="text"
-        defaultValue={bookmarkFeedItem}
-        name="bookmarkFeedItem"
-        hidden
-      />
-      {data.isBookmarkExists && (
-        <input
-          type="text"
-          defaultValue={data.bookmarkId}
-          name="bookmarkId"
-          hidden
-        />
-      )}
-    </form>
+      </form>
+    </CustomTooltip>
   );
 }

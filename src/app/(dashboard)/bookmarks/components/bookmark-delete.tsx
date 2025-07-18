@@ -6,27 +6,46 @@ import { useEffect, useActionState } from "react";
 
 import { deleteBookmarkAction } from "@/app/actions";
 
-import { useDeleteBookmark } from "@/hooks/useDeleteBookmark";
+// import { useDeleteBookmark } from "@/hooks/useDeleteBookmark";
+// import { useNewBookmarksStore } from "@/store/bookmarks-store";
 import { toast } from "sonner";
 
 import useSound from "use-sound";
 import { SpinnerRotate } from "@/components/SpinnerRotate";
 
-export default function BookmarkDelete({ bookmarkId }: { bookmarkId: string }) {
+import { mutate } from "swr";
+
+export default function BookmarkDelete({
+  bookmarkId,
+  bookmarkLink,
+}: {
+  bookmarkId: string;
+  bookmarkLink: string;
+}) {
   const [state, formAction, isPending] = useActionState(deleteBookmarkAction, {
     message: "",
   });
 
   const [success] = useSound("/sounds/success.wav");
 
-  const deleteBookmarkFn = useDeleteBookmark();
+  // const deleteBookmarkFn = useDeleteBookmark();
 
   console.log("RE RENDERED");
 
   useEffect(() => {
     if (state.message === "success") {
       console.log("AWEEEEEEEEEEESOMMEEEEEEEE");
-      deleteBookmarkFn(bookmarkId);
+
+      mutate(
+        (key) =>
+          typeof key === "string" &&
+          key.startsWith(
+            `/api/checkBookmarkExists?bookmarkLink=${encodeURIComponent(bookmarkLink)}`,
+          ),
+        { isBookmarkExists: false, type: "success" },
+        { revalidate: false },
+      );
+      // deleteBookmarkFn(bookmarkId);
       success();
       toast.success("Deleted");
       // revalidateCachePath("/folder/Home");
@@ -36,7 +55,7 @@ export default function BookmarkDelete({ bookmarkId }: { bookmarkId: string }) {
   return (
     <form
       action={formAction}
-      className="z-20"
+      // className="z-20"
       // className="z-20 flex size-12 cursor-pointer items-center justify-center rounded-full transition-[background-color] hover:bg-background-secondary"
     >
       <input type="hidden" name="bookmarkId" value={bookmarkId} />
@@ -47,9 +66,9 @@ export default function BookmarkDelete({ bookmarkId }: { bookmarkId: string }) {
       >
         <span>
           {isPending ? (
-            <SpinnerRotate className="size-[18px]" />
+            <SpinnerRotate className="size-5" />
           ) : (
-            <TrashIcon className="size-[18px]" />
+            <TrashIcon className="size-5" />
           )}
         </span>
       </button>

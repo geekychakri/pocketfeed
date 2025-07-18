@@ -24,12 +24,10 @@ import { useFeedsAdd } from "@/hooks/useFeedsAdd";
 import { getInitials } from "@/lib/utils";
 
 export function FolderFeedList({
-  initialFeeds,
   initialPageInfo,
   folders,
   folderName,
 }: {
-  initialFeeds: any;
   initialPageInfo: any;
   folders: any;
   folderName: string;

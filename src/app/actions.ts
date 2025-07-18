@@ -496,15 +496,17 @@ export async function addBookmarkAction(formData: FormData) {
     const bookmarkLink = formData.get("bookmarkLink") as string;
     const bookmarkType = formData.get("bookmarkType") as string;
     const bookmarkTitle = formData.get("bookmarkTitle") as string;
+    const bookmarkFeedItem = formData.get("bookmarkFeedItem") as string;
 
     const data = await xata.db.bookmarks.create({
       userId,
       bookmarkLink,
       bookmarkType,
       bookmarkTitle,
+      bookmarkFeedItem,
     });
 
-    return { message: "success", bookmarkId: data.id };
+    return { message: "success", bookmarkId: data.id, isBookmarkExists: true };
   } catch (err) {
     //send error to 3rd party services like sentry //TODO:
     return { message: getErrorMessage(err), bookmarkId: "" };
@@ -532,9 +534,10 @@ export async function deleteBookmarkAction(prevState: any, formData: FormData) {
     const deletedFeed = await xata.db.bookmarks.delete(bookmarkId);
 
     console.log("DELETED");
-    // revalidatePath(`/folder/${folderName}`, "page");
-    return { message: "success" };
+    // revalidatePath(`/bookmarks`, "page");
+    return { message: "success", bookmarkId: null, isBookmarkExists: null };
   } catch (err) {
+    console.log({ err });
     return { message: "error" };
   }
 }

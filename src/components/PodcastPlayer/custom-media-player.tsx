@@ -37,7 +37,8 @@ function CustomMediaPlayer({
               --media-control-background: transparent;
               --media-control-hover-background: transparent;
               --media-tooltip-display: none;
-
+            --media-focus-box-shadow: 0 0 0 2px #fcfcfc,
+                  0 0 0 4px #f84f39;
               display: block;
               width: 100%;
               height: 100%;
@@ -58,7 +59,8 @@ function CustomMediaPlayer({
 
             media-controller[breakpointmd] {
               --base: 20px;
-              min-height: 84px;
+              // min-height: 84px;
+              min-height: 98px;
             }
 
             .info,
@@ -75,6 +77,8 @@ function CustomMediaPlayer({
               border-radius: 8px;
               position: relative;
               padding: 0;
+
+              color: var(--text-primary);
             }
 
             .media-button:focus-visible {
@@ -85,6 +89,7 @@ function CustomMediaPlayer({
 
             .media-button svg {
               fill: none;
+              color: var(--text-primary);
               stroke: var(--text-primary, #fff);
               stroke-width: 1;
               stroke-linecap: round;
@@ -162,7 +167,10 @@ function CustomMediaPlayer({
 
               .info-text {
                 position: relative;
-                padding: 16px;
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+                // padding: 16px;
               }
 
               .info h1,
@@ -470,6 +478,7 @@ function CustomMediaPlayer({
                 .time-display {
                   padding: 0;
                   line-height: 1;
+                  color: var(--text-primary);
                 }
 
                 .time-display:focus-visible {
@@ -555,7 +564,8 @@ function CustomMediaPlayer({
                 left: 15px;
                 width: calc(100% - 30px);
                 height: 10px;
-                bottom: -3px;
+                // bottom: -3px;
+                bottom: 4px;
                 z-index: 1;
               }
 
@@ -572,10 +582,12 @@ function CustomMediaPlayer({
               media-preview-time-display {
                 font-size: calc(0.65 * var(--base));
                 line-height: 1;
+                color: var(--text-primary);
+                text-shadow: none;
               }
             </style>
             <media-time-range class="big-time-range">
-              <media-preview-time-display slot="preview"></media-preview-time-display>
+               <media-preview-time-display slot="preview"></media-preview-time-display>
             </media-time-range>
           </media-controller>`,
         }}

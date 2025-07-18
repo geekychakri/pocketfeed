@@ -27,6 +27,7 @@ const xata = getXataClient();
 export default async function UserProfile({ username }: { username: string }) {
   const { userId }: { userId: string | null } = await auth();
   const loggedInUserId = userId as string;
+  const loggedInUserInfo = await currentUser();
 
   const user = (await xata.db.users
     .filter({ username: username })
@@ -64,7 +65,10 @@ export default async function UserProfile({ username }: { username: string }) {
         <ProfileHeader user={user}>
           <FollowButton followeeId={followingRecord?.id as string} />
         </ProfileHeader>
-        <ProfileBody user={user} />
+        <ProfileBody
+          user={user}
+          loggedInUsername={loggedInUserInfo?.username as string}
+        />
         <ProfileFooter username={user.username as string} />
       </ProfileInfo>
 
@@ -74,7 +78,7 @@ export default async function UserProfile({ username }: { username: string }) {
 }
 
 async function ProfileInfo({ children }: { children: React.ReactNode }) {
-  return <div className="flex flex-col gap-6">{children}</div>;
+  return <div className="flex flex-col gap-4">{children}</div>;
 }
 
 // function ProfileTitle({ username }: { username: string }) {
@@ -140,7 +144,13 @@ function ProfileHeader({
   );
 }
 
-function ProfileBody({ user }: { user: UsersRecord }) {
+function ProfileBody({
+  user,
+  loggedInUsername,
+}: {
+  user: UsersRecord;
+  loggedInUsername: string;
+}) {
   return (
     <div className="flex flex-col gap-2">
       {user.bio ? (
@@ -150,14 +160,14 @@ function ProfileBody({ user }: { user: UsersRecord }) {
             __html: convertTextToLinks(user.bio as string),
           }}
         ></p>
-      ) : (
+      ) : loggedInUsername === user.username ? (
         <Link
           href="/settings"
           className="custom-underline text-text-secondary hover:text-text-primary self-start duration-150"
         >
           Say hi with a short bio!
         </Link>
-      )}
+      ) : null}
       {user.website && (
         <a
           href={`https://${user.website as string}`}

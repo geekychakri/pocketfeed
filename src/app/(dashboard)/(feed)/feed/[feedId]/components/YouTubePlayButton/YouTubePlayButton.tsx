@@ -13,17 +13,29 @@ import useSound from "use-sound";
 import { cn } from "@/lib/utils";
 
 import { useGlobalRef } from "@/store/globalRef";
+import { useFeedItem } from "@/store/feed-item";
+import { useCurrentBookmarkId } from "@/store/bookmark-id-store";
 export default function YouTubePlayButton({
+  feedItem,
+  ytVideoTitle,
   youtubeId,
   className,
   showText,
+  bookmarkId,
 }: {
+  feedItem?: any;
+  ytVideoTitle: string;
   youtubeId: string;
   className?: string;
   showText?: boolean;
+  bookmarkId?: string;
 }) {
   console.log({ youtubeId });
-  const { openYoutubePlayer, setYoutubeId, isOpen } = useShowYTPlayer();
+  console.log({ feedItemType: feedItem });
+  const { openYoutubePlayer, setYoutubeId, isOpen, setYtVideoTitle } =
+    useShowYTPlayer();
+  const { setFeedItem } = useFeedItem();
+  const { setYtBookmarkId } = useCurrentBookmarkId();
 
   const [tap] = useSound("/sounds/tap.wav");
 
@@ -43,11 +55,14 @@ export default function YouTubePlayButton({
       onClick={() => {
         openYoutubePlayer();
         setYoutubeId(youtubeId);
+        setYtVideoTitle(ytVideoTitle);
+        setFeedItem(JSON.stringify(feedItem));
         audioPlayerRef.current?.pause();
         tap();
+        setYtBookmarkId(bookmarkId as string); //TODO:: for handling bookmarks in bookmarks page to delete
       }}
       className={cn(
-        "flex size-10 items-center justify-center gap-1 rounded-full bg-ui-normal px-4 py-2 text-base font-medium transition-transform will-change-transform active:scale-95",
+        "bg-ui-normal hover:bg-ui-hover flex size-10 cursor-pointer items-center justify-center gap-1 rounded-full px-4 py-2 text-base font-medium transition-transform duration-150 active:scale-95",
         className,
       )}
     >

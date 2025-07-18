@@ -248,6 +248,8 @@ function FeedItem({
 
         <div className="flex-none">
           <YouTubePlayButton
+            feedItem={item}
+            ytVideoTitle={item.title}
             youtubeId={
               item.id?.split(":")?.[2] ||
               (getYoutubeVideoId(item.link) as string)
@@ -268,7 +270,7 @@ function FeedItem({
       // prefetch={false}
     >
       <span className="flex w-4/5 flex-col text-pretty">
-        {decode(item.title)}
+        {decode(item.title) || feedList.title}
         {/* <span className="line-clamp-2 text-text-secondary">
             {item.contentSnippet}
           </span> */}
@@ -291,7 +293,8 @@ function FeedItem({
         //     ? `/read/${encodeURIComponent(item.link as string)}`
         //     : `/read/${encodeURIComponent(`${feedList.link}/${item.link}` as string)}`
         // }
-        href={`/read/${encodeURIComponent("https://www.alanwsmith.com/en/2v/mq/vc/om/")}`} //TODO::
+        // href={`/read/${encodeURIComponent("https://www.alanwsmith.com/en/2v/mq/vc/om/")}`} //TODO:
+        href={`/read/${encodeURIComponent(item.link as string)}`}
         className="absolute inset-0 z-1"
       />
     </div>
@@ -349,6 +352,7 @@ const PodcastCard = ({
       {item.enclosure?.length && (
         <div className="flex-none">
           <PodcastPlayButton
+            feedItem={JSON.stringify(item)}
             title={title}
             audioUrl={audioUrl}
             albumCover={coverImage}

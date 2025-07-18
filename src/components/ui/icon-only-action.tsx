@@ -28,7 +28,7 @@ export default forwardRef<
           props.className,
         )}
       >
-        <span className="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 bg-blue-100/20 pointer-fine:hidden"></span>
+        <span className="absolute top-1/2 left-1/2 size-12 -translate-x-1/2 -translate-y-1/2 bg-blue-100/20 pointer-fine:hidden"></span>
         {props.children}
       </a>
     );
@@ -38,11 +38,11 @@ export default forwardRef<
       ref={ref as React.Ref<HTMLButtonElement>}
       {...props}
       className={cn(
-        "relative flex size-6 items-center justify-center rounded-full",
+        "relative flex size-6 cursor-pointer items-center justify-center rounded-full",
         props.className,
       )}
     >
-      <span className="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 pointer-fine:hidden"></span>
+      <span className="absolute top-1/2 left-1/2 size-12 -translate-x-1/2 -translate-y-1/2 pointer-fine:hidden"></span>
       {props.children}
     </button>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { Cross2Icon } from "@radix-ui/react-icons";
 
 import { useFullscreen } from "@/store/read-fullscreen";
@@ -14,6 +14,8 @@ import VaulDrawer from "../Drawer";
 import { useGlobalRef } from "@/store/globalRef";
 
 import CustomMediaPlayer from "./custom-media-player";
+import BookmarkPodcast from "./bookmark-podcast";
+import { useFeedItem } from "@/store/feed-item";
 
 const PodcastPlayer = () => {
   console.log("RE RENDERED");
@@ -59,6 +61,8 @@ const PodcastPlayer = () => {
     author: state.author,
     albumName: state.albumName,
   }));
+
+  const { feedItem } = useFeedItem();
 
   // console.log({ albumCover });
 
@@ -131,25 +135,39 @@ const PodcastPlayer = () => {
 
   return (
     <div
-      className={`fixed -bottom-72 ${fullscreen && segment === "read" ? "left-0" : "left-[240px]"} animation-slide-up-player ease-out-player border-border-non-interactive bg-background-primary animate-player-slide-up right-0 z-10 flex flex-col gap-1 border-t p-4 transition-[translate] duration-700 ${show === "hide" ? "translate-y-80" : ""}`}
+      className={`bg-background-primary fixed -bottom-72 p-4 ${fullscreen && segment === "read" ? "left-0" : "left-[240px]"} animation-slide-up-player ease-out-player border-border-non-interactive animate-player-slide-up right-0 z-10 flex flex-col gap-1 border-t transition-[translate] duration-700 ${show === "hide" ? "translate-y-80" : ""}`}
     >
       <div className="absolute -top-[14px] flex cursor-pointer gap-2 self-end">
         {/* <button>
           <Share2Icon className="size-5" />
         </button> */}
+
+        <BookmarkPodcast
+          // bookmarked={bookmarkExists}
+          bookmarkFeedItem={JSON.stringify(feedItem)} //TODO:
+          bookmarkLink={audioUrl}
+          bookmarkType="podcast"
+          // bookmarkId={bookmarkId}
+          bookmarkTitle={title}
+          btnClassName="border-border-interactive bg-background-secondary flex size-7 items-center justify-center rounded-full border"
+          iconClassName="size-4"
+        />
+
         <VaulDrawer audioRef={audioPlayerRef} />
         {/* <BookmarkPodcast
+          bookmarkFeedItem={JSON.stringify(feedItem)}
           bookmarkLink={audioUrl}
           bookmarkTitle={title}
           bookmarkType="podcast"
         /> */}
+
         <button
           onClick={() => {
             hidePodcastPlayer();
             // setIsPlaying(false);
             audioPlayerRef.current?.pause();
           }}
-          className="border-border-interactive bg-background-secondary flex size-6 items-center justify-center rounded-full border"
+          className="border-border-interactive bg-background-secondary flex size-7 items-center justify-center rounded-full border"
         >
           <Cross2Icon className="size-4" />
         </button>
@@ -176,4 +194,4 @@ const PodcastPlayer = () => {
   );
 };
 
-export default PodcastPlayer;
+export default memo(PodcastPlayer);
