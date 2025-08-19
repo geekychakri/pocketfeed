@@ -98,43 +98,43 @@
 // }
 
 // import TestChild from "./components/test-child";
-"use client";
-import { useEffect, useState } from "react";
+// "use client";
+// import { useEffect, useState } from "react";
 
-import useSWR from "swr";
+// import useSWR from "swr";
 
-import {
-  useSetCookie,
-  useGetCookie,
-  useDeleteCookie,
-} from "cookies-next/client";
-import AriaFileUpload from "@/components/aria-file-upload";
+// import {
+//   useSetCookie,
+//   useGetCookie,
+//   useDeleteCookie,
+// } from "cookies-next/client";
+// import AriaFileUpload from "@/components/aria-file-upload";
 
-import YoutubeVideo from "youtube-video-element/react";
-import MediaThemeSutro from "player.style/sutro/react";
-import { YouTubeEmbed } from "@next/third-parties/google";
+// import YoutubeVideo from "youtube-video-element/react";
+// import MediaThemeSutro from "player.style/sutro/react";
+// import { YouTubeEmbed } from "@next/third-parties/google";
 
-import Modal from "@/components/Modal/Modal";
+// import Modal from "@/components/Modal/Modal";
 
-class StatusError extends Error {
-  info: string | undefined;
-  status: number | undefined;
-}
+// class StatusError extends Error {
+//   info: string | undefined;
+//   status: number | undefined;
+// }
 
-async function fetcher<JSON = any>(
-  input: RequestInfo,
-  init?: RequestInit,
-): Promise<JSON> {
-  const res = await fetch(input, init);
-  if (!res.ok) {
-    const error = new StatusError("An error occurred while fetching the data.");
-    // Attach extra info to the error object.
-    error.info = await res.json();
-    error.status = res.status;
-    throw error;
-  }
-  return res.json();
-}
+// async function fetcher<JSON = any>(
+//   input: RequestInfo,
+//   init?: RequestInit,
+// ): Promise<JSON> {
+//   const res = await fetch(input, init);
+//   if (!res.ok) {
+//     const error = new StatusError("An error occurred while fetching the data.");
+//     // Attach extra info to the error object.
+//     error.info = await res.json();
+//     error.status = res.status;
+//     throw error;
+//   }
+//   return res.json();
+// }
 
 // export default function Test() {
 //   const [inngestExecutionId, setInngestExecutionId] = useState<string | null>(
@@ -200,70 +200,121 @@ async function fetcher<JSON = any>(
 //   );
 // }
 
-import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { cn } from "@/lib/utils";
+// import * as DialogPrimitive from "@radix-ui/react-dialog";
+// import { cn } from "@/lib/utils";
+
+// // Base styles for media player and provider (~400B).
+// import "@vidstack/react/player/styles/base.css";
+// import { MediaPlayer, MediaProvider } from "@vidstack/react";
+
+// import "@vidstack/react/player/styles/default/theme.css";
+// import "@vidstack/react/player/styles/default/layouts/audio.css";
+// import "@vidstack/react/player/styles/default/layouts/video.css";
+
+import InlineScript from "@/components/inline-script";
+
+// import {
+//   DefaultVideoLayout,
+//   defaultLayoutIcons,
+// } from "@vidstack/react/player/layouts/default";
 
 export default function Test() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // return (
+
+  //   <div className="mx-auto w-full max-w-[900px] bg-amber-300">
+  //     Test
+
+  //     {/* <MediaPlayer
+  //       src="https://www.youtube.com/watch?v=mmq-KVeO-uU"
+  //       // controls
+  //       viewType="video"
+  //       playsInline
+  //     >
+  //       <MediaProvider />
+  //       <DefaultVideoLayout icons={defaultLayoutIcons} />
+  //     </MediaPlayer> */}
+  //     {/* <AriaFileUpload /> */}
+  //     {/* <MediaThemeSutro style={{ width: "100%" }} className="aspect-video">
+  //       <YoutubeVideo
+  //         slot="media"
+  //         src="https://www.youtube.com/watch?v=uxsOYVWclA0"
+  //         playsInline
+  //         crossOrigin="anonymous"
+  //       ></YoutubeVideo>
+  //     </MediaThemeSutro> */}
+  //     {/* <YouTubeEmbed
+  //       videoid="mmq-KVeO-uU"
+  //       // title="HEllo"
+  //       // width={100}
+  //       // width="100%"
+  //       style="aspect-ratio:16/9;max-width:100%"
+  //       playlabel="Play"
+  //       // params="controls=0"
+  //     /> */}
+  //     {/* <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
+  //       <Modal.Button asChild>
+  //         <button>Open Modal</button>
+  //       </Modal.Button>
+  //       <Modal.Content
+  //         title="What's up?"
+  //         className="bg-background-primary"
+  //       ></Modal.Content>
+  //     </Modal> */}
+  //     {/* <DialogPrimitive.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
+  //       <DialogPrimitive.Trigger>Open</DialogPrimitive.Trigger>
+  //       <DialogPrimitive.Portal>
+  //         <DialogPrimitive.Overlay className="bg-background-secondary/50 data-[state=open]:animate-overlayShow fixed inset-0 z-120 backdrop-blur-[1px]" />
+  //         <DialogPrimitive.Content
+  //           className={cn(
+  //             "z-130 w-full rounded-lg bg-yellow-400 p-4 shadow-[0_8px_30px_0px_rgba(0,0,0,0.12)] focus:outline-none",
+  //           )}
+  //         >
+  //           <YouTubeEmbed
+  //             videoid="mmq-KVeO-uU"
+  //             // title="HEllo"
+  //             // width={100}
+  //             // width="100%"
+  //             style="aspect-ratio:16/9;max-width:100%"
+  //             playlabel="Play"
+  //             // params="controls=0"
+  //           />
+  //           <DialogPrimitive.Close asChild>
+  //             <button
+  //               className="text-text-primary hover:bg-ui-hover absolute top-2.5 right-2.5 inline-flex size-[25px] cursor-pointer appearance-none items-center justify-center rounded-full focus:outline-none"
+  //               aria-label="Close"
+  //             >
+  //               Close
+  //             </button>
+  //           </DialogPrimitive.Close>
+  //         </DialogPrimitive.Content>
+  //       </DialogPrimitive.Portal>
+  //     </DialogPrimitive.Root> */}
+  //   </div>
+  // );
+
   return (
-    <div className="mx-auto w-full max-w-[900px] bg-amber-300">
-      Test
-      {/* <AriaFileUpload /> */}
-      {/* <MediaThemeSutro style={{ width: "100%" }} className="aspect-video">
-        <YoutubeVideo
-          slot="media"
-          src="https://www.youtube.com/watch?v=uxsOYVWclA0"
-          playsInline
-          crossOrigin="anonymous"
-        ></YoutubeVideo>
-      </MediaThemeSutro> */}
-      {/* <YouTubeEmbed
-        videoid="mmq-KVeO-uU"
-        // title="HEllo"
-        // width={100}
-        // width="100%"
-        style="aspect-ratio:16/9;max-width:100%"
-        playlabel="Play"
-        // params="controls=0"
-      /> */}
-      {/* <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <Modal.Button asChild>
-          <button>Open Modal</button>
-        </Modal.Button>
-        <Modal.Content
-          title="What's up?"
-          className="bg-background-primary"
-        ></Modal.Content>
-      </Modal> */}
-      {/* <DialogPrimitive.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogPrimitive.Trigger>Open</DialogPrimitive.Trigger>
-        <DialogPrimitive.Portal>
-          <DialogPrimitive.Overlay className="bg-background-secondary/50 data-[state=open]:animate-overlayShow fixed inset-0 z-120 backdrop-blur-[1px]" />
-          <DialogPrimitive.Content
-            className={cn(
-              "z-130 w-full rounded-lg bg-yellow-400 p-4 shadow-[0_8px_30px_0px_rgba(0,0,0,0.12)] focus:outline-none",
-            )}
-          >
-            <YouTubeEmbed
-              videoid="mmq-KVeO-uU"
-              // title="HEllo"
-              // width={100}
-              // width="100%"
-              style="aspect-ratio:16/9;max-width:100%"
-              playlabel="Play"
-              // params="controls=0"
-            />
-            <DialogPrimitive.Close asChild>
-              <button
-                className="text-text-primary hover:bg-ui-hover absolute top-2.5 right-2.5 inline-flex size-[25px] cursor-pointer appearance-none items-center justify-center rounded-full focus:outline-none"
-                aria-label="Close"
-              >
-                Close
-              </button>
-            </DialogPrimitive.Close>
-          </DialogPrimitive.Content>
-        </DialogPrimitive.Portal>
-      </DialogPrimitive.Root> */}
-    </div>
+    <>
+      <DummyData />
+      <InlineScript />
+    </>
+  );
+}
+
+function DummyData() {
+  // const [time, setText] = useState(() => {
+  //   // On client, use the initial time from the inline script
+  //   if (typeof window !== "undefined" && window.__INITIAL_TEXT__) {
+  //     return window.__INITIAL_TEXT__;
+  //   }
+  //   // On server, use the current time
+  //   return new Date();
+  // });
+  // const secondRotation = time.getSeconds() * 6 + time.getMilliseconds() * 0.006;
+  return (
+    <div
+      id="dummy-data"
+      suppressHydrationWarning
+      dangerouslySetInnerHTML={{ __html: `<pre>Hello</pre><pre>Hi</pre>` }}
+    ></div>
   );
 }

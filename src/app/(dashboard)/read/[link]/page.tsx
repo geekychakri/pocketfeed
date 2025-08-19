@@ -1,6 +1,8 @@
 import { ExtractArticle } from "@/lib/extract-article";
 import Article from "@/components/Article";
 
+import { extract } from "@extractus/article-extractor";
+
 // import Parser from "@postlight/parser";
 import RouteBack from "@/components/RouteBack/RouteBack";
 
@@ -8,7 +10,7 @@ import localFont from "next/font/local";
 
 import Script from "next/script";
 
-import { JSDOM } from "jsdom";
+import { JSDOM, VirtualConsole } from "jsdom";
 import { Readability, isProbablyReaderable } from "@mozilla/readability";
 import ArticleSettings from "@/components/ArticleSettings";
 
@@ -23,97 +25,104 @@ import ReadNav from "../components/read-nav";
 import { getXataClient } from "@/xata";
 
 import { auth } from "@clerk/nextjs/server";
+import InlineScript from "@/components/inline-script";
+import { createHighlighter } from "shiki";
+import nord from "@shikijs/themes/nord";
 
-async function checkBookmarkExists(
-  filterCondition: Record<string, any>,
-): Promise<{
-  type: string;
-  id: string | null;
-  isBookmarkExists: boolean | null;
-}> {
-  try {
-    const xata = getXataClient();
-    // Fetch the first record that matches the filter condition
-    const record = await xata.db.bookmarks.filter(filterCondition).getFirst();
+// async function checkBookmarkExists(
+//   filterCondition: Record<string, any>,
+// ): Promise<{
+//   type: string;
+//   id: string | null;
+//   isBookmarkExists: boolean | null;
+// }> {
+//   try {
+//     const xata = getXataClient();
+//     // Fetch the first record that matches the filter condition
+//     const record = await xata.db.bookmarks.filter(filterCondition).getFirst();
 
-    // Return true if a record is found, false otherwise
-    return {
-      type: "success",
-      id: record?.id as string,
-      isBookmarkExists: record !== null,
-    };
-  } catch (error) {
-    console.error("Error checking item existence:", error);
-    return { type: "error", id: null, isBookmarkExists: null };
-  }
-}
+//     // Return true if a record is found, false otherwise
+//     return {
+//       type: "success",
+//       id: record?.id as string,
+//       isBookmarkExists: record !== null,
+//     };
+//   } catch (error) {
+//     console.error("Error checking item existence:", error);
+//     return { type: "error", id: null, isBookmarkExists: null };
+//   }
+// }
 
 export default async function Read(props: {
   params: Promise<{ link: string }>;
 }) {
   const params = await props.params;
   const userId = (await auth()).userId as string;
+
   let article, articleUrl;
 
-  let bookmarkItem!: {
-    type: string;
-    id: string | null;
-    isBookmarkExists: boolean | null;
-  };
+  // let bookmarkItem!: {
+  //   type: string;
+  //   id: string | null;
+  //   isBookmarkExists: boolean | null;
+  // };
 
   try {
+    console.log("article");
     articleUrl = decodeURIComponent(params.link);
-    console.log({ articleUrl });
+    // console.log({ articleUrl });
 
-    const { error } = await checkLinkIsBroken(articleUrl);
+    // const { error } = await checkLinkIsBroken(articleUrl);
 
-    if (error) {
-      return (
-        <div className="flex h-screen flex-1 flex-col items-center justify-center gap-6">
-          <LinkBrokenIcon className="size-20" />
-          <div className="flex flex-col items-center gap-2">
-            <span>Oops!</span>
-            <span>
-              The link{" "}
-              <a
-                href={articleUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="custom-underline"
-              >
-                {articleUrl}
-              </a>{" "}
-              seems broken.
-            </span>
-          </div>
-          <RouteBack text="Back" />
-        </div>
-      );
-    }
-
-    const dom = await JSDOM.fromURL(articleUrl);
-
-    if (isProbablyReaderable(dom.window.document)) {
-      // const xata = getXataClient();
-      // const isBookmarked = await xata.db.bookmarks
-      //   .filter({
-      //     userId,
-      //     bookmarkLink: decodeURIComponent(params.link),
-      //   })
-      //   .getFirst();
-      // console.log({ isBookmarked });
-      bookmarkItem = await checkBookmarkExists({
-        userId,
-        bookmarkLink: decodeURIComponent(params.link),
-      });
-      const reader = new Readability(dom.window.document);
-
-      article = reader.parse();
-      console.log(article);
-    } else {
-      article = null;
-    }
+    // if (error) {
+    //   return (
+    //     <div className="flex h-screen flex-1 flex-col items-center justify-center gap-6">
+    //       <LinkBrokenIcon className="size-20" />
+    //       <div className="flex flex-col items-center gap-2">
+    //         <span>Oops!</span>
+    //         <span>
+    //           The link{" "}
+    //           <a
+    //             href={articleUrl}
+    //             target="_blank"
+    //             rel="noopener noreferrer"
+    //             className="custom-underline"
+    //           >
+    //             {articleUrl}
+    //           </a>{" "}
+    //           seems broken.
+    //         </span>
+    //       </div>
+    //       <RouteBack text="Back" />
+    //     </div>
+    //   );
   } catch (err) {
+    // const virtualConsole = new VirtualConsole();
+
+    // const dom = await JSDOM.fromURL(articleUrl, {
+    //   virtualConsole,
+    // });
+
+    // if (isProbablyReaderable(dom.window.document)) {
+    //   // const xata = getXataClient();
+    //   // const isBookmarked = await xata.db.bookmarks
+    //   //   .filter({
+    //   //     userId,
+    //   //     bookmarkLink: decodeURIComponent(params.link),
+    //   //   })
+    //   //   .getFirst();
+    //   // console.log({ isBookmarked });
+    //   // bookmarkItem = await checkBookmarkExists({
+    //   //   userId,
+    //   //   bookmarkLink: decodeURIComponent(params.link),
+    //   // });
+    //   const reader = new Readability(dom.window.document); //TODO:
+    //   article = await extract(decodeURIComponent(params.link));
+    //   console.log(article);
+    // } else {
+    //   article = null;
+    // }
+    console.log(err);
     return (
       <div className="flex h-screen flex-1 flex-col items-center justify-center gap-6">
         <GlobeErrorIcon className="size-20" />
@@ -142,11 +151,11 @@ export default async function Read(props: {
       </nav> */}
 
       <ReadNav
-        articleSiteName={article?.siteName}
+        // articleSiteName={article?.siteName}
         articleUrl={articleUrl}
         articleTitle={article?.title as string}
-        bookmarkExists={bookmarkItem?.isBookmarkExists}
-        bookmarkId={bookmarkItem?.id}
+        // bookmarkExists={bookmarkItem?.isBookmarkExists}
+        // bookmarkId={bookmarkItem?.id}
       />
 
       {/* <div className="relative mx-auto mt-7 flex w-full max-w-3xl flex-col">
@@ -158,13 +167,8 @@ export default async function Read(props: {
         </div>
         <Article content={article?.content as string} />
       </div> */}
-      <div className="mx-auto w-full max-w-[60ch] px-4 pt-7 pb-14">
-        <div className="relative flex items-center">
-          {/* <RouteBack className="absolute -left-9 p-2" /> */}
-          <h1 className="text-text-primary! flex h-14 items-center text-xl font-medium tracking-tight text-balance">
-            {article?.title}
-          </h1>
-        </div>
+      <div className="mx-auto w-full max-w-[60ch] px-4 pb-14">
+        <div className="h-14"></div>
         <Article
           content={article?.content as string}
           articleSiteName={article?.siteName as string}

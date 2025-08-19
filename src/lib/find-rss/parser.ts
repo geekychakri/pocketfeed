@@ -51,12 +51,17 @@ export function htmlParser(htmlBody, feedParserOptions) {
     var isSiteTitle;
     var siteTitle = null;
     var feedParser;
+    let insideFooter = false;
 
     parser = new htmlparser.Parser(
       {
         onopentag: function (name, attr) {
           if (/(feed)|(atom)|(rdf)|(rss)/.test(name)) {
             isFeeds = true;
+          }
+
+          if (name === "footer") {
+            insideFooter = true;
           }
 
           if (
@@ -92,6 +97,9 @@ export function htmlParser(htmlBody, feedParserOptions) {
 
           // console.log("NEW CODE BLOCK")
           if (attr.href && attr.href.includes("rss") && !isRssIcon(attr.href)) {
+            if (insideFooter) {
+              return;
+            }
             feeds.push({
               title: attr.title || null,
               url: attr.href,
@@ -108,6 +116,9 @@ export function htmlParser(htmlBody, feedParserOptions) {
         onclosetag: function (name) {
           if (name === "title") {
             isSiteTitle = false;
+          }
+          if (name === "footer") {
+            insideFooter = false;
           }
         },
       },

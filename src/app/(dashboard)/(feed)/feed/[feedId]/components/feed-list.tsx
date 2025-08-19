@@ -1,3 +1,5 @@
+"use client";
+
 import PostModal from "@/components/PostModal";
 
 import Link from "next/link";
@@ -16,15 +18,20 @@ import { convertTimeStringToReadable } from "@/lib/utils";
 import { getYoutubeVideoId } from "@/lib/utils";
 import SaveArticles from "./save-articles";
 
+import { useArticleContent } from "@/store/article-content";
+import { useFolderName } from "@/store/folder-name";
+
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
 
 export default function FeedList({
   feedList,
   categorizedFeedItemsList,
+  folderName,
 }: {
   categorizedFeedItemsList: any;
   feedList: any;
+  folderName: string;
 }) {
   return (
     <>
@@ -51,7 +58,12 @@ export default function FeedList({
             </h1>
 
             {categorizedFeedItemsList.today.map((item, i) => (
-              <FeedItem feedList={feedList} item={item} key={i} />
+              <FeedItem
+                feedList={feedList}
+                item={item}
+                key={i}
+                folderName={folderName}
+              />
             ))}
           </div>
         )}
@@ -70,7 +82,12 @@ export default function FeedList({
             </h1>
 
             {categorizedFeedItemsList.yesterday.map((item, i) => (
-              <FeedItem feedList={feedList} item={item} key={i} />
+              <FeedItem
+                feedList={feedList}
+                item={item}
+                key={i}
+                folderName={folderName}
+              />
             ))}
           </div>
         )}
@@ -89,7 +106,12 @@ export default function FeedList({
             </h1>
 
             {categorizedFeedItemsList.thisWeek.map((item, i) => (
-              <FeedItem feedList={feedList} item={item} key={i} />
+              <FeedItem
+                feedList={feedList}
+                item={item}
+                key={i}
+                folderName={folderName}
+              />
             ))}
           </div>
         )}
@@ -108,7 +130,12 @@ export default function FeedList({
             </h1>
 
             {categorizedFeedItemsList.lastWeek.map((item, i) => (
-              <FeedItem feedList={feedList} item={item} key={i} />
+              <FeedItem
+                feedList={feedList}
+                item={item}
+                key={i}
+                folderName={folderName}
+              />
             ))}
           </div>
         )}
@@ -119,7 +146,12 @@ export default function FeedList({
             </h1>
 
             {categorizedFeedItemsList.thisMonth.map((item, i) => (
-              <FeedItem feedList={feedList} item={item} key={i} />
+              <FeedItem
+                feedList={feedList}
+                item={item}
+                key={i}
+                folderName={folderName}
+              />
             ))}
           </div>
         )}
@@ -138,7 +170,12 @@ export default function FeedList({
             </h1>
 
             {categorizedFeedItemsList.lastMonth.map((item, i) => (
-              <FeedItem feedList={feedList} item={item} key={i} />
+              <FeedItem
+                feedList={feedList}
+                item={item}
+                key={i}
+                folderName={folderName}
+              />
             ))}
           </div>
         )}
@@ -157,7 +194,12 @@ export default function FeedList({
             </h1>
 
             {categorizedFeedItemsList.thisYear.map((item, i) => (
-              <FeedItem feedList={feedList} item={item} key={i} />
+              <FeedItem
+                feedList={feedList}
+                item={item}
+                key={i}
+                folderName={folderName}
+              />
             ))}
           </div>
         )}
@@ -176,7 +218,12 @@ export default function FeedList({
             </h1>
 
             {categorizedFeedItemsList.lastYear.map((item, i) => (
-              <FeedItem feedList={feedList} item={item} key={i} />
+              <FeedItem
+                feedList={feedList}
+                item={item}
+                key={i}
+                folderName={folderName}
+              />
             ))}
           </div>
         )}
@@ -200,7 +247,12 @@ export default function FeedList({
                   </h1>
 
                   {categorizedFeedItemsList.older[item].map((item, i) => (
-                    <FeedItem feedList={feedList} item={item} key={i} />
+                    <FeedItem
+                      feedList={feedList}
+                      item={item}
+                      key={i}
+                      folderName={folderName}
+                    />
                   ))}
                 </div>
               ))}
@@ -214,10 +266,14 @@ export default function FeedList({
 function FeedItem({
   feedList,
   item,
+  folderName,
 }: {
   feedList: FeedListType;
   item: FeedItemType;
+  folderName: string;
 }) {
+  const { setFolderName } = useFolderName();
+  const { setArticleData } = useArticleContent();
   console.log({ feedUrl: feedList.feedUrl });
   if (item.enclosure?.type?.includes("audio")) {
     //TODO:
@@ -287,6 +343,7 @@ function FeedItem({
         feedTitle={feedList.title}
         websiteLink={feedList.link}
       /> */}
+
       <Link
         // href={
         //   item.link?.includes(new URL(feedList.link as string).hostname)
@@ -294,7 +351,11 @@ function FeedItem({
         //     : `/read/${encodeURIComponent(`${feedList.link}/${item.link}` as string)}`
         // }
         // href={`/read/${encodeURIComponent("https://www.alanwsmith.com/en/2v/mq/vc/om/")}`} //TODO:
-        href={`/read/${encodeURIComponent(item.link as string)}`}
+        href={`/read/${encodeURIComponent(item.link as string)}?author=${feedList.title}`}
+        onNavigate={(e) => {
+          setArticleData(item.content, item.title);
+          // setFolderName(folderName);
+        }}
         className="absolute inset-0 z-1"
       />
     </div>

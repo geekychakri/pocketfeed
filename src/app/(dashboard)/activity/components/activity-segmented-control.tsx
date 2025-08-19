@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 import { cn } from "@/lib/utils";
 
@@ -38,7 +38,7 @@ const ActivitySegmentedControl = ({
                 <motion.span
                   layoutId="activity-highlight"
                   initial={false}
-                  className="absolute bottom-0 left-0 right-0 h-[1px] rounded-full bg-brand-primary"
+                  className="bg-brand-primary absolute right-0 bottom-0 left-0 h-[1px] rounded-full"
                   style={{ originY: "0px" }}
                 ></motion.span>
               )}

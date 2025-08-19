@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useActionState } from "react";
 
 import { useFormState } from "react-dom";
 
@@ -14,10 +14,17 @@ import { addPost } from "@/app/actions";
 
 import { checkObjectIsEmpty, cn } from "@/lib/utils";
 
+import DOMPurify from "isomorphic-dompurify";
+
 import { useArticles } from "@/store/articles-list";
 
 import { stripHtml } from "string-strip-html";
 import { PostIcon } from "@/icons/post";
+import { CustomTooltip } from "./ui/custom-tooltip";
+import IconOnlyAction from "./ui/icon-only-action";
+import { useArticleContent } from "@/store/article-content";
+import { useHotkeys } from "react-hotkeys-hook";
+import { SpinnerRotate } from "./SpinnerRotate";
 
 const initialState = {
   message: "",
@@ -38,8 +45,8 @@ export default function PostModal({
   feedAlbumCover,
   websiteLink,
 }: {
-  feedItem: any;
-  feedTitle: string;
+  feedItem?: any;
+  feedTitle?: string;
   feedAlbumCover?: string;
   websiteLink?: string;
   className?: string;
@@ -48,6 +55,8 @@ export default function PostModal({
   const [newItemData, setNewItemData] = useState({});
   const { link } = useParams<{ link: string }>();
   console.log({ link });
+
+  const { articleTitle, articleContent } = useArticleContent();
 
   const { articles, articleMetaData } = useArticles();
   const findArticle = articles.find(
@@ -59,7 +68,12 @@ export default function PostModal({
   console.log({ parsedFeedItem });
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [state, formAction] = useFormState(addPost, initialState);
+  const [state, formAction, isPending] = useActionState(addPost, initialState);
+
+  useHotkeys("P", (e) => {
+    setIsModalOpen(true);
+    e.preventDefault();
+  });
 
   useEffect(() => {
     if (state?.message === "success") {
@@ -67,28 +81,34 @@ export default function PostModal({
     }
   }, [state]);
 
-  const parseNewItem = async () => {
-    setLoading(true);
-    const res = await fetch(`/api/parseNewItem?newItemLink=${link}`);
-    const data = await res.json();
-    console.log(data);
-    setNewItemData(data);
-    setLoading(false);
-  };
+  // const parseNewItem = async () => {
+  //   setLoading(true);
+  //   const res = await fetch(`/api/parseNewItem?newItemLink=${link}`);
+  //   const data = await res.json();
+  //   console.log(data);
+  //   setNewItemData(data);
+  //   setLoading(false);
+  // };
+  console.log({ feedTitle });
 
   return (
-    <Modal
-      open={isModalOpen}
-      onOpenChange={() => {
-        setIsModalOpen((prevState) => !prevState);
-        parseNewItem();
-      }}
-    >
-      <Modal.Button asChild>
-        <button>
-          <PostIcon />
-        </button>
-      </Modal.Button>
+    <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
+      <CustomTooltip
+        content={
+          <span>
+            Share with note <kbd>[P]</kbd>
+          </span>
+        }
+      >
+        {/* <IconOnlyAction> */}
+        <Modal.Button className="relative flex size-6 cursor-pointer items-center justify-center">
+          <span className="absolute top-1/2 left-1/2 size-12 -translate-x-1/2 -translate-y-1/2 pointer-fine:hidden"></span>
+          <PostIcon className="size-[18px]" />
+        </Modal.Button>
+
+        {/* </IconOnlyAction> */}
+      </CustomTooltip>
+
       <Modal.Content title="What's up?" className="bg-background-primary">
         {loading ? (
           "Loading..."
@@ -102,10 +122,18 @@ export default function PostModal({
               className="min-h-24 resize-none scroll-pb-2"
               name="post"
             />
-            <div className="flex flex-col gap-3 rounded-md py-2 shadow-sm">
+            <div className="border-shadow flex flex-col gap-3 rounded-md p-4">
               <div className="flex flex-col gap-1">
-                <p className="text-primary">{newItemData.title}</p>
-                <p className="text-sm text-text-secondary">{newItemData.url}</p>
+                <p className="text-primary">{articleTitle}</p>
+                <p
+                  className="text-text-secondary line-clamp-2 text-sm"
+                  dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(articleContent),
+                  }}
+                ></p>
+                <p className="text-text-secondary text-sm">
+                  {decodeURIComponent(link)}
+                </p>
               </div>
               {/* {parsedFeedItem.contentSnippet || parsedFeedItem.content ? (
                 <p className="line-clamp-2 text-text-secondary">
@@ -138,8 +166,8 @@ export default function PostModal({
 
             <input type="text" name="feedItem" hidden defaultValue={feedItem} />
 
-            <Button className="bg-ui-normal transition-[background-color] hover:bg-ui-hover">
-              Post
+            <Button className="bg-ui-normal hover:bg-ui-hover transition-[background-color]">
+              {isPending ? <SpinnerRotate /> : "Post"}
             </Button>
           </form>
         )}

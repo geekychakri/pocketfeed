@@ -19,7 +19,7 @@ import {
   AnimatePresence,
   useScroll,
   useMotionValueEvent,
-} from "framer-motion";
+} from "motion/react";
 import { useAuth } from "@clerk/clerk-react";
 
 import { useNavigatorOnline } from "@/hooks/useNavigatorOnline";
@@ -204,13 +204,13 @@ export default function Navigation({
         <div className="flex items-center gap-7">
           <Link
             href="/signin"
-            className="cursor-pointer rounded-lg text-center font-medium duration-150 hover:text-primary"
+            className="hover:text-primary cursor-pointer rounded-lg text-center font-medium duration-150"
           >
             Sign in
           </Link>
           <Link
             href="/join"
-            className="cursor-pointer rounded-md border-primary py-1 text-center font-medium text-primary"
+            className="border-primary text-primary cursor-pointer rounded-md py-1 text-center font-medium"
           >
             Join
           </Link>

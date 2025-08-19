@@ -38,7 +38,7 @@ export default forwardRef<
       ref={ref as React.Ref<HTMLButtonElement>}
       {...props}
       className={cn(
-        "relative flex size-6 cursor-pointer items-center justify-center rounded-full",
+        "relative flex size-6 cursor-pointer items-center justify-center",
         props.className,
       )}
     >

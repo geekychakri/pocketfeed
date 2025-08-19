@@ -30,6 +30,7 @@ import { useWatchScrollAreaOverflow } from "@/hooks/use-watch-scroll-area";
 
 import DeleteFolderModal from "./delete-folder-modal";
 import Button from "./ui/Button";
+import { useFolderName } from "@/store/folder-name";
 
 const CollapsibleFolders = ({
   foldersList,
@@ -37,6 +38,10 @@ const CollapsibleFolders = ({
   foldersList: { id: string; folder: string }[];
 }) => {
   const [open, setOpen] = React.useState(true);
+
+  const { folderName } = useFolderName();
+
+  console.log({ storefolderName: folderName });
 
   const [playFolderOpen] = useSound("/sounds/transition_open.wav");
   const [playFolderClose] = useSound("/sounds/transition_close.wav");
@@ -56,9 +61,13 @@ const CollapsibleFolders = ({
 
   const pathname = usePathname();
 
-  const currentFolderName = decodeURIComponent(pathname.split("/")[2]);
+  const currentFolderName =
+    pathname.includes("/feed") || pathname.includes("/read")
+      ? folderName
+      : decodeURIComponent(pathname.split("/")[2]); //TODO: folderName store
 
   // console.log("Collapsible folders");
+  console.log({ currentFolderName });
   return (
     <Collapsible.Root
       open={open}
@@ -73,8 +82,9 @@ const CollapsibleFolders = ({
           <Button
             className={cn(
               "hover:bg-ui-normal flex w-full items-center justify-between gap-3 rounded-md bg-transparent px-0 py-[10px] pl-3 font-normal",
-              pathname.includes("/folder") &&
-                "bg-ui-normal hover:bg-ui-hover font-medium",
+              pathname.includes("/activity") || pathname.includes("/bookmarks")
+                ? null
+                : "bg-ui-normal hover:bg-ui-hover font-medium",
             )}
           >
             <span className="flex items-center gap-3">
@@ -191,7 +201,7 @@ const FolderItem = ({
             className={cn(
               "hover:text-text-primary relative flex h-9 items-center gap-4 pl-3 text-sm transition-colors",
               currentFolderName === folder.folder
-                ? "text-text-primary"
+                ? "text-text-primary font-medium"
                 : "text-text-secondary",
             )}
           >

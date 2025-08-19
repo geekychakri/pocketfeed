@@ -1,7 +1,7 @@
 "use client";
 
-import type { Variants } from "framer-motion";
-import { motion, useAnimation } from "framer-motion";
+import type { Variants } from "motion/react";
+import { motion, useAnimation } from "motion/react";
 
 import { useEffect } from "react";
 
@@ -58,7 +58,7 @@ const FavoriteIcon = ({
 
   return (
     <div
-      className="hover:bg-accent flex cursor-pointer select-none items-center justify-center rounded-md p-2 transition-colors duration-200"
+      className="hover:bg-accent flex cursor-pointer items-center justify-center rounded-md p-2 transition-colors duration-200 select-none"
       //   onMouseEnter={() => {
       //     sparkleControls.start("hover");
       //     starControls.start("blink", { delay: 1 });

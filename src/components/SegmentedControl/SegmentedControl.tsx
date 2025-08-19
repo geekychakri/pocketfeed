@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { LayoutGroup, motion } from "framer-motion";
+import { LayoutGroup, motion } from "motion/react";
 
 import { cn } from "@/lib/utils";
 
@@ -30,7 +30,7 @@ const SegmentedControl = ({
   }, []);
 
   return (
-    <motion.ul className="flex border-b border-border-non-interactive text-center">
+    <motion.ul className="border-border-non-interactive flex border-b text-center">
       {items.map((item, index) => {
         // const isActive = index === activeIndex;
         const isActive = item.href === pathname;
@@ -51,7 +51,7 @@ const SegmentedControl = ({
                 <motion.span
                   layoutId="profile-highlight"
                   initial={false}
-                  className="absolute bottom-0 left-0 right-0 h-[2px] rounded-full bg-brand-primary"
+                  className="bg-brand-primary absolute right-0 bottom-0 left-0 h-[2px] rounded-full"
                   style={{ originY: "0px" }}
                 ></motion.span>
               )}

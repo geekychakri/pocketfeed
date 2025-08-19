@@ -6,6 +6,7 @@ import { BookmarkIcon } from "@/icons/bookmark";
 import { FullScreenCircleIcon } from "@/icons/full-screen";
 import { PostIcon } from "@/icons/post";
 import { FullScreenCircleBoldIcon } from "@/icons/fullscreen-bold";
+import { ExtractArticleIcon } from "@/icons/animated/extract-article-icon";
 
 import { useFullscreen } from "@/store/read-fullscreen";
 import RouteBack from "@/components/RouteBack/RouteBack";
@@ -14,6 +15,8 @@ import PostModal from "@/components/PostModal";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
+import { useRef } from "react";
+
 import { CustomTooltip } from "@/components/ui/custom-tooltip";
 
 import Bookmark from "./bookmark";
@@ -21,6 +24,9 @@ import Bookmark from "./bookmark";
 import { useArticles } from "@/store/articles-list";
 
 import useStore from "@/store/useStore";
+import BookmarkPodcast from "@/components/PodcastPlayer/bookmark-podcast";
+import ExtractArticle from "./extract-article";
+import { useSearchParams } from "next/navigation";
 export default function ReadNav({
   articleSiteName,
   articleUrl,
@@ -28,16 +34,17 @@ export default function ReadNav({
   bookmarkId,
   articleTitle,
 }: {
-  articleSiteName: string | undefined;
+  articleSiteName?: string | undefined;
   articleUrl: string;
-  articleTitle: string;
-  bookmarkExists: boolean | null;
-  bookmarkId: string | null;
+  articleTitle?: string;
+  bookmarkExists?: boolean | null;
+  bookmarkId?: string | null;
 }) {
   // const { fullscreen, toggleFullscreen } = useFullscreen();
-  const { articles, articleMetaData } = useArticles();
-  console.log({ articleMetaData });
-  const articleItem = articles.find((item, _) => item.link === articleUrl);
+  // const { articles, articleMetaData } = useArticles();
+  // console.log({ articleMetaData });
+  // const articleItem = articles.find((item, _) => item.link === articleUrl);
+
   const fullscreen = useStore(useFullscreen, (state) => state.fullscreen);
   const toggleFullscreen = useStore(
     useFullscreen,
@@ -55,13 +62,21 @@ export default function ReadNav({
   //   useBoundStore.persist.rehydrate();
   // }, [])
 
+  const extractArticleIconRef = useRef(null);
+
+  const searchParams = useSearchParams();
+
+  const blogName = searchParams.get("author");
+
   return (
-    <nav className="sticky top-0 z-10 flex h-14 items-center justify-between gap-3 border-b border-border-non-interactive bg-background-primary px-4">
+    <nav className="border-border-non-interactive bg-background-primary sticky top-0 z-10 flex h-14 items-center justify-between gap-3 border-b px-4">
       <div className="flex items-center gap-4">
         <RouteBack />
-        <p className="text-text-secondary">{articleSiteName}</p>
+        <p className="text-text-secondary">{blogName}</p>
       </div>
+
       <div className="flex items-center gap-5">
+        <ExtractArticle />
         <CustomTooltip
           content={
             <span>
@@ -74,37 +89,25 @@ export default function ReadNav({
             className="relative"
           >
             {fullscreen ? (
-              <FullScreenCircleBoldIcon />
+              <FullScreenCircleBoldIcon className="size-[18px]" />
             ) : (
-              <FullScreenCircleIcon />
+              <FullScreenCircleIcon className="size-[18px]" />
             )}
           </IconOnlyAction>
         </CustomTooltip>
 
-        <CustomTooltip
-          content={
-            <span>
-              Share with note <kbd>[P]</kbd>
-            </span>
-          }
-        >
-          {/* <button>
+        {/* <button>
             <PostIcon />
           </button> */}
-          <PostModal
-            feedItem={JSON.stringify(articleItem)}
-            feedTitle={articleMetaData.title}
-            websiteLink={articleMetaData.websiteLink}
-          />
-        </CustomTooltip>
+        <PostModal />
 
-        <Bookmark
+        {/* <Bookmark
           bookmarked={bookmarkExists}
           bookmarkLink={articleUrl}
           bookmarkType="article"
           bookmarkId={bookmarkId}
           bookmarkTitle={articleTitle}
-        />
+        /> */}
 
         <CustomTooltip
           content={
@@ -119,7 +122,7 @@ export default function ReadNav({
             target="_blank"
             rel="noopener noreferrer"
           >
-            <GlobalIcon />
+            <GlobalIcon className="size-[18px]" />
           </IconOnlyAction>
         </CustomTooltip>
       </div>

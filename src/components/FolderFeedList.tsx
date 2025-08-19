@@ -22,6 +22,7 @@ import { useFolderFeedStore } from "@/store/folder-feed";
 
 import { useFeedsAdd } from "@/hooks/useFeedsAdd";
 import { getInitials } from "@/lib/utils";
+import { useFolderName } from "@/store/folder-name";
 
 export function FolderFeedList({
   initialPageInfo,
@@ -33,6 +34,7 @@ export function FolderFeedList({
   folderName: string;
 }) {
   const feeds = useFolderFeedStore((state) => state.feeds);
+  const { setFolderName } = useFolderName();
   // console.log({ folderStoreData });
   // const [feeds, setFeeds] = useState(initialFeeds);
   const [pageInfo, setPageInfo] = useState(initialPageInfo);
@@ -117,6 +119,9 @@ export function FolderFeedList({
               <Link
                 href={`/feed/${item.feedId}`}
                 className="absolute inset-0 z-1"
+                onNavigate={() => {
+                  setFolderName(folderName); //TODO: to highlight folder on navigation
+                }}
               />
             </div>
           ))

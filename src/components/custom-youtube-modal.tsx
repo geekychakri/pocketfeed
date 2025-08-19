@@ -6,6 +6,7 @@ import Bookmark from "@/app/(dashboard)/read/components/bookmark";
 import BookmarkPodcast from "./PodcastPlayer/bookmark-podcast";
 
 import { usePathname } from "next/navigation";
+import { SpinnerRotate } from "./SpinnerRotate";
 
 export default function CustomYouTubeModal({
   //   trigger,
@@ -47,15 +48,23 @@ export default function CustomYouTubeModal({
                 bookmarkTitle={title}
               />
             </div>
-            <YouTubeEmbed
-              videoid={videoId}
-              // title="HEllo"
-              // width={100}
-              // width="100%"
-              style="aspect-ratio:16/9;max-width:100%"
-              playlabel="Play"
-              // params="controls=0"
-            />
+            <div className="relative aspect-video">
+              {/* <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <SpinnerRotate />
+              </div> */}
+              <YouTubeEmbed
+                videoid={videoId}
+                // title="HEllo"
+                // width={100}
+                // width="100%"
+                style="aspect-ratio:16/9;max-width:100%"
+                playlabel="Play"
+                params="rel=0"
+
+                // params="controls=0"
+              />
+            </div>
+
             {/* <p className="max-w-[500px]">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
                 Voluptates ducimus non natus porro assumenda voluptatem at!

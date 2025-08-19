@@ -1,7 +1,7 @@
 "use client";
 
-import type { Variants } from "framer-motion";
-import { motion, useAnimation } from "framer-motion";
+import type { Variants } from "motion/react";
+import { motion, useAnimation } from "motion/react";
 import type { HTMLAttributes } from "react";
 import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
 import { cn } from "@/lib/utils";
@@ -76,7 +76,7 @@ const ActivityIcon = forwardRef<ActivityIconHandle, ActivityIconProps>(
     return (
       <div
         className={cn(
-          `hover:bg-accent flex cursor-pointer select-none items-center justify-center rounded-md p-2 transition-colors duration-200`,
+          `hover:bg-accent flex cursor-pointer items-center justify-center rounded-md p-2 transition-colors duration-200 select-none`,
           className,
         )}
         onMouseEnter={handleMouseEnter}

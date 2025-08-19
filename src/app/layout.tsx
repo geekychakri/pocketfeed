@@ -17,11 +17,20 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import { GeistSans } from "geist/font/sans";
 
-import { Inter } from "next/font/google";
+import { Inter, Geist } from "next/font/google";
+
+import { NavigationEvents } from "@/components/NavigationEvents/NavigationEvents";
+import { Suspense } from "react";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-geist",
   display: "swap",
 });
 
@@ -75,6 +84,10 @@ export default function RootLayout({
               },
             }}
           />
+
+          <Suspense fallback={null}>
+            <NavigationEvents />
+          </Suspense>
         </body>
       </html>
     </ClerkProvider>

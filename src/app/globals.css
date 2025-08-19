@@ -20,7 +20,7 @@
 
 @utility text-balance {
   text-wrap: balance;
-  color: #ff5a1f;
+  /* color: #ff5a1f; */
 }
 
 @utility animation-pause {
@@ -63,20 +63,22 @@
 
   @font-face {
     font-family: "Monaspace";
-    src: url("../../public/SyntaxHighlightLightOwl.woff2") format("woff2");
+    src: url("../../public/SyntaxHighlightRegular.woff2") format("woff2");
   }
+
   @font-palette-values --kung-fury {
     font-family: "Monaspace";
     override-colors:
       0 hsl(225 100% 40%),
-      /* curlies and tags */ 1 hsl(250 100% 80%),
-      /* ? */ 2 hsl(225 100% 40%),
-      /* function */ 3 hsl(225 100% 40%),
-      /* ? */ 4 hsl(270 50% 40%),
-      /* () */ 5 hsl(210 40% 2%),
-      /* property name */ 6 hsl(210 10% 30%),
-      /* ? */ 7 hsl(327 100% 54%) /* numbers */;
+      1 hsl(250 100% 80%),
+      2 hsl(225 100% 40%),
+      3 hsl(225 100% 40%),
+      4 hsl(270 50% 40%),
+      5 hsl(210 40% 2%),
+      6 hsl(210 10% 30%),
+      7 hsl(327 100% 54%);
   }
+
   [data-theme="light"] {
     /* --color-primary: 248, 79, 57; */
 
@@ -246,9 +248,9 @@
     scrollbar-color: rgb(var(--color-primary)) #eee !important;
   }
 
-  pre code {
+  code {
     font-family: "Monaspace", monospace !important;
-    /* font-palette: --kung-fury !important; */
+    font-palette: --kung-fury !important;
   }
 
   textarea::-webkit-scrollbar {
@@ -702,4 +704,17 @@
   background: white;
   padding: 20px 0 0 0;
   border-radius: 4px;
+}
+
+/* Copy code btn */
+.copy-code-btn:active {
+  transform: scale(0.97);
+  transition: scale 150ms;
+}
+
+/* Popover */
+[popover] {
+  margin: 0;
+  inset: auto;
+  position-area: bottom right;
 }

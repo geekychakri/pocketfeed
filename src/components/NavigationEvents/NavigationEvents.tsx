@@ -3,13 +3,19 @@
 import { useEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 
-export default function NavigationEvents() {
+import { useArticleContent } from "@/store/article-content";
+
+export function NavigationEvents() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  const { setArticleData, articleContent } = useArticleContent();
+
   useEffect(() => {
-    const url = `${pathname}`;
-    console.log(url);
+    // reset article data on route change
+    if (articleContent.length >= 1 && !pathname.startsWith("/read")) {
+      setArticleData("", "");
+    }
   }, [pathname, searchParams]);
 
   return null;

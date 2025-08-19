@@ -89,22 +89,22 @@ export default function BookmarkPodcast({
     return (
       <button
         className={cn(
-          "relative flex size-6 cursor-pointer items-center justify-center rounded-full",
+          "relative flex size-6 cursor-wait items-center justify-center rounded-full",
           btnClassName,
         )}
       >
-        <BookmarkBoldIcon className={cn("size-5 cursor-wait", iconClassName)} />
+        <BookmarkBoldIcon className={cn("size-5", iconClassName)} />
       </button>
     );
   } else if (isLoading || isValidating) {
     return (
       <button
         className={cn(
-          "relative flex size-6 cursor-pointer items-center justify-center rounded-full",
+          "relative flex size-6 cursor-wait items-center justify-center rounded-full",
           btnClassName,
         )}
       >
-        <BookmarkIcon className={cn("size-5 cursor-wait", iconClassName)} />;
+        <BookmarkIcon className={cn("size-5", iconClassName)} />
       </button>
     );
   }

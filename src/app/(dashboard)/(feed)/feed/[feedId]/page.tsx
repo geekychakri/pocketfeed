@@ -32,9 +32,11 @@ export default async function Feed(props: {
       username: user?.username,
       feedId: params.feedId,
     })
+    .select(["*", "folderName.folder"])
     .getFirst();
   // console.log(feed);
   // console.log({ favicon: feed[0].favicon });
+  console.log({ feed });
   const feedUrl = feed?.rssURL;
 
   const feedList = (await parser.parseURL(
@@ -42,6 +44,10 @@ export default async function Feed(props: {
   )) as unknown as FeedListType;
 
   console.log({ feedList });
+
+  const sortFirstTenFeedsByDate = feedList.items
+    .slice(0, 10)
+    .sort((a, b) => (dayjs(a.isoDate).isAfter(dayjs(b.isoDate)) ? -1 : 1));
 
   if (feedList.items.length === 0) {
     return <div>Feed is empty!</div>; //TODO:
@@ -56,11 +62,7 @@ export default async function Feed(props: {
   // console.log({ itemsCategorized });
 
   // console.log(feedList?.image?.url);
-  const categorizedFeedItemsList = categorizeFeedItems(
-    feedList.items
-      .sort((a, b) => (dayjs(a.isoDate).isAfter(dayjs(b.isoDate)) ? -1 : 1))
-      .slice(0, 10),
-  );
+  const categorizedFeedItemsList = categorizeFeedItems(sortFirstTenFeedsByDate);
 
   console.log({
     categorizedFeedItemsList: categorizedFeedItemsList,
@@ -79,8 +81,11 @@ export default async function Feed(props: {
       <YouTubeModal />
 
       <FeedList
-        categorizedFeedItemsList={categorizedFeedItemsList}
-        feedList={feedList}
+        categorizedFeedItemsList={JSON.parse(
+          JSON.stringify(categorizedFeedItemsList),
+        )}
+        feedList={JSON.parse(JSON.stringify(feedList))}
+        folderName={feed?.folderName?.folder as string} //TODO:
       />
       <a
         target="_blank"
