@@ -73,6 +73,10 @@ DOMPurify.addHook("afterSanitizeAttributes", function (node) {
     node.removeAttribute("target");
   }
 
+  if (node.tagName === "A" && !node.hasAttribute("target")) {
+    node.setAttribute("target", "_blank");
+  }
+
   // if (node.tagName === "PRE") {
   //   // document.querySelectorAll("pre").forEach((pre) => {
   //   // Create wrapper, button, and message elements
