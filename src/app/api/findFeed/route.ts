@@ -12,6 +12,7 @@ function getUniqueListBy<T>(arr: T[], key: keyof T): T[] {
 
 export async function POST(request: Request) {
   try {
+    // throw new Error("");
     const bodyRaw = await request.json();
     console.log(bodyRaw);
     const body = getFeedUrlSchema.parse(bodyRaw);

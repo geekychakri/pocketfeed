@@ -9,9 +9,9 @@ import Textarea from "@/components/ui/Textarea";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 
-import { deleteFolder } from "@/app/actions";
+import { deleteFolder } from "@/app/actions/delete-folder";
 
-import { cn } from "@/lib/utils";
+import { cn, internalErrorToast } from "@/lib/utils";
 
 import { stripHtml } from "string-strip-html";
 import { useRouter, usePathname } from "next/navigation";
@@ -25,8 +25,8 @@ import { useActionState } from "react";
 import { toast } from "sonner";
 
 const initialState = {
+  type: "",
   message: "",
-  statusCode: 200,
 };
 
 export default function DeleteFolderModal({
@@ -74,13 +74,18 @@ export default function DeleteFolderModal({
   // }, []);
 
   useEffect(() => {
-    if (isDeleteFolderOpen) {
-      setIsDeleteFolderOpen(false);
-    }
-    if (state?.statusCode === 500) {
+    // if (isDeleteFolderOpen) {
+    //   setIsDeleteFolderOpen(false);
+    // }
+    if (state?.type === "internal-error") {
       setIsDeleteFolderOpen(false);
 
-      toast.error(state.message);
+      internalErrorToast(state?.message);
+      console.log(state.message);
+    } else if (state?.type === "user-error") {
+      setIsDeleteFolderOpen(false);
+
+      internalErrorToast(state?.message);
       console.log(state.message);
     }
   }, [pathname, state]);

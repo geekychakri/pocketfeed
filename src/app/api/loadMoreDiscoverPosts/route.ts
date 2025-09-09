@@ -2,10 +2,9 @@ import { getXataClient } from "@/xata";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const cursor = searchParams.get("cursor");
-
   try {
+    const { searchParams } = new URL(request.url);
+    const cursor = searchParams.get("cursor");
     const xata = getXataClient();
     const page = await xata.db.posts.getPaginated({
       pagination: {
@@ -24,9 +23,6 @@ export async function GET(request: Request) {
       },
     });
   } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to fetch posts" },
-      { status: 500 },
-    );
+    return NextResponse.json("", { status: 500 });
   }
 }

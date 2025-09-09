@@ -4,7 +4,8 @@ import { useRef, useEffect, useState, useActionState } from "react";
 import { useFormState } from "react-dom";
 import { UsersRecord } from "@/xata";
 
-import { updateProfile } from "@/app/actions";
+// import { updateProfile } from "@/app/actions";
+import { updateProfile } from "@/app/actions/update-profile";
 
 import useSound from "use-sound";
 
@@ -16,7 +17,7 @@ import Textarea from "@/components/ui/Textarea";
 
 import { SpinnerRotate } from "../SpinnerRotate";
 import Button from "../ui/Button";
-import { toastError } from "@/lib/utils";
+import { internalErrorToast, toastError } from "@/lib/utils";
 
 import type { updateProfileActionResponse } from "@/types";
 
@@ -37,13 +38,23 @@ export default function ProfileForm({ userInfo }: { userInfo: UsersRecord }) {
   );
 
   useEffect(() => {
-    if (formState?.type === "success") {
-      console.log("state msg");
-      playSuccess();
-      toast.success(formState?.message);
-    } else if (formState?.type === "error") {
-      playCaution();
-      toastError(formState?.message);
+    switch (formState.type) {
+      case "success":
+        playSuccess();
+        toast.success(formState?.message);
+        break;
+
+      case "user-error":
+        playCaution();
+        toastError(formState?.message);
+        break;
+
+      case "internal-error":
+        playCaution();
+        internalErrorToast(formState?.message);
+        break;
+      default:
+        null;
     }
   }, [formState]);
 

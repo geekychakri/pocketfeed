@@ -5,11 +5,19 @@ import { getXataClient } from "@/xata";
 import { type NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const userId = (await auth()).userId as string;
-
-  const searchParams = request.nextUrl.searchParams;
-  const bookmarkLink = searchParams.get("bookmarkLink") as string;
   try {
+    const userId = (await auth()).userId as string;
+
+    if (!userId) {
+      return {
+        type: "user-error",
+        message: "You must be signed in to check if bookmark exists!",
+      };
+    }
+
+    const searchParams = request.nextUrl.searchParams;
+    const bookmarkLink = searchParams.get("bookmarkLink") as string;
+
     const xata = getXataClient();
     // Fetch the first record that matches the filter condition
     const record = await xata.db.bookmarks
@@ -29,8 +37,8 @@ export async function GET(request: NextRequest) {
     };
 
     return Response.json(data);
-  } catch (error) {
-    console.error("Error checking item existence:", error);
+  } catch (err) {
+    console.error("Error checking item existence:", err);
     const data = { type: "error", bookmarkId: null, isBookmarkExists: null };
     return Response.json(data);
   }

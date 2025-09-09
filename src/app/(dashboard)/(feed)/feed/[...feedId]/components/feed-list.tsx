@@ -282,8 +282,8 @@ function FeedItem({
         feedUrl={feedList.feedUrl}
         item={item}
         albumCover={feedList?.image?.url as string}
-        episodeNumber={item.guid}
-        author={feedList.itunes.author}
+        episodeNumber={item?.guid}
+        author={feedList?.itunes?.author}
         albumName={feedList.title}
         webLink={feedList.link}
       />
@@ -391,7 +391,7 @@ const PodcastCard = ({
 
   const chaptersUrl = item["podcast:chapters"]?.["$"]?.url ?? null;
 
-  console.log({ duration: item.itunes.duration });
+  console.log({ duration: item?.itunes?.duration });
   return (
     <div className="hover:text-brand-primary relative flex items-center justify-between gap-5 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]">
       <span className="flex flex-1 flex-col gap-1">
@@ -404,7 +404,7 @@ const PodcastCard = ({
           {item.itunes?.duration ? (
             <>
               <span>·</span>
-              <span>{convertTimeStringToReadable(item.itunes.duration)}</span>
+              <span>{convertTimeStringToReadable(item?.itunes?.duration)}</span>
             </>
           ) : null}
         </span>

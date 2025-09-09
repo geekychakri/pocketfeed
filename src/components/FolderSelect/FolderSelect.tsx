@@ -29,7 +29,7 @@ const FolderSelect = ({ folders }: { folders: any }) => {
         Choose a folder
       </Label>
       <Select.Root
-        name="folder"
+        name={showNewFolderInput ? undefined : "folder"}
         value={value}
         onValueChange={(value) => {
           if (value === "New Folder") {

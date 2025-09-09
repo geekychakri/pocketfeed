@@ -76,7 +76,11 @@ export default function SignIn() {
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
       console.error(JSON.stringify(err, null, 2));
+      if (err.errors[0].message === "Session already exists") {
+        return router.push("/folder/Home");
+      }
       toast.error(err.errors[0].message);
+
       playCaution();
       setLoginLoading(false);
     }

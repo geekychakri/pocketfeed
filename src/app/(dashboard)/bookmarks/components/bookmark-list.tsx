@@ -14,9 +14,9 @@ import Button from "@/components/ui/Button";
 import { SpinnerRotate } from "@/components/SpinnerRotate";
 import { useBookmarksStore } from "@/store/bookmark-store";
 import BookmarkDelete from "./bookmark-delete";
-import YouTubePlayButton from "../../(feed)/feed/[feedId]/components/YouTubePlayButton";
-import YouTubeModal from "../../(feed)/feed/[feedId]/components/YouTubeModal";
-import PodcastPlayButton from "../../(feed)/feed/[feedId]/components/PodcastPlayButton";
+import YouTubeModal from "../../(feed)/feed/[...feedId]/components/YouTubeModal";
+import YouTubePlayButton from "../../(feed)/feed/[...feedId]/components/YouTubePlayButton";
+import PodcastPlayButton from "../../(feed)/feed/[...feedId]/components/PodcastPlayButton";
 import { getYoutubeVideoId } from "@/lib/utils";
 
 import { WindowVirtualizer } from "virtua";

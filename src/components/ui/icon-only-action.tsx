@@ -24,7 +24,7 @@ export default forwardRef<
         ref={ref as React.Ref<HTMLAnchorElement>}
         {...props}
         className={cn(
-          "relative flex size-6 items-center justify-center rounded-full",
+          "relative flex size-6 items-center justify-center px-6 py-4",
           props.className,
         )}
       >
@@ -38,7 +38,7 @@ export default forwardRef<
       ref={ref as React.Ref<HTMLButtonElement>}
       {...props}
       className={cn(
-        "relative flex size-6 cursor-pointer items-center justify-center",
+        "relative flex size-6 cursor-pointer items-center justify-center px-6 py-4",
         props.className,
       )}
     >

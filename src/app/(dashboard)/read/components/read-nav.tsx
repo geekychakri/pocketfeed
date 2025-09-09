@@ -27,6 +27,8 @@ import useStore from "@/store/useStore";
 import BookmarkPodcast from "@/components/PodcastPlayer/bookmark-podcast";
 import ExtractArticle from "./extract-article";
 import { useSearchParams } from "next/navigation";
+
+import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 export default function ReadNav({
   articleSiteName,
   articleUrl,
@@ -75,33 +77,34 @@ export default function ReadNav({
         <p className="text-text-secondary">{blogName}</p>
       </div>
 
-      <div className="flex items-center gap-5">
-        <ExtractArticle />
-        <CustomTooltip
-          content={
-            <span>
-              Fullscreen <kbd>[F]</kbd>
-            </span>
-          }
-        >
-          <IconOnlyAction
-            onClick={() => toggleFullscreen()}
-            className="relative"
+      <div className="flex items-center">
+        <TooltipPrimitive.Provider delayDuration={800} skipDelayDuration={500}>
+          <ExtractArticle />
+          <CustomTooltip
+            content={
+              <span>
+                Fullscreen <kbd>[F]</kbd>
+              </span>
+            }
           >
-            {fullscreen ? (
-              <FullScreenCircleBoldIcon className="size-[18px]" />
-            ) : (
-              <FullScreenCircleIcon className="size-[18px]" />
-            )}
-          </IconOnlyAction>
-        </CustomTooltip>
+            <IconOnlyAction
+              onClick={() => toggleFullscreen()}
+              className="relative"
+            >
+              {fullscreen ? (
+                <FullScreenCircleBoldIcon className="size-[18px] shrink-0" />
+              ) : (
+                <FullScreenCircleIcon className="size-[18px] shrink-0" />
+              )}
+            </IconOnlyAction>
+          </CustomTooltip>
 
-        {/* <button>
+          {/* <button>
             <PostIcon />
           </button> */}
-        <PostModal />
+          <PostModal />
 
-        {/* <Bookmark
+          {/* <Bookmark
           bookmarked={bookmarkExists}
           bookmarkLink={articleUrl}
           bookmarkType="article"
@@ -109,22 +112,24 @@ export default function ReadNav({
           bookmarkTitle={articleTitle}
         /> */}
 
-        <CustomTooltip
-          content={
-            <span>
-              View original <kbd>[W]</kbd>
-            </span>
-          }
-        >
-          <IconOnlyAction
-            as="a"
-            href={articleUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          <CustomTooltip
+            content={
+              <span>
+                View original <kbd>[W]</kbd>
+              </span>
+            }
           >
-            <GlobalIcon className="size-[18px]" />
-          </IconOnlyAction>
-        </CustomTooltip>
+            <IconOnlyAction
+              as="a"
+              href={articleUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-full"
+            >
+              <GlobalIcon className="size-[18px] shrink-0" />
+            </IconOnlyAction>
+          </CustomTooltip>
+        </TooltipPrimitive.Provider>
       </div>
     </nav>
   );

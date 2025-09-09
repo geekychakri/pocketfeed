@@ -3,11 +3,17 @@ import { useState, useEffect } from "react";
 
 import useSWR from "swr";
 
+import { useSWRConfig } from "swr";
+
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { SpinnerRotate } from "./SpinnerRotate";
+import { internalErrorToast } from "@/lib/utils";
+import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
+import { fetcher } from "@/lib/utils";
+import Button from "./ui/Button";
+import { toast } from "sonner";
 
 function extractText(inputString: string) {
   // Regular expression to match the timestamp and special characters
@@ -77,7 +83,9 @@ export default function PodcastChapters({
 
   // console.log(chaptersWithTimeStartandEnd);
 
-  const { data, error, isLoading } = useSWR(
+  const { onError } = useSWRConfig();
+
+  const { data, error, isLoading, mutate } = useSWR(
     chaptersUrl
       ? `/api/getChapters?chaptersUrl=${encodeURIComponent(chaptersUrl)}`
       : null,
@@ -86,6 +94,18 @@ export default function PodcastChapters({
       revalidateIfStale: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
+      onError: (error, key) => {
+        if (error.status === 500) {
+          internalErrorToast(INTERNAL_ERROR_MESSAGE);
+        }
+      },
+      onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+        // Never retry on 500.
+        if (error.status === 500) return;
+
+        // Only retry up to 10 times.
+        if (retryCount >= 5) return;
+      },
     },
   );
 
@@ -103,7 +123,14 @@ export default function PodcastChapters({
   }, [data]);
 
   if (error) {
-    return <div>Something went wrong!</div>;
+    return (
+      <div className="flex flex-col gap-4">
+        <p className="text-lg">Something went wrong!</p>
+        <Button onClick={() => mutate()} className="self-start">
+          Try again
+        </Button>
+      </div>
+    );
   }
 
   if (isLoading) {
@@ -118,7 +145,7 @@ export default function PodcastChapters({
 
   return (
     <div className="flex flex-col justify-center gap-4">
-      {data.chapters.map((chapter, i) => {
+      {data.chapters?.map((chapter, i) => {
         const isActive =
           audioRef.current?.currentTime >= chapter.startTime &&
           audioRef.current?.currentTime <

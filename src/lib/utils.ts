@@ -2,6 +2,12 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { number } from "zod";
 
+import crypto from "crypto";
+
+import DOMPurify from "isomorphic-dompurify";
+
+import { createElement } from "react";
+
 import { toast } from "sonner";
 
 export function cn(...inputs: ClassValue[]) {
@@ -303,12 +309,29 @@ export function compactNumber(value: number) {
   }).format(value);
 }
 
-export function toastError(message: string) {
+export function toastError(message: string, duration = 3000) {
   return toast.error(message, {
+    duration,
     style: {
       color: "rgba(var(--danger))",
     },
   });
+}
+
+export function internalErrorToast(message: string) {
+  const sanitized = DOMPurify.sanitize(message, {
+    ADD_ATTR: ["target"],
+  });
+
+  toast(
+    createElement("div", {
+      className: `flex flex-col gap-2 font-medium text-pretty`,
+      dangerouslySetInnerHTML: { __html: sanitized },
+    }),
+    {
+      duration: 7000,
+    },
+  );
 }
 
 class StatusError extends Error {
@@ -329,4 +352,21 @@ export async function fetcher<JSON = any>(
     throw error;
   }
   return res.json();
+}
+
+const secret = process.env.URL_SIGN_SECRET!;
+
+export function signUrl(url: string) {
+  const sig = crypto.createHmac("sha256", secret).update(url).digest("hex");
+  return `${url}::${sig}`;
+}
+
+export function verifyUrl(signed: string) {
+  const [url, sig] = signed.split("::");
+  const expected = crypto
+    .createHmac("sha256", secret)
+    .update(url)
+    .digest("hex");
+  if (sig !== expected) throw new Error("Tampered URL");
+  return url;
 }

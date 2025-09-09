@@ -3,17 +3,17 @@ import { NextResponse } from "next/server";
 
 import { auth } from "@clerk/nextjs/server";
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const cursor = searchParams.get("cursor");
-  const folderName = searchParams.get("folderName");
-
-  const { userId } = await auth();
-
-  console.log({ folderName });
-
-  // const { userId } = auth();
-
   try {
+    const { searchParams } = new URL(request.url);
+    const cursor = searchParams.get("cursor");
+    const folderName = searchParams.get("folderName");
+
+    const { userId } = await auth();
+
+    console.log({ folderName });
+
+    // const { userId } = auth();
+
     const xata = getXataClient();
     const page = await xata.db.feeds
       .filter({
@@ -38,9 +38,6 @@ export async function GET(request: Request) {
       },
     });
   } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to fetch posts" },
-      { status: 500 },
-    );
+    return NextResponse.json("", { status: 500 });
   }
 }

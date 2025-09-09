@@ -21,7 +21,9 @@ import Modal from "../Modal/Modal";
 
 import Input from "../ui/Input";
 
-import { addNewFolder, deleteFolder } from "@/app/actions";
+// import { deleteFolder } from "@/app/actions";
+import { addNewFolder } from "@/app/actions/add-new-folder";
+import { deleteFolder } from "@/app/actions/delete-folder";
 import Button from "../ui/Button";
 import { toast } from "sonner";
 
@@ -159,7 +161,7 @@ const DropdownMenuDemo = ({
 
         <DropdownMenu.Portal>
           <DropdownMenu.Content
-            className="z-11 min-w-[220px] rounded-md border bg-white p-[5px] will-change-[opacity,transform] data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
+            className="data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-11 min-w-[220px] rounded-md border bg-white p-[5px] will-change-[opacity,transform]"
             sideOffset={5}
             // hideWhenDetached={true}
           >
@@ -192,7 +194,7 @@ const DropdownMenuDemo = ({
               <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
                 <Modal.Button asChild>
                   <DropdownMenu.Item
-                    className="relative flex h-[25px] select-none items-center gap-[5px] px-[5px] py-4 text-[14px] outline-none data-disabled:pointer-events-none data-highlighted:bg-gray-100 data-disabled:text-mauve8"
+                    className="data-disabled:text-mauve8 relative flex h-[25px] items-center gap-[5px] px-[5px] py-4 text-[14px] outline-none select-none data-disabled:pointer-events-none data-highlighted:bg-gray-100"
                     onSelect={(e) => {
                       e.preventDefault();
                     }}
@@ -234,7 +236,7 @@ const DropdownMenuDemo = ({
                 >
                   <Modal.Button asChild>
                     <DropdownMenu.Item
-                      className="relative flex h-[25px] select-none items-center gap-[5px] px-[5px] py-4 text-[14px] outline-none data-disabled:pointer-events-none data-highlighted:bg-gray-100 data-disabled:text-mauve8"
+                      className="data-disabled:text-mauve8 relative flex h-[25px] items-center gap-[5px] px-[5px] py-4 text-[14px] outline-none select-none data-disabled:pointer-events-none data-highlighted:bg-gray-100"
                       onSelect={(e) => {
                         e.preventDefault();
                       }}

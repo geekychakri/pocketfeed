@@ -13,7 +13,7 @@ export function NavigationEvents() {
 
   useEffect(() => {
     // reset article data on route change
-    if (articleContent.length >= 1 && !pathname.startsWith("/read")) {
+    if (articleContent?.length >= 1 && !pathname.startsWith("/read")) {
       setArticleData("", "");
     }
   }, [pathname, searchParams]);

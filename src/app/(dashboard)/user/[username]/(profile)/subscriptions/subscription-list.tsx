@@ -1,12 +1,12 @@
 "use client";
-
+import { useActionState } from "react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/UserAvatar";
 
 import { useFormState, useFormStatus } from "react-dom";
 
 import { SpinnerRotate } from "@/components/SpinnerRotate";
 
-import { getInitials } from "@/lib/utils";
+import { getInitials, internalErrorToast } from "@/lib/utils";
 import Link from "next/link";
 
 import { decode } from "html-entities";
@@ -21,7 +21,7 @@ import { PageRecordArray, SelectedPick } from "@xata.io/client";
 
 import { WindowVirtualizer } from "virtua";
 
-import { deleteSubscriptions } from "@/app/actions";
+import { deleteSubscriptions } from "@/app/actions/delete-subscriptions";
 import { useEffect, useState, useRef } from "react";
 
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
@@ -32,16 +32,22 @@ import { useUser } from "@clerk/nextjs";
 import { useParams } from "next/navigation";
 
 const initialState = {
+  type: "",
   message: "",
 };
 
 import useSound from "use-sound";
 import { FeedIcon } from "@/icons/feed";
+import { toast } from "sonner";
+import Button from "@/components/ui/Button";
 
 type FeedsType = PageRecordArray<Readonly<SelectedPick<FeedsRecord, ["*"]>>>;
 
 export default function SubscriptionList({ feeds }: { feeds: FeedsType }) {
-  const [state, formAction] = useFormState(deleteSubscriptions, initialState);
+  const [state, formAction, isPending] = useActionState(
+    deleteSubscriptions,
+    initialState,
+  );
 
   const { user: loggedInUser } = useUser();
   const params = useParams();
@@ -61,9 +67,19 @@ export default function SubscriptionList({ feeds }: { feeds: FeedsType }) {
   // });
 
   const [selectSound] = useSound("/sounds/select.wav");
+  const [playCaution] = useSound("/sounds/caution.wav");
 
   useEffect(() => {
     console.log({ message: state.message });
+    if (state.type === "success") {
+      toast.success(state.message);
+    } else if (state.type === "user-error") {
+      toast.error(state.message);
+      playCaution();
+    } else if (state.type === "internal-error") {
+      internalErrorToast(state.message);
+      playCaution();
+    }
   }, [state]);
 
   if (feeds.length === 0) {
@@ -89,7 +105,7 @@ export default function SubscriptionList({ feeds }: { feeds: FeedsType }) {
   return (
     <div className="flex flex-col gap-2">
       <form action={formAction} id="subscriptionForm">
-        <SubscriptionListStatusBar feeds={feeds} />
+        <SubscriptionListStatusBar feeds={feeds} isPending={isPending} />
         <div className="flex flex-col empty:border-none">
           {feeds.length >= 1 ? (
             <WindowVirtualizer>
@@ -161,7 +177,13 @@ export default function SubscriptionList({ feeds }: { feeds: FeedsType }) {
   );
 }
 
-function SubscriptionListStatusBar({ feeds }: { feeds: FeedsType }) {
+function SubscriptionListStatusBar({
+  feeds,
+  isPending,
+}: {
+  feeds: FeedsType;
+  isPending: boolean;
+}) {
   const [isSticky, setIsSticky] = useState(false);
   return (
     <InView
@@ -180,31 +202,37 @@ function SubscriptionListStatusBar({ feeds }: { feeds: FeedsType }) {
         {feeds.length}{" "}
         <span className="text-text-secondary">subscriptions</span>
       </h2>
-      <SubmitButton />
+      <Button className="bg-transparent" type="submit" disabled={isPending}>
+        {isPending ? (
+          <SpinnerRotate className="size-5" />
+        ) : (
+          <TrashIcon className="size-5" />
+        )}
+      </Button>
     </InView>
   );
 }
 
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    // <button
-    //   className="flex h-11 w-full items-center justify-center rounded-md bg-ui-normal px-4 py-2 font-medium text-white"
-    //   disabled={pending}
-    // >
-    //   {pending ? <SpinnerRotate /> : "Add"}
-    // </button>
-    <button
-      //   form="subscriptionForm"
-      className="hover:bg-ui-hover flex size-[50px] items-center justify-center rounded-full duration-150"
-      type="submit"
-      disabled={pending}
-    >
-      {pending ? (
-        <SpinnerRotate className="size-5" />
-      ) : (
-        <TrashIcon className="size-5" />
-      )}
-    </button>
-  );
-}
+// function SubmitButton() {
+//   const { pending } = useFormStatus();
+//   return (
+//     // <button
+//     //   className="flex h-11 w-full items-center justify-center rounded-md bg-ui-normal px-4 py-2 font-medium text-white"
+//     //   disabled={pending}
+//     // >
+//     //   {pending ? <SpinnerRotate /> : "Add"}
+//     // </button>
+//     <button
+//       //   form="subscriptionForm"
+//       className="hover:bg-ui-hover flex size-[50px] items-center justify-center rounded-full duration-150"
+//       type="submit"
+//       disabled={pending}
+//     >
+//       {pending ? (
+//         <SpinnerRotate className="size-5" />
+//       ) : (
+//         <TrashIcon className="size-5" />
+//       )}
+//     </button>
+//   );
+// }

@@ -30,7 +30,7 @@ export default async function Feed(props: {
   const feed = await xata.db.feeds
     .filter({
       username: user?.username,
-      feedId: params.feedId,
+      feedId: params.feedId[0],
     })
     .select(["*", "folderName.folder"])
     .getFirst();
@@ -76,7 +76,7 @@ export default async function Feed(props: {
     <div className="flex flex-col px-4 py-14">
       <div className="relative mb-5 flex items-center">
         <RouteBack className="absolute -left-9 border" />
-        <h1 className="border text-lg font-medium">{feedList?.title}</h1>
+        <h1 className="border text-lg font-medium">{feed?.title}</h1>
       </div>
       <YouTubeModal />
 

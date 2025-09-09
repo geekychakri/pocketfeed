@@ -11,7 +11,7 @@ import { Cross2Icon, ReaderIcon } from "@radix-ui/react-icons";
 import { useFormState } from "react-dom";
 
 import { useShowPodcastPlayer } from "@/store/podcastplayer";
-import PodcastPlayButton from "@/app/(dashboard)/(feed)/feed/[feedId]/components/PodcastPlayButton";
+import PodcastPlayButton from "@/app/(dashboard)/(feed)/feed/[...feedId]/components/PodcastPlayButton"; //TODO:
 
 import PodcastDrawerTabs from "./PodcastDrawerTabs";
 
@@ -26,7 +26,7 @@ import Modal from "@/components/Modal/Modal";
 import Textarea from "@/components/ui/Textarea";
 import Button from "@/components/ui/Button";
 
-import { addPost } from "@/app/actions";
+import { addPost } from "@/app/actions/add-post";
 import BookmarkPodcast from "./PodcastPlayer/bookmark-podcast";
 
 DOMPurify.addHook("beforeSanitizeAttributes", function (node) {

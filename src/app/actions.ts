@@ -21,6 +21,7 @@ import { fromZodError } from "@/lib/api/errors";
 import { ZodError } from "zod";
 
 import type { updateProfileActionResponse } from "@/types";
+import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 
 const xata = getXataClient();
 
@@ -410,9 +411,9 @@ export async function deleteFeed(prevState: any, formData: FormData) {
 
     console.log("DELETED");
     // revalidatePath(`/folder/${folderName}`, "page");
-    return { message: "success" };
+    return { type: "success", message: "success" };
   } catch (err) {
-    return { message: "error" };
+    return { type: "internal-error", message: INTERNAL_ERROR_MESSAGE };
   }
 }
 

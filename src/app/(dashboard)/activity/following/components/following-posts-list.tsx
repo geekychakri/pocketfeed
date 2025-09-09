@@ -3,11 +3,13 @@
 import Link from "next/link";
 import { useState } from "react";
 
-import YouTubePlayButton from "@/app/(dashboard)/(feed)/feed/[feedId]/components/YouTubePlayButton";
-import PodcastPlayButton from "@/app/(dashboard)/(feed)/feed/[feedId]/components/PodcastPlayButton";
+import YouTubePlayButton from "@/app/(dashboard)/(feed)/feed/[...feedId]/components/YouTubePlayButton";
+import PodcastPlayButton from "@/app/(dashboard)/(feed)/feed/[...feedId]/components/PodcastPlayButton";
 
 import Button from "@/components/ui/Button";
 import { SpinnerRotate } from "@/components/SpinnerRotate";
+import { internalErrorToast } from "@/lib/utils";
+import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 
 export default function FollowingPostsList({
   posts,
@@ -24,25 +26,30 @@ export default function FollowingPostsList({
   console.log({ pageInfoCursor: pageInfo.cursor });
 
   const loadMore = async () => {
-    if (!pageInfo.hasNextPage || !pageInfo.cursor) return;
+    try {
+      if (!pageInfo.hasNextPage || !pageInfo.cursor) return;
 
-    setLoading(true);
+      setLoading(true);
 
-    const response = await fetch(
-      `/api/loadMoreFollowingPosts?cursor=${encodeURIComponent(pageInfo.cursor)}`,
-    );
+      const response = await fetch(
+        `/api/loadMoreFollowingPosts?cursor=${encodeURIComponent(pageInfo.cursor)}`,
+      );
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch more posts");
+      if (!response.ok) {
+        throw new Error("Failed to fetch more posts");
+      }
+
+      const data = await response.json();
+
+      // setFeeds((prevPosts: any) => [...prevPosts, ...data.posts]);
+      console.log({ data });
+      setPostsList([...postsList, ...data.posts]);
+      setPageInfo(data.pageInfo);
+    } catch (err) {
+      internalErrorToast(INTERNAL_ERROR_MESSAGE);
+    } finally {
+      setLoading(false);
     }
-
-    const data = await response.json();
-
-    // setFeeds((prevPosts: any) => [...prevPosts, ...data.posts]);
-    console.log({ data });
-    setPostsList([...postsList, ...data.posts]);
-    setPageInfo(data.pageInfo);
-    setLoading(false);
   };
   return (
     <>
@@ -56,7 +63,7 @@ export default function FollowingPostsList({
           return (
             <div
               key={post.id}
-              className="flex flex-col gap-6 rounded-lg border border-border-primary p-4 text-text-primary"
+              className="border-border-primary text-text-primary flex flex-col gap-6 rounded-lg border p-4"
             >
               <div className="flex flex-col gap-4">
                 <Link
@@ -75,7 +82,7 @@ export default function FollowingPostsList({
                 </Link>
                 <p>{post.body}</p>
               </div>
-              <div className="flex flex-col gap-4 rounded-md border border-border-primary bg-background-secondary p-3 text-sm">
+              <div className="border-border-primary bg-background-secondary flex flex-col gap-4 rounded-md border p-3 text-sm">
                 <div className="flex flex-col gap-1">
                   <div className="flex justify-between">
                     <h2 className="text-primary font-medium">
@@ -107,7 +114,7 @@ export default function FollowingPostsList({
                 </p>
                 <PodcastPlayButton
                   showText={true}
-                  className="h-9 w-24 rounded-md border border-border-primary bg-background-primary text-sm transition-[background] hover:bg-transparent"
+                  className="border-border-primary bg-background-primary h-9 w-24 rounded-md border text-sm transition-[background] hover:bg-transparent"
                   title={feedItem.title}
                   audioUrl={feedItem.enclosure.url}
                   albumCover={post.feedAlbumCover as string}
@@ -125,7 +132,7 @@ export default function FollowingPostsList({
           return (
             <div
               key={post.id}
-              className="flex flex-col gap-6 rounded-lg border border-border-primary p-4 text-text-primary"
+              className="border-border-primary text-text-primary flex flex-col gap-6 rounded-lg border p-4"
             >
               <div className="flex flex-col gap-4">
                 <Link
@@ -144,7 +151,7 @@ export default function FollowingPostsList({
                 </Link>
                 <p>{post.body}</p>
               </div>
-              <div className="flex flex-col gap-4 rounded-md border border-border-primary bg-background-secondary p-3 text-sm">
+              <div className="border-border-primary bg-background-secondary flex flex-col gap-4 rounded-md border p-3 text-sm">
                 <div className="flex flex-col gap-1">
                   <div className="flex justify-between">
                     <h2 className="text-primary font-medium">
@@ -169,7 +176,7 @@ export default function FollowingPostsList({
                 </div>
                 <YouTubePlayButton
                   youtubeId={feedItem.id.split(":")[2]}
-                  className="h-9 w-24 rounded-md border border-border-primary bg-background-primary text-sm transition-[background] hover:bg-transparent"
+                  className="border-border-primary bg-background-primary h-9 w-24 rounded-md border text-sm transition-[background] hover:bg-transparent"
                   showText={true}
                 />
               </div>
@@ -179,7 +186,7 @@ export default function FollowingPostsList({
         return (
           <div
             key={post.id}
-            className="flex flex-col gap-6 rounded-lg border border-border-primary p-4 text-text-primary"
+            className="border-border-primary text-text-primary flex flex-col gap-6 rounded-lg border p-4"
           >
             <div className="flex flex-col gap-4">
               <div
@@ -208,7 +215,7 @@ export default function FollowingPostsList({
               }
               prefetch={false}
               rel="noopener noreferrer"
-              className="flex flex-col gap-4 rounded-md border border-border-primary bg-background-secondary p-3 text-sm"
+              className="border-border-primary bg-background-secondary flex flex-col gap-4 rounded-md border p-3 text-sm"
             >
               <div className="flex flex-col gap-1">
                 <div className="flex justify-between">
@@ -243,7 +250,7 @@ export default function FollowingPostsList({
         <Button
           onClick={loadMore}
           disabled={loading}
-          className="pointer-events-auto mt-[10px] border border-border-primary bg-ui-normal px-2 py-4 text-sm text-text-primary transition-[background-color] hover:bg-ui-hover"
+          className="border-border-primary bg-ui-normal text-text-primary hover:bg-ui-hover pointer-events-auto mt-[10px] border px-2 py-4 text-sm transition-[background-color]"
         >
           {loading ? (
             <SpinnerRotate fill="currentColor" />
@@ -254,7 +261,7 @@ export default function FollowingPostsList({
       )}
 
       {!pageInfo.hasNextPage && posts.length >= 1 && (
-        <p className="mt-5 text-text-secondary">End of list!</p>
+        <p className="text-text-secondary mt-5">End of list!</p>
       )}
     </>
   );

@@ -9,9 +9,9 @@ import Textarea from "@/components/ui/Textarea";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 
-import { updateFolder } from "@/app/actions";
+import { updateFolder } from "@/app/actions/update-folder";
 
-import { cn } from "@/lib/utils";
+import { cn, internalErrorToast } from "@/lib/utils";
 
 import { stripHtml } from "string-strip-html";
 import { useRouter, usePathname } from "next/navigation";
@@ -22,13 +22,11 @@ import { useActionState } from "react";
 
 import { SpinnerRotate } from "./SpinnerRotate";
 
-// import { toast } from "sonner";
-
-import toast, { Toaster } from "react-hot-toast";
+import { toast } from "sonner";
 
 const initialState = {
+  type: "",
   message: "",
-  statusCode: 200,
 };
 
 export default function EditFolderModal({
@@ -89,13 +87,16 @@ export default function EditFolderModal({
   // }, []);
 
   useEffect(() => {
-    if (isEditFolderOpen) {
-      setIsEditFolderOpen(false);
-    }
-    if (state?.statusCode === 500) {
-      setIsEditFolderOpen(false);
+    // if (isEditFolderOpen) {
+    //   setIsEditFolderOpen(false);
+    // }
+    if (state?.type === "internal-error") {
+      // setIsEditFolderOpen(false);
       // toast.error(state.message);
+      internalErrorToast(state?.message);
       console.log(state.message);
+    } else if (state?.type === "user-error") {
+      toast.error(state?.message);
     }
   }, [pathname, state]);
 

@@ -3,10 +3,10 @@ import { getXataClient } from "@/xata";
 import { Link2Icon } from "@radix-ui/react-icons";
 
 import Link from "next/link";
-import PodcastPlayButton from "../../(feed)/feed/[feedId]/components/PodcastPlayButton";
-import YouTubePlayButton from "../../(feed)/feed/[feedId]/components/YouTubePlayButton";
 
-import YouTubeModal from "../../(feed)/feed/[feedId]/components/YouTubeModal";
+import YouTubeModal from "../../(feed)/feed/[...feedId]/components/YouTubeModal";
+import YouTubePlayButton from "../../(feed)/feed/[...feedId]/components/YouTubePlayButton";
+import PodcastPlayButton from "../../(feed)/feed/[...feedId]/components/PodcastPlayButton";
 
 import { decode } from "html-entities";
 import DiscoverPostsList from "./components/discover-posts-list";

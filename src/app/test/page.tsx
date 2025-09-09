@@ -211,110 +211,121 @@
 // import "@vidstack/react/player/styles/default/layouts/audio.css";
 // import "@vidstack/react/player/styles/default/layouts/video.css";
 
-import InlineScript from "@/components/inline-script";
+// import InlineScript from "@/components/inline-script";
 
 // import {
 //   DefaultVideoLayout,
 //   defaultLayoutIcons,
 // } from "@vidstack/react/player/layouts/default";
 
+// export default function Test() {
+//   // return (
+
+//   //   <div className="mx-auto w-full max-w-[900px] bg-amber-300">
+//   //     Test
+
+//   //     {/* <MediaPlayer
+//   //       src="https://www.youtube.com/watch?v=mmq-KVeO-uU"
+//   //       // controls
+//   //       viewType="video"
+//   //       playsInline
+//   //     >
+//   //       <MediaProvider />
+//   //       <DefaultVideoLayout icons={defaultLayoutIcons} />
+//   //     </MediaPlayer> */}
+//   //     {/* <AriaFileUpload /> */}
+//   //     {/* <MediaThemeSutro style={{ width: "100%" }} className="aspect-video">
+//   //       <YoutubeVideo
+//   //         slot="media"
+//   //         src="https://www.youtube.com/watch?v=uxsOYVWclA0"
+//   //         playsInline
+//   //         crossOrigin="anonymous"
+//   //       ></YoutubeVideo>
+//   //     </MediaThemeSutro> */}
+//   //     {/* <YouTubeEmbed
+//   //       videoid="mmq-KVeO-uU"
+//   //       // title="HEllo"
+//   //       // width={100}
+//   //       // width="100%"
+//   //       style="aspect-ratio:16/9;max-width:100%"
+//   //       playlabel="Play"
+//   //       // params="controls=0"
+//   //     /> */}
+//   //     {/* <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
+//   //       <Modal.Button asChild>
+//   //         <button>Open Modal</button>
+//   //       </Modal.Button>
+//   //       <Modal.Content
+//   //         title="What's up?"
+//   //         className="bg-background-primary"
+//   //       ></Modal.Content>
+//   //     </Modal> */}
+//   //     {/* <DialogPrimitive.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
+//   //       <DialogPrimitive.Trigger>Open</DialogPrimitive.Trigger>
+//   //       <DialogPrimitive.Portal>
+//   //         <DialogPrimitive.Overlay className="bg-background-secondary/50 data-[state=open]:animate-overlayShow fixed inset-0 z-120 backdrop-blur-[1px]" />
+//   //         <DialogPrimitive.Content
+//   //           className={cn(
+//   //             "z-130 w-full rounded-lg bg-yellow-400 p-4 shadow-[0_8px_30px_0px_rgba(0,0,0,0.12)] focus:outline-none",
+//   //           )}
+//   //         >
+//   //           <YouTubeEmbed
+//   //             videoid="mmq-KVeO-uU"
+//   //             // title="HEllo"
+//   //             // width={100}
+//   //             // width="100%"
+//   //             style="aspect-ratio:16/9;max-width:100%"
+//   //             playlabel="Play"
+//   //             // params="controls=0"
+//   //           />
+//   //           <DialogPrimitive.Close asChild>
+//   //             <button
+//   //               className="text-text-primary hover:bg-ui-hover absolute top-2.5 right-2.5 inline-flex size-[25px] cursor-pointer appearance-none items-center justify-center rounded-full focus:outline-none"
+//   //               aria-label="Close"
+//   //             >
+//   //               Close
+//   //             </button>
+//   //           </DialogPrimitive.Close>
+//   //         </DialogPrimitive.Content>
+//   //       </DialogPrimitive.Portal>
+//   //     </DialogPrimitive.Root> */}
+//   //   </div>
+//   // );
+
+//   return (
+//     <>
+//       <DummyData />
+//       <InlineScript />
+//     </>
+//   );
+// }
+
+// function DummyData() {
+//   // const [time, setText] = useState(() => {
+//   //   // On client, use the initial time from the inline script
+//   //   if (typeof window !== "undefined" && window.__INITIAL_TEXT__) {
+//   //     return window.__INITIAL_TEXT__;
+//   //   }
+//   //   // On server, use the current time
+//   //   return new Date();
+//   // });
+//   // const secondRotation = time.getSeconds() * 6 + time.getMilliseconds() * 0.006;
+//   return (
+//     <div
+//       id="dummy-data"
+//       suppressHydrationWarning
+//       dangerouslySetInnerHTML={{ __html: `<pre>Hello</pre><pre>Hi</pre>` }}
+//     ></div>
+//   );
+// }
+// "use client";
+import { startTransition } from "react";
+import { testAction } from "../actions/test-action";
 export default function Test() {
-  // return (
-
-  //   <div className="mx-auto w-full max-w-[900px] bg-amber-300">
-  //     Test
-
-  //     {/* <MediaPlayer
-  //       src="https://www.youtube.com/watch?v=mmq-KVeO-uU"
-  //       // controls
-  //       viewType="video"
-  //       playsInline
-  //     >
-  //       <MediaProvider />
-  //       <DefaultVideoLayout icons={defaultLayoutIcons} />
-  //     </MediaPlayer> */}
-  //     {/* <AriaFileUpload /> */}
-  //     {/* <MediaThemeSutro style={{ width: "100%" }} className="aspect-video">
-  //       <YoutubeVideo
-  //         slot="media"
-  //         src="https://www.youtube.com/watch?v=uxsOYVWclA0"
-  //         playsInline
-  //         crossOrigin="anonymous"
-  //       ></YoutubeVideo>
-  //     </MediaThemeSutro> */}
-  //     {/* <YouTubeEmbed
-  //       videoid="mmq-KVeO-uU"
-  //       // title="HEllo"
-  //       // width={100}
-  //       // width="100%"
-  //       style="aspect-ratio:16/9;max-width:100%"
-  //       playlabel="Play"
-  //       // params="controls=0"
-  //     /> */}
-  //     {/* <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
-  //       <Modal.Button asChild>
-  //         <button>Open Modal</button>
-  //       </Modal.Button>
-  //       <Modal.Content
-  //         title="What's up?"
-  //         className="bg-background-primary"
-  //       ></Modal.Content>
-  //     </Modal> */}
-  //     {/* <DialogPrimitive.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
-  //       <DialogPrimitive.Trigger>Open</DialogPrimitive.Trigger>
-  //       <DialogPrimitive.Portal>
-  //         <DialogPrimitive.Overlay className="bg-background-secondary/50 data-[state=open]:animate-overlayShow fixed inset-0 z-120 backdrop-blur-[1px]" />
-  //         <DialogPrimitive.Content
-  //           className={cn(
-  //             "z-130 w-full rounded-lg bg-yellow-400 p-4 shadow-[0_8px_30px_0px_rgba(0,0,0,0.12)] focus:outline-none",
-  //           )}
-  //         >
-  //           <YouTubeEmbed
-  //             videoid="mmq-KVeO-uU"
-  //             // title="HEllo"
-  //             // width={100}
-  //             // width="100%"
-  //             style="aspect-ratio:16/9;max-width:100%"
-  //             playlabel="Play"
-  //             // params="controls=0"
-  //           />
-  //           <DialogPrimitive.Close asChild>
-  //             <button
-  //               className="text-text-primary hover:bg-ui-hover absolute top-2.5 right-2.5 inline-flex size-[25px] cursor-pointer appearance-none items-center justify-center rounded-full focus:outline-none"
-  //               aria-label="Close"
-  //             >
-  //               Close
-  //             </button>
-  //           </DialogPrimitive.Close>
-  //         </DialogPrimitive.Content>
-  //       </DialogPrimitive.Portal>
-  //     </DialogPrimitive.Root> */}
-  //   </div>
-  // );
-
-  return (
-    <>
-      <DummyData />
-      <InlineScript />
-    </>
-  );
-}
-
-function DummyData() {
-  // const [time, setText] = useState(() => {
-  //   // On client, use the initial time from the inline script
-  //   if (typeof window !== "undefined" && window.__INITIAL_TEXT__) {
-  //     return window.__INITIAL_TEXT__;
-  //   }
-  //   // On server, use the current time
-  //   return new Date();
-  // });
-  // const secondRotation = time.getSeconds() * 6 + time.getMilliseconds() * 0.006;
-  return (
-    <div
-      id="dummy-data"
-      suppressHydrationWarning
-      dangerouslySetInnerHTML={{ __html: `<pre>Hello</pre><pre>Hi</pre>` }}
-    ></div>
-  );
+  const msg = "hello";
+  const handleServerAction = async () => {
+    "use server";
+    console.log(msg);
+  };
+  return <button onClick={handleServerAction}>hello</button>;
 }

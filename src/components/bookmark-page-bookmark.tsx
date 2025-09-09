@@ -10,7 +10,8 @@ import { useOptimistic, startTransition } from "react";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
-import { addBookmarkAction, deleteBookmarkAction } from "@/app/actions";
+import { deleteBookmarkAction } from "@/app/actions/delete-bookmark";
+import { addBookmarkAction } from "@/app/actions/add-bookmark";
 
 import { useDeleteBookmark } from "@/hooks/useDeleteBookmark";
 

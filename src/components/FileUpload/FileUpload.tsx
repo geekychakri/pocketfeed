@@ -11,7 +11,8 @@ import { SpinnerRotate } from "../SpinnerRotate";
 import Button from "../ui/Button";
 
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/UserAvatar";
-import { getInitials } from "@/lib/utils";
+import { getInitials, internalErrorToast } from "@/lib/utils";
+import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
@@ -38,6 +39,10 @@ function FileUpload({
         method: "POST",
         body: formData,
       });
+      if (res.status === 401) {
+        const { message } = await res.json();
+        return toast.error(message);
+      }
       if (!res.ok) {
         throw new Error("Something went wrong!");
       }
@@ -51,7 +56,7 @@ function FileUpload({
       console.log(data);
       router.refresh();
     } catch (err) {
-      toast.error("Something went wrong!");
+      internalErrorToast(INTERNAL_ERROR_MESSAGE);
     } finally {
       setIsLoading(false);
     }
@@ -104,12 +109,12 @@ function FileUpload({
             be about 500px wide and under 1MB
           </p>
           <div className="flex items-center gap-4 text-sm">
-            <Button
+            {/* <Button
               onClickCapture={handleRemove}
               className="border-shadow bg-transparent"
             >
               Remove Image
-            </Button>
+            </Button> */}
             <Button>Upload Image</Button>
           </div>
         </div>

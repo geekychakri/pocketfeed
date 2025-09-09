@@ -5,6 +5,7 @@ import DOMPurify from "isomorphic-dompurify";
 import ReactDOM from "react-dom/client";
 
 import { createHighlighter } from "shiki";
+import { useSWRConfig } from "swr";
 
 import {
   useState,
@@ -128,6 +129,21 @@ function convertRelativeUrlsToAbsolute(html: string, baseUrl: string) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, "text/html");
 
+  const isRelativeUrl = (url: string): boolean => {
+    if (!url || url.trim() === "") return false;
+
+    // Check for absolute URLs (protocol + hostname)
+    if (url.match(/^https?:\/\//i)) return false;
+
+    // Check for protocol-relative URLs (//example.com)
+    if (url.startsWith("//")) return false;
+
+    // Check for data URLs, mailto, tel, etc.
+    if (url.match(/^[a-z]+:/i)) return false;
+
+    return true;
+  };
+
   // Elements with URL attributes
   const elementsWithUrls = doc.querySelectorAll("[href], [srcset], [src]");
 
@@ -141,26 +157,51 @@ function convertRelativeUrlsToAbsolute(html: string, baseUrl: string) {
     //   }
     // }
 
-    if (el.hasAttribute("srcset")) {
-      const srcset = el.getAttribute("srcset");
-      // try {
-      //   el.setAttribute("srcset", new URL(src, baseUrl).href);
-      // } catch (_) {}
-      if (!srcset?.includes(baseUrl)) {
-        try {
-          el.setAttribute("srcset", new URL(srcset as string, baseUrl).href);
-        } catch (_) {}
-      }
-    }
+    // if (el.hasAttribute("srcset")) {
+    //   const srcset = el.getAttribute("srcset");
+    //   // try {
+    //   //   el.setAttribute("srcset", new URL(src, baseUrl).href);
+    //   // } catch (_) {}
+    //   if (!srcset?.includes(baseUrl)) {
+    //     try {
+    //       el.setAttribute("srcset", new URL(srcset as string, baseUrl).href);
+    //     } catch (_) {}
+    //   }
+    // }
 
     if (el.hasAttribute("src")) {
       const src = el.getAttribute("src");
       // try {
       //   el.setAttribute("src", new URL(src, baseUrl).href);
       // } catch (_) {}
-      if (!src?.includes(baseUrl)) {
+      if (src && isRelativeUrl(src)) {
         try {
           el.setAttribute("src", new URL(src as string, baseUrl).href);
+        } catch (_) {}
+      }
+    }
+
+    if (el.hasAttribute("srcset")) {
+      const srcset = el.getAttribute("srcset");
+      if (srcset && isRelativeUrl(srcset)) {
+        try {
+          // srcset can contain multiple URLs with descriptors
+          // For proper srcset handling, you might want to parse each URL separately
+          const urls = srcset.split(",").map((entry) => {
+            const [url, descriptor] = entry.trim().split(/\s+/);
+            if (isRelativeUrl(url)) {
+              try {
+                return (
+                  new URL(url, baseUrl).href +
+                  (descriptor ? " " + descriptor : "")
+                );
+              } catch (_) {
+                return entry.trim();
+              }
+            }
+            return entry.trim();
+          });
+          el.setAttribute("srcset", urls.join(", "));
         } catch (_) {}
       }
     }
@@ -169,12 +210,15 @@ function convertRelativeUrlsToAbsolute(html: string, baseUrl: string) {
   return doc.body.innerHTML;
 }
 
-import { addPost } from "@/app/actions";
+import { addPost } from "@/app/actions/add-post";
 import Link from "next/link";
 
 import { useArticleContent } from "@/store/article-content";
 
-import { fetcher } from "@/lib/utils";
+import { fetcher, internalErrorToast } from "@/lib/utils";
+import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
+import { toast } from "sonner";
+import { SpinnerRotate } from "../SpinnerRotate";
 
 const initialState = {
   message: "",
@@ -206,6 +250,8 @@ export default function Article({
 
   const { articleContent, articleTitle, isExtracted } = useArticleContent();
 
+  const { onError } = useSWRConfig();
+
   const { data, error, isLoading } = useSWR<{
     content: string;
     title: string;
@@ -221,6 +267,18 @@ export default function Article({
       revalidateIfStale: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
+      onError: (error, key) => {
+        if (error.status === 500) {
+          internalErrorToast(INTERNAL_ERROR_MESSAGE);
+        }
+      },
+      onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+        // Never retry on 404.
+        if (error.status === 500) return;
+
+        // Only retry up to 5 times.
+        if (retryCount >= 5) return;
+      },
     },
   );
 
@@ -350,16 +408,27 @@ export default function Article({
     // };
   }, [copySound, isExtracted, isLoading]);
 
-  if (isLoading) {
+  if (error) {
+    throw new Error("Something went wrong!"); //TODO: Catch nearest error boundary
+  }
+
+  if (data?.content === null) {
     return (
       <div className="flex flex-col items-center justify-center gap-6">
-        {/* <img
+        <img
           src="/nothing-to-read.svg"
           className="w-[320px]"
           alt="nothing-to-read-svg"
         />
-        <p>Hmm, there&apos;s nothing to read!</p> */}
-        Loading..
+        <p>Hmm, there&apos;s nothing to read!</p>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center">
+        <SpinnerRotate />
       </div>
     );
   }

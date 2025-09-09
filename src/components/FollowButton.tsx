@@ -9,11 +9,13 @@ import { useOptimistic } from "react";
 
 import { usePathname, useRouter } from "next/navigation";
 
-import { followUser, unFollowUser } from "@/app/actions";
+import { unFollowUser } from "@/app/actions/unfollow-user";
+import { followUser } from "@/app/actions/follow-user";
 
 import { toast } from "sonner";
 import Link from "next/link";
 import Button from "./ui/Button";
+import { internalErrorToast } from "@/lib/utils";
 
 export default function FollowButton({ followeeId }: { followeeId: string }) {
   const { user, isLoaded } = useUser();
@@ -51,14 +53,16 @@ export default function FollowButton({ followeeId }: { followeeId: string }) {
 
     startTransition(async () => {
       setIsOptimisticFollowingUser(true);
-      const { message, recordId } = await followUser(followeeName);
-      if (message === "success") {
+      const { type, recordId, message } = await followUser(followeeName);
+      if (type === "success") {
         toast.success(`Following ${followeeName}`);
         setRecordId(recordId as string);
-      } else {
-        toast.error("Something went wrong!");
+        setFollow(true);
+      } else if (type === "user-error") {
+        toast.error(message);
+      } else if (type === "internal-error") {
+        internalErrorToast(message);
       }
-      setFollow(true);
     });
   };
 
@@ -78,13 +82,15 @@ export default function FollowButton({ followeeId }: { followeeId: string }) {
     // toast.success("No longer Following  username");
     startTransition(async () => {
       setIsOptimisticFollowingUser(false);
-      const { message } = await unFollowUser(recordId || followeeId);
-      if (message === "success") {
+      const { type, message } = await unFollowUser(recordId || followeeId);
+      if (type === "success") {
         toast.success(`Unfollowed ${followeeName}`);
-      } else {
-        toast.error(`Something went wrong!`);
+        setFollow(false);
+      } else if (type === "user-error") {
+        toast.error(message);
+      } else if (type === "internal-error") {
+        internalErrorToast(message);
       }
-      setFollow(false);
     });
   };
   if (user?.username === pathname.split("/")[2]) {

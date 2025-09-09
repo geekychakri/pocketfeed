@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, startTransition, memo } from "react";
+import React, { useEffect, startTransition, memo, useState } from "react";
 
 import { useRouter } from "next/navigation";
 
@@ -26,7 +26,8 @@ import { useActionState } from "react";
 
 import { usePathname } from "next/navigation";
 
-import { deleteFeed, moveToFolder } from "@/app/actions";
+import { moveToFolder } from "@/app/actions/move-to-folder";
+import { deleteFeed } from "@/app/actions/delete-feed";
 import { Folders, FoldersRecord } from "@/xata";
 
 // import { useFolderFeedStore } from "@/store/folder-feed";
@@ -35,6 +36,8 @@ import { useFeedsDelete } from "@/hooks/useFeedsDelete";
 import { DeleteIcon } from "@/icons/delete";
 import Button from "../ui/Button";
 import { SpinnerRotate } from "../SpinnerRotate";
+import { internalErrorToast } from "@/lib/utils";
+import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 
 const FeedDropdown = ({
   feedId,
@@ -52,15 +55,25 @@ const FeedDropdown = ({
 
   const moveToFolderAction = async (id: string, newFolder: string) => {
     try {
-      const { message } = await moveToFolder(id, currentFolder, newFolder);
-      if (message === "success") {
+      const { type, message } = await moveToFolder(
+        id,
+        currentFolder,
+        newFolder,
+      );
+      if (type === "success") {
         deleteFeedStoreFn(feedId);
         toast.success("Successfully moved!");
-      } else {
-        throw new Error("");
+        return "success";
+      } else if (type === "internal-error") {
+        internalErrorToast(message);
+        return "error";
+      } else if (type === "user-error") {
+        toast.error(message);
+        return "error";
       }
     } catch (err) {
-      toast.error("Something went wrong!");
+      internalErrorToast(INTERNAL_ERROR_MESSAGE);
+      return "error";
     }
   };
   return (
@@ -106,20 +119,30 @@ const FeedDropdown = ({
                     .filter((item) => item.folder !== currentFolder)
                     .map((item, i) => {
                       return (
-                        <DropdownMenu.Item
+                        // <DropdownMenu.Item
+                        //   key={item.id}
+                        //   className="group data-highlighted:bg-ui-hover relative flex h-[25px] items-center rounded-[3px] px-2 py-4 text-sm leading-none outline-none select-none"
+                        //   onSelect={async (e) => {
+                        //     e.preventDefault();
+                        //     setIsMovingLoading(true);
+                        //     console.log(item.folder);
+                        //     await moveToFolderAction(
+                        //       feedId,
+                        //       item.folder as string,
+                        //     );
+                        //   }}
+                        // >
+                        //   {item.folder}{" "}
+                        //   {isMovingLoading && (
+                        //     <SpinnerRotate className="size-4" />
+                        //   )}
+                        // </DropdownMenu.Item>
+                        <FeedDropdownItem
                           key={item.id}
-                          className="group data-highlighted:bg-ui-hover relative flex h-[25px] items-center rounded-[3px] px-2 py-4 text-sm leading-none outline-none select-none"
-                          onSelect={async (e) => {
-                            e.preventDefault();
-                            console.log(item.folder);
-                            await moveToFolderAction(
-                              feedId,
-                              item.folder as string,
-                            );
-                          }}
-                        >
-                          {item.folder}
-                        </DropdownMenu.Item>
+                          item={item}
+                          feedId={feedId}
+                          moveToFolderAction={moveToFolderAction}
+                        />
                       );
                     })}
                 </DropdownMenu.SubContent>
@@ -134,6 +157,32 @@ const FeedDropdown = ({
   );
 };
 
+const FeedDropdownItem = ({ item, feedId, moveToFolderAction }) => {
+  const [isMovingLoading, setIsMovingLoading] = useState(false);
+  return (
+    <DropdownMenu.Item
+      key={item.id}
+      className="group data-highlighted:bg-ui-hover relative flex h-[25px] items-center gap-2 rounded-[3px] px-2 py-4 text-sm leading-none outline-none select-none"
+      onSelect={async (e) => {
+        e.preventDefault();
+        setIsMovingLoading(true);
+        console.log(item.folder);
+        const status = await moveToFolderAction(feedId, item.folder as string);
+        if (status === "error") {
+          setIsMovingLoading(false);
+        }
+      }}
+    >
+      {item.folder} {isMovingLoading && <SpinnerRotate className="size-4" />}
+    </DropdownMenu.Item>
+  );
+};
+
+const initialState = {
+  type: "",
+  message: "",
+};
+
 function DeleteFeedForm({
   feedId,
   folderName,
@@ -142,9 +191,10 @@ function DeleteFeedForm({
   folderName: string;
 }) {
   const router = useRouter();
-  const [state, formAction, isPending] = useActionState(deleteFeed, {
-    message: "",
-  });
+  const [state, formAction, isPending] = useActionState(
+    deleteFeed,
+    initialState,
+  );
 
   const [success] = useSound("/sounds/success.wav");
 
@@ -156,15 +206,17 @@ function DeleteFeedForm({
   console.log({ state });
 
   useEffect(() => {
-    if (state.message === "success") {
+    if (state.type === "success") {
       console.log("AWEEEEEEEEEEESOMMEEEEEEEE");
       deleteFeedStoreFn(feedId);
       success();
       toast.success("Deleted");
       // revalidateCachePath("/folder/Home");
       // router.refresh();
-    } else if (state.message === "error") {
-      toast.error("Something went wrong!");
+    } else if (state.type === "internal-error") {
+      internalErrorToast(state?.message);
+    } else if (state.type === "user-error") {
+      toast.error(state.message);
     }
   }, [state]);
   return (

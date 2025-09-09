@@ -1,10 +1,6 @@
 import Link from "next/link";
 import ActivitySegmentedControl from "./components/activity-segmented-control";
-
-const items = [
-  { href: `/activity/discover`, title: "Discover" },
-  { href: `/activity/following`, title: "Following" },
-];
+import RouteBack from "@/components/RouteBack/RouteBack";
 
 export default function ExploreLayout({
   children,
@@ -12,13 +8,17 @@ export default function ExploreLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="mx-auto flex w-full max-w-[720px] flex-col gap-8 py-5">
-      <div className="mb-5 flex gap-3">
+    <main className="mx-auto flex min-h-screen w-full max-w-[720px] flex-col border-x">
+      <div className="flex h-14 items-center gap-4 px-4">
+        <RouteBack />
+        <h1 className="font-medium">Activity</h1>
+      </div>
+      <div className="h-14 border-y">
         {/* <Link href="/activity/discover">Discover</Link>
         <Link href="/activity/following">Following</Link> */}
-        <ActivitySegmentedControl items={items} />
+        <ActivitySegmentedControl />
       </div>
-      {children}
+      <div className="px-4 py-8">{children}</div>
     </main>
   );
 }

@@ -18,11 +18,14 @@ import useSound from "use-sound";
 
 import { VList } from "virtua";
 
+import slugify from "@sindresorhus/slugify";
+
 import { useFolderFeedStore } from "@/store/folder-feed";
 
 import { useFeedsAdd } from "@/hooks/useFeedsAdd";
-import { getInitials } from "@/lib/utils";
+import { getInitials, internalErrorToast } from "@/lib/utils";
 import { useFolderName } from "@/store/folder-name";
+import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 
 export function FolderFeedList({
   initialPageInfo,
@@ -67,12 +70,13 @@ export function FolderFeedList({
       addFeeds(data.posts);
       setPageInfo(data.pageInfo);
     } catch (err) {
-      let message;
-      if (err instanceof Error) message = err.message;
-      else message = String(error);
-      // toast.error(message);
-      setError(message);
-      console.error("Error loading more posts:", err);
+      // let message;
+      // if (err instanceof Error) message = err.message;
+      // else message = String(error);
+      // // toast.error(message);
+      // setError(message);
+      // console.error("Error loading more posts:", err);
+      internalErrorToast(INTERNAL_ERROR_MESSAGE);
     } finally {
       setLoading(false);
     }
@@ -117,7 +121,9 @@ export function FolderFeedList({
                 folders={JSON.parse(JSON.stringify(folders))}
               />
               <Link
-                href={`/feed/${item.feedId}`}
+                href={`/feed/${item.feedId}/${slugify(item.title, {
+                  decamelize: false,
+                })}`}
                 className="absolute inset-0 z-1"
                 onNavigate={() => {
                   setFolderName(folderName); //TODO: to highlight folder on navigation

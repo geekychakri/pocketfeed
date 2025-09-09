@@ -4,11 +4,12 @@ import { NextResponse } from "next/server";
 import { currentUser } from "@clerk/nextjs/server";
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const cursor = searchParams.get("cursor");
-  const user = await currentUser();
-
   try {
+    // throw new Error("");
+    const { searchParams } = new URL(request.url);
+    const cursor = searchParams.get("cursor");
+    const user = await currentUser();
+
     const xata = getXataClient();
 
     const followingNames = await xata.db.follows
@@ -42,9 +43,6 @@ export async function GET(request: Request) {
       },
     });
   } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to fetch posts" },
-      { status: 500 },
-    );
+    return NextResponse.json("", { status: 500 });
   }
 }

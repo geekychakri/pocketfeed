@@ -27,7 +27,7 @@ export default async function SubscriptionPage(props: {
   const username = params.username;
   // const user = await currentUser();
   // console.log({ user });
-  const feeds = await xata.db.feeds.filter({ username }).getMany();
+  const feeds = await xata.db.feeds.filter({ username }).getAll();
   console.log(feeds);
 
   return <SubscriptionList feeds={JSON.parse(JSON.stringify(feeds))} />;

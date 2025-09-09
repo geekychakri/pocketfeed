@@ -4,7 +4,7 @@ import { useFormState } from "react-dom";
 
 import { useEffect, useActionState } from "react";
 
-import { deleteBookmarkAction } from "@/app/actions";
+import { deleteBookmarkAction } from "@/app/actions/delete-bookmark";
 
 // import { useDeleteBookmark } from "@/hooks/useDeleteBookmark";
 // import { useNewBookmarksStore } from "@/store/bookmarks-store";

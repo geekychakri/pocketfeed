@@ -46,6 +46,7 @@ export default function CustomYouTubeModal({
                 bookmarkType="youtube"
                 // bookmarkId={bookmarkId}
                 bookmarkTitle={title}
+                btnClassName="relative flex size-6 items-center justify-center rounded-full p-0"
               />
             </div>
             <div className="relative aspect-video">

@@ -11,43 +11,53 @@ type SegmentedControlProps = {
   items: { href: string; title: string }[];
 };
 
-const ActivitySegmentedControl = ({
-  items,
-}: SegmentedControlProps): JSX.Element => {
+const items = [
+  { href: `/activity/discover`, title: "Discover" },
+  { href: `/activity/following`, title: "Following" },
+];
+
+const ActivitySegmentedControl = (): JSX.Element => {
   const pathname = usePathname();
 
   return (
-    <motion.ul className="flex gap-8">
+    <ul className="flex h-full">
       {items.map((item, index) => {
         // const isActive = index === activeIndex;
         const isActive = item.href === pathname;
         return (
           <motion.li
+            initial={false}
+            key={index}
             // layout
             // layoutRoot
-            key={index}
+
             // onClick={() => setActiveIndex(index)}
-            className="relative flex-1 list-none"
+            className="hover:bg-background-secondary relative flex flex-1 justify-center"
           >
-            <Link
-              href={item.href}
-              className={cn("inline-block w-full py-2 outline-none")}
-              //   replace
-            >
+            <span className="relative">
               {isActive && (
                 <motion.span
                   layoutId="activity-highlight"
                   initial={false}
-                  className="bg-brand-primary absolute right-0 bottom-0 left-0 h-[1px] rounded-full"
+                  className="bg-brand-primary absolute right-0 bottom-0 left-0 h-[4px]"
                   style={{ originY: "0px" }}
                 ></motion.span>
               )}
-              {item.title}
-            </Link>
+              <span className="flex h-full items-center justify-center">
+                {item.title}
+              </span>
+            </span>
+            <Link
+              key={item.href}
+              href={item.href}
+              draggable={false}
+              className="absolute inset-0 z-2"
+              //   replace
+            ></Link>
           </motion.li>
         );
       })}
-    </motion.ul>
+    </ul>
   );
 };
 

@@ -19,28 +19,26 @@ export function CustomTooltip({
   ...props
 }: TooltipProps) {
   return (
-    <TooltipPrimitive.Provider delayDuration={0}>
-      <TooltipPrimitive.Root
-        open={open}
-        defaultOpen={defaultOpen}
-        onOpenChange={onOpenChange}
+    <TooltipPrimitive.Root
+      open={open}
+      defaultOpen={defaultOpen}
+      onOpenChange={onOpenChange}
+    >
+      <TooltipPrimitive.Trigger asChild>{children}</TooltipPrimitive.Trigger>
+      <TooltipPrimitive.Content
+        side="top"
+        align="center"
+        // sideOffset={10}
+        {...props}
+        className="bg-background-secondary border-shadow data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade z-[100] rounded px-[10px] py-[5px] text-[13px] leading-none font-medium select-none"
       >
-        <TooltipPrimitive.Trigger asChild>{children}</TooltipPrimitive.Trigger>
-        <TooltipPrimitive.Content
-          side="top"
-          align="center"
-          sideOffset={10}
-          {...props}
-          className="bg-background-secondary border-shadow data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade z-[100] rounded px-[10px] py-[5px] text-[13px] leading-none font-medium select-none"
-        >
-          {content}
-          {/* <TooltipPrimitive.Arrow
+        {content}
+        {/* <TooltipPrimitive.Arrow
             width={11}
             height={5}
             className="fill-brand-primary"
           /> */}
-        </TooltipPrimitive.Content>
-      </TooltipPrimitive.Root>
-    </TooltipPrimitive.Provider>
+      </TooltipPrimitive.Content>
+    </TooltipPrimitive.Root>
   );
 }

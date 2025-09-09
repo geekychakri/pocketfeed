@@ -6,11 +6,14 @@ import { CustomTooltip } from "@/components/ui/custom-tooltip";
 import { BookmarkIcon } from "@/icons/bookmark";
 import { BookmarkBoldIcon } from "@/icons/bookmark-bold";
 
+import * as Tooltip from "@radix-ui/react-tooltip";
+
 import { useOptimistic, startTransition } from "react";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
-import { addBookmarkAction, deleteBookmarkAction } from "@/app/actions";
+import { deleteBookmarkAction } from "@/app/actions/delete-bookmark";
+import { addBookmarkAction } from "@/app/actions/add-bookmark";
 
 import { useDeleteBookmark } from "@/hooks/useDeleteBookmark";
 
@@ -23,9 +26,10 @@ import { SpinnerRotate } from "../SpinnerRotate";
 import { boolean } from "zod";
 import { usePathname } from "next/navigation";
 import { revalidateCachePath } from "@/lib/revalidateCachePath";
-import { cn } from "@/lib/utils";
+import { cn, internalErrorToast } from "@/lib/utils";
 
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
+import { fetcher } from "@/lib/utils";
+import { BookmarkType } from "@/types";
 
 export default function BookmarkPodcast({
   bookmarkFeedItem,
@@ -54,7 +58,7 @@ export default function BookmarkPodcast({
   const pathname = usePathname();
   console.log({ pathname });
 
-  const { data, isLoading, isValidating } = useSWR(
+  const { data, isLoading, isValidating } = useSWR<BookmarkType>(
     `/api/checkBookmarkExists?bookmarkLink=${encodeURIComponent(bookmarkLink)}`,
     fetcher,
     {
@@ -109,6 +113,11 @@ export default function BookmarkPodcast({
     );
   }
 
+  if (!data) {
+    // TODO: handle swr data or undefined ts error. think of any alternative
+    return;
+  }
+
   return (
     <>
       {/* {pathname === "/bookmarks" ? (
@@ -129,14 +138,17 @@ export default function BookmarkPodcast({
             playBookmarked();
             // const { message, bookmarkId } = await addBookmarkAction(formData);
 
-            await mutate(
+            const mutatedData = await mutate(
               `/api/checkBookmarkExists?bookmarkLink=${encodeURIComponent(bookmarkLink)}`,
               addBookmarkAction(formData),
               {
-                optimisticData: (data) => ({
-                  ...data,
-                  isBookmarkExists: true,
-                }),
+                optimisticData: (data) => {
+                  console.log({ optimisticData: data });
+                  return {
+                    ...data,
+                    isBookmarkExists: true,
+                  };
+                },
                 rollbackOnError: true,
                 populateCache(result, currentData) {
                   console.log({ result });
@@ -145,21 +157,23 @@ export default function BookmarkPodcast({
                 revalidate: false,
               },
             );
-            if (data.type === "success") {
+            console.log({ mutatedData });
+            if (mutatedData?.type === "user-error") {
               // setIsBookmarked(true);
               // setSavedBookmarkId(data.bookmarkId);
-            } else {
+              toast.error(mutatedData?.message);
+            } else if (mutatedData?.type === "internal-error") {
               // setIsBookmarked(false);
-              toast.error("Something went wrong!");
+              internalErrorToast(mutatedData?.message);
             }
           } else {
             console.log("DELETE BOOKMARK RAN");
             addOptimisticBookmark(!data.isBookmarkExists);
             // const { message } = await deleteBookmarkAction(formData);
 
-            await mutate(
+            const mutatedData = await mutate(
               `/api/checkBookmarkExists?bookmarkLink=${encodeURIComponent(bookmarkLink)}`,
-              deleteBookmarkAction("", formData),
+              deleteBookmarkAction(formData),
               {
                 optimisticData: (data) => ({
                   ...data,
@@ -173,14 +187,14 @@ export default function BookmarkPodcast({
                 revalidate: false,
               },
             );
-            if (data.type === "success") {
+            if (mutatedData?.type === "success") {
               console.log({ onDeleteData: data });
               // setIsBookmarked(false);
               // deleteBookmarkFn(data.bookmarkId);
               revalidateCachePath("/bookmarks"); //TODO:
-            } else {
+            } else if (mutatedData?.type === "internal-error") {
               // setIsBookmarked(true);
-              toast.error("Something went wrong!");
+              internalErrorToast(mutatedData.message);
             }
           }
         }}
@@ -218,139 +232,143 @@ export default function BookmarkPodcast({
           />
         )}
       </form>
-      <CustomTooltip content={<span>Bookmark</span>}>
-        <IconOnlyAction
-          type="submit"
-          form="bookmarkForm"
-          className={btnClassName}
-          // onClick={() => {
-          //   startTransition(() => {
-          //     addOptimisticBookmark(undefined);
-          //   });
-          //   setIsBookmarked((prevState) => !prevState);
-          // }}
-        >
-          {data.isBookmarkExists ? (
-            <BookmarkBoldIcon className={cn("size-5", iconClassName)} />
-          ) : (
-            <BookmarkIcon className={cn("size-5", iconClassName)} />
-          )}
-        </IconOnlyAction>
-      </CustomTooltip>
+      <Tooltip.Provider>
+        <CustomTooltip content={<span>Bookmark</span>}>
+          <IconOnlyAction
+            type="submit"
+            form="bookmarkForm"
+            className={btnClassName}
+            // onClick={() => {
+            //   startTransition(() => {
+            //     addOptimisticBookmark(undefined);
+            //   });
+            //   setIsBookmarked((prevState) => !prevState);
+            // }}
+          >
+            {data.isBookmarkExists ? (
+              <BookmarkBoldIcon
+                className={cn("size-5 shrink-0", iconClassName)}
+              />
+            ) : (
+              <BookmarkIcon className={cn("size-5 shrink-0", iconClassName)} />
+            )}
+          </IconOnlyAction>
+        </CustomTooltip>
+      </Tooltip.Provider>
     </>
   );
 }
 
-function ConditionalHook({
-  data,
-  bookmarkFeedItem,
-  bookmarkLink,
-  bookmarkType,
-  bookmarkTitle,
-}: {
-  data: any;
-  bookmarkFeedItem: any;
-  bookmarkLink: string;
-  bookmarkTitle: string;
-  bookmarkType: string;
-}) {
-  // const deleteBookmarkFn = useDeleteBookmark();
-  return (
-    <form
-      id="bookmarkForm"
-      action={async (formData: FormData) => {
-        console.log(formData);
-        if (!data.isBookmarkExists) {
-          // addOptimisticBookmark(!data.isBookmarkExists);
-          // playBookmarked();
-          // const { message, bookmarkId } = await addBookmarkAction(formData);
+// function ConditionalHook({
+//   data,
+//   bookmarkFeedItem,
+//   bookmarkLink,
+//   bookmarkType,
+//   bookmarkTitle,
+// }: {
+//   data: any;
+//   bookmarkFeedItem: any;
+//   bookmarkLink: string;
+//   bookmarkTitle: string;
+//   bookmarkType: string;
+// }) {
+//   // const deleteBookmarkFn = useDeleteBookmark();
+//   return (
+//     <form
+//       id="bookmarkForm"
+//       action={async (formData: FormData) => {
+//         console.log(formData);
+//         if (!data.isBookmarkExists) {
+//           // addOptimisticBookmark(!data.isBookmarkExists);
+//           // playBookmarked();
+//           // const { message, bookmarkId } = await addBookmarkAction(formData);
 
-          await mutate(
-            `/api/checkBookmarkExists?bookmarkLink=${encodeURIComponent(bookmarkLink)}`,
-            addBookmarkAction(formData),
-            {
-              optimisticData: (data) => ({ ...data, isBookmarkExists: true }),
-              rollbackOnError: true,
-              populateCache(result, currentData) {
-                console.log({ result });
-                return { ...currentData, ...result };
-              },
-              revalidate: false,
-            },
-          );
-          if (data.type === "success") {
-            // setIsBookmarked(true);
-            // setSavedBookmarkId(data.bookmarkId);
-          } else {
-            // setIsBookmarked(false);
-            toast.error("Something went wrong!");
-          }
-        } else {
-          console.log("DELETE BOOKMARK RAN");
-          // addOptimisticBookmark(!data.isBookmarkExists);
-          // const { message } = await deleteBookmarkAction(formData);
+//           await mutate(
+//             `/api/checkBookmarkExists?bookmarkLink=${encodeURIComponent(bookmarkLink)}`,
+//             addBookmarkAction(formData),
+//             {
+//               optimisticData: (data) => ({ ...data, isBookmarkExists: true }),
+//               rollbackOnError: true,
+//               populateCache(result, currentData) {
+//                 console.log({ result });
+//                 return { ...currentData, ...result };
+//               },
+//               revalidate: false,
+//             },
+//           );
+//           if (data.type === "success") {
+//             // setIsBookmarked(true);
+//             // setSavedBookmarkId(data.bookmarkId);
+//           } else {
+//             // setIsBookmarked(false);
+//             toast.error("Something went wrong!");
+//           }
+//         } else {
+//           console.log("DELETE BOOKMARK RAN");
+//           // addOptimisticBookmark(!data.isBookmarkExists);
+//           // const { message } = await deleteBookmarkAction(formData);
 
-          await mutate(
-            `/api/checkBookmarkExists?bookmarkLink=${encodeURIComponent(bookmarkLink)}`,
-            deleteBookmarkAction(formData),
-            {
-              optimisticData: (data) => ({
-                ...data,
-                isBookmarkExists: false,
-              }),
-              rollbackOnError: true,
-              populateCache(result, currentData) {
-                console.log({ result });
-                return { ...currentData, ...result };
-              },
-              revalidate: false,
-            },
-          );
-          if (data.type === "success") {
-            console.log({ onDeleteData: data });
-            // setIsBookmarked(false);
-            // deleteBookmarkFn(data.bookmarkId);
+//           await mutate(
+//             `/api/checkBookmarkExists?bookmarkLink=${encodeURIComponent(bookmarkLink)}`,
+//             deleteBookmarkAction(formData),
+//             {
+//               optimisticData: (data) => ({
+//                 ...data,
+//                 isBookmarkExists: false,
+//               }),
+//               rollbackOnError: true,
+//               populateCache(result, currentData) {
+//                 console.log({ result });
+//                 return { ...currentData, ...result };
+//               },
+//               revalidate: false,
+//             },
+//           );
+//           if (data.type === "success") {
+//             console.log({ onDeleteData: data });
+//             // setIsBookmarked(false);
+//             // deleteBookmarkFn(data.bookmarkId);
 
-            revalidateCachePath("/bookmarks");
-          } else {
-            // setIsBookmarked(true);
-            toast.error("Something went wrong!");
-          }
-        }
-      }}
-    >
-      <input
-        type="text"
-        defaultValue={bookmarkLink}
-        name="bookmarkLink"
-        hidden
-      />
-      <input
-        type="text"
-        defaultValue={bookmarkType}
-        name="bookmarkType"
-        hidden
-      />
-      <input
-        type="text"
-        defaultValue={bookmarkTitle}
-        name="bookmarkTitle"
-        hidden
-      />
-      <input
-        type="text"
-        defaultValue={bookmarkFeedItem}
-        name="bookmarkFeedItem"
-        hidden
-      />
-      {data.isBookmarkExists && (
-        <input
-          type="text"
-          defaultValue={data.bookmarkId}
-          name="bookmarkId"
-          hidden
-        />
-      )}
-    </form>
-  );
-}
+//             revalidateCachePath("/bookmarks");
+//           } else {
+//             // setIsBookmarked(true);
+//             toast.error("Something went wrong!");
+//           }
+//         }
+//       }}
+//     >
+//       <input
+//         type="text"
+//         defaultValue={bookmarkLink}
+//         name="bookmarkLink"
+//         hidden
+//       />
+//       <input
+//         type="text"
+//         defaultValue={bookmarkType}
+//         name="bookmarkType"
+//         hidden
+//       />
+//       <input
+//         type="text"
+//         defaultValue={bookmarkTitle}
+//         name="bookmarkTitle"
+//         hidden
+//       />
+//       <input
+//         type="text"
+//         defaultValue={bookmarkFeedItem}
+//         name="bookmarkFeedItem"
+//         hidden
+//       />
+//       {data.isBookmarkExists && (
+//         <input
+//           type="text"
+//           defaultValue={data.bookmarkId}
+//           name="bookmarkId"
+//           hidden
+//         />
+//       )}
+//     </form>
+//   );
+// }

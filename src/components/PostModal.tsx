@@ -10,9 +10,9 @@ import Modal from "@/components/Modal/Modal";
 import Textarea from "@/components/ui/Textarea";
 import Button from "@/components/ui/Button";
 
-import { addPost } from "@/app/actions";
+import { addPost } from "@/app/actions/add-post";
 
-import { checkObjectIsEmpty, cn } from "@/lib/utils";
+import { checkObjectIsEmpty, cn, internalErrorToast } from "@/lib/utils";
 
 import DOMPurify from "isomorphic-dompurify";
 
@@ -25,8 +25,10 @@ import IconOnlyAction from "./ui/icon-only-action";
 import { useArticleContent } from "@/store/article-content";
 import { useHotkeys } from "react-hotkeys-hook";
 import { SpinnerRotate } from "./SpinnerRotate";
+import { toast } from "sonner";
 
 const initialState = {
+  type: "",
   message: "",
 };
 
@@ -76,8 +78,12 @@ export default function PostModal({
   });
 
   useEffect(() => {
-    if (state?.message === "success") {
+    if (state?.type === "success") {
       setIsModalOpen(false);
+    } else if (state.type === "internal-error") {
+      internalErrorToast(state.message);
+    } else if (state.type === "user-error") {
+      toast.error(state.message);
     }
   }, [state]);
 
@@ -101,9 +107,9 @@ export default function PostModal({
         }
       >
         {/* <IconOnlyAction> */}
-        <Modal.Button className="relative flex size-6 cursor-pointer items-center justify-center">
+        <Modal.Button className="relative flex size-6 cursor-pointer items-center justify-center px-6 py-4">
           <span className="absolute top-1/2 left-1/2 size-12 -translate-x-1/2 -translate-y-1/2 pointer-fine:hidden"></span>
-          <PostIcon className="size-[18px]" />
+          <PostIcon className="size-[18px] shrink-0" />
         </Modal.Button>
 
         {/* </IconOnlyAction> */}

@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef, useActionState } from "react";
 import { useFormStatus, useFormState } from "react-dom";
 
+import DOMPurify from "isomorphic-dompurify";
+
 import qs from "qs";
 
 import { ArrowLeftIcon, Pencil2Icon } from "@radix-ui/react-icons";
@@ -18,11 +20,20 @@ import { SpinnerRotate } from "@/components/SpinnerRotate";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 
-import { cn, checkIfObjectIsEmpty, isHttpValid, toastError } from "@/lib/utils";
-import { addFeeds } from "@/app/actions";
+import {
+  cn,
+  checkIfObjectIsEmpty,
+  isHttpValid,
+  toastError,
+  internalErrorToast,
+} from "@/lib/utils";
+// import { addFeeds } from "@/app/actions";
+import { addFeeds } from "@/app/actions/add-feeds";
 
 import useSound from "use-sound";
 import RouteBack from "@/components/RouteBack/RouteBack";
+import { EditIcon } from "@/icons/edit";
+import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 
 type RssDataType = {
   url: string;
@@ -35,6 +46,7 @@ type RssDataType = {
 };
 
 const initialState = {
+  type: "",
   message: "",
 };
 
@@ -89,10 +101,11 @@ export default function AddFeed({ folders }: { folders: any }) {
       setRssData(data);
     } catch (error) {
       playCaution();
-      let message;
-      if (error instanceof Error) message = error.message;
-      else message = String(error);
-      toastError(message);
+      // let message;
+      // if (error instanceof Error) message = error.message;
+      // else message = String(error);
+      // toastError(message);
+      internalErrorToast(INTERNAL_ERROR_MESSAGE);
     } finally {
       setIsLoading(false);
     }
@@ -108,8 +121,9 @@ export default function AddFeed({ folders }: { folders: any }) {
   };
 
   useEffect(() => {
-    if (state?.message) {
-      console.log("state msg");
+    if (state?.type === "internal-error") {
+      internalErrorToast(state?.message);
+    } else if (state?.type === "error") {
       toast.error(state?.message);
       playCaution();
     }
@@ -136,6 +150,13 @@ export default function AddFeed({ folders }: { folders: any }) {
             id="url"
             placeholder="https://www.example.com"
             autoComplete="off"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                if (!isHttpValid(urlValue) && Boolean(urlValue)) {
+                  setUrlValue("https://" + urlValue);
+                }
+              }
+            }}
             onChange={(e) => {
               setRssData({});
               setUrlValue(e.target.value);
@@ -189,17 +210,31 @@ export default function AddFeed({ folders }: { folders: any }) {
                 return (
                   <div key={i} className="flex flex-col gap-1">
                     <div className="flex items-center gap-4">
-                      <Input
-                        type="text"
-                        className="flex-1"
-                        name={`feeds[${i}][title]`}
-                        defaultValue={
-                          rssData.url?.includes("youtube.com")
-                            ? rssData?.title
-                            : item.title || rssData?.title
-                        }
-                        required={i === 0 ? true : false}
-                      />
+                      <div className="border-shadow focus-within:outline-brand-primary flex w-full rounded-md focus-within:outline-2">
+                        <Input
+                          type="text"
+                          className="flex-1 border-none shadow-none! outline-none"
+                          name={`feeds[${i}][title]`}
+                          defaultValue={
+                            rssData.url?.includes("youtube.com")
+                              ? rssData?.title
+                              : item.title || rssData?.title
+                          }
+                          required={i === 0 ? true : false}
+                          placeholder={new URL(urlValue).hostname}
+                        />
+                        <span
+                          className="flex items-center justify-center px-4"
+                          onClick={(e) =>
+                            (
+                              e.currentTarget
+                                .previousElementSibling as HTMLInputElement
+                            ).focus()
+                          }
+                        >
+                          <EditIcon />
+                        </span>
+                      </div>
                       {(rssData?.feedUrls?.length ?? 0) > 1 && (
                         //   <input
                         //     type="checkbox"
@@ -241,7 +276,9 @@ export default function AddFeed({ folders }: { folders: any }) {
                 );
               })}
 
-              <input type="hidden" value={rssData?.favicon} name="favicon" />
+              {rssData?.favicon && (
+                <input type="hidden" value={rssData?.favicon} name="favicon" />
+              )}
               <input type="hidden" value={rssData?.url} name="siteURL" />
 
               <div className="flex flex-col gap-3">

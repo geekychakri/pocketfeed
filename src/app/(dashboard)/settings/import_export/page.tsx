@@ -9,6 +9,9 @@ import { useState } from "react";
 import RouteBack from "@/components/RouteBack/RouteBack";
 import { SpinnerRotate } from "@/components/SpinnerRotate";
 import Link from "next/link";
+import { internalErrorToast } from "@/lib/utils";
+import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
+import { toast } from "sonner";
 
 export default function ImportExportOPML() {
   const [loading, setLoading] = useState(false);
@@ -17,12 +20,21 @@ export default function ImportExportOPML() {
     setLoading(true);
     try {
       const res = await fetch("/api/downloadOPML");
+      console.log({ res });
+
+      if (res.status === 401) {
+        const { message } = await res.json();
+        return toast.error(message);
+      }
+      if (res.status === 500) {
+        throw new Error();
+      }
       const data = await res.json();
       console.log(data.opml);
       const blob = new Blob([data.opml], { type: "text/xml" });
       FileSaver.saveAs(blob, "pocket-feed.xml");
     } catch (err) {
-      console.log(err);
+      internalErrorToast(INTERNAL_ERROR_MESSAGE);
     } finally {
       setLoading(false);
     }

@@ -78,3 +78,14 @@ export type updateProfileActionResponse = {
   };
   inputs?: UserProfileFormData;
 };
+
+export type PFServerActionResponseType = {
+  type: "success" | "user-error" | "internal-error";
+  message: string;
+};
+
+export type BookmarkType = {
+  type: string;
+  bookmarkId: string;
+  isBookmarkExists: boolean;
+};
