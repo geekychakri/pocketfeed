@@ -69,7 +69,7 @@ export default async function MainLayout({
   // console.log({ username: user });
 
   return (
-    <main className="scrollbar-gutter-stable scrollbar-width-thin flex h-screen w-full overflow-y-auto">
+    <main className="flex w-full">
       <SidebarNavigation user={JSON.parse(JSON.stringify(user))}>
         <CollapsibleFolders foldersList={foldersList} />
       </SidebarNavigation>

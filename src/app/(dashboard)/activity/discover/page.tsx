@@ -24,15 +24,22 @@ export default async function Page() {
     cursor: page.meta.page.cursor, // Contains cursor information
   };
 
-  return (
-    <>
-      <div className="flex flex-col gap-8">
+  if (page.records.length >= 1) {
+    return (
+      <div className="flex flex-col">
         <DiscoverPostsList
           posts={page.records.toSerializable()}
           initialPageInfo={pageInfo}
         />
+        <YouTubeModal />
       </div>
-      <YouTubeModal />
-    </>
-  );
+    );
+  } else {
+    return (
+      <div className="flex flex-col items-center gap-4 py-6">
+        <img src="/empty-feed.svg" alt="empty-feed" className="w-[320px]" />
+        <p>Looks quiet! Follow others to see their latest posts here.</p>
+      </div>
+    );
+  }
 }

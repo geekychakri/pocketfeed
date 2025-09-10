@@ -11,70 +11,69 @@ export default function Home() {
   console.log(user?.username);
 
   return (
-    <div className="scrollbar-width-thin h-screen overflow-y-auto">
-      <div className="mx-auto max-w-[900px] py-24">
-        <nav className="flex items-center justify-between px-4 py-2">
-          Pocket Feed
-          <div className="flex items-center gap-6">
-            <p>Login</p>
-            <p>Signup</p>
-          </div>
-        </nav>
-        <div className="px-4 py-8">
-          <header className="flex flex-col gap-12">
-            <div className="flex flex-col gap-4">
-              <h1
-                className={`flex gap-4 text-center text-8xl leading-none tracking-tight ${InstrumentSerif.className}`}
-              >
-                {/* <span>
+    <div className="mx-auto max-w-[900px] py-24">
+      <nav className="flex items-center justify-between px-4 py-2">
+        Pocket Feed
+        <div className="flex items-center gap-6">
+          <p>Login</p>
+          <p>Signup</p>
+        </div>
+      </nav>
+      <div className="px-4 py-8">
+        <header className="flex flex-col gap-12">
+          <div className="flex flex-col gap-4">
+            <h1
+              className={`flex gap-4 text-center text-8xl leading-none tracking-tight ${InstrumentSerif.className}`}
+            >
+              {/* <span>
               Less <span>Chaos</span>.
             </span> */}
-                {/* <span className={`text-[#f84f39] ${InstrumentSerif.className}`}>
+              {/* <span className={`text-[#f84f39] ${InstrumentSerif.className}`}>
             content
           </span> */}
-                <span>
-                  Be your own{" "}
-                  <span className="text-brand-primary">algorithm</span>.
-                </span>
-              </h1>
-              <h2 className="text-2xl text-gray-400">
-                All of your favorite content in one place.
-              </h2>
-            </div>
-
-            <div className="flex gap-7">
-              <Link
-                href="/join"
-                className="w-48 rounded-md bg-[#181818] px-6 py-3 text-center text-lg font-medium text-white select-none"
-              >
-                Join for free
-              </Link>
-              {/* <button className="text-xl">Watch Demo</button> */}
-            </div>
-          </header>
-          <div className="mt-14 flex max-w-[65ch] flex-col gap-5">
-            <h2 className="text-xl font-medium">About</h2>
-            <div className="flex flex-col gap-3">
-              <p>
-                Are.na is a place to save content, create collections over time
-                and connect ideas. Privately or with other people.
-              </p>
-              <p>
-                Students (highly curious and open to new information), hobbyists
-                (deeply into a topic or topics, narrowly focused) or what we
-                call connected knowledge collectors (those more experienced but
-                highly curious information gatherers who can make disparate
-                connections between disciplines) have been the core of our
-                community for 13 years and 361 days.
-              </p>
-              <p>
-                Are.na is a mindful space where you can work through any project
-                over time. It&apos;s a place to structure your ideas and build
-                new forms of knowledge together.
-              </p>
-            </div>
+              <span>
+                Be your own{" "}
+                <span className="text-brand-primary">algorithm</span>.
+              </span>
+            </h1>
+            <h2 className="text-2xl text-gray-400">
+              All of your favorite content in one place.
+            </h2>
           </div>
-          {/* <main className="flex flex-col gap-36">
+
+          <div className="flex gap-7">
+            <Link
+              href="/join"
+              className="w-48 rounded-md bg-[#181818] px-6 py-3 text-center text-lg font-medium text-white select-none"
+            >
+              Join for free
+            </Link>
+            {/* <button className="text-xl">Watch Demo</button> */}
+          </div>
+        </header>
+        <div className="mt-14 flex max-w-[65ch] flex-col gap-5">
+          <h2 className="text-xl font-medium">About</h2>
+          <div className="flex flex-col gap-3">
+            <p>
+              Are.na is a place to save content, create collections over time
+              and connect ideas. Privately or with other people.
+            </p>
+            <p>
+              Students (highly curious and open to new information), hobbyists
+              (deeply into a topic or topics, narrowly focused) or what we call
+              connected knowledge collectors (those more experienced but highly
+              curious information gatherers who can make disparate connections
+              between disciplines) have been the core of our community for 13
+              years and 361 days.
+            </p>
+            <p>
+              Are.na is a mindful space where you can work through any project
+              over time. It&apos;s a place to structure your ideas and build new
+              forms of knowledge together.
+            </p>
+          </div>
+        </div>
+        {/* <main className="flex flex-col gap-36">
         <section className="grid grid-cols-5 grid-rows-5 gap-5">
           <div className="col-span-2 row-span-3 rounded-lg border p-4">
             <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>
@@ -101,7 +100,6 @@ export default function Home() {
         </section>
       </main>
       <footer className="">Made with love by GeekyChakri</footer> */}
-        </div>
       </div>
     </div>
   );
