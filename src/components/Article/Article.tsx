@@ -296,6 +296,8 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
 
   const blogName = searchParams.get("author");
 
+  console.log({ data });
+
   // console.log({ articles });
 
   // isNewArticle = articles.every(
@@ -315,21 +317,6 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
       ? convertRelativeUrlsToAbsolute(feedItem.content, articleLinkOrigin)
       : (data?.content as string);
   }
-
-  // useEffect(() => {
-  //   if (state?.message === "success") {
-  //     setIsModalOpen(false);
-  //   }
-  // }, [state]);
-
-  useEffect(() => {
-    // const getFeedItem = localStorage.getItem("feedItem");
-    // if (!getFeedItem) {
-    //   setFetchArticle(true);
-    // } else {
-    //   return JSON.parse(getFeedItem);
-    // }
-  }, []);
 
   useEffect(() => {
     // if (!effectRan.current) {
@@ -417,6 +404,21 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
     throw new Error("Something went wrong!"); //TODO: Catch nearest error boundary
   }
 
+  if (isExtracted) {
+    if (articleContent === null) {
+      return (
+        <div className="flex flex-col items-center justify-center gap-6">
+          <img
+            src="/nothing-to-read.svg"
+            className="w-[320px]"
+            alt="nothing-to-read-svg"
+          />
+          <p>Hmm, there&apos;s nothing to read!</p>
+        </div>
+      );
+    }
+  }
+
   if (data?.content === null) {
     return (
       <div className="flex flex-col items-center justify-center gap-6">
@@ -437,6 +439,7 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
       </div>
     );
   }
+
   return (
     <>
       <div className="relative mb-12 flex flex-col gap-2 pt-[10px]">

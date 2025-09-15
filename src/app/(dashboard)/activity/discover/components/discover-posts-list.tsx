@@ -376,6 +376,11 @@ const ArticlePost = ({
             prefetch={false}
             rel="noopener noreferrer"
             className="border-border-primary bg-background-secondary flex flex-col gap-4 rounded-md border p-3 text-sm"
+            onNavigate={(e) => {
+              // setArticleData(item.content, item.title);
+              localStorage.setItem("feedItem", JSON.stringify(feedItem));
+              // setFolderName(folderName);
+            }}
           >
             <div className="flex flex-col gap-1">
               <div className="flex justify-between">

@@ -6,6 +6,7 @@ import Link from "next/link";
 
 import { currentUser } from "@clerk/nextjs/server";
 import FollowingPostsList from "./components/following-posts-list";
+import EmptyFeedSVG from "@/components/svg/empty-feed";
 
 const xata = getXataClient();
 export default async function Page() {
@@ -40,7 +41,7 @@ export default async function Page() {
   } else {
     return (
       <div className="flex flex-col items-center gap-4 py-6">
-        <img src="/empty-feed.svg" alt="empty-feed" className="w-[320px]" />
+        <EmptyFeedSVG width={320} />
         <p>Looks quiet! Follow others to see their latest posts here.</p>
       </div>
     );
