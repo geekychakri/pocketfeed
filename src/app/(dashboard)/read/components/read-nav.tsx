@@ -11,7 +11,14 @@ import { ExtractArticleIcon } from "@/icons/animated/extract-article-icon";
 import { useFullscreen } from "@/store/read-fullscreen";
 import RouteBack from "@/components/RouteBack/RouteBack";
 import IconOnlyAction from "@/components/ui/icon-only-action";
-import PostModal from "@/components/PostModal";
+const PostModal = dynamic(() => import("@/components/PostModal"), {
+  ssr: false,
+  loading: () => (
+    <IconOnlyAction>
+      <PostIcon className="size-[18px] shrink-0" />
+    </IconOnlyAction>
+  ),
+});
 
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -29,6 +36,7 @@ import ExtractArticle from "./extract-article";
 import { useSearchParams } from "next/navigation";
 
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
+import dynamic from "next/dynamic";
 export default function ReadNav({
   articleSiteName,
   articleUrl,

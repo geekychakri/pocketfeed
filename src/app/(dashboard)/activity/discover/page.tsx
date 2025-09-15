@@ -11,12 +11,16 @@ import PodcastPlayButton from "../../(feed)/feed/[...feedId]/components/PodcastP
 import { decode } from "html-entities";
 import DiscoverPostsList from "./components/discover-posts-list";
 
+import { currentUser } from "@clerk/nextjs/server";
+
 const xata = getXataClient();
 export default async function Page() {
-  const page = await xata.db.posts.getPaginated({
+  const page = await xata.db.posts.sort("xata.createdAt", "desc").getPaginated({
     pagination: { size: 3 },
   });
   console.log({ page });
+
+  const user = await currentUser();
 
   const hasNextPage = page.hasNextPage();
   const pageInfo = {
@@ -30,6 +34,7 @@ export default async function Page() {
         <DiscoverPostsList
           posts={page.records.toSerializable()}
           initialPageInfo={pageInfo}
+          username={user?.username as string}
         />
         <YouTubeModal />
       </div>

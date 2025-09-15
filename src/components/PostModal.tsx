@@ -16,7 +16,7 @@ import { checkObjectIsEmpty, cn, internalErrorToast } from "@/lib/utils";
 
 import DOMPurify from "isomorphic-dompurify";
 
-import { useArticles } from "@/store/articles-list";
+// import { useArticles } from "@/store/articles-list";
 
 import { stripHtml } from "string-strip-html";
 import { PostIcon } from "@/icons/post";
@@ -26,6 +26,8 @@ import { useArticleContent } from "@/store/article-content";
 import { useHotkeys } from "react-hotkeys-hook";
 import { SpinnerRotate } from "./SpinnerRotate";
 import { toast } from "sonner";
+
+import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 
 const initialState = {
   type: "",
@@ -40,19 +42,17 @@ const parseJSON = (val: any) => {
   }
 };
 
-export default function PostModal({
-  feedItem,
-  className,
-  feedTitle,
-  feedAlbumCover,
-  websiteLink,
-}: {
-  feedItem?: any;
-  feedTitle?: string;
-  feedAlbumCover?: string;
-  websiteLink?: string;
-  className?: string;
+export default function PostModal({}: {
+  // feedItem?: any;
+  // feedTitle?: string;
+  // feedAlbumCover?: string;
+  // websiteLink?: string;
+  // className?: string;
 }) {
+  const [feedItem, _] = useState(() => {
+    const localFeedItem = localStorage.getItem("feedItem");
+    return localFeedItem !== null ? JSON.parse(localFeedItem) : {};
+  });
   const [loading, setLoading] = useState(false);
   const [newItemData, setNewItemData] = useState({});
   const { link } = useParams<{ link: string }>();
@@ -60,13 +60,13 @@ export default function PostModal({
 
   const { articleTitle, articleContent } = useArticleContent();
 
-  const { articles, articleMetaData } = useArticles();
-  const findArticle = articles.find(
-    (article, _) => article.link === decodeURIComponent(link),
-  );
+  // const { articles, articleMetaData } = useArticles();
+  // const findArticle = articles.find(
+  //   (article, _) => article.link === decodeURIComponent(link),
+  // );
   const MAX_TEXT_LENGTH = 160;
   const [text, setText] = useState("");
-  const parsedFeedItem = parseJSON(feedItem || JSON.stringify(findArticle));
+  const parsedFeedItem = parseJSON(feedItem);
   console.log({ parsedFeedItem });
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -95,53 +95,58 @@ export default function PostModal({
   //   setNewItemData(data);
   //   setLoading(false);
   // };
-  console.log({ feedTitle });
+  // console.log({ feedTitle });
 
   return (
-    <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
-      <CustomTooltip
-        content={
+    <>
+      <TooltipPrimitive.Root>
+        <TooltipPrimitive.Trigger onClick={() => setIsModalOpen(true)} asChild>
+          {/* <span className="absolute top-1/2 left-1/2 size-12 -translate-x-1/2 -translate-y-1/2 pointer-fine:hidden"></span>
+          <PostIcon className="size-[18px] shrink-0" /> */}
+          <IconOnlyAction>
+            <PostIcon className="size-[18px] shrink-0" />
+          </IconOnlyAction>
+        </TooltipPrimitive.Trigger>
+        <TooltipPrimitive.Content
+          side="top"
+          align="center"
+          sideOffset={5}
+          className="bg-background-secondary border-shadow data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade z-[100] rounded px-[10px] py-[5px] text-[13px] leading-none font-medium select-none"
+        >
           <span>
             Share with note <kbd>[P]</kbd>
           </span>
-        }
-      >
-        {/* <IconOnlyAction> */}
-        <Modal.Button className="relative flex size-6 cursor-pointer items-center justify-center px-6 py-4">
-          <span className="absolute top-1/2 left-1/2 size-12 -translate-x-1/2 -translate-y-1/2 pointer-fine:hidden"></span>
-          <PostIcon className="size-[18px] shrink-0" />
-        </Modal.Button>
+        </TooltipPrimitive.Content>
+      </TooltipPrimitive.Root>
 
-        {/* </IconOnlyAction> */}
-      </CustomTooltip>
-
-      <Modal.Content title="What's up?" className="bg-background-primary">
-        {loading ? (
-          "Loading..."
-        ) : (
-          <form className="flex flex-col gap-4 px-[25px]" action={formAction}>
-            {/* <span className="text-right text-sm tabular-nums text-text-secondary">
+      <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <Modal.Content title="What's up?" className="bg-background-primary">
+          {loading ? (
+            "Loading..."
+          ) : (
+            <form className="flex flex-col gap-4 px-[25px]" action={formAction}>
+              {/* <span className="text-right text-sm tabular-nums text-text-secondary">
               {text.length} / {MAX_TEXT_LENGTH}
             </span> */}
-            <Textarea
-              placeholder="Share something on your mind about this!"
-              className="min-h-24 resize-none scroll-pb-2"
-              name="post"
-            />
-            <div className="border-shadow flex flex-col gap-3 rounded-md p-4">
-              <div className="flex flex-col gap-1">
-                <p className="text-primary">{articleTitle}</p>
-                <p
-                  className="text-text-secondary line-clamp-2 text-sm"
-                  dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(articleContent),
-                  }}
-                ></p>
-                <p className="text-text-secondary text-sm">
-                  {decodeURIComponent(link)}
-                </p>
-              </div>
-              {/* {parsedFeedItem.contentSnippet || parsedFeedItem.content ? (
+              <Textarea
+                placeholder="Share something on your mind about this!"
+                className="min-h-24 resize-none scroll-pb-2"
+                name="post"
+              />
+              <div className="border-shadow flex flex-col gap-3 rounded-md p-4">
+                <div className="flex flex-col gap-1">
+                  <p className="text-primary">{feedItem.title}</p>
+                  <p
+                    className="text-text-secondary line-clamp-2 text-sm"
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(feedItem.content),
+                    }}
+                  ></p>
+                  <p className="text-text-secondary/70 text-sm">
+                    {decodeURIComponent(link)}
+                  </p>
+                </div>
+                {/* {parsedFeedItem.contentSnippet || parsedFeedItem.content ? (
                 <p className="line-clamp-2 text-text-secondary">
                   {parsedFeedItem.contentSnippet ||
                     (Boolean(parsedFeedItem.content) &&
@@ -150,34 +155,40 @@ export default function PostModal({
               ) : (
                 <p>{feedTitle || articleMetaData.title}</p>
               )} */}
-            </div>
-            <input
-              type="text"
-              name="feedTitle"
-              hidden
-              defaultValue={feedTitle || articleMetaData.title}
-            />
-            <input
-              type="text"
-              name="feedAlbumCover"
-              hidden
-              defaultValue={feedAlbumCover || articleMetaData.albumCover}
-            />
-            <input
-              type="text"
-              name="websiteLink"
-              hidden
-              defaultValue={websiteLink || articleMetaData.websiteLink}
-            />
+              </div>
+              <input
+                type="text"
+                name="feedTitle"
+                hidden
+                defaultValue={feedItem.title}
+              />
+              <input
+                type="text"
+                name="feedAlbumCover"
+                hidden
+                defaultValue={feedItem?.albumCover}
+              />
+              <input
+                type="text"
+                name="websiteLink"
+                hidden
+                defaultValue={feedItem?.link}
+              />
 
-            <input type="text" name="feedItem" hidden defaultValue={feedItem} />
+              <input
+                type="text"
+                name="feedItem"
+                hidden
+                defaultValue={JSON.stringify(feedItem)}
+              />
 
-            <Button className="bg-ui-normal hover:bg-ui-hover transition-[background-color]">
-              {isPending ? <SpinnerRotate /> : "Post"}
-            </Button>
-          </form>
-        )}
-      </Modal.Content>
-    </Modal>
+              <Button className="bg-ui-normal hover:bg-ui-hover transition-[background-color]">
+                {isPending ? <SpinnerRotate /> : "Post"}
+              </Button>
+            </form>
+          )}
+        </Modal.Content>
+      </Modal>
+    </>
   );
 }

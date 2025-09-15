@@ -353,7 +353,8 @@ function FeedItem({
         // href={`/read/${encodeURIComponent("https://www.alanwsmith.com/en/2v/mq/vc/om/")}`} //TODO:
         href={`/read/${encodeURIComponent(item.link as string)}?author=${feedList.title}`}
         onNavigate={(e) => {
-          setArticleData(item.content, item.title);
+          // setArticleData(item.content, item.title);
+          localStorage.setItem("feedItem", JSON.stringify(item));
           // setFolderName(folderName);
         }}
         className="absolute inset-0 z-1"

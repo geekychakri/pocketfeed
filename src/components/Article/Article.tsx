@@ -224,18 +224,17 @@ const initialState = {
   message: "",
 };
 
-export default function Article({
-  content,
-  articleUrl,
-  articleSiteName,
-}: {
-  content: string;
-  articleUrl: string;
-  articleSiteName: string;
-}) {
+export default function Article({ articleUrl }: { articleUrl: string }) {
+  const [feedItem, _] = useState(() => {
+    return localStorage.getItem("feedItem")
+      ? JSON.parse(localStorage.getItem("feedItem") as string)
+      : null;
+  });
   console.log({ articleUrl });
   let isNewArticle = false;
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [fetchArticle, setFetchArticle] = useState(false);
 
   const [state, formAction] = useActionState(addPost, initialState);
 
@@ -252,13 +251,14 @@ export default function Article({
 
   const { onError } = useSWRConfig();
 
+  // If someone deletes localstorage by mistake
   const { data, error, isLoading } = useSWR<{
     content: string;
     title: string;
     author: string;
     source: string;
   }>(
-    articleContent ? null : `/api/extractArticle?articleLink=${articleUrl}`,
+    feedItem ? null : `/api/extractArticle?articleLink=${articleUrl}`,
     fetcher,
     {
       keepPreviousData: true,
@@ -282,7 +282,7 @@ export default function Article({
     },
   );
 
-  console.log(data?.content);
+  // console.log(data?.content);
 
   const { link } = useParams<{ link: string }>();
   console.log({ link });
@@ -311,19 +311,24 @@ export default function Article({
   if (isExtracted) {
     contentToRead = articleContent;
   } else {
-    contentToRead = articleContent
-      ? convertRelativeUrlsToAbsolute(articleContent, articleLinkOrigin)
+    contentToRead = feedItem
+      ? convertRelativeUrlsToAbsolute(feedItem.content, articleLinkOrigin)
       : (data?.content as string);
   }
 
-  useEffect(() => {
-    if (state?.message === "success") {
-      setIsModalOpen(false);
-    }
-  }, [state]);
+  // useEffect(() => {
+  //   if (state?.message === "success") {
+  //     setIsModalOpen(false);
+  //   }
+  // }, [state]);
 
   useEffect(() => {
-    console.log("COpy button ran!");
+    // const getFeedItem = localStorage.getItem("feedItem");
+    // if (!getFeedItem) {
+    //   setFetchArticle(true);
+    // } else {
+    //   return JSON.parse(getFeedItem);
+    // }
   }, []);
 
   useEffect(() => {
@@ -406,7 +411,7 @@ export default function Article({
     // return () => {
     //   effectRan.current = true;
     // };
-  }, [copySound, isExtracted, isLoading]);
+  }, [copySound, isExtracted]);
 
   if (error) {
     throw new Error("Something went wrong!"); //TODO: Catch nearest error boundary
@@ -437,12 +442,10 @@ export default function Article({
       <div className="relative mb-12 flex flex-col gap-2 pt-[10px]">
         {/* <RouteBack className="absolute -left-9 p-2" /> */}
         <h1 className="flex min-h-14 items-center gap-2 text-[48px] leading-[52px] font-[575] tracking-tighter text-balance">
-          {decode(articleTitle) || decode(data?.title)}
+          {decode(feedItem?.title) || decode(data?.title)}
         </h1>
         {!blogName ? (
-          <span className="text-text-secondary">
-            {data?.author || data?.source}
-          </span>
+          <span className="text-text-secondary">{feedItem?.author}</span>
         ) : null}
       </div>
 

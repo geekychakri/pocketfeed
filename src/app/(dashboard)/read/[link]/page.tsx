@@ -1,5 +1,4 @@
 import { ExtractArticle } from "@/lib/extract-article";
-import Article from "@/components/Article";
 
 import { extract } from "@extractus/article-extractor";
 
@@ -28,6 +27,9 @@ import { auth } from "@clerk/nextjs/server";
 import InlineScript from "@/components/inline-script";
 import { createHighlighter } from "shiki";
 import nord from "@shikijs/themes/nord";
+import dynamic from "next/dynamic";
+
+import { ClientArticle } from "../components/client-article";
 
 // async function checkBookmarkExists(
 //   filterCondition: Record<string, any>,
@@ -61,68 +63,12 @@ export default async function Read(props: {
 
   let article, articleUrl;
 
-  // let bookmarkItem!: {
-  //   type: string;
-  //   id: string | null;
-  //   isBookmarkExists: boolean | null;
-  // };
-
   try {
     console.log("article");
-    articleUrl = decodeURIComponent(params.link);
-    // console.log({ articleUrl });
-
-    // const { error } = await checkLinkIsBroken(articleUrl);
-
-    // if (error) {
-    //   return (
-    //     <div className="flex h-screen flex-1 flex-col items-center justify-center gap-6">
-    //       <LinkBrokenIcon className="size-20" />
-    //       <div className="flex flex-col items-center gap-2">
-    //         <span>Oops!</span>
-    //         <span>
-    //           The link{" "}
-    //           <a
-    //             href={articleUrl}
-    //             target="_blank"
-    //             rel="noopener noreferrer"
-    //             className="custom-underline"
-    //           >
-    //             {articleUrl}
-    //           </a>{" "}
-    //           seems broken.
-    //         </span>
-    //       </div>
-    //       <RouteBack text="Back" />
-    //     </div>
-    //   );
+    articleUrl = params.link;
   } catch (err) {
-    // const virtualConsole = new VirtualConsole();
-
-    // const dom = await JSDOM.fromURL(articleUrl, {
-    //   virtualConsole,
-    // });
-
-    // if (isProbablyReaderable(dom.window.document)) {
-    //   // const xata = getXataClient();
-    //   // const isBookmarked = await xata.db.bookmarks
-    //   //   .filter({
-    //   //     userId,
-    //   //     bookmarkLink: decodeURIComponent(params.link),
-    //   //   })
-    //   //   .getFirst();
-    //   // console.log({ isBookmarked });
-    //   // bookmarkItem = await checkBookmarkExists({
-    //   //   userId,
-    //   //   bookmarkLink: decodeURIComponent(params.link),
-    //   // });
-    //   const reader = new Readability(dom.window.document); //TODO:
-    //   article = await extract(decodeURIComponent(params.link));
-    //   console.log(article);
-    // } else {
-    //   article = null;
-    // }
     console.log(err);
+
     return (
       <div className="flex h-screen flex-1 flex-col items-center justify-center gap-6">
         <GlobeErrorIcon className="size-20" />
@@ -134,46 +80,17 @@ export default async function Read(props: {
 
   return (
     <main className="w-full flex-1">
-      {/* <ArticleSettings /> */}
-      {/* <nav className="sticky top-0 z-10 flex h-14 items-center justify-between gap-3 border-b border-border-non-interactive bg-background-primary px-4">
-        <p className="text-text-secondary">{article?.siteName}</p>
-        <div className="flex items-center gap-5">
-          <div>
-            <FullScreenCircleIcon />
-          </div>
-          <div>
-            <BookmarkIcon className="size-4" />
-          </div>
-          <a href={articleUrl} target="_blank" rel="noopener noreferrer">
-            <GlobalIcon />
-          </a>
-        </div>
-      </nav> */}
-
       <ReadNav
         // articleSiteName={article?.siteName}
         articleUrl={articleUrl}
-        articleTitle={article?.title as string}
+
         // bookmarkExists={bookmarkItem?.isBookmarkExists}
         // bookmarkId={bookmarkItem?.id}
       />
 
-      {/* <div className="relative mx-auto mt-7 flex w-full max-w-3xl flex-col">
-        <div className="relative flex items-center">
-          <RouteBack className="absolute -left-9 p-2" />
-          <h1 className="flex h-14 items-center text-balance text-[20px] font-medium tracking-tight text-text-primary!">
-            {article?.title}
-          </h1>
-        </div>
-        <Article content={article?.content as string} />
-      </div> */}
       <div className="mx-auto w-full max-w-[60ch] px-4 pb-14">
         <div className="h-14"></div>
-        <Article
-          content={article?.content as string}
-          articleSiteName={article?.siteName as string}
-          articleUrl={articleUrl}
-        />
+        <ClientArticle articleUrl={articleUrl} />
       </div>
     </main>
   );
