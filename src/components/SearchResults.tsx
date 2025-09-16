@@ -4,6 +4,9 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 
+import NothingToReadSVG from "./svg/nothing-to-read";
+import SearchSVG from "./svg/search";
+
 const xata = getXataClient();
 
 export default async function SearchResults({
@@ -29,11 +32,7 @@ export default async function SearchResults({
   if (feedsList.length === 0 && !query) {
     return (
       <div className="mt-12 flex flex-col items-center gap-2">
-        <img
-          src="/search.svg"
-          className="w-[320px]"
-          alt="nothing-to-read-svg"
-        />
+        <SearchSVG className="w-[320px]" />
         <p>Search for {category}</p>
       </div>
     );
@@ -47,7 +46,7 @@ export default async function SearchResults({
             <Link
               href={`/user/${item.username}`}
               key={item.id}
-              className="hover:border-shadow flex items-center gap-2 rounded-md bg-background-secondary p-4 duration-150 hover:bg-transparent"
+              className="hover:border-shadow bg-background-secondary flex items-center gap-2 rounded-md p-4 duration-150 hover:bg-transparent"
             >
               <img
                 src={item.avatarUrl as string}
@@ -70,7 +69,7 @@ export default async function SearchResults({
           <Link
             href={`/feed/${item.feedId}`}
             key={item.id}
-            className="hover:border-shadow flex items-center gap-2 rounded-md bg-background-secondary p-4 duration-150 hover:bg-transparent"
+            className="hover:border-shadow bg-background-secondary flex items-center gap-2 rounded-md p-4 duration-150 hover:bg-transparent"
           >
             <img
               src={item.favicon as string}
@@ -98,9 +97,9 @@ const SearchResultsEmpty = ({ query }: { query: string }) => {
         <span className="text-text-primary">{query}</span> did not return any
         results.
       </p>
-      <div className="flex flex-col gap-4 rounded-sm border border-dashed border-border-non-interactive p-4">
+      <div className="border-border-non-interactive flex flex-col gap-4 rounded-sm border border-dashed p-4">
         <h2 className="text-lg">Search tips</h2>
-        <ul className="flex list-inside list-disc flex-col gap-2 text-text-secondary">
+        <ul className="text-text-secondary flex list-inside list-disc flex-col gap-2">
           <li>Check for any accidentally misspelt words</li>
           <li>Try searching by feed title or username</li>
         </ul>

@@ -26,6 +26,7 @@ import { useFeedsAdd } from "@/hooks/useFeedsAdd";
 import { getInitials, internalErrorToast } from "@/lib/utils";
 import { useFolderName } from "@/store/folder-name";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
+import EmptyFeedSVG from "@/components/svg/empty-feed";
 
 export function FolderFeedList({
   initialPageInfo,
@@ -133,11 +134,7 @@ export function FolderFeedList({
           ))
         ) : (
           <div className="flex flex-col items-center justify-center gap-6">
-            <img
-              src="/empty-feed.svg"
-              className="w-[320px]"
-              alt="empty-feed-svg"
-            />
+            <EmptyFeedSVG className="w-[320px]" />
             <div className="flex flex-col items-center gap-3">
               <p className="text-xl font-medium">The folder is empty.</p>
               <Link

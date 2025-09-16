@@ -18,6 +18,6 @@ export const useArticleContent = create<ArticleContentType>((set) => ({
   setArticleData: (
     articleContent: string,
     articleTitle: string,
-    isExtracted: boolean,
+    isExtracted?: boolean,
   ) => set((state) => ({ articleContent, articleTitle, isExtracted })),
 }));

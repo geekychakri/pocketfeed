@@ -12,6 +12,7 @@ import { decode } from "html-entities";
 import DiscoverPostsList from "./components/discover-posts-list";
 
 import { currentUser } from "@clerk/nextjs/server";
+import EmptyFeedSVG from "@/components/svg/empty-feed";
 
 const xata = getXataClient();
 export default async function Page() {
@@ -42,7 +43,7 @@ export default async function Page() {
   } else {
     return (
       <div className="flex flex-col items-center gap-4 py-6">
-        <img src="/empty-feed.svg" alt="empty-feed" className="w-[320px]" />
+        <EmptyFeedSVG className="w-[320px]" />
         <p>Looks quiet! Follow others to see their latest posts here.</p>
       </div>
     );

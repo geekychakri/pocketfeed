@@ -5,6 +5,7 @@ import { useEffect, startTransition } from "react";
 import { useRouter } from "next/navigation";
 
 import Button from "@/components/ui/Button";
+import NotFoundSVG from "@/components/svg/not-found";
 
 export default function Error({
   error,
@@ -28,7 +29,7 @@ export default function Error({
 
   return (
     <div className="mx-auto flex h-screen w-[320px] flex-col justify-center gap-4">
-      <img src="/not-found.svg" className="w-full" alt="error" />
+      <NotFoundSVG className="w-full" />
       <h2 className="text-center text-lg">
         Something went wrong, but don&apos;t fret — it&apos;s not your fault!
       </h2>

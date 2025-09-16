@@ -25,6 +25,7 @@ const getLastModified = async (url: string) => {
 };
 
 import { FolderFeedStoreProvider } from "@/context/folder-feed-provider";
+import EmptyFeedSVG from "@/components/svg/empty-feed";
 
 export default async function Folder(props: {
   params: Promise<{ foldername: string }>;
@@ -121,11 +122,7 @@ export default async function Folder(props: {
             />
           ) : (
             <div className="flex flex-col items-center justify-center gap-6">
-              <img
-                src="/empty-feed.svg"
-                className="w-[320px]"
-                alt="empty-feed-svg"
-              />
+              <EmptyFeedSVG className="w-[320px]" />
               <div className="flex flex-col items-center gap-3">
                 <p className="text-xl font-medium">The folder is empty.</p>
                 <Link

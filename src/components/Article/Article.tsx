@@ -219,6 +219,7 @@ import { fetcher, internalErrorToast } from "@/lib/utils";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import { toast } from "sonner";
 import { SpinnerRotate } from "../SpinnerRotate";
+import NothingToReadSVG from "@/components/svg/nothing-to-read";
 
 const initialState = {
   message: "",
@@ -405,14 +406,11 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
   }
 
   if (isExtracted) {
+    console.log("IS EXTRACTED!");
     if (articleContent === null) {
       return (
         <div className="flex flex-col items-center justify-center gap-6">
-          <img
-            src="/nothing-to-read.svg"
-            className="w-[320px]"
-            alt="nothing-to-read-svg"
-          />
+          <NothingToReadSVG className="w-[320px]" />
           <p>Hmm, there&apos;s nothing to read!</p>
         </div>
       );
@@ -422,11 +420,7 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
   if (data?.content === null) {
     return (
       <div className="flex flex-col items-center justify-center gap-6">
-        <img
-          src="/nothing-to-read.svg"
-          className="w-[320px]"
-          alt="nothing-to-read-svg"
-        />
+        <NothingToReadSVG className="w-[320px]" />
         <p>Hmm, there&apos;s nothing to read!</p>
       </div>
     );
