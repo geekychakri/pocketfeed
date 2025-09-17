@@ -1,28 +1,29 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { useSignUp } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
 import dynamic from "next/dynamic";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-import { motion } from "framer-motion";
-
-import useSound from "use-sound";
-
+import { useSignUp } from "@clerk/nextjs";
 import {
   EyeClosedIcon,
   EyeOpenIcon,
   GitHubLogoIcon,
 } from "@radix-ui/react-icons";
+import { motion } from "framer-motion";
 import { toast } from "sonner";
+import useSound from "use-sound";
 
+import { SpinnerRotate } from "@/components/spinner-rotate";
 import Button from "@/components/ui/custom-button";
 import Input from "@/components/ui/custom-input";
-import { SpinnerRotate } from "@/components/spinner-rotate";
-import { useNavigatorOnline } from "@/hooks/useNavigatorOnline";
 
 import { createUser } from "@/app/actions";
+import { useNavigatorOnline } from "@/hooks/useNavigatorOnline";
+
+import Divider from "../../components/divider";
+
 const SocialOauth = dynamic(() => import("@/components/social-oauth"), {
   ssr: false,
   loading: () => (
@@ -31,7 +32,6 @@ const SocialOauth = dynamic(() => import("@/components/social-oauth"), {
     </div>
   ),
 });
-import Divider from "../../components/divider";
 
 export default function Join() {
   const { isLoaded, signUp, setActive } = useSignUp();

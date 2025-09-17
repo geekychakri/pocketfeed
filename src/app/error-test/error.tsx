@@ -1,7 +1,8 @@
-"use client"; // Error components must be Client Components
+"use client";
 
+// Error components must be Client Components
+import { startTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useEffect, startTransition } from "react";
 
 import { flushSync } from "react-dom";
 

@@ -1,25 +1,21 @@
 "use client";
 
+import { memo, useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSelectedLayoutSegment } from "next/navigation";
 
-import { SearchIcon } from "@/icons/search";
-import { ExploreIcon } from "@/icons/explore";
-import { BookmarkIcon } from "@/icons/bookmark";
+import { SelectedPick } from "@xata.io/client";
 
 import CollapsibleFolders from "@/components/collapsible-folders";
 import ProfileAvatar from "@/components/profile-avatar";
 
+import { BookmarkIcon } from "@/icons/bookmark";
+import { ExploreIcon } from "@/icons/explore";
+import { SearchIcon } from "@/icons/search";
 import { cn } from "@/lib/utils";
-
-import { useSelectedLayoutSegment } from "next/navigation";
-
-import { UsersRecord } from "@/xata";
-import { SelectedPick } from "@xata.io/client";
 import { useFullscreen } from "@/store/read-fullscreen";
-import { useEffect, useState, memo } from "react";
-
 import useStore from "@/store/useStore";
+import { UsersRecord } from "@/xata";
 
 const links = [
   { label: "Activity", path: "/activity/discover", icon: ExploreIcon },

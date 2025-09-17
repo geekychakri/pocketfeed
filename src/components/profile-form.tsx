@@ -1,25 +1,22 @@
 "use client";
 
-import { useRef, useEffect, useState, useActionState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
+
 import { useFormState } from "react-dom";
-import { UsersRecord } from "@/xata";
-
-// import { updateProfile } from "@/app/actions";
-import { updateProfile } from "@/app/actions/update-profile";
-
+import { toast } from "sonner";
 import useSound from "use-sound";
 
-import { toast } from "sonner";
-
+import { SpinnerRotate } from "@/components/spinner-rotate";
 import SubmitButton from "@/components/SubmitButton";
+import Button from "@/components/ui/custom-button";
 import Input from "@/components/ui/custom-input";
 import Textarea from "@/components/ui/custom-textarea";
 
-import { SpinnerRotate } from "@/components/spinner-rotate";
-import Button from "@/components/ui/custom-button";
+// import { updateProfile } from "@/app/actions";
+import { updateProfile } from "@/app/actions/update-profile";
 import { internalErrorToast, toastError } from "@/lib/utils";
-
 import type { updateProfileActionResponse } from "@/types";
+import { UsersRecord } from "@/xata";
 
 const initialState: updateProfileActionResponse = {
   type: "",

@@ -1,11 +1,11 @@
 "use client";
 
 import {
-  SectionIcon,
   BookmarkIcon,
-  PersonIcon,
-  SunIcon,
   MoonIcon,
+  PersonIcon,
+  SectionIcon,
+  SunIcon,
 } from "@radix-ui/react-icons";
 
 import ThemeSwitcher from "@/components/theme-switcher";

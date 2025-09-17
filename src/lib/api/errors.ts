@@ -1,6 +1,7 @@
+import { NextResponse } from "next/server";
+
 import { ZodError } from "zod";
 import { generateErrorMessage } from "zod-error";
-import { NextResponse } from "next/server";
 
 import z from "@/lib/zod";
 
@@ -84,7 +85,7 @@ export function handleApiError(error: any) {
 
 export function handleAndReturnErrorResponse(
   err: unknown,
-  headers?: Record<string, string>
+  headers?: Record<string, string>,
 ) {
   const { error, status } = handleApiError(err);
   return new Response(error.message, { headers, status });

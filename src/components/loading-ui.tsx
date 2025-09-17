@@ -1,8 +1,11 @@
 "use client";
+
 import { usePathname } from "next/navigation";
+
 import { SpinnerRotate } from "@/components/spinner-rotate";
-import { useFullscreen } from "@/store/read-fullscreen";
+
 import { cn } from "@/lib/utils";
+import { useFullscreen } from "@/store/read-fullscreen";
 
 export default function LoadingUI({ className }: { className?: string }) {
   const pathname = usePathname();

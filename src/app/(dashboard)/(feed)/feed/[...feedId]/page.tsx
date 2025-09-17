@@ -1,17 +1,14 @@
-import { getXataClient } from "@/xata";
+import { currentUser } from "@clerk/nextjs/server";
+import dayjs from "dayjs";
 import Parser from "rss-parser";
 
 import RouteBack from "@/components/route-back";
 
-import { currentUser } from "@clerk/nextjs/server";
-
-import { FeedListType, FeedItemType } from "@/types";
-
-import dayjs from "dayjs";
-
-import YouTubeModal from "./components/YouTubeModal";
+import { FeedItemType, FeedListType } from "@/types";
+import { getXataClient } from "@/xata";
 
 import FeedList from "./components/feed-list";
+import YouTubeModal from "./components/YouTubeModal";
 
 const xata = getXataClient();
 const parser = new Parser({

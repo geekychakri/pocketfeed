@@ -1,7 +1,7 @@
-"use client"; // Error boundaries must be Client Components
+"use client";
 
-import { useEffect, startTransition } from "react";
-
+// Error boundaries must be Client Components
+import { startTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import Button from "@/components/ui/custom-button";

@@ -1,10 +1,12 @@
 //@ts-nocheck
 
-import { htmlParser } from "./parser";
-import extend from "extend";
-import Promise from "pinkie-promise";
 import url from "node:url";
+
+import extend from "extend";
 import got from "got";
+import Promise from "pinkie-promise";
+
+import { htmlParser } from "./parser";
 
 // function resolve(from, to) {
 //   const resolvedUrl = new URL(to, new URL(from, "resolve://"));

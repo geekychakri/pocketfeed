@@ -1,28 +1,22 @@
-import { useState } from "react";
+import { startTransition, useOptimistic, useState } from "react";
+import { usePathname } from "next/navigation";
 
-import IconOnlyAction from "@/components/ui/icon-only-action";
+import { useHotkeys } from "react-hotkeys-hook";
+import { toast } from "sonner";
+import useSWR, { mutate } from "swr";
+import { useSound } from "use-sound";
+import { boolean } from "zod";
 
 import { CustomTooltip } from "@/components/ui/custom-tooltip";
+import IconOnlyAction from "@/components/ui/icon-only-action";
+
+import { addBookmarkAction } from "@/app/actions/add-bookmark";
+import { deleteBookmarkAction } from "@/app/actions/delete-bookmark";
+import { useDeleteBookmark } from "@/hooks/useDeleteBookmark";
 import { BookmarkIcon } from "@/icons/bookmark";
 import { BookmarkBoldIcon } from "@/icons/bookmark-bold";
 
-import { useOptimistic, startTransition } from "react";
-
-import { useHotkeys } from "react-hotkeys-hook";
-
-import { deleteBookmarkAction } from "@/app/actions/delete-bookmark";
-import { addBookmarkAction } from "@/app/actions/add-bookmark";
-
-import { useDeleteBookmark } from "@/hooks/useDeleteBookmark";
-
-import { toast } from "sonner";
-
-import { useSound } from "use-sound";
-
-import useSWR, { mutate } from "swr";
 import { SpinnerRotate } from "../SpinnerRotate";
-import { boolean } from "zod";
-import { usePathname } from "next/navigation";
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 

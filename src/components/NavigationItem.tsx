@@ -1,8 +1,7 @@
 "use client";
 
-import Link from "next/link";
-
 import { ComponentType, ReactNode, useState } from "react";
+import Link from "next/link";
 
 export default function NavigationItem({
   to,

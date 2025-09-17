@@ -1,10 +1,12 @@
 "use client";
 
-import { ComponentProps, ReactNode, forwardRef } from "react";
-import { cn } from "@/lib/utils";
+import { ComponentProps, forwardRef, ReactNode } from "react";
+
 import { useFormStatus } from "react-dom";
 
 import { SpinnerRotate } from "@/components/spinner-rotate";
+
+import { cn } from "@/lib/utils";
 
 type ButtonProps = {
   icon?: ReactNode;

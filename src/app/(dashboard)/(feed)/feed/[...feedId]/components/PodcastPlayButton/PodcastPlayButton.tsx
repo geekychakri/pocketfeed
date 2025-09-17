@@ -1,13 +1,14 @@
 "use client";
-import { useShowPodcastPlayer } from "@/store/podcastplayer";
-import { useState, MouseEvent } from "react";
+
+import { MouseEvent, useState } from "react";
+
+import { PauseIcon, PlayIcon } from "@radix-ui/react-icons";
+import useSound from "use-sound";
 
 import { cn } from "@/lib/utils";
-
-import { PlayIcon, PauseIcon } from "@radix-ui/react-icons";
-import useSound from "use-sound";
-import { useFeedItem } from "@/store/feed-item";
 import { useCurrentBookmarkId } from "@/store/bookmark-id-store";
+import { useFeedItem } from "@/store/feed-item";
+import { useShowPodcastPlayer } from "@/store/podcastplayer";
 
 type PodcastPlayButtonType = {};
 

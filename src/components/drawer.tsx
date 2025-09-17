@@ -1,32 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
-import { memo } from "react";
-
-import { Drawer } from "vaul";
+import { memo, useEffect, useState } from "react";
 
 import { Cross2Icon, ReaderIcon } from "@radix-ui/react-icons";
-
-import { useFormState } from "react-dom";
-
-import { useShowPodcastPlayer } from "@/store/podcastplayer";
-import PodcastPlayButton from "@/app/(dashboard)/(feed)/feed/[...feedId]/components/PodcastPlayButton"; //TODO:
-
-import PodcastDrawerTabs from "@/components/podcast-drawer-tabs";
-
 import * as Tabs from "@radix-ui/react-tabs";
-
-import { extractTimestampTags } from "@/lib/utils";
-
 import DOMPurify from "isomorphic-dompurify";
-import PodcastChapters from "@/components/podcast-chapters";
+import { useFormState } from "react-dom";
+import { Drawer } from "vaul";
 
 import Modal from "@/components/custom-modal";
-import Textarea from "@/components/ui/custom-textarea";
+import PodcastChapters from "@/components/podcast-chapters";
+import PodcastDrawerTabs from "@/components/podcast-drawer-tabs";
 import Button from "@/components/ui/custom-button";
+import Textarea from "@/components/ui/custom-textarea";
+
+import PodcastPlayButton from "@/app/(dashboard)/(feed)/feed/[...feedId]/components/PodcastPlayButton"; //TODO:
 
 import { addPost } from "@/app/actions/add-post";
+import { extractTimestampTags } from "@/lib/utils";
+import { useShowPodcastPlayer } from "@/store/podcastplayer";
+
 import BookmarkPodcast from "./PodcastPlayer/bookmark-podcast";
 
 DOMPurify.addHook("beforeSanitizeAttributes", function (node) {

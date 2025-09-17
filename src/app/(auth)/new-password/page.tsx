@@ -1,12 +1,14 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { useAuth, useSignIn } from "@clerk/nextjs";
-import type { NextPage } from "next";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
 
-import Input from "@/components/ui/custom-input";
+import React, { useEffect, useState } from "react";
+import type { NextPage } from "next";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+import { useAuth, useSignIn } from "@clerk/nextjs";
+
 import Button from "@/components/ui/custom-button";
+import Input from "@/components/ui/custom-input";
 
 const NewPasswordPage: NextPage = () => {
   const [email, setEmail] = useState("");

@@ -1,14 +1,13 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { balloons } from "balloons-js";
 import { LayoutGroup, motion } from "motion/react";
 
 import { cn } from "@/lib/utils";
-
-import { balloons } from "balloons-js";
-import { useEffect } from "react";
 
 type SegmentedControlProps = {
   items: { href: string; title: string }[];

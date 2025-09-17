@@ -1,33 +1,29 @@
 "use client";
 
-import { useState, useEffect, useActionState } from "react";
-
-import { useFormState } from "react-dom";
-
+import { useActionState, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
-import Modal from "@/components/custom-modal";
-import Textarea from "@/components/ui/custom-textarea";
-import Button from "@/components/ui/custom-button";
-
-import { addPost } from "@/app/actions/add-post";
-
-import { checkObjectIsEmpty, cn, internalErrorToast } from "@/lib/utils";
-
+import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import DOMPurify from "isomorphic-dompurify";
-
+import { useFormState } from "react-dom";
+import { useHotkeys } from "react-hotkeys-hook";
+import { toast } from "sonner";
 // import { useArticles } from "@/store/articles-list";
 
 import { stripHtml } from "string-strip-html";
+
+import Modal from "@/components/custom-modal";
+import { SpinnerRotate } from "@/components/spinner-rotate";
+import Button from "@/components/ui/custom-button";
+import Textarea from "@/components/ui/custom-textarea";
+
+import { addPost } from "@/app/actions/add-post";
 import { PostIcon } from "@/icons/post";
+import { checkObjectIsEmpty, cn, internalErrorToast } from "@/lib/utils";
+import { useArticleContent } from "@/store/article-content";
+
 import { CustomTooltip } from "./ui/custom-tooltip";
 import IconOnlyAction from "./ui/icon-only-action";
-import { useArticleContent } from "@/store/article-content";
-import { useHotkeys } from "react-hotkeys-hook";
-import { SpinnerRotate } from "@/components/spinner-rotate";
-import { toast } from "sonner";
-
-import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 
 const initialState = {
   type: "",

@@ -1,11 +1,12 @@
 "use server";
+
 import { revalidatePath } from "next/cache";
-import qs from "qs";
 
 import { auth } from "@clerk/nextjs/server";
+import qs from "qs";
 
-import { getXataClient } from "@/xata";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
+import { getXataClient } from "@/xata";
 
 const xata = getXataClient();
 

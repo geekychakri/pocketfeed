@@ -3,12 +3,12 @@
 import { redirect } from "next/navigation";
 
 import { auth, currentUser } from "@clerk/nextjs/server";
-import { getXataClient } from "@/xata";
-import qs from "qs";
 import { nanoid } from "nanoid";
+import qs from "qs";
 
-import { addFeedSchema } from "@/lib/zod/schemas/add-feed";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
+import { addFeedSchema } from "@/lib/zod/schemas/add-feed";
+import { getXataClient } from "@/xata";
 
 const xata = getXataClient();
 

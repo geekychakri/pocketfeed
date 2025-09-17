@@ -1,36 +1,29 @@
 "use client";
 
 import React, { memo, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
 import * as Collapsible from "@radix-ui/react-collapsible";
-
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import * as ContextMenu from "@radix-ui/react-context-menu";
-
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { ChevronRightIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
-
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-
-import { cn } from "@/lib/utils";
-
 import useSound from "use-sound";
-
 import { Virtualizer } from "virtua";
 
-import { usePathname } from "next/navigation";
-import { ChevronRightIcon } from "@radix-ui/react-icons";
-import Link from "next/link";
-
-import { FolderClosedIcon } from "@/icons/folder-closed";
-import { FolderOpenIcon } from "@/icons/folder-open";
-import { DeleteIcon } from "@/icons/delete";
-import { EditIcon } from "@/icons/edit";
 import EditFolderModal from "@/components/edit-folder-modal";
+import Button from "@/components/ui/custom-button";
 
 import { useWatchScrollAreaOverflow } from "@/hooks/use-watch-scroll-area";
+import { DeleteIcon } from "@/icons/delete";
+import { EditIcon } from "@/icons/edit";
+import { FolderClosedIcon } from "@/icons/folder-closed";
+import { FolderOpenIcon } from "@/icons/folder-open";
+import { cn } from "@/lib/utils";
+import { useFolderName } from "@/store/folder-name";
 
 import DeleteFolderModal from "./delete-folder-modal";
-import Button from "@/components/ui/custom-button";
-import { useFolderName } from "@/store/folder-name";
 
 const CollapsibleFolders = ({
   foldersList,

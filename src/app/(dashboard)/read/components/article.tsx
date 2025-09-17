@@ -1,46 +1,40 @@
 "use client";
 
-import DOMPurify from "isomorphic-dompurify";
-
-import ReactDOM from "react-dom/client";
-
-import { createHighlighter } from "shiki";
-import { useSWRConfig } from "swr";
-
 import {
-  useState,
-  useEffect,
-  useRef,
-  useLayoutEffect,
   useActionState,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
 } from "react";
-
-import { useFormState } from "react-dom";
-
-import { usePathname, useSearchParams } from "next/navigation";
-
-import { useParams } from "next/navigation";
-
-import RouteBack from "@/components/route-back";
-
-import useSWR from "swr";
-
-import { motion } from "motion/react";
-import { animate } from "motion/mini";
-
-import useSound from "use-sound";
-
+import Link from "next/link";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 import Script from "next/script";
 
-import Modal from "@/components/custom-modal";
-import Textarea from "@/components/ui/custom-textarea";
-import Button from "@/components/ui/custom-button";
-
-import { useArticles } from "@/store/articles-list";
-
-import { decode } from "html-entities";
-
 import nord from "@shikijs/themes/nord";
+import { decode } from "html-entities";
+import DOMPurify from "isomorphic-dompurify";
+import { animate } from "motion/mini";
+import { motion } from "motion/react";
+import { useFormState } from "react-dom";
+import ReactDOM from "react-dom/client";
+import { createHighlighter } from "shiki";
+import { toast } from "sonner";
+import useSWR, { useSWRConfig } from "swr";
+import useSound from "use-sound";
+
+import Modal from "@/components/custom-modal";
+import RouteBack from "@/components/route-back";
+import { SpinnerRotate } from "@/components/spinner-rotate";
+import NothingToReadSVG from "@/components/svg/nothing-to-read";
+import Button from "@/components/ui/custom-button";
+import Textarea from "@/components/ui/custom-textarea";
+
+import { addPost } from "@/app/actions/add-post";
+import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
+import { fetcher, internalErrorToast } from "@/lib/utils";
+import { useArticleContent } from "@/store/article-content";
+import { useArticles } from "@/store/articles-list";
 
 // function makeRelativeUrl(url, origin) {
 //   try {
@@ -209,17 +203,6 @@ function convertRelativeUrlsToAbsolute(html: string, baseUrl: string) {
 
   return doc.body.innerHTML;
 }
-
-import { addPost } from "@/app/actions/add-post";
-import Link from "next/link";
-
-import { useArticleContent } from "@/store/article-content";
-
-import { fetcher, internalErrorToast } from "@/lib/utils";
-import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
-import { toast } from "sonner";
-import { SpinnerRotate } from "@/components/spinner-rotate";
-import NothingToReadSVG from "@/components/svg/nothing-to-read";
 
 const initialState = {
   message: "",

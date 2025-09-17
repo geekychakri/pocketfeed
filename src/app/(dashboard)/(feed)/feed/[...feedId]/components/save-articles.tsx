@@ -1,8 +1,11 @@
 "use client";
+
 import { useEffect } from "react";
-import { useArticles } from "@/store/articles-list";
 
 import dayjs from "dayjs";
+
+import { useArticles } from "@/store/articles-list";
+
 export default function SaveArticles({ feedList }: { feedList: any }) {
   console.log({ feedList });
   const articlesList = feedList.items

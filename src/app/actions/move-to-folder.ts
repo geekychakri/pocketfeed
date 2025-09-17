@@ -1,9 +1,9 @@
 "use server";
 
+import { auth } from "@clerk/nextjs/server";
+
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import { getXataClient } from "@/xata";
-
-import { auth } from "@clerk/nextjs/server";
 
 const xata = getXataClient();
 

@@ -1,22 +1,16 @@
-import { useState, use } from "react";
-
-import IconOnlyAction from "@/components/ui/icon-only-action";
-
-import { CustomTooltip } from "@/components/ui/custom-tooltip";
-import { BookmarkIcon } from "@/icons/bookmark";
-import { BookmarkBoldIcon } from "@/icons/bookmark-bold";
-
-import { useOptimistic, startTransition } from "react";
+import { startTransition, use, useOptimistic, useState } from "react";
 
 import { useHotkeys } from "react-hotkeys-hook";
+import { toast } from "sonner";
+import { useSound } from "use-sound";
 
-import { deleteBookmarkAction } from "@/app/actions/delete-bookmark";
+import { CustomTooltip } from "@/components/ui/custom-tooltip";
+import IconOnlyAction from "@/components/ui/icon-only-action";
 
 import { addBookmarkAction } from "@/app/actions/add-bookmark";
-
-import { toast } from "sonner";
-
-import { useSound } from "use-sound";
+import { deleteBookmarkAction } from "@/app/actions/delete-bookmark";
+import { BookmarkIcon } from "@/icons/bookmark";
+import { BookmarkBoldIcon } from "@/icons/bookmark-bold";
 
 export default function Bookmark({
   bookmarked,

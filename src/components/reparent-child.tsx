@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
+
 import * as portals from "react-reverse-portal";
 
 import ComponentA from "./reparent-component-1";

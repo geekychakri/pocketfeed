@@ -1,27 +1,25 @@
 "use client";
 
 import { useState } from "react";
-import { JSONData, RecordArray, SelectedPick } from "@xata.io/client";
-
-import { BookmarksRecord } from "@/xata";
-
-import { useAddBookmarks } from "@/hooks/useAddBookmarks";
-
-import { decode } from "html-entities";
-
 import Link from "next/link";
-import Button from "@/components/ui/custom-button";
-import { SpinnerRotate } from "@/components/spinner-rotate";
-import { useBookmarksStore } from "@/store/bookmark-store";
-import BookmarkDelete from "./bookmark-delete";
-import YouTubeModal from "../../(feed)/feed/[...feedId]/components/YouTubeModal";
-import YouTubePlayButton from "../../(feed)/feed/[...feedId]/components/YouTubePlayButton";
-import PodcastPlayButton from "../../(feed)/feed/[...feedId]/components/PodcastPlayButton";
-import { getYoutubeVideoId } from "@/lib/utils";
-
-import { WindowVirtualizer } from "virtua";
 
 import { ChevronRightIcon, ReaderIcon } from "@radix-ui/react-icons";
+import { JSONData, RecordArray, SelectedPick } from "@xata.io/client";
+import { decode } from "html-entities";
+import { WindowVirtualizer } from "virtua";
+
+import { SpinnerRotate } from "@/components/spinner-rotate";
+import Button from "@/components/ui/custom-button";
+
+import { useAddBookmarks } from "@/hooks/useAddBookmarks";
+import { getYoutubeVideoId } from "@/lib/utils";
+import { useBookmarksStore } from "@/store/bookmark-store";
+import { BookmarksRecord } from "@/xata";
+
+import PodcastPlayButton from "../../(feed)/feed/[...feedId]/components/PodcastPlayButton";
+import YouTubeModal from "../../(feed)/feed/[...feedId]/components/YouTubeModal";
+import YouTubePlayButton from "../../(feed)/feed/[...feedId]/components/YouTubePlayButton";
+import BookmarkDelete from "./bookmark-delete";
 
 type BookmarkListType = {
   // initialBookmarks: JSONData<Readonly<SelectedPick<BookmarksRecord, ["*"]>>>[];

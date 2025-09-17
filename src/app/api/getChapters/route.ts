@@ -1,9 +1,7 @@
 import crypto from "crypto";
-
 import { type NextRequest } from "next/server";
 
 import { auth } from "@clerk/nextjs/server";
-
 import { LinkChecker } from "linkinator";
 
 export async function GET(request: NextRequest) {

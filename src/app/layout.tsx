@@ -2,25 +2,22 @@ import type { Metadata } from "next";
 
 import "./globals.css";
 
-import { Toaster } from "sonner";
+import { Suspense } from "react";
+import { Geist, Inter } from "next/font/google";
+
 import {
   ClerkProvider,
-  SignInButton,
   SignedIn,
   SignedOut,
+  SignInButton,
   UserButton,
 } from "@clerk/nextjs";
-
-import { ThemeProvider } from "next-themes";
-
-import { NuqsAdapter } from "nuqs/adapters/next/app";
-
 import { GeistSans } from "geist/font/sans";
-
-import { Inter, Geist } from "next/font/google";
+import { ThemeProvider } from "next-themes";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { Toaster } from "sonner";
 
 import { NavigationEvents } from "@/components/navigation-events";
-import { Suspense } from "react";
 
 const inter = Inter({
   subsets: ["latin"],

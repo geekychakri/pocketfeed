@@ -1,21 +1,20 @@
 "use client";
 
-import React, { useState, use } from "react";
-import * as Select from "@radix-ui/react-select";
-import { Label } from "@radix-ui/react-label";
-
-import getFolders from "@/lib/getFolders";
+import React, { use, useState } from "react";
 
 import { useUser } from "@clerk/nextjs";
-
-import { cn } from "@/lib/utils";
 import {
   CheckIcon,
   ChevronDownIcon,
   ChevronUpIcon,
 } from "@radix-ui/react-icons";
+import { Label } from "@radix-ui/react-label";
+import * as Select from "@radix-ui/react-select";
 
 import Input from "@/components/ui/custom-input";
+
+import getFolders from "@/lib/getFolders";
+import { cn } from "@/lib/utils";
 
 const folders = ["Home", "Tech", "Music", "News", "Podcast"]; //TODO:
 

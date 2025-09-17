@@ -1,26 +1,22 @@
+import { Suspense } from "react";
 import Link from "next/link";
 
-import { Suspense } from "react";
-
-import RouteBack from "@/components/route-back";
-
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/user-avatar";
-import { CustomTooltip } from "@/components/ui/custom-tooltip";
-
-import SegmentedControl from "@/components/segmented-control";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { ErrorBoundary } from "react-error-boundary";
 
+import FollowButton from "@/components/follow-button";
+import RouteBack from "@/components/route-back";
+import SegmentedControl from "@/components/segmented-control";
+import { CustomTooltip } from "@/components/ui/custom-tooltip";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/user-avatar";
+
+import { DotsLoaderIcon } from "@/icons/dots-loader";
 import { GlobeErrorIcon } from "@/icons/globe-error";
-
 import { UserErrorIcon } from "@/icons/user-error";
-
+import { compactNumber, convertTextToLinks, getInitials } from "@/lib/utils";
 // import DOMPurify from "isomorphic-dompurify";
 
 import { getXataClient, UsersRecord } from "@/xata";
-import { auth, currentUser } from "@clerk/nextjs/server";
-import { compactNumber, convertTextToLinks, getInitials } from "@/lib/utils";
-import FollowButton from "@/components/follow-button";
-import { DotsLoaderIcon } from "@/icons/dots-loader";
 
 const xata = getXataClient();
 

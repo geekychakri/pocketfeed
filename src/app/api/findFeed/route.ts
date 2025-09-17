@@ -1,9 +1,7 @@
-import { findRSS as rssFinder } from "@/lib/find-rss";
-
-import { getFeedUrlSchema } from "@/lib/zod/schemas";
 import { handleAndReturnErrorResponse } from "@/lib/api/errors";
-
+import { findRSS as rssFinder } from "@/lib/find-rss";
 import { getYTChannelAvatar } from "@/lib/utils";
+import { getFeedUrlSchema } from "@/lib/zod/schemas";
 
 //remove duplicate feed urls from rss parser feedUrls array
 function getUniqueListBy<T>(arr: T[], key: keyof T): T[] {

@@ -1,7 +1,6 @@
-import { useHotkeys } from "react-hotkeys-hook";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-
 import { CheckIcon } from "@radix-ui/react-icons";
+import { useHotkeys } from "react-hotkeys-hook";
 
 const FolderItem = ({
   folder,

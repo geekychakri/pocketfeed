@@ -1,11 +1,12 @@
-import { YouTubeEmbed } from "@next/third-parties/google";
-
-import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { cn } from "@/lib/utils";
-import Bookmark from "@/app/(dashboard)/read/components/bookmark";
-import BookmarkPodcast from "./PodcastPlayer/bookmark-podcast";
-
 import { usePathname } from "next/navigation";
+
+import { YouTubeEmbed } from "@next/third-parties/google";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
+
+import Bookmark from "@/app/(dashboard)/read/components/bookmark";
+import { cn } from "@/lib/utils";
+
+import BookmarkPodcast from "./PodcastPlayer/bookmark-podcast";
 import { SpinnerRotate } from "./SpinnerRotate";
 
 export default function CustomYouTubeModal({

@@ -1,8 +1,8 @@
-import UserProfile from "../components/user-profile";
+import { Suspense } from "react";
 
 import RouteBack from "@/components/route-back";
 
-import { Suspense } from "react";
+import UserProfile from "../components/user-profile";
 
 export default async function UserLayout({
   children,

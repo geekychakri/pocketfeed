@@ -1,35 +1,30 @@
-import { ExtractArticle } from "@/lib/extract-article";
+import dynamic from "next/dynamic";
+import localFont from "next/font/local";
+import Script from "next/script";
 
+import { auth } from "@clerk/nextjs/server";
 import { extract } from "@extractus/article-extractor";
+import { isProbablyReaderable, Readability } from "@mozilla/readability";
+import nord from "@shikijs/themes/nord";
+import { JSDOM, VirtualConsole } from "jsdom";
+import { createHighlighter } from "shiki";
 
+import ArticleSettings from "@/components/article-settings";
+import InlineScript from "@/components/inline-script";
 // import Parser from "@postlight/parser";
 import RouteBack from "@/components/route-back";
 
-import localFont from "next/font/local";
-
-import Script from "next/script";
-
-import { JSDOM, VirtualConsole } from "jsdom";
-import { Readability, isProbablyReaderable } from "@mozilla/readability";
-import ArticleSettings from "@/components/article-settings";
-
-import { checkLinkIsBroken } from "@/lib/utils";
-import { LinkBrokenIcon } from "@/icons/link-broken";
-import { GlobeErrorIcon } from "@/icons/globe-error";
-import { GlobalIcon } from "@/icons/globe";
 import { BookmarkIcon } from "@/icons/bookmark";
 import { FullScreenCircleIcon } from "@/icons/full-screen";
-import ReadNav from "../components/read-nav";
-
+import { GlobalIcon } from "@/icons/globe";
+import { GlobeErrorIcon } from "@/icons/globe-error";
+import { LinkBrokenIcon } from "@/icons/link-broken";
+import { ExtractArticle } from "@/lib/extract-article";
+import { checkLinkIsBroken } from "@/lib/utils";
 import { getXataClient } from "@/xata";
 
-import { auth } from "@clerk/nextjs/server";
-import InlineScript from "@/components/inline-script";
-import { createHighlighter } from "shiki";
-import nord from "@shikijs/themes/nord";
-import dynamic from "next/dynamic";
-
 import { ClientArticle } from "../components/client-article";
+import ReadNav from "../components/read-nav";
 
 // async function checkBookmarkExists(
 //   filterCondition: Record<string, any>,

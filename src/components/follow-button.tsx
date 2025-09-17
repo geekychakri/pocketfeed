@@ -1,20 +1,23 @@
 "use client";
 
-import { useState, useEffect, startTransition, useActionState } from "react";
+import {
+  startTransition,
+  useActionState,
+  useEffect,
+  useOptimistic,
+  useState,
+} from "react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 
 import { useUser } from "@clerk/clerk-react";
 import { useAuth } from "@clerk/nextjs";
-
-import { useOptimistic } from "react";
-
-import { usePathname, useRouter } from "next/navigation";
-
-import { unFollowUser } from "@/app/actions/unfollow-user";
-import { followUser } from "@/app/actions/follow-user";
-
 import { toast } from "sonner";
-import Link from "next/link";
+
 import Button from "@/components/ui/custom-button";
+
+import { followUser } from "@/app/actions/follow-user";
+import { unFollowUser } from "@/app/actions/unfollow-user";
 import { internalErrorToast } from "@/lib/utils";
 
 export default function FollowButton({ followeeId }: { followeeId: string }) {

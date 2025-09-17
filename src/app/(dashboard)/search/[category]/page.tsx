@@ -1,10 +1,8 @@
-import GlobalSearch from "@/components/global-search";
-import SearchResults from "@/components/search-results";
-
 import { Suspense } from "react";
-
 import Link from "next/link";
 
+import GlobalSearch from "@/components/global-search";
+import SearchResults from "@/components/search-results";
 import { SpinnerRotate } from "@/components/spinner-rotate";
 
 export default async function Page(props: {

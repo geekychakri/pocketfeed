@@ -1,9 +1,12 @@
+import { auth, currentUser } from "@clerk/nextjs/server";
+
+import PodcastLoader from "@/components/podcast-loader";
+import RouteBack from "@/components/route-back";
+
 import { BookmarksStoreProvider } from "@/context/bookmarks-provider";
 import { getXataClient } from "@/xata";
-import { auth, currentUser } from "@clerk/nextjs/server";
+
 import BookmarkList from "./components/bookmark-list";
-import RouteBack from "@/components/route-back";
-import PodcastLoader from "@/components/podcast-loader";
 
 const xata = getXataClient();
 

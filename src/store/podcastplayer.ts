@@ -1,8 +1,7 @@
 import { create } from "zustand";
-
+import { shallow } from "zustand/shallow";
 import { createWithEqualityFn } from "zustand/traditional";
 
-import { shallow } from "zustand/shallow";
 type ShowPodcastPlayer = {
   show: boolean | string;
   openPodcastPlayer: () => void;

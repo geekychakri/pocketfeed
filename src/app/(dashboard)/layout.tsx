@@ -5,26 +5,26 @@
 //   description: "All of your favorite content in one place.",
 // };
 
-import { FoldersRecord, getXataClient, UsersRecord } from "@/xata";
-import { auth } from "@clerk/nextjs/server";
 import { cache } from "react";
 
-const xata = getXataClient();
+import { ClerkProvider } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
+
+import CollapsibleFolders from "@/components/collapsible-folders";
+import PodcastLoader from "@/components/podcast-loader";
+import ReparentChild from "@/components/reparent-child";
+import ReparentComponent2 from "@/components/reparent-component-2";
+import SidebarNavigation from "@/components/sidebar-navigation";
+import TestNav from "@/components/test-nav";
 
 // const fetchFolders = cache(async (userId: string) => {
 //   return await xata.db.folders.filter({ userId }).select(["folder"]).getMany();
 // });
 
 import getFolders from "@/lib/getFolders";
+import { FoldersRecord, getXataClient, UsersRecord } from "@/xata";
 
-import SidebarNavigation from "@/components/sidebar-navigation";
-import PodcastLoader from "@/components/podcast-loader";
-
-import { ClerkProvider } from "@clerk/nextjs";
-import TestNav from "@/components/test-nav";
-import CollapsibleFolders from "@/components/collapsible-folders";
-import ReparentComponent2 from "@/components/reparent-component-2";
-import ReparentChild from "@/components/reparent-child";
+const xata = getXataClient();
 
 export default async function MainLayout({
   children,

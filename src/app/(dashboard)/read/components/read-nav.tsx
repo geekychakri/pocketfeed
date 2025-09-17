@@ -1,16 +1,30 @@
 "use client";
 
-import { useEffect } from "react";
-import { GlobalIcon } from "@/icons/globe";
+import { useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
+import { useSearchParams } from "next/navigation";
+
+import * as TooltipPrimitive from "@radix-ui/react-tooltip";
+import { useHotkeys } from "react-hotkeys-hook";
+
+import BookmarkPodcast from "@/components/PodcastPlayer/bookmark-podcast";
+import RouteBack from "@/components/route-back";
+import { CustomTooltip } from "@/components/ui/custom-tooltip";
+import IconOnlyAction from "@/components/ui/icon-only-action";
+
+import { ExtractArticleIcon } from "@/icons/animated/extract-article-icon";
 import { BookmarkIcon } from "@/icons/bookmark";
 import { FullScreenCircleIcon } from "@/icons/full-screen";
-import { PostIcon } from "@/icons/post";
 import { FullScreenCircleBoldIcon } from "@/icons/fullscreen-bold";
-import { ExtractArticleIcon } from "@/icons/animated/extract-article-icon";
-
+import { GlobalIcon } from "@/icons/globe";
+import { PostIcon } from "@/icons/post";
+import { useArticles } from "@/store/articles-list";
 import { useFullscreen } from "@/store/read-fullscreen";
-import RouteBack from "@/components/route-back";
-import IconOnlyAction from "@/components/ui/icon-only-action";
+import useStore from "@/store/useStore";
+
+import Bookmark from "./bookmark";
+import ExtractArticle from "./extract-article";
+
 const PostModal = dynamic(() => import("@/components/post-modal"), {
   ssr: false,
   loading: () => (
@@ -20,23 +34,6 @@ const PostModal = dynamic(() => import("@/components/post-modal"), {
   ),
 });
 
-import { useHotkeys } from "react-hotkeys-hook";
-
-import { useRef } from "react";
-
-import { CustomTooltip } from "@/components/ui/custom-tooltip";
-
-import Bookmark from "./bookmark";
-
-import { useArticles } from "@/store/articles-list";
-
-import useStore from "@/store/useStore";
-import BookmarkPodcast from "@/components/PodcastPlayer/bookmark-podcast";
-import ExtractArticle from "./extract-article";
-import { useSearchParams } from "next/navigation";
-
-import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-import dynamic from "next/dynamic";
 export default function ReadNav({
   articleSiteName,
   articleUrl,

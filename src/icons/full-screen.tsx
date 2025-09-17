@@ -1,4 +1,5 @@
 import { SVGProps } from "react";
+
 export function FullScreenCircleIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg

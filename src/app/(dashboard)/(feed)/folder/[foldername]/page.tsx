@@ -1,18 +1,21 @@
 import Link from "next/link";
-import { ChevronRightIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { redirect } from "next/navigation";
-import { auth, currentUser } from "@clerk/nextjs/server";
 
-import { getXataClient } from "@/xata";
-import SearchFeed from "@/components/search-feed";
+import { auth, currentUser } from "@clerk/nextjs/server";
+import { ChevronRightIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
+
 import { FolderFeedList } from "@/components/folder-feed-list";
+import SearchFeed from "@/components/search-feed";
+import EmptyFeedSVG from "@/components/svg/empty-feed";
+
+import { FolderFeedStoreProvider } from "@/context/folder-feed-provider";
+import getFolders from "@/lib/getFolders";
+import { getXataClient } from "@/xata";
 
 // export const dynamic = "force-dynamic";
 
 const xata = getXataClient();
 const folders = ["Home", "Music"];
-
-import getFolders from "@/lib/getFolders";
 
 const getLastModified = async (url: string) => {
   const res = await fetch(url, {
@@ -21,9 +24,6 @@ const getLastModified = async (url: string) => {
   const etag = res.headers.get("last-modified");
   return etag;
 };
-
-import { FolderFeedStoreProvider } from "@/context/folder-feed-provider";
-import EmptyFeedSVG from "@/components/svg/empty-feed";
 
 export default async function Folder(props: {
   params: Promise<{ foldername: string }>;

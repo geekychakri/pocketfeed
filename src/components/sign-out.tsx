@@ -1,15 +1,14 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { useClerk } from "@clerk/nextjs";
+import { useRef, useState } from "react";
 
+import { useClerk } from "@clerk/nextjs";
+import { User } from "@clerk/nextjs/server";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { ExitIcon } from "@radix-ui/react-icons";
 
 import { LogoutIcon } from "@/icons/animated/LogoutIcon";
-
 import { UserIcon } from "@/icons/animated/UserIcon";
-import { User } from "@clerk/nextjs/server";
 
 interface UserIconHandle {
   startAnimation: () => void;

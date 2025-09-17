@@ -6,8 +6,8 @@
 //   },
 // });
 
-import { codeToHtml } from "shiki";
-import { createHighlighter } from "shiki";
+import { codeToHtml, createHighlighter } from "shiki";
+
 const htmlString = `
   <p>Here is some code:</p><pre><code class="language-js">const msg = "Hello Shiki!";console.log(msg);</code></pre>
 `;

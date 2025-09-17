@@ -1,7 +1,6 @@
 import { create } from "zustand";
-import { createWithEqualityFn } from "zustand/traditional";
-
 import { shallow } from "zustand/shallow";
+import { createWithEqualityFn } from "zustand/traditional";
 
 type YoutubePlayer = {
   bears: number;

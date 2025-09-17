@@ -1,9 +1,9 @@
 import "media-chrome/react";
 import "media-chrome/react/menu";
-import { useRef, useEffect } from "react";
-import { MediaTheme } from "media-chrome/react/media-theme";
 
-import { memo } from "react";
+import { memo, useEffect, useRef } from "react";
+
+import { MediaTheme } from "media-chrome/react/media-theme";
 
 function CustomMediaPlayer({
   children,

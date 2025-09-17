@@ -1,13 +1,12 @@
+import { revalidatePath } from "next/cache";
+
+import { auth, currentUser } from "@clerk/nextjs/server";
+import { UploadApiResponse } from "cloudinary";
+
+import { cloudinary } from "@/lib/cloudinary";
 import { getXataClient, UsersRecord } from "@/xata";
 
 const xata = getXataClient();
-
-import { auth, currentUser } from "@clerk/nextjs/server";
-
-import { cloudinary } from "@/lib/cloudinary";
-
-import { UploadApiResponse } from "cloudinary";
-import { revalidatePath } from "next/cache";
 
 type ResType = {
   success: boolean;

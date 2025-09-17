@@ -1,29 +1,25 @@
 "use client";
 
+import { use, useState } from "react";
 import Link from "next/link";
-
 import { usePathname } from "next/navigation";
 
-import { cn } from "@/lib/utils";
-
-import Dropdown from "@/components/folder-dropdown";
-
+import { useAuth } from "@clerk/clerk-react";
+import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 // import ProfileAvatar from "../ProfileAvatar";
 
 import Avatar from "boring-avatars";
-
-import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-
 import {
-  motion,
   AnimatePresence,
-  useScroll,
+  motion,
   useMotionValueEvent,
+  useScroll,
 } from "motion/react";
-import { useAuth } from "@clerk/clerk-react";
+
+import Dropdown from "@/components/folder-dropdown";
 
 import { useNavigatorOnline } from "@/hooks/useNavigatorOnline";
-import { use, useState } from "react";
+import { cn } from "@/lib/utils";
 
 const containerVariants = {
   hideAvatar: {

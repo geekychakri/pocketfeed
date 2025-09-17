@@ -8,10 +8,10 @@ import { useShowPodcastPlayer as useShowYTPlayer } from "@/store/youtubeplayer";
 
 // import "react-modal-video/scss/modal-video.scss";
 import "./youtubeModal.css";
-import { useShowPodcastPlayer } from "@/store/podcastplayer";
 
-import { useGlobalRef } from "@/store/globalRef";
 import { useFeedItem } from "@/store/feed-item";
+import { useGlobalRef } from "@/store/globalRef";
+import { useShowPodcastPlayer } from "@/store/podcastplayer";
 
 export default function YouTubeModal({ bookmarkId }: { bookmarkId?: string }) {
   const { isOpen, closeYoutubePlayer, youtubeId, ytVideoTitle } =

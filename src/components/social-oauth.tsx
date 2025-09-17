@@ -1,11 +1,11 @@
-import { motion } from "motion/react";
-
 import { SVGProps } from "react";
 
 import { useSignIn } from "@clerk/nextjs";
 import { OAuthStrategy } from "@clerk/types";
-import Button from "@/components/ui/custom-button";
+import { motion } from "motion/react";
+
 import { SpinnerRotate } from "@/components/spinner-rotate";
+import Button from "@/components/ui/custom-button";
 
 export default function SocialOauth() {
   const { signIn, isLoaded } = useSignIn();

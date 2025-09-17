@@ -1,21 +1,21 @@
 "use client";
 
 import { useState } from "react";
+// import SocialOauth from "@/components/SocialOauth";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { toast } from "sonner";
-
-import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
-
 import { useSignIn } from "@clerk/nextjs";
+import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
+import { toast } from "sonner";
+import useSound from "use-sound";
 
+import { SpinnerRotate } from "@/components/spinner-rotate";
 import Button from "@/components/ui/custom-button";
 import Input from "@/components/ui/custom-input";
-import { SpinnerRotate } from "@/components/spinner-rotate";
 
-// import SocialOauth from "@/components/SocialOauth";
-import dynamic from "next/dynamic";
+import Divider from "../../components/divider";
 
 const SocialOauth = dynamic(() => import("@/components/social-oauth"), {
   ssr: false,
@@ -25,9 +25,6 @@ const SocialOauth = dynamic(() => import("@/components/social-oauth"), {
     </div>
   ),
 });
-import Divider from "../../components/divider";
-
-import useSound from "use-sound";
 
 export default function SignIn() {
   const { isLoaded, signIn, setActive } = useSignIn();

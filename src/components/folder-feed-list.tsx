@@ -1,32 +1,25 @@
 "use client";
 
-import Link from "next/link";
-
 import { useMemo, useState } from "react";
-
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import FeedDropdown from "@/components/feed-dropdown";
-import Button from "@/components/ui/custom-button";
-import { SpinnerRotate } from "@/components/spinner-rotate";
-
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/user-avatar";
-
+import slugify from "@sindresorhus/slugify";
 import { decode } from "html-entities";
-
 import useSound from "use-sound";
-
 import { VList } from "virtua";
 
-import slugify from "@sindresorhus/slugify";
-
-import { useFolderFeedStore } from "@/store/folder-feed";
+import FeedDropdown from "@/components/feed-dropdown";
+import { SpinnerRotate } from "@/components/spinner-rotate";
+import EmptyFeedSVG from "@/components/svg/empty-feed";
+import Button from "@/components/ui/custom-button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/user-avatar";
 
 import { useFeedsAdd } from "@/hooks/useFeedsAdd";
-import { getInitials, internalErrorToast } from "@/lib/utils";
-import { useFolderName } from "@/store/folder-name";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
-import EmptyFeedSVG from "@/components/svg/empty-feed";
+import { getInitials, internalErrorToast } from "@/lib/utils";
+import { useFolderFeedStore } from "@/store/folder-feed";
+import { useFolderName } from "@/store/folder-name";
 
 export function FolderFeedList({
   initialPageInfo,

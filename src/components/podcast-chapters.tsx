@@ -1,19 +1,19 @@
-import { useShowPodcastPlayer } from "@/store/podcastplayer";
-import { useState, useEffect } from "react";
-
-import useSWR from "swr";
-
-import { useSWRConfig } from "swr";
+import { useEffect, useState } from "react";
 
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
-import { SpinnerRotate } from "@/components/spinner-rotate";
-import { internalErrorToast } from "@/lib/utils";
-import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
+import useSWR, { useSWRConfig } from "swr";
 
-import { fetcher } from "@/lib/utils";
-import Button from "@/components/ui/custom-button";
+import { useShowPodcastPlayer } from "@/store/podcastplayer";
+
+import "react-loading-skeleton/dist/skeleton.css";
+
 import { toast } from "sonner";
+
+import { SpinnerRotate } from "@/components/spinner-rotate";
+import Button from "@/components/ui/custom-button";
+
+import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
+import { fetcher, internalErrorToast } from "@/lib/utils";
 
 function extractText(inputString: string) {
   // Regular expression to match the timestamp and special characters

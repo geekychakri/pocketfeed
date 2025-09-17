@@ -1,10 +1,8 @@
+import { FetcherError, SelectedPick } from "@xata.io/client";
+import { nanoid } from "nanoid";
 import xml2js from "xml2js";
 
 import { FoldersRecord, getXataClient } from "@/xata";
-
-import { FetcherError, SelectedPick } from "@xata.io/client";
-
-import { nanoid } from "nanoid";
 
 const xata = getXataClient();
 

@@ -1,8 +1,9 @@
 "use client";
-import { useUser } from "@clerk/clerk-react";
-import { Instrument_Serif } from "next/font/google";
 
+import { Instrument_Serif } from "next/font/google";
 import Link from "next/link";
+
+import { useUser } from "@clerk/clerk-react";
 
 const InstrumentSerif = Instrument_Serif({ weight: "400", subsets: ["latin"] });
 

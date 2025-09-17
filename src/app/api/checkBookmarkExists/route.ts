@@ -1,8 +1,8 @@
+import { type NextRequest } from "next/server";
+
 import { auth } from "@clerk/nextjs/server";
 
 import { getXataClient } from "@/xata";
-
-import { type NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {

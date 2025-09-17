@@ -1,7 +1,7 @@
 //@ts-nocheck
 
-import * as htmlparser from "htmlparser2";
 import FeedParser from "feedparser";
+import * as htmlparser from "htmlparser2";
 import Pinkie_Promise from "pinkie-promise";
 
 const rssTypes = [

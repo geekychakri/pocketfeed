@@ -1,13 +1,12 @@
 "use server";
 
+import { permanentRedirect } from "next/navigation";
+
 import { auth } from "@clerk/nextjs/server";
 
-import { getXataClient } from "@/xata";
-
-import { permanentRedirect } from "next/navigation";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
-
 import type { PFServerActionResponseType } from "@/types";
+import { getXataClient } from "@/xata";
 
 const xata = getXataClient();
 

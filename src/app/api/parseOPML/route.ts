@@ -1,14 +1,11 @@
 import path from "path";
+import { revalidatePath } from "next/cache";
 
+import { auth, currentUser } from "@clerk/nextjs/server";
+import { nanoid } from "nanoid";
 import xml2js from "xml2js";
 
 import { getXataClient } from "@/xata";
-
-import { nanoid } from "nanoid";
-
-import { auth, currentUser } from "@clerk/nextjs/server";
-
-import { revalidatePath } from "next/cache";
 
 const xata = getXataClient();
 

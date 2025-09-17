@@ -1,5 +1,6 @@
-import { getXataClient } from "@/xata";
 import { NextResponse } from "next/server";
+
+import { getXataClient } from "@/xata";
 
 const xata = getXataClient();
 

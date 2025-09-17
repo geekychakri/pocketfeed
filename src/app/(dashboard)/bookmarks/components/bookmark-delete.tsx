@@ -1,19 +1,16 @@
+import { useActionState, useEffect } from "react";
+
 import { TrashIcon } from "@radix-ui/react-icons";
-
 import { useFormState } from "react-dom";
-
-import { useEffect, useActionState } from "react";
-
-import { deleteBookmarkAction } from "@/app/actions/delete-bookmark";
-
 // import { useDeleteBookmark } from "@/hooks/useDeleteBookmark";
 // import { useNewBookmarksStore } from "@/store/bookmarks-store";
 import { toast } from "sonner";
-
+import { mutate } from "swr";
 import useSound from "use-sound";
+
 import { SpinnerRotate } from "@/components/spinner-rotate";
 
-import { mutate } from "swr";
+import { deleteBookmarkAction } from "@/app/actions/delete-bookmark";
 
 export default function BookmarkDelete({
   bookmarkId,

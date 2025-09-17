@@ -3,12 +3,12 @@
 import { revalidatePath } from "next/cache";
 
 import { auth } from "@clerk/nextjs/server";
-import { getXataClient } from "@/xata";
 
+import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
+import { cleanUrl } from "@/lib/utils";
 import { updateProfileSchema } from "@/lib/zod/schemas/update-profile";
 import type { updateProfileActionResponse } from "@/types";
-import { cleanUrl } from "@/lib/utils";
-import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
+import { getXataClient } from "@/xata";
 
 const xata = getXataClient();
 

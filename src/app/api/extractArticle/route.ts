@@ -1,7 +1,6 @@
-import { Readability, isProbablyReaderable } from "@mozilla/readability";
-import { JSDOM, VirtualConsole } from "jsdom";
-
 import { extract } from "@extractus/article-extractor";
+import { isProbablyReaderable, Readability } from "@mozilla/readability";
+import { JSDOM, VirtualConsole } from "jsdom";
 
 export async function GET(request: Request) {
   try {

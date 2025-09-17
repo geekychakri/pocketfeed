@@ -1,6 +1,6 @@
-import { getXataClient } from "@/xata";
-
 import { auth } from "@clerk/nextjs/server";
+
+import { getXataClient } from "@/xata";
 
 const xata = getXataClient();
 

@@ -1,7 +1,8 @@
+import { auth } from "@clerk/nextjs/server";
+
 import AddFeed from "@/components/add-feed";
 
 import getFolders from "@/lib/getFolders";
-import { auth } from "@clerk/nextjs/server";
 
 export default async function Add() {
   const { userId }: { userId: string | null } = await auth();

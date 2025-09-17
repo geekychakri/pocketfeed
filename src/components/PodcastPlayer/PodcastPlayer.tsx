@@ -1,21 +1,20 @@
 "use client";
 
-import React, { useState, useEffect, memo } from "react";
-import { Cross2Icon } from "@radix-ui/react-icons";
-
-import { useFullscreen } from "@/store/read-fullscreen";
-
+import React, { memo, useEffect, useState } from "react";
 import { useSelectedLayoutSegment } from "next/navigation";
 
+import { Cross2Icon } from "@radix-ui/react-icons";
+
+import VaulDrawer from "@/components/drawer";
+
+import { useFeedItem } from "@/store/feed-item";
+import { useGlobalRef } from "@/store/globalRef";
+import { useShowPodcastPlayer } from "@/store/podcastplayer";
+import { useFullscreen } from "@/store/read-fullscreen";
 import useStore from "@/store/useStore";
 
-import { useShowPodcastPlayer } from "@/store/podcastplayer";
-import VaulDrawer from "@/components/drawer";
-import { useGlobalRef } from "@/store/globalRef";
-
-import CustomMediaPlayer from "./custom-media-player";
 import BookmarkPodcast from "./bookmark-podcast";
-import { useFeedItem } from "@/store/feed-item";
+import CustomMediaPlayer from "./custom-media-player";
 
 const PodcastPlayer = () => {
   console.log("RE RENDERED");

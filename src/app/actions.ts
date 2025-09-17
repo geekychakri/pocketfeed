@@ -1,27 +1,23 @@
 "use server";
-import { redirect, permanentRedirect } from "next/navigation";
-import qs from "qs";
-import { nanoid } from "nanoid";
+
+import { revalidatePath } from "next/cache";
+import { permanentRedirect, redirect } from "next/navigation";
 
 import { auth, currentUser } from "@clerk/nextjs/server";
+import { nanoid } from "nanoid";
+import qs from "qs";
+import Parser from "rss-parser";
+import urlMetadata from "url-metadata";
+import { ZodError } from "zod";
 
+import { fromZodError } from "@/lib/api/errors";
+import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
+import { cleanUrl, getErrorMessage } from "@/lib/utils";
 import { updateProfileSchema } from "@/lib/zod/schemas/update-profile";
-
+import type { updateProfileActionResponse } from "@/types";
 // import { currentUser } from "@clerk/nextjs/server";
 
 import { getXataClient } from "@/xata";
-import { revalidatePath } from "next/cache";
-
-import Parser from "rss-parser";
-
-import { cleanUrl, getErrorMessage } from "@/lib/utils";
-
-import urlMetadata from "url-metadata";
-import { fromZodError } from "@/lib/api/errors";
-import { ZodError } from "zod";
-
-import type { updateProfileActionResponse } from "@/types";
-import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 
 const xata = getXataClient();
 

@@ -8,12 +8,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "inngest:dev": "npx inngest-cli@latest dev --no-discovery -u http://localhost:3000/api/inngest"
+    "inngest:dev": "npx inngest-cli@latest dev --no-discovery -u http://localhost:3000/api/inngest",
+    "prettier": "prettier . --write"
   },
   "dependencies": {
     "@braintree/browser-detection": "^2.0.1",
     "@clerk/nextjs": "^6.31.2",
     "@extractus/article-extractor": "^8.0.19",
+    "@ianvs/prettier-plugin-sort-imports": "^4.7.0",
     "@mozilla/readability": "^0.6.0",
     "@next/third-parties": "^15.3.5",
     "@radix-ui/colors": "^3.0.0",

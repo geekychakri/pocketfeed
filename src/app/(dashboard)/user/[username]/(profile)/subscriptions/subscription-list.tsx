@@ -1,45 +1,34 @@
 "use client";
-import { useActionState } from "react";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/user-avatar";
 
-import { useFormState, useFormStatus } from "react-dom";
-
-import { SpinnerRotate } from "@/components/spinner-rotate";
-
-import { getInitials, internalErrorToast } from "@/lib/utils";
+import { useActionState, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-
-import { decode } from "html-entities";
-
-import * as Checkbox from "@radix-ui/react-checkbox";
-
-import { CheckIcon, TrashIcon } from "@radix-ui/react-icons";
-
-import type { FeedsRecord } from "@/xata";
-
-import { PageRecordArray, SelectedPick } from "@xata.io/client";
-
-import { WindowVirtualizer } from "virtua";
-
-import { deleteSubscriptions } from "@/app/actions/delete-subscriptions";
-import { useEffect, useState, useRef } from "react";
-
-import { motion, useMotionValueEvent, useScroll } from "framer-motion";
-
-import { useInView, InView } from "react-intersection-observer";
+import { useParams } from "next/navigation";
 
 import { useUser } from "@clerk/nextjs";
-import { useParams } from "next/navigation";
+import * as Checkbox from "@radix-ui/react-checkbox";
+import { CheckIcon, TrashIcon } from "@radix-ui/react-icons";
+import { PageRecordArray, SelectedPick } from "@xata.io/client";
+import { motion, useMotionValueEvent, useScroll } from "framer-motion";
+import { decode } from "html-entities";
+import { useFormState, useFormStatus } from "react-dom";
+import { InView, useInView } from "react-intersection-observer";
+import { toast } from "sonner";
+import useSound from "use-sound";
+import { WindowVirtualizer } from "virtua";
+
+import { SpinnerRotate } from "@/components/spinner-rotate";
+import Button from "@/components/ui/custom-button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/user-avatar";
+
+import { deleteSubscriptions } from "@/app/actions/delete-subscriptions";
+import { FeedIcon } from "@/icons/feed";
+import { getInitials, internalErrorToast } from "@/lib/utils";
+import type { FeedsRecord } from "@/xata";
 
 const initialState = {
   type: "",
   message: "",
 };
-
-import useSound from "use-sound";
-import { FeedIcon } from "@/icons/feed";
-import { toast } from "sonner";
-import Button from "@/components/ui/custom-button";
 
 type FeedsType = PageRecordArray<Readonly<SelectedPick<FeedsRecord, ["*"]>>>;
 

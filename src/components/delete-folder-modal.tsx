@@ -1,28 +1,27 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import {
+  useActionState,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 import { useFormState } from "react-dom";
+import { toast } from "sonner";
+import { stripHtml } from "string-strip-html";
 
 import Modal from "@/components/custom-modal";
-import Textarea from "@/components/ui/custom-textarea";
+import { SpinnerRotate } from "@/components/spinner-rotate";
 import Button from "@/components/ui/custom-button";
 import Input from "@/components/ui/custom-input";
+import Textarea from "@/components/ui/custom-textarea";
 
 import { deleteFolder } from "@/app/actions/delete-folder";
-
-import { cn, internalErrorToast } from "@/lib/utils";
-
-import { stripHtml } from "string-strip-html";
-import { useRouter, usePathname } from "next/navigation";
-
 import { revalidateCachePath } from "@/lib/revalidateCachePath";
-
-import { SpinnerRotate } from "@/components/spinner-rotate";
-
-import { useActionState } from "react";
-
-import { toast } from "sonner";
+import { cn, internalErrorToast } from "@/lib/utils";
 
 const initialState = {
   type: "",

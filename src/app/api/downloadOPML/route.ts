@@ -1,10 +1,10 @@
-import xml2js from "xml2js";
-
-import { auth, currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-import { getXataClient } from "@/xata";
+import { auth, currentUser } from "@clerk/nextjs/server";
+import xml2js from "xml2js";
+
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
+import { getXataClient } from "@/xata";
 
 const xata = getXataClient();
 

@@ -1,11 +1,13 @@
 import { useState } from "react";
+
+import type { FileDropItem } from "react-aria";
 import {
-  FileTrigger,
   Button as AriaButton,
   DropZone,
+  FileTrigger,
 } from "react-aria-components";
-import type { FileDropItem } from "react-aria";
-import Button from "./ui/Button";
+
+import Button from "@/components/ui/custom-button";
 
 export default function AriaFileUpload() {
   const [file, setFile] = useState<string | null>(null);

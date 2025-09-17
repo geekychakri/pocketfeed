@@ -1,6 +1,8 @@
-import RouteBack from "@/components/route-back";
-import { getXataClient } from "@/xata";
 import { auth, currentUser } from "@clerk/nextjs/server";
+
+import RouteBack from "@/components/route-back";
+
+import { getXataClient } from "@/xata";
 
 const xata = getXataClient();
 

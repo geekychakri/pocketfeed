@@ -1,8 +1,8 @@
 "use client";
 
-import { useShowPodcastPlayer } from "@/store/podcastplayer";
-
 import dynamic from "next/dynamic";
+
+import { useShowPodcastPlayer } from "@/store/podcastplayer";
 
 const PodcastPlayerDynamic = dynamic(() => import("./PodcastPlayer"), {
   ssr: false,

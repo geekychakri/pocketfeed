@@ -2,12 +2,10 @@
 
 import { auth } from "@clerk/nextjs/server";
 
-import { getXataClient } from "@/xata";
-
-import { getErrorMessage } from "@/lib/utils";
-
-import { addBookmarkSchema } from "@/lib/zod/schemas/add-bookmark";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
+import { getErrorMessage } from "@/lib/utils";
+import { addBookmarkSchema } from "@/lib/zod/schemas/add-bookmark";
+import { getXataClient } from "@/xata";
 
 const xata = getXataClient();
 

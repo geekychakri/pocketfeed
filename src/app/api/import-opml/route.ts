@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
-import { inngest } from "@/inngest/client";
-
-import { getXataClient } from "@/xata";
-
-const xata = getXataClient();
 
 import { auth, currentUser } from "@clerk/nextjs/server";
 
+import { inngest } from "@/inngest/client";
 import { checkOPMLFileFormat } from "@/lib/zod/schemas/check-opml-file-format";
+import { getXataClient } from "@/xata";
+
+const xata = getXataClient();
 
 export async function POST(request: Request) {
   const userId = (await auth()).userId as string;

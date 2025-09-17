@@ -2,10 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 
-import { currentUser, auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 
-import { getXataClient } from "@/xata";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
+import { getXataClient } from "@/xata";
 
 const xata = getXataClient();
 

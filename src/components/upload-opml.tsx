@@ -1,20 +1,24 @@
 "use client";
 
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 // import { FileUploader } from "react-drag-drop-files";
 import { useRouter } from "next/navigation";
 
-import Button from "@/components/ui/custom-button";
-import { SpinnerRotate } from "@/components/spinner-rotate";
-
-import { revalidateCachePath } from "@/lib/revalidateCachePath";
+import type { FileDropItem } from "react-aria";
+import {
+  Button as AriaButton,
+  DropZone,
+  FileTrigger,
+} from "react-aria-components";
+import { toast } from "sonner";
+import useSWR from "swr";
+import useSound from "use-sound";
 
 import Modal from "@/components/custom-modal";
+import { SpinnerRotate } from "@/components/spinner-rotate";
+import Button from "@/components/ui/custom-button";
 
-import { toast } from "sonner";
-
-import useSWR from "swr";
-
+import { revalidateCachePath } from "@/lib/revalidateCachePath";
 import { fetcher } from "@/lib/utils";
 
 const fileTypes = ["XML", "OPML"];
@@ -32,14 +36,6 @@ function getErrorMessage(error: unknown) {
   // send error to 3rd party service String(error)
   return "Something went wrong! Please try again later.";
 }
-
-import {
-  FileTrigger,
-  Button as AriaButton,
-  DropZone,
-} from "react-aria-components";
-import type { FileDropItem } from "react-aria";
-import useSound from "use-sound";
 
 function FileUpload() {
   const [file, setFile] = useState<File | null>(null);

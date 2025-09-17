@@ -1,18 +1,17 @@
-import { getXataClient } from "@/xata";
-
-import { Link2Icon } from "@radix-ui/react-icons";
-
 import Link from "next/link";
 
+import { currentUser } from "@clerk/nextjs/server";
+import { Link2Icon } from "@radix-ui/react-icons";
+import { decode } from "html-entities";
+
+import EmptyFeedSVG from "@/components/svg/empty-feed";
+
+import { getXataClient } from "@/xata";
+
+import PodcastPlayButton from "../../(feed)/feed/[...feedId]/components/PodcastPlayButton";
 import YouTubeModal from "../../(feed)/feed/[...feedId]/components/YouTubeModal";
 import YouTubePlayButton from "../../(feed)/feed/[...feedId]/components/YouTubePlayButton";
-import PodcastPlayButton from "../../(feed)/feed/[...feedId]/components/PodcastPlayButton";
-
-import { decode } from "html-entities";
 import DiscoverPostsList from "./components/discover-posts-list";
-
-import { currentUser } from "@clerk/nextjs/server";
-import EmptyFeedSVG from "@/components/svg/empty-feed";
 
 const xata = getXataClient();
 export default async function Page() {

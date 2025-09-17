@@ -1,14 +1,13 @@
-import { useState, useEffect } from "react";
-
-import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 import {
-  SectionIcon,
   BookmarkIcon,
-  PersonIcon,
-  SunIcon,
   MoonIcon,
+  PersonIcon,
+  SectionIcon,
+  SunIcon,
 } from "@radix-ui/react-icons";
+import { useTheme } from "next-themes";
 
 export default function ThemeSwitcher() {
   const [mounted, setMounted] = useState(false);

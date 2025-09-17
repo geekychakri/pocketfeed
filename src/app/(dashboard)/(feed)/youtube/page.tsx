@@ -1,5 +1,5 @@
-import YoutubeVideo from "youtube-video-element/react";
 import MediaThemeYt from "player.style/yt/react";
+import YoutubeVideo from "youtube-video-element/react";
 
 export default function YTPage() {
   return (

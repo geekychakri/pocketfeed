@@ -1,18 +1,20 @@
 "use client";
+
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ExtractArticleIcon } from "@/icons/animated/extract-article-icon";
-
-import useSWR, { useSWRConfig } from "swr";
-import { fetcher } from "@/lib/utils";
-
-import { useArticleContent } from "@/store/article-content";
 import { useParams } from "next/navigation";
 
 import { useHotkeys } from "react-hotkeys-hook";
+import useSWR, { useSWRConfig } from "swr";
 
-import { ExtractArticleIconHandle } from "@/icons/animated/extract-article-icon";
 import { CustomTooltip } from "@/components/ui/custom-tooltip";
 import IconOnlyAction from "@/components/ui/icon-only-action";
+
+import {
+  ExtractArticleIcon,
+  ExtractArticleIconHandle,
+} from "@/icons/animated/extract-article-icon";
+import { fetcher } from "@/lib/utils";
+import { useArticleContent } from "@/store/article-content";
 
 export default function ExtractArticle() {
   const [shouldFetch, setShouldFetch] = useState(false);

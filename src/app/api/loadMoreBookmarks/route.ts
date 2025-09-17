@@ -1,7 +1,9 @@
-import { getXataClient } from "@/xata";
 import { NextResponse } from "next/server";
 
 import { auth } from "@clerk/nextjs/server";
+
+import { getXataClient } from "@/xata";
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const cursor = searchParams.get("cursor");

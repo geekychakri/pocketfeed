@@ -1,39 +1,38 @@
 "use client";
 
 import {
+  ComponentType,
   ReactElement,
   ReactNode,
-  useState,
-  ComponentType,
   useRef,
+  useState,
 } from "react";
-
+import type {
+  ForwardRefExoticComponent,
+  HTMLAttributes,
+  MutableRefObject,
+  RefAttributes,
+} from "react";
 import Link from "next/link";
 
 // import * as Avatar from "@radix-ui/react-avatar";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import {
-  PersonIcon,
   GearIcon,
-  PaperPlaneIcon,
   HeartIcon,
+  PaperPlaneIcon,
+  PersonIcon,
 } from "@radix-ui/react-icons";
 
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/user-avatar";
 import SignOutButton from "@/components/sign-out";
-import { UserIcon } from "@/icons/animated/UserIcon";
-import { SettingsGearIcon } from "@/icons/animated/SettingsGearIcon";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/user-avatar";
+
+import { LogoutIcon } from "@/icons/animated/LogoutIcon";
 import { MessageCircleMoreIcon } from "@/icons/animated/MessageCircleMoreIcon";
 import { PartyPopperIcon } from "@/icons/animated/PartyPopperIcon";
+import { SettingsGearIcon } from "@/icons/animated/SettingsGearIcon";
+import { UserIcon } from "@/icons/animated/UserIcon";
 import { getInitials } from "@/lib/utils";
-
-import type {
-  HTMLAttributes,
-  RefAttributes,
-  MutableRefObject,
-  ForwardRefExoticComponent,
-} from "react";
-import { LogoutIcon } from "@/icons/animated/LogoutIcon";
 
 interface UserIconProps extends HTMLAttributes<HTMLSpanElement> {
   size?: number;

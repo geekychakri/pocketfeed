@@ -1,12 +1,13 @@
-import { getXataClient } from "@/xata";
-
-import { Link2Icon } from "@radix-ui/react-icons";
-
 import Link from "next/link";
 
 import { currentUser } from "@clerk/nextjs/server";
-import FollowingPostsList from "./components/following-posts-list";
+import { Link2Icon } from "@radix-ui/react-icons";
+
 import EmptyFeedSVG from "@/components/svg/empty-feed";
+
+import { getXataClient } from "@/xata";
+
+import FollowingPostsList from "./components/following-posts-list";
 
 const xata = getXataClient();
 export default async function Page() {

@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import {
@@ -9,23 +10,19 @@ import {
   PlusIcon,
   TrashIcon,
 } from "@radix-ui/react-icons";
-import SubmitButton from "../SubmitButton";
-
-import { useRouter, usePathname } from "next/navigation";
 import { useFormState } from "react-dom";
 import { useHotkeys } from "react-hotkeys-hook";
-
-import FolderItem from "../FolderItem";
-
-import Modal from "../Modal/Modal";
-
-import Input from "../ui/Input";
+import { toast } from "sonner";
 
 // import { deleteFolder } from "@/app/actions";
 import { addNewFolder } from "@/app/actions/add-new-folder";
 import { deleteFolder } from "@/app/actions/delete-folder";
+
+import FolderItem from "../FolderItem";
+import Modal from "../Modal/Modal";
+import SubmitButton from "../SubmitButton";
 import Button from "../ui/Button";
-import { toast } from "sonner";
+import Input from "../ui/Input";
 
 // const folders = ["Tech", "Music", "News"];
 

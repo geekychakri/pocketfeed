@@ -1,22 +1,19 @@
-import { getXataClient } from "@/xata";
-import { currentUser } from "@clerk/nextjs/server";
-
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/user-avatar";
-
-import { getInitials } from "@/lib/utils";
+import { Suspense } from "react";
 import Link from "next/link";
 
+import { currentUser } from "@clerk/nextjs/server";
+import * as Checkbox from "@radix-ui/react-checkbox";
+import { CheckIcon, TrashIcon } from "@radix-ui/react-icons";
 import { decode } from "html-entities";
 
-import * as Checkbox from "@radix-ui/react-checkbox";
-
-import { CheckIcon, TrashIcon } from "@radix-ui/react-icons";
-
-import Button from "@/components/ui/custom-button";
-import SubscriptionList from "./subscription-list";
-
-import { Suspense } from "react";
 import LoadingUI from "@/components/loading-ui";
+import Button from "@/components/ui/custom-button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/user-avatar";
+
+import { getInitials } from "@/lib/utils";
+import { getXataClient } from "@/xata";
+
+import SubscriptionList from "./subscription-list";
 
 const xata = getXataClient();
 

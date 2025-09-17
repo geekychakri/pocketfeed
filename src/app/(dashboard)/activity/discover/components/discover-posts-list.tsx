@@ -1,18 +1,19 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
+import Link from "next/link";
 
-import YouTubePlayButton from "@/app/(dashboard)/(feed)/feed/[...feedId]/components/YouTubePlayButton";
-import PodcastPlayButton from "@/app/(dashboard)/(feed)/feed/[...feedId]/components/PodcastPlayButton";
-
-import Button from "@/components/ui/custom-button";
-import { SpinnerRotate } from "@/components/spinner-rotate";
-import { internalErrorToast } from "@/lib/utils";
-import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import { TrashIcon } from "@radix-ui/react-icons";
 import { toast } from "sonner";
+
 import DeletePostModal from "@/components/delete-post-modal";
+import { SpinnerRotate } from "@/components/spinner-rotate";
+import Button from "@/components/ui/custom-button";
+
+import PodcastPlayButton from "@/app/(dashboard)/(feed)/feed/[...feedId]/components/PodcastPlayButton";
+import YouTubePlayButton from "@/app/(dashboard)/(feed)/feed/[...feedId]/components/YouTubePlayButton";
+import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
+import { internalErrorToast } from "@/lib/utils";
 
 export default function DiscoverPostsList({
   posts,

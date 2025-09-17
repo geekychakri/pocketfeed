@@ -1,10 +1,10 @@
-import { getXataClient } from "@/xata";
+import Link from "next/link";
 import { NextResponse } from "next/server";
 
+import { auth } from "@clerk/nextjs/server";
 import slugify from "@sindresorhus/slugify";
 
-import { auth } from "@clerk/nextjs/server";
-import Link from "next/link";
+import { getXataClient } from "@/xata";
 
 import NothingToReadSVG from "./svg/nothing-to-read";
 import SearchSVG from "./svg/search";

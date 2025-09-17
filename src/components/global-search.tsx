@@ -1,13 +1,13 @@
 "use client";
 
-import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import Input from "@/components/ui/custom-input";
-
-import { useDebouncedCallback } from "use-debounce";
 import { useEffect, useState } from "react";
-
 import Link from "next/link";
-import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
+import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import { useDebouncedCallback } from "use-debounce";
+
+import Input from "@/components/ui/custom-input";
 
 export default function GlobalSearch({ category }: { category: string }) {
   const searchParams = useSearchParams();
