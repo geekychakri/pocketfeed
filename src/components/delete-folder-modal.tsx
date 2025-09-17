@@ -4,10 +4,10 @@ import { useState, useEffect, useRef, useCallback } from "react";
 
 import { useFormState } from "react-dom";
 
-import Modal from "@/components/Modal/Modal";
-import Textarea from "@/components/ui/Textarea";
-import Button from "@/components/ui/Button";
-import Input from "@/components/ui/Input";
+import Modal from "@/components/custom-modal";
+import Textarea from "@/components/ui/custom-textarea";
+import Button from "@/components/ui/custom-button";
+import Input from "@/components/ui/custom-input";
 
 import { deleteFolder } from "@/app/actions/delete-folder";
 
@@ -18,7 +18,7 @@ import { useRouter, usePathname } from "next/navigation";
 
 import { revalidateCachePath } from "@/lib/revalidateCachePath";
 
-import { SpinnerRotate } from "./SpinnerRotate";
+import { SpinnerRotate } from "@/components/spinner-rotate";
 
 import { useActionState } from "react";
 

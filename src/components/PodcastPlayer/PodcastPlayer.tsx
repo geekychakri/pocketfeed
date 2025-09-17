@@ -10,7 +10,7 @@ import { useSelectedLayoutSegment } from "next/navigation";
 import useStore from "@/store/useStore";
 
 import { useShowPodcastPlayer } from "@/store/podcastplayer";
-import VaulDrawer from "../Drawer";
+import VaulDrawer from "@/components/drawer";
 import { useGlobalRef } from "@/store/globalRef";
 
 import CustomMediaPlayer from "./custom-media-player";

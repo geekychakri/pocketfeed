@@ -1,4 +1,4 @@
-import { SpinnerRotate } from "@/components/SpinnerRotate";
+import { SpinnerRotate } from "@/components/spinner-rotate";
 import { AuthenticateWithRedirectCallback } from "@clerk/nextjs";
 
 export default function SSOCallback() {

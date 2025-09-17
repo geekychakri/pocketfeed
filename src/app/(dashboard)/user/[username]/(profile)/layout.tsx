@@ -1,6 +1,6 @@
 import UserProfile from "../components/user-profile";
 
-import RouteBack from "@/components/RouteBack/RouteBack";
+import RouteBack from "@/components/route-back";
 
 import { Suspense } from "react";
 

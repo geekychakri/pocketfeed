@@ -4,10 +4,10 @@ import { useState, useEffect, useRef, useCallback } from "react";
 
 import { useFormState } from "react-dom";
 
-import Modal from "@/components/Modal/Modal";
-import Textarea from "@/components/ui/Textarea";
-import Button from "@/components/ui/Button";
-import Input from "@/components/ui/Input";
+import Modal from "@/components/custom-modal";
+import Textarea from "@/components/ui/custom-textarea";
+import Button from "@/components/ui/custom-button";
+import Input from "@/components/ui/custom-input";
 
 import { updateFolder } from "@/app/actions/update-folder";
 import { deletePost } from "@/app/actions/delete-post";
@@ -21,7 +21,7 @@ import { revalidateCachePath } from "@/lib/revalidateCachePath";
 
 import { useActionState } from "react";
 
-import { SpinnerRotate } from "./SpinnerRotate";
+import { SpinnerRotate } from "@/components/spinner-rotate";
 
 import { toast } from "sonner";
 
@@ -99,7 +99,8 @@ export default function DeletePostModal({
             <Button
               type="submit"
               disabled={isPending}
-              className="bg-danger/15 text-danger hover:bg-danger/20 flex w-full items-center justify-center duration-100"
+              className="bg-danger flex w-full items-center justify-center text-white"
+              variant="delete"
             >
               {isPending ? <SpinnerRotate /> : "Delete"}
             </Button>

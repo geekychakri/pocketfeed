@@ -9,9 +9,9 @@ import { FullScreenCircleBoldIcon } from "@/icons/fullscreen-bold";
 import { ExtractArticleIcon } from "@/icons/animated/extract-article-icon";
 
 import { useFullscreen } from "@/store/read-fullscreen";
-import RouteBack from "@/components/RouteBack/RouteBack";
+import RouteBack from "@/components/route-back";
 import IconOnlyAction from "@/components/ui/icon-only-action";
-const PostModal = dynamic(() => import("@/components/PostModal"), {
+const PostModal = dynamic(() => import("@/components/post-modal"), {
   ssr: false,
   loading: () => (
     <IconOnlyAction>

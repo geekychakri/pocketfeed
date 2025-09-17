@@ -1,14 +1,11 @@
-import GlobalSearch from "@/components/GlobalSearch";
-import SearchResults from "@/components/SearchResults";
-import Input from "@/components/ui/Input";
-import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import GlobalSearch from "@/components/global-search";
+import SearchResults from "@/components/search-results";
 
 import { Suspense } from "react";
 
 import Link from "next/link";
 
-import SearchResultSkeleton from "@/components/SearchResultsSkeleton";
-import { SpinnerRotate } from "@/components/SpinnerRotate";
+import { SpinnerRotate } from "@/components/spinner-rotate";
 
 export default async function Page(props: {
   params: Promise<{ category: string }>;

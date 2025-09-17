@@ -60,7 +60,7 @@ export default function Bookmark({
             const { message, bookmarkId } = await addBookmarkAction(formData);
             if (message === "success") {
               setIsBookmarked(true);
-              setSavedBookmarkId(bookmarkId);
+              setSavedBookmarkId(bookmarkId as string);
             } else {
               setIsBookmarked(false);
               toast.error(message);

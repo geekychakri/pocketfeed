@@ -11,7 +11,7 @@ import { deleteBookmarkAction } from "@/app/actions/delete-bookmark";
 import { toast } from "sonner";
 
 import useSound from "use-sound";
-import { SpinnerRotate } from "@/components/SpinnerRotate";
+import { SpinnerRotate } from "@/components/spinner-rotate";
 
 import { mutate } from "swr";
 

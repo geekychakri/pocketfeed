@@ -1,10 +1,10 @@
 "use client";
 import { useActionState } from "react";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/UserAvatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/user-avatar";
 
 import { useFormState, useFormStatus } from "react-dom";
 
-import { SpinnerRotate } from "@/components/SpinnerRotate";
+import { SpinnerRotate } from "@/components/spinner-rotate";
 
 import { getInitials, internalErrorToast } from "@/lib/utils";
 import Link from "next/link";
@@ -39,7 +39,7 @@ const initialState = {
 import useSound from "use-sound";
 import { FeedIcon } from "@/icons/feed";
 import { toast } from "sonner";
-import Button from "@/components/ui/Button";
+import Button from "@/components/ui/custom-button";
 
 type FeedsType = PageRecordArray<Readonly<SelectedPick<FeedsRecord, ["*"]>>>;
 

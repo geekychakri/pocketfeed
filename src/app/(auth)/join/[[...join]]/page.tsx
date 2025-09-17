@@ -17,14 +17,13 @@ import {
 } from "@radix-ui/react-icons";
 import { toast } from "sonner";
 
-import InputOTP from "@/components/InputOTP";
-import Button from "@/components/ui/Button";
-import Input from "@/components/ui/Input";
-import { SpinnerRotate } from "@/components/SpinnerRotate";
+import Button from "@/components/ui/custom-button";
+import Input from "@/components/ui/custom-input";
+import { SpinnerRotate } from "@/components/spinner-rotate";
 import { useNavigatorOnline } from "@/hooks/useNavigatorOnline";
 
 import { createUser } from "@/app/actions";
-const SocialOauth = dynamic(() => import("@/components/SocialOauth"), {
+const SocialOauth = dynamic(() => import("@/components/social-oauth"), {
   ssr: false,
   loading: () => (
     <div className="flex h-28 items-center justify-center">
@@ -33,7 +32,6 @@ const SocialOauth = dynamic(() => import("@/components/SocialOauth"), {
   ),
 });
 import Divider from "../../components/divider";
-import RouteBack from "@/components/RouteBack/RouteBack";
 
 export default function Join() {
   const { isLoaded, signUp, setActive } = useSignUp();

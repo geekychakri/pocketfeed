@@ -2,7 +2,7 @@
 
 import * as portals from "react-reverse-portal";
 
-const ComponentA = (props) => {
+const ComponentA = (props: any) => {
   return (
     <div>
       Component A

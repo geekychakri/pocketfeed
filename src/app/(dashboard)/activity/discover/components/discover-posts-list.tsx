@@ -6,8 +6,8 @@ import { useState } from "react";
 import YouTubePlayButton from "@/app/(dashboard)/(feed)/feed/[...feedId]/components/YouTubePlayButton";
 import PodcastPlayButton from "@/app/(dashboard)/(feed)/feed/[...feedId]/components/PodcastPlayButton";
 
-import Button from "@/components/ui/Button";
-import { SpinnerRotate } from "@/components/SpinnerRotate";
+import Button from "@/components/ui/custom-button";
+import { SpinnerRotate } from "@/components/spinner-rotate";
 import { internalErrorToast } from "@/lib/utils";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import { TrashIcon } from "@radix-ui/react-icons";

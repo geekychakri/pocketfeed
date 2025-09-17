@@ -1,7 +1,7 @@
 import { getXataClient } from "@/xata";
 import { currentUser } from "@clerk/nextjs/server";
 
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/UserAvatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/user-avatar";
 
 import { getInitials } from "@/lib/utils";
 import Link from "next/link";
@@ -12,7 +12,7 @@ import * as Checkbox from "@radix-ui/react-checkbox";
 
 import { CheckIcon, TrashIcon } from "@radix-ui/react-icons";
 
-import Button from "@/components/ui/Button";
+import Button from "@/components/ui/custom-button";
 import SubscriptionList from "./subscription-list";
 
 import { Suspense } from "react";

@@ -1,4 +1,4 @@
-import RouteBack from "@/components/RouteBack/RouteBack";
+import RouteBack from "@/components/route-back";
 import { getXataClient } from "@/xata";
 import { auth, currentUser } from "@clerk/nextjs/server";
 

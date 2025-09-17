@@ -22,7 +22,7 @@ import PodcastLoader from "@/components/podcast-loader";
 
 import { ClerkProvider } from "@clerk/nextjs";
 import TestNav from "@/components/test-nav";
-import CollapsibleFolders from "@/components/CollapsibleFolders";
+import CollapsibleFolders from "@/components/collapsible-folders";
 import ReparentComponent2 from "@/components/reparent-component-2";
 import ReparentChild from "@/components/reparent-child";
 

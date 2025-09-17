@@ -1,12 +1,12 @@
-import RouteBack from "@/components/RouteBack/RouteBack";
-import FileUpload from "@/components/FileUpload";
+import RouteBack from "@/components/route-back";
+import FileUpload from "@/components/file-upload";
 import Link from "next/link";
 
-import ProfileForm from "@/components/ProfileForm";
+import ProfileForm from "@/components/profile-form";
 
 import { auth } from "@clerk/nextjs/server";
 
-import Button from "@/components/ui/Button";
+import Button from "@/components/ui/custom-button";
 
 import { getXataClient, UsersRecord } from "@/xata";
 

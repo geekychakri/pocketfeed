@@ -1,6 +1,6 @@
 import { Toaster } from "sonner";
 
-import AuthNavigation from "@/components/AuthNavigation";
+import AuthNavigation from "@/components/auth-navigation";
 
 export default function RootLayout({
   children,

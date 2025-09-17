@@ -1,13 +1,13 @@
 "use client";
 
-import UploadOPML from "@/components/UploadOPML";
+import UploadOPML from "@/components/upload-opml";
 
 import FileSaver from "file-saver";
 
-import Button from "@/components/ui/Button";
+import Button from "@/components/ui/custom-button";
 import { useState } from "react";
-import RouteBack from "@/components/RouteBack/RouteBack";
-import { SpinnerRotate } from "@/components/SpinnerRotate";
+import RouteBack from "@/components/route-back";
+import { SpinnerRotate } from "@/components/spinner-rotate";
 import Link from "next/link";
 import { internalErrorToast } from "@/lib/utils";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";

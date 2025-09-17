@@ -1,7 +1,7 @@
 "use client";
 
 import { useClerk } from "@clerk/nextjs";
-import Button from "@/components/ui/Button";
+import Button from "@/components/ui/custom-button";
 
 export default function SettingsFooter() {
   const { signOut } = useClerk();
@@ -16,7 +16,7 @@ export default function SettingsFooter() {
       >
         Logout
       </Button>
-      <Button className="border-0 bg-danger/10 text-danger">
+      <Button className="bg-danger/10 text-danger border-0">
         Delete account
       </Button>
     </div>

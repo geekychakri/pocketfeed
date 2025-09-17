@@ -1,6 +1,6 @@
 import Link from "next/link";
 import ActivitySegmentedControl from "./components/activity-segmented-control";
-import RouteBack from "@/components/RouteBack/RouteBack";
+import RouteBack from "@/components/route-back";
 
 export default function ExploreLayout({
   children,

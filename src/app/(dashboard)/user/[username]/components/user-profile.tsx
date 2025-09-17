@@ -2,12 +2,12 @@ import Link from "next/link";
 
 import { Suspense } from "react";
 
-import RouteBack from "@/components/RouteBack/RouteBack";
+import RouteBack from "@/components/route-back";
 
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/UserAvatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/user-avatar";
 import { CustomTooltip } from "@/components/ui/custom-tooltip";
 
-import SegmentedControl from "@/components/SegmentedControl";
+import SegmentedControl from "@/components/segmented-control";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { GlobeErrorIcon } from "@/icons/globe-error";
@@ -19,7 +19,7 @@ import { UserErrorIcon } from "@/icons/user-error";
 import { getXataClient, UsersRecord } from "@/xata";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { compactNumber, convertTextToLinks, getInitials } from "@/lib/utils";
-import FollowButton from "@/components/FollowButton";
+import FollowButton from "@/components/follow-button";
 import { DotsLoaderIcon } from "@/icons/dots-loader";
 
 const xata = getXataClient();

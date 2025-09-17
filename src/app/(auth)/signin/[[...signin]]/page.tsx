@@ -10,14 +10,14 @@ import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 
 import { useSignIn } from "@clerk/nextjs";
 
-import Button from "@/components/ui/Button";
-import Input from "@/components/ui/Input";
-import { SpinnerRotate } from "@/components/SpinnerRotate";
+import Button from "@/components/ui/custom-button";
+import Input from "@/components/ui/custom-input";
+import { SpinnerRotate } from "@/components/spinner-rotate";
 
 // import SocialOauth from "@/components/SocialOauth";
 import dynamic from "next/dynamic";
 
-const SocialOauth = dynamic(() => import("@/components/SocialOauth"), {
+const SocialOauth = dynamic(() => import("@/components/social-oauth"), {
   ssr: false,
   loading: () => (
     <div className="flex h-28 items-center justify-center">

@@ -4,7 +4,7 @@ import { useEffect, startTransition } from "react";
 
 import { useRouter } from "next/navigation";
 
-import Button from "@/components/ui/Button";
+import Button from "@/components/ui/custom-button";
 
 export default function Error({
   error,

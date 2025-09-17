@@ -1,7 +1,7 @@
 import { getXataClient } from "@/xata";
 import Parser from "rss-parser";
 
-import RouteBack from "@/components/RouteBack/RouteBack";
+import RouteBack from "@/components/route-back";
 
 import { currentUser } from "@clerk/nextjs/server";
 

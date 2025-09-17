@@ -19,7 +19,7 @@ import { GeistSans } from "geist/font/sans";
 
 import { Inter, Geist } from "next/font/google";
 
-import { NavigationEvents } from "@/components/NavigationEvents/NavigationEvents";
+import { NavigationEvents } from "@/components/navigation-events";
 import { Suspense } from "react";
 
 const inter = Inter({

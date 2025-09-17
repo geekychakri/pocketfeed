@@ -3,7 +3,7 @@ import { ExtractArticle } from "@/lib/extract-article";
 import { extract } from "@extractus/article-extractor";
 
 // import Parser from "@postlight/parser";
-import RouteBack from "@/components/RouteBack/RouteBack";
+import RouteBack from "@/components/route-back";
 
 import localFont from "next/font/local";
 
@@ -11,7 +11,7 @@ import Script from "next/script";
 
 import { JSDOM, VirtualConsole } from "jsdom";
 import { Readability, isProbablyReaderable } from "@mozilla/readability";
-import ArticleSettings from "@/components/ArticleSettings";
+import ArticleSettings from "@/components/article-settings";
 
 import { checkLinkIsBroken } from "@/lib/utils";
 import { LinkBrokenIcon } from "@/icons/link-broken";

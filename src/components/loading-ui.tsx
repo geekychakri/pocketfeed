@@ -1,6 +1,6 @@
 "use client";
 import { usePathname } from "next/navigation";
-import { SpinnerRotate } from "@/components/SpinnerRotate";
+import { SpinnerRotate } from "@/components/spinner-rotate";
 import { useFullscreen } from "@/store/read-fullscreen";
 import { cn } from "@/lib/utils";
 

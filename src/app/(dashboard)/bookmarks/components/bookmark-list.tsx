@@ -10,8 +10,8 @@ import { useAddBookmarks } from "@/hooks/useAddBookmarks";
 import { decode } from "html-entities";
 
 import Link from "next/link";
-import Button from "@/components/ui/Button";
-import { SpinnerRotate } from "@/components/SpinnerRotate";
+import Button from "@/components/ui/custom-button";
+import { SpinnerRotate } from "@/components/spinner-rotate";
 import { useBookmarksStore } from "@/store/bookmark-store";
 import BookmarkDelete from "./bookmark-delete";
 import YouTubeModal from "../../(feed)/feed/[...feedId]/components/YouTubeModal";

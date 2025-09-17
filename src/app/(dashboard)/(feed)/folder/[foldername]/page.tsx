@@ -3,11 +3,9 @@ import { ChevronRightIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { redirect } from "next/navigation";
 import { auth, currentUser } from "@clerk/nextjs/server";
 
-import FeedDropdown from "@/components/FeedDropdown";
-
 import { getXataClient } from "@/xata";
-import SearchFeed from "@/components/SearchFeed";
-import { FolderFeedList } from "@/components/FolderFeedList";
+import SearchFeed from "@/components/search-feed";
+import { FolderFeedList } from "@/components/folder-feed-list";
 
 // export const dynamic = "force-dynamic";
 

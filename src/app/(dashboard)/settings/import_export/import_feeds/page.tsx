@@ -2,7 +2,7 @@
 
 import { useOPMLFeed } from "@/store/opmlfeed";
 
-import RouteBack from "@/components/RouteBack/RouteBack";
+import RouteBack from "@/components/route-back";
 
 export default function ImportFeeds() {
   //   const feeds = useOPMLFeed((state) => state.feeds);
@@ -28,7 +28,7 @@ export default function ImportFeeds() {
           <div key={i} className="flex flex-col gap-3 rounded-md border p-6">
             <div className="flex flex-col gap-1">
               <p>{feed?.name}</p>
-              <p className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-gray-500">
+              <p className="overflow-hidden text-sm text-ellipsis whitespace-nowrap text-gray-500">
                 {feed.url}
               </p>
             </div>

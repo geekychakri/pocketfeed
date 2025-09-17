@@ -11,14 +11,14 @@ import { ArrowLeftIcon, Pencil2Icon } from "@radix-ui/react-icons";
 
 import * as Switch from "@radix-ui/react-switch";
 
-import FolderSelect from "@/components/FolderSelect";
+import FolderSelect from "@/components/folder-select";
 
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import { SpinnerRotate } from "@/components/SpinnerRotate";
-import Button from "@/components/ui/Button";
-import Input from "@/components/ui/Input";
+import { SpinnerRotate } from "@/components/spinner-rotate";
+import Button from "@/components/ui/custom-button";
+import Input from "@/components/ui/custom-input";
 
 import {
   cn,
@@ -31,7 +31,7 @@ import {
 import { addFeeds } from "@/app/actions/add-feeds";
 
 import useSound from "use-sound";
-import RouteBack from "@/components/RouteBack/RouteBack";
+import RouteBack from "@/components/route-back";
 import { EditIcon } from "@/icons/edit";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 

@@ -7,8 +7,8 @@ import { SearchIcon } from "@/icons/search";
 import { ExploreIcon } from "@/icons/explore";
 import { BookmarkIcon } from "@/icons/bookmark";
 
-import CollapsibleFolders from "@/components/CollapsibleFolders";
-import ProfileAvatar from "@/components/ProfileAvatar";
+import CollapsibleFolders from "@/components/collapsible-folders";
+import ProfileAvatar from "@/components/profile-avatar";
 
 import { cn } from "@/lib/utils";
 

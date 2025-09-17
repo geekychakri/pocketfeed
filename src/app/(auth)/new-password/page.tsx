@@ -5,8 +5,8 @@ import type { NextPage } from "next";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-import Input from "@/components/ui/Input";
-import Button from "@/components/ui/Button";
+import Input from "@/components/ui/custom-input";
+import Button from "@/components/ui/custom-button";
 
 const NewPasswordPage: NextPage = () => {
   const [email, setEmail] = useState("");
