@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { refresh, revalidatePath } from "next/cache";
 
 import { auth } from "@clerk/nextjs/server";
 
@@ -59,6 +59,7 @@ export async function updateProfile(
       birthday,
     });
     revalidatePath("/user/[username]/(content)", "layout");
+    // refresh(); //TODO:
     return { type: "success", message: "Profile updated successfully!" };
   } catch (err) {
     return { type: "internal-error", message: INTERNAL_ERROR_MESSAGE };

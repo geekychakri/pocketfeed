@@ -1,15 +1,14 @@
-"use client";
+// "use client";
 
 import { Instrument_Serif } from "next/font/google";
 import Link from "next/link";
 
-import { useUser } from "@clerk/clerk-react";
-
 const InstrumentSerif = Instrument_Serif({ weight: "400", subsets: ["latin"] });
 
-export default function Home() {
-  const { isSignedIn, user, isLoaded } = useUser();
-  console.log(user?.username);
+export default async function Home() {
+  // const { isSignedIn, user, isLoaded } = useUser();
+  // console.log(user?.username);
+  "use cache";
 
   return (
     <div className="mx-auto max-w-[900px] py-24">

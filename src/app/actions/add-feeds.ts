@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { auth, currentUser } from "@clerk/nextjs/server";
@@ -27,8 +28,9 @@ type FeedsType = {
 export async function addFeeds(prevState: any, formData: FormData) {
   let results: FeedsType;
   let shouldRedirect: boolean;
+  let userId: string;
   try {
-    const userId = (await auth()).userId as string;
+    userId = (await auth()).userId as string;
 
     if (!userId) {
       throw new Error("You must be signed in to add a feed!");
@@ -191,6 +193,7 @@ export async function addFeeds(prevState: any, formData: FormData) {
   }
 
   if (shouldRedirect) {
+    revalidateTag(`${userId}-${results.folder || results.newFolder}`, "max");
     redirect(`/folder/${results.folder || results.newFolder}`);
   }
 }

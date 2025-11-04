@@ -1,12 +1,15 @@
+import { Suspense } from "react";
 import Link from "next/link";
 
 import { auth } from "@clerk/nextjs/server";
+import { JSONData } from "@xata.io/client";
 
 import FileUpload from "@/components/file-upload";
 import ProfileForm from "@/components/profile-form";
 import RouteBack from "@/components/route-back";
 import Button from "@/components/ui/custom-button";
 
+import { getCachedUser } from "@/lib/cache-functions/getUser";
 import { getXataClient, UsersRecord } from "@/xata";
 
 import SettingsFooter from "./components/settings-footer";
@@ -14,11 +17,11 @@ import SettingsFooter from "./components/settings-footer";
 const xata = getXataClient();
 
 export default async function Settings() {
-  const { userId }: { userId: string | null } = await auth();
-  console.log({ userId });
-  const user = (await xata.db.users
-    .filter({ userId: userId })
-    .getFirst()) as UsersRecord;
+  // const { userId }: { userId: string | null } = await auth();
+  // console.log({ userId });
+  // const user = (await xata.db.users
+  //   .filter({ userId: userId })
+  //   .getFirst()) as UsersRecord;
 
   // const avatarUrl = user.avatar?.transform({
   //   width: 64,
@@ -26,9 +29,9 @@ export default async function Settings() {
   //   format: "webp",
   // });
 
-  console.log(user);
+  // console.log(user);
 
-  const { avatarUrl, ...userInfo } = user;
+  // const { avatarUrl, ...userInfo } = user;
 
   // const userInfo = (({ fullname, website, bio }) => ({
   //   fullname,
@@ -55,14 +58,19 @@ export default async function Settings() {
         </div>
       </div>
       <div>
-        <FileUpload
-          username={userInfo.username as string}
-          avatarUrl={avatarUrl as string}
-        />
+        <Suspense fallback={<FileUploadFallback />}>
+          <FileUploadWrapper />
+        </Suspense>
       </div>
-      <div className="border-border-non-interactive h-[1px] border-t border-dotted"></div>
-      <ProfileForm userInfo={userInfo} />
-      <div className="border-border-non-interactive h-[1px] border-t border-dotted"></div>
+      <div className="border-border-non-interactive h-[1px] border-t border-dashed"></div>
+      <div className="flex flex-col gap-5">
+        <h2 className="text-text-secondary text-xl">Profile</h2>
+        <Suspense fallback={<ProfileFormFallback />}>
+          <ProfileFormWrapper />
+        </Suspense>
+      </div>
+
+      <div className="border-border-non-interactive h-[1px] border-t border-dashed"></div>
       {/* <div className="flex flex-col gap-5">
         <h2 className="text-xl font-medium text-text-secondary">
           Integrations
@@ -80,6 +88,72 @@ export default async function Settings() {
         </Link>
       </div>
       <SettingsFooter />
+    </div>
+  );
+}
+
+async function FileUploadWrapper() {
+  const { userId }: { userId: string | null } = await auth();
+
+  const user = await getCachedUser(userId as string);
+
+  return (
+    <FileUpload
+      username={user?.username as string}
+      avatarUrl={user?.avatarUrl as string}
+    />
+  );
+}
+
+async function ProfileFormWrapper() {
+  const { userId }: { userId: string | null } = await auth();
+
+  const user = await getCachedUser(userId as string);
+
+  // const { avatarUrl, ...userInfo } = user;
+
+  return <ProfileForm userInfo={user} />;
+}
+
+function FileUploadFallback() {
+  return (
+    <div className="h-[164px] border-shadow animate-pulse flex gap-6 rounded-md p-8">
+      <div className="size-16 rounded-full bg-ui-active"></div>
+      <div className="flex flex-1 flex-col gap-6">
+        <div className="flex flex-col gap-2">
+          <div className="h-4 rounded-md bg-ui-active"></div>
+          <div className="h-4 rounded-md bg-ui-active"></div>
+        </div>
+        <div className="h-11 w-[120px] rounded-md bg-ui-active"></div>
+      </div>
+    </div>
+  );
+}
+
+function ProfileFormFallback() {
+  return (
+    <div className="h-[508px] animate-pulse flex flex-col gap-6 rounded-md">
+      <div className="flex flex-col gap-2">
+        <div className="h-[22px] w-[180px]  rounded-md bg-ui-active"></div>
+        <div className="h-[44px] rounded-md bg-ui-active"></div>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <div className="h-[22px] w-[180px]  rounded-md bg-ui-active"></div>
+        <div className="h-[44px] rounded-md bg-ui-active"></div>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <div className="h-[22px] w-[180px]  rounded-md bg-ui-active"></div>
+        <div className="h-[96px] rounded-md bg-ui-active"></div>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <div className="h-[22px] w-[180px]  rounded-md bg-ui-active"></div>
+        <div className="h-[44px] rounded-md bg-ui-active"></div>
+      </div>
+
+      <div className="h-[44px] rounded-md bg-ui-active"></div>
     </div>
   );
 }

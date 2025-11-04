@@ -5,7 +5,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import slugify from "@sindresorhus/slugify";
+import { setCookie } from "cookies-next/client";
 import { decode } from "html-entities";
+import LZString from "lz-string";
 import useSound from "use-sound";
 import { VList } from "virtua";
 
@@ -121,6 +123,7 @@ export function FolderFeedList({
                 className="absolute inset-0 z-1"
                 onNavigate={() => {
                   setFolderName(folderName); //TODO: to highlight folder on navigation
+                  setCookie("feedUrl", item.rssURL);
                 }}
               />
             </div>

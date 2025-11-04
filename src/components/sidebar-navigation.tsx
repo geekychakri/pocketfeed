@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useEffect, useState } from "react";
+import { memo, Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useSelectedLayoutSegment } from "next/navigation";
 
@@ -17,16 +17,18 @@ import { useFullscreen } from "@/store/read-fullscreen";
 import useStore from "@/store/useStore";
 import { UsersRecord } from "@/xata";
 
+import ProfileAvatarWrapper from "./profile-avatar-wrapper";
+
 const links = [
   { label: "Activity", path: "/activity/discover", icon: ExploreIcon },
   { label: "Bookmarks", path: "/bookmarks", icon: BookmarkIcon },
 ];
 
 export default function SidebarNavigation({
-  user,
+  // user,
   children,
 }: {
-  user: SelectedPick<UsersRecord, ("avatarUrl" | "username")[]> | null;
+  // user: SelectedPick<UsersRecord, ("avatarUrl" | "username")[]> | null;
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
@@ -84,7 +86,7 @@ export default function SidebarNavigation({
             <SearchIcon className="flex-none" />
           </Link>
         </div>
-        <div className="flex flex-1 flex-col gap-1 py-[10px] shadow-[0_-1px_0_0_var(--border-non-interactive)]">
+        <div className="flex flex-1 flex-col gap-1 pt-[10px] shadow-[0_-1px_0_0_var(--border-non-interactive)]">
           {links.map(({ path, label, icon: Icon }, i) => {
             // const isActive = pathname === path;
             const isActive =
@@ -112,15 +114,22 @@ export default function SidebarNavigation({
             );
           })}
 
-          <div className="">{children}</div>
+          <div className="flex flex-col justify-between flex-1">{children}</div>
         </div>
 
-        <div className="flex h-14 items-center gap-2 px-3 shadow-[0_-1px_0_0_var(--border-non-interactive)]">
+        {/* <div className="flex h-14 items-center gap-2 px-3 shadow-[0_-1px_0_0_var(--border-non-interactive)]">
           <ProfileAvatar
             avatarUrl={user?.avatarUrl as string}
             username={user?.username as string}
           />
-        </div>
+        </div> */}
+
+        {/* <Suspense fallback="Loading...">
+          <ProfileAvatarWrapper />
+        </Suspense> */}
+        {/* <Link href={`/test-server/${1}`} prefetch={false}>
+          Test dynamic
+        </Link> */}
       </nav>
       <div
         className={`transition-all ${fullscreen && pathname.startsWith("/read") ? "w-0" : "w-[240px]"}`}

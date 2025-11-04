@@ -42,13 +42,13 @@ export default async function SearchResults({
 
   if (category === "users") {
     return (
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 px-3">
         {feedsList.length >= 1 ? (
           feedsList.map((item, i) => (
             <Link
               href={`/user/${item.username}`}
               key={item.id}
-              className="hover:border-shadow bg-background-secondary flex items-center gap-2 rounded-md p-4 duration-150 hover:bg-transparent"
+              className="bg-ui-active flex items-center gap-2 rounded-md  p-4 duration-150 hover:bg-ui-hover"
             >
               <img
                 src={item.avatarUrl as string}
@@ -65,7 +65,7 @@ export default async function SearchResults({
     );
   }
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 px-6">
       {feedsList.length >= 1 ? (
         feedsList.map((item, i) => (
           <Link
@@ -73,7 +73,7 @@ export default async function SearchResults({
               decamelize: false,
             })}`}
             key={item.id}
-            className="hover:border-shadow bg-background-secondary flex items-center gap-2 rounded-md p-4 duration-150 hover:bg-transparent"
+            className="bg-ui-active flex items-center gap-2 rounded-md  p-4 duration-150 hover:bg-ui-hover"
           >
             <img
               src={item.favicon as string}

@@ -15,6 +15,16 @@ import { motion } from "framer-motion";
 import { toast } from "sonner";
 import useSound from "use-sound";
 
+// const SocialOauth = dynamic(() => import("@/components/social-oauth"), {
+//   ssr: false,
+//   loading: () => (
+//     <div className="flex h-28 items-center justify-center">
+//       {/* <SpinnerRotate /> */}
+//     </div>
+//   ),
+// });
+
+import SocialOauth from "@/components/social-oauth";
 import { SpinnerRotate } from "@/components/spinner-rotate";
 import Button from "@/components/ui/custom-button";
 import Input from "@/components/ui/custom-input";
@@ -23,15 +33,6 @@ import { createUser } from "@/app/actions";
 import { useNavigatorOnline } from "@/hooks/useNavigatorOnline";
 
 import Divider from "../../components/divider";
-
-const SocialOauth = dynamic(() => import("@/components/social-oauth"), {
-  ssr: false,
-  loading: () => (
-    <div className="flex h-28 items-center justify-center">
-      {/* <SpinnerRotate /> */}
-    </div>
-  ),
-});
 
 export default function Join() {
   const { isLoaded, signUp, setActive } = useSignUp();

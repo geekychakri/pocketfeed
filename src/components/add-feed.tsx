@@ -44,7 +44,7 @@ const initialState = {
   message: "",
 };
 
-export default function AddFeed({ folders }: { folders: any }) {
+export default function AddFeed() {
   const router = useRouter();
 
   const [urlValue, setUrlValue] = useState("");
@@ -124,16 +124,11 @@ export default function AddFeed({ folders }: { folders: any }) {
   }, [state]);
 
   return (
-    <div className="relative mx-auto flex w-full max-w-md flex-col gap-3 py-14">
+    <div className="relative mx-auto flex w-full max-w-md flex-col gap-3">
       {/* <RouteBack className="absolute -left-9" />
       <h1 className="flex items-center gap-3 text-xl font-medium">
         <span>Add a feed</span>
       </h1> */}
-
-      <div className="relative flex h-14 items-center gap-1">
-        <RouteBack className="absolute -left-9" />
-        <h1 className="text-xl font-semibold">Add a feed</h1>
-      </div>
       <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
         <label htmlFor="url" className="flex flex-col gap-2">
           <span className="text-brand-primary text-sm font-medium">
@@ -275,9 +270,7 @@ export default function AddFeed({ folders }: { folders: any }) {
               )}
               <input type="hidden" value={rssData?.url} name="siteURL" />
 
-              <div className="flex flex-col gap-3">
-                <FolderSelect folders={folders} />
-              </div>
+              {/* <div className="flex flex-col gap-3">{children}</div> */}
             </div>
             <p aria-live="polite" className="sr-only">
               {state?.message}

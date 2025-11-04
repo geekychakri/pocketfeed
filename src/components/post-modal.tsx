@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { use, useActionState, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
@@ -49,6 +49,7 @@ export default function PostModal({}: {
     const localFeedItem = localStorage.getItem("feedItem");
     return localFeedItem !== null ? JSON.parse(localFeedItem) : {};
   });
+  console.log({ feedItem });
   const [loading, setLoading] = useState(false);
   const [newItemData, setNewItemData] = useState({});
   const { link } = useParams<{ link: string }>();
@@ -66,7 +67,12 @@ export default function PostModal({}: {
   console.log({ parsedFeedItem });
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [state, formAction, isPending] = useActionState(addPost, initialState);
+  const addPostAction = addPost.bind(null, decodeURIComponent(link));
+
+  const [state, formAction, isPending] = useActionState(
+    addPostAction,
+    initialState,
+  );
 
   useHotkeys("P", (e) => {
     setIsModalOpen(true);
@@ -78,7 +84,7 @@ export default function PostModal({}: {
       setIsModalOpen(false);
     } else if (state.type === "internal-error") {
       internalErrorToast(state.message);
-    } else if (state.type === "user-error") {
+    } else if (state.type === "auth-error") {
       toast.error(state.message);
     }
   }, [state]);

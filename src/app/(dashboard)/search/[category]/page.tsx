@@ -16,7 +16,10 @@ export default async function Page(props: {
   const searchParams = await props.searchParams;
   const query = searchParams?.query || "";
   return (
-    <main className="mx-auto flex min-h-[500px] w-full max-w-3xl flex-col gap-6 py-20 max-sm:px-4">
+    <main
+      id="main"
+      className="mx-auto flex min-h-screen border-x w-full max-w-3xl flex-col gap-6 py-14 max-sm:px-4"
+    >
       <GlobalSearch category={category} />
       {/* <SearchResultSkeleton /> */}
 

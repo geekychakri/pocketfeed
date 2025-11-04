@@ -1,77 +1,32 @@
-// import type { Metadata } from "next";
-
-// export const metadata: Metadata = {
-//   title: "Pocket Feed",
-//   description: "All of your favorite content in one place.",
-// };
-
-import { cache } from "react";
+import { Suspense } from "react";
 
 import { ClerkProvider } from "@clerk/nextjs";
-import { auth } from "@clerk/nextjs/server";
 
 import CollapsibleFolders from "@/components/collapsible-folders";
+import FolderList from "@/components/folder-list";
 import PodcastLoader from "@/components/podcast-loader";
+import ProfileAvatarWrapper from "@/components/profile-avatar-wrapper";
 import ReparentChild from "@/components/reparent-child";
 import ReparentComponent2 from "@/components/reparent-component-2";
 import SidebarNavigation from "@/components/sidebar-navigation";
 import TestNav from "@/components/test-nav";
-
-// const fetchFolders = cache(async (userId: string) => {
-//   return await xata.db.folders.filter({ userId }).select(["folder"]).getMany();
-// });
-
-import getFolders from "@/lib/getFolders";
-import { FoldersRecord, getXataClient, UsersRecord } from "@/xata";
-
-const xata = getXataClient();
 
 export default async function MainLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const { show } = useShowPodcastPlayer();
-  const { userId }: { userId: string | null } = await auth();
-  // console.log({ userId });
-  // HANDLE NULL FILTER //TODO:
-  const [user, folders] = await Promise.all([
-    xata.db.users
-      .filter({ userId })
-      .select(["avatarUrl", "username"])
-      .getFirst(),
-    getFolders(userId as string),
-  ]);
-  // const user = (await xata.db.users
-  //   .filter({ userId: userId })
-  //   .select(["avatarUrl", "username"])
-  //   .getFirst()) as UsersRecord;
-
-  // const folders = await xata.db.folders
-  //   .filter({ userId })
-  //   .select(["folder"])
-  //   .getMany();
-
-  // console.log(folders);
-  // console.log({ user });
-
-  const foldersList = folders.map((item) => ({
-    id: item.id,
-    folder: item.folder,
-  })) as { id: string; folder: string }[];
-
-  // const avatarUrl = user.avatar?.transform({
-  //   width: 64,
-  //   height: 64,
-  //   format: "webp",
-  // });
-
-  // console.log({ username: user });
-
   return (
     <main className="flex w-full">
-      <SidebarNavigation user={JSON.parse(JSON.stringify(user))}>
-        <CollapsibleFolders foldersList={foldersList} />
+      <SidebarNavigation>
+        <CollapsibleFolders>
+          <Suspense fallback={<FolderListFallback />}>
+            <FolderList />
+          </Suspense>
+        </CollapsibleFolders>
+        <Suspense fallback={<ProfileAvatarFallback />}>
+          <ProfileAvatarWrapper />
+        </Suspense>
       </SidebarNavigation>
 
       <PodcastLoader />
@@ -80,5 +35,30 @@ export default async function MainLayout({
         <div className="flex-1">{children}</div>
       </ClerkProvider>
     </main>
+  );
+}
+
+function ProfileAvatarFallback() {
+  return (
+    <div className="px-3 py-4 shadow-[0_-1px_0_0_var(--border-non-interactive)]">
+      <div className="flex items-center animate-pulse space-x-4">
+        <div className="size-10 rounded-full bg-ui-normal"></div>
+        <div className="w-full h-6 rounded bg-ui-normal"></div>
+      </div>
+    </div>
+  );
+}
+
+function FolderListFallback() {
+  return (
+    <div className="pt-3">
+      <div className="flex flex-col animate-pulse space-y-4">
+        <div className="flex-1 space-y-4 px-3.5">
+          <div className="h-8 rounded-md bg-ui-normal"></div>
+          <div className="h-8 rounded-md bg-ui-normal"></div>
+          <div className="h-8 rounded-md bg-ui-normal"></div>
+        </div>
+      </div>
+    </div>
   );
 }

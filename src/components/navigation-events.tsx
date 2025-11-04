@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 
+import { deleteCookie } from "cookies-next/client";
+
 import { useArticleContent } from "@/store/article-content";
 
 export function NavigationEvents() {
@@ -13,6 +15,7 @@ export function NavigationEvents() {
 
   useEffect(() => {
     // reset article data on route change
+    deleteCookie("feedUrl");
     if (!pathname.startsWith("/read")) {
       setArticleData("", "", false);
     }

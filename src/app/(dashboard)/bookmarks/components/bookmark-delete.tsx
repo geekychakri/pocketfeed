@@ -1,6 +1,7 @@
 import { useActionState, useEffect } from "react";
 
 import { TrashIcon } from "@radix-ui/react-icons";
+import type { JSONData, SelectedPick } from "@xata.io/client";
 import { useFormState } from "react-dom";
 // import { useDeleteBookmark } from "@/hooks/useDeleteBookmark";
 // import { useNewBookmarksStore } from "@/store/bookmarks-store";
@@ -11,15 +12,22 @@ import useSound from "use-sound";
 import { SpinnerRotate } from "@/components/spinner-rotate";
 
 import { deleteBookmarkAction } from "@/app/actions/delete-bookmark";
+import { revalidateCachePath } from "@/lib/revalidateCachePath";
+import type { BookmarksRecord } from "@/xata";
 
 export default function BookmarkDelete({
   bookmarkId,
   bookmarkLink,
+  // removeBookmark,
 }: {
   bookmarkId: string;
   bookmarkLink: string;
+  // removeBookmark: (
+  //   id: string,
+  // ) => JSONData<Readonly<SelectedPick<BookmarksRecord, ["*"]>>>[];
 }) {
   const [state, formAction, isPending] = useActionState(deleteBookmarkAction, {
+    type: "",
     message: "",
   });
 
@@ -43,8 +51,10 @@ export default function BookmarkDelete({
         { revalidate: false },
       );
       // deleteBookmarkFn(bookmarkId);
+      // removeBookmark(bookmarkId);
       success();
       toast.success("Deleted");
+      revalidateCachePath(`/bookmarks`, "page");
       // revalidateCachePath("/folder/Home");
       // router.refresh();
     }

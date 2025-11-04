@@ -17,7 +17,9 @@ export default function RouteBack({
 
   return (
     <button
-      onClick={() => router.back()}
+      onClick={() => {
+        router.back();
+      }}
       className={cn(
         "relative flex size-6 items-center justify-center gap-3",
         className,

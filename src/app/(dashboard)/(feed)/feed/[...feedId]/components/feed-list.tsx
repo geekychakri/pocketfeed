@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { decode } from "html-entities";
+import LZString from "lz-string";
 
 import { convertTimeStringToReadable, getYoutubeVideoId } from "@/lib/utils";
 import { useArticleContent } from "@/store/article-content";
@@ -22,11 +23,11 @@ dayjs.extend(localizedFormat);
 export default function FeedList({
   feedList,
   categorizedFeedItemsList,
-  folderName,
+  // folderName,
 }: {
   categorizedFeedItemsList: any;
   feedList: any;
-  folderName: string;
+  // folderName: string;
 }) {
   return (
     <>
@@ -57,7 +58,7 @@ export default function FeedList({
                 feedList={feedList}
                 item={item}
                 key={i}
-                folderName={folderName}
+                // folderName={folderName}
               />
             ))}
           </div>
@@ -81,7 +82,7 @@ export default function FeedList({
                 feedList={feedList}
                 item={item}
                 key={i}
-                folderName={folderName}
+                // folderName={folderName}
               />
             ))}
           </div>
@@ -105,7 +106,7 @@ export default function FeedList({
                 feedList={feedList}
                 item={item}
                 key={i}
-                folderName={folderName}
+                // folderName={folderName}
               />
             ))}
           </div>
@@ -129,7 +130,7 @@ export default function FeedList({
                 feedList={feedList}
                 item={item}
                 key={i}
-                folderName={folderName}
+                // folderName={folderName}
               />
             ))}
           </div>
@@ -145,7 +146,7 @@ export default function FeedList({
                 feedList={feedList}
                 item={item}
                 key={i}
-                folderName={folderName}
+                // folderName={folderName}
               />
             ))}
           </div>
@@ -169,7 +170,7 @@ export default function FeedList({
                 feedList={feedList}
                 item={item}
                 key={i}
-                folderName={folderName}
+                // folderName={folderName}
               />
             ))}
           </div>
@@ -193,7 +194,7 @@ export default function FeedList({
                 feedList={feedList}
                 item={item}
                 key={i}
-                folderName={folderName}
+                // folderName={folderName}
               />
             ))}
           </div>
@@ -217,7 +218,7 @@ export default function FeedList({
                 feedList={feedList}
                 item={item}
                 key={i}
-                folderName={folderName}
+                // folderName={folderName}
               />
             ))}
           </div>
@@ -246,7 +247,7 @@ export default function FeedList({
                       feedList={feedList}
                       item={item}
                       key={i}
-                      folderName={folderName}
+                      // folderName={folderName}
                     />
                   ))}
                 </div>
@@ -261,14 +262,14 @@ export default function FeedList({
 function FeedItem({
   feedList,
   item,
-  folderName,
+  // folderName,
 }: {
   feedList: FeedListType;
   item: FeedItemType;
-  folderName: string;
+  // folderName: string;
 }) {
-  const { setFolderName } = useFolderName();
-  const { setArticleData } = useArticleContent();
+  // const { setFolderName } = useFolderName();
+  // const { setArticleData } = useArticleContent();
   console.log({ feedUrl: feedList.feedUrl });
   if (item.enclosure?.type?.includes("audio")) {
     //TODO:

@@ -33,6 +33,15 @@ export default function BookmarkList({
   bookmarks,
 }: BookmarkListType) {
   // console.log({ initialBookmarks });
+  // const [bookmarksList, setBookmarksList] = useState(bookmarks);
+
+  // const removeBookmark = (id: string) => {
+  //   const updatedBookmarks = bookmarksList.filter(
+  //     (bookmarkItem, _) => bookmarkItem.id !== id,
+  //   );
+  //   console.log({ updatedBookmarks });
+  //   setBookmarksList(updatedBookmarks);
+  // };
 
   // const bookmarks = useBookmarksStore((state) => state.bookmarks);
 
@@ -98,10 +107,11 @@ export default function BookmarkList({
                 <div className="flex shrink-0 items-center gap-3">
                   <BookmarkDelete
                     bookmarkId={bookmark.id}
-                    bookmarkLink={bookmark.bookmarkLink}
+                    bookmarkLink={bookmark.bookmarkLink as string}
+                    // removeBookmark={removeBookmark}
                   />
 
-                  {bookmark.bookmarkType === "podcast" ? (
+                  {/* {bookmark.bookmarkType === "podcast" ? (
                     <PodcastPlayButton
                       // showText={true}
                       // className="border-border-primary bg-background-primary h-9 w-24 rounded-md border text-sm transition-[background] hover:bg-transparent"
@@ -149,7 +159,7 @@ export default function BookmarkList({
                     >
                       <ReaderIcon className="size-5 shrink-0" />
                     </Link>
-                  )}
+                  )} */}
                 </div>
               </div>
             );

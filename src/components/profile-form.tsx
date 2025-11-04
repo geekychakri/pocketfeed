@@ -2,12 +2,13 @@
 
 import { useActionState, useEffect, useRef, useState } from "react";
 
+import { JSONData } from "@xata.io/client";
 import { useFormState } from "react-dom";
 import { toast } from "sonner";
 import useSound from "use-sound";
 
 import { SpinnerRotate } from "@/components/spinner-rotate";
-import SubmitButton from "@/components/SubmitButton";
+// import SubmitButton from "@/components/SubmitButton";
 import Button from "@/components/ui/custom-button";
 import Input from "@/components/ui/custom-input";
 import Textarea from "@/components/ui/custom-textarea";
@@ -23,110 +24,123 @@ const initialState: updateProfileActionResponse = {
   message: "",
 };
 
-export default function ProfileForm({ userInfo }: { userInfo: UsersRecord }) {
+export default function ProfileForm({
+  userInfo,
+}: {
+  userInfo: JSONData<UsersRecord>;
+}) {
   const [playSuccess] = useSound("sounds/success.wav");
   const [playCaution] = useSound("sounds/caution.wav");
 
-  const { fullname, website, bio, birthday } = userInfo as UsersRecord;
+  const { fullname, website, bio, birthday } = userInfo;
 
-  const [formState, formAction, isPending] = useActionState(
-    updateProfile,
-    initialState,
-  );
+  console.log({ fullname: typeof fullname });
+
+  const [formState, formAction, isPending] = useActionState(updateProfile, {
+    type: "",
+    message: "",
+  });
+
+  console.log({ formState });
 
   useEffect(() => {
-    switch (formState.type) {
-      case "success":
-        playSuccess();
-        toast.success(formState?.message);
-        break;
+    // switch (formState.type) {
+    //   case "success":
+    //     playSuccess();
+    //     toast.success(formState?.message);
+    //     break;
 
-      case "user-error":
-        playCaution();
-        toastError(formState?.message);
-        break;
+    //   case "user-error":
+    //     playCaution();
+    //     toastError(formState?.message);
+    //     break;
 
-      case "internal-error":
-        playCaution();
-        internalErrorToast(formState?.message);
-        break;
-      default:
-        null;
+    //   case "internal-error":
+    //     playCaution();
+    //     internalErrorToast(formState?.message);
+    //     break;
+    //   default:
+    //     null;
+    // }
+    if (formState.type === "success") {
+      playSuccess();
+      toast.success(formState?.message);
+      formState.type = "";
     }
   }, [formState]);
 
   return (
-    <div className="flex flex-col gap-5">
-      <h2 className="text-text-secondary text-xl">Profile</h2>
+    <form action={formAction} className="flex flex-col gap-6">
+      <div className="flex flex-col gap-2">
+        <label htmlFor="fullname" className="font-medium">
+          Fullname
+        </label>
+        <Input
+          type="text"
+          id="fullname"
+          name="fullname"
+          placeholder="John Doe"
+          defaultValue={
+            formState?.inputs?.fullname || (fullname as string) || ""
+          }
+          spellCheck={false}
+        />
+      </div>
 
-      <form action={formAction} className="flex flex-col gap-6">
-        <div className="flex flex-col gap-2">
-          <label htmlFor="fullname" className="font-medium">
-            Fullname
+      <div className="flex flex-col gap-2">
+        <div className="flex justify-between">
+          <label htmlFor="website" className="font-medium">
+            Website
           </label>
-          <Input
-            type="text"
-            id="fullname"
-            name="fullname"
-            placeholder="John Doe"
-            defaultValue={formState?.inputs?.fullname || fullname || ""}
-            spellCheck={false}
-          />
+          {formState?.errors?.website && (
+            <p aria-live="polite" className="text-danger text-sm">
+              {formState.errors.website[0]}
+            </p>
+          )}
         </div>
+        <Input
+          type="text"
+          id="website"
+          name="website"
+          placeholder="johndoe.com"
+          defaultValue={formState?.inputs?.website || (website as string) || ""}
+          spellCheck={false}
+          className={formState?.errors?.website ? "border-shadow-error" : ""}
+        />
+      </div>
 
-        <div className="flex flex-col gap-2">
-          <div className="flex justify-between">
-            <label htmlFor="website" className="font-medium">
-              Website
-            </label>
-            {formState?.errors?.website && (
-              <p aria-live="polite" className="text-danger text-sm">
-                {formState.errors.website[0]}
-              </p>
-            )}
-          </div>
-          <Input
-            type="text"
-            id="website"
-            name="website"
-            placeholder="johndoe.com"
-            defaultValue={formState?.inputs?.website || website || ""}
-            spellCheck={false}
-            className={formState?.errors?.website ? "border-shadow-error" : ""}
-          />
+      <ProfileBio bio={bio as string} formState={formState} />
+      <div className="flex flex-col gap-2">
+        <div className="flex justify-between">
+          <label htmlFor="birthday" className="font-medium">
+            Birthday
+          </label>
+          {formState?.errors?.birthday && (
+            <p aria-live="polite" className="text-danger text-sm">
+              {formState.errors.birthday[0]}
+            </p>
+          )}
         </div>
+        <Input
+          type="date"
+          id="birthday"
+          name="birthday"
+          defaultValue={
+            formState?.inputs?.birthday || (birthday as string) || ""
+          }
+          spellCheck={false}
+          className={formState?.errors?.birthday ? "border-shadow-error" : ""}
+        />
+      </div>
 
-        <ProfileBio bio={bio as string} formState={formState} />
-        <div className="flex flex-col gap-2">
-          <div className="flex justify-between">
-            <label htmlFor="birthday" className="font-medium">
-              Birthday
-            </label>
-            {formState?.errors?.birthday && (
-              <p aria-live="polite" className="text-danger text-sm">
-                {formState.errors.birthday[0]}
-              </p>
-            )}
-          </div>
-          <Input
-            type="date"
-            id="birthday"
-            name="birthday"
-            defaultValue={formState?.inputs?.birthday || birthday || ""}
-            spellCheck={false}
-            className={formState?.errors?.birthday ? "border-shadow-error" : ""}
-          />
-        </div>
-
-        <Button
-          type="submit"
-          aria-disabled={isPending}
-          className="flex h-11 cursor-pointer items-center justify-center rounded-md"
-        >
-          <span>{isPending ? <SpinnerRotate /> : "Save"}</span>
-        </Button>
-      </form>
-    </div>
+      <Button
+        type="submit"
+        aria-disabled={isPending}
+        className="flex h-11 cursor-pointer items-center justify-center rounded-md"
+      >
+        <span>{isPending ? <SpinnerRotate /> : "Save"}</span>
+      </Button>
+    </form>
   );
 }
 

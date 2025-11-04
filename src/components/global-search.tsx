@@ -9,6 +9,8 @@ import { useDebouncedCallback } from "use-debounce";
 
 import Input from "@/components/ui/custom-input";
 
+import { cn } from "@/lib/utils";
+
 export default function GlobalSearch({ category }: { category: string }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -52,18 +54,19 @@ export default function GlobalSearch({ category }: { category: string }) {
   //   console.log(typeof feeds);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col">
       <div>
-        <span className="border-shadow flex items-center rounded-md duration-100 focus-within:shadow-[0_0_0_1px_#fc591e,0_0_0_1px_#fc591e] hover:shadow-[0_0_0_1px_#fc591e,0_0_0_1px_#fc591e]">
+        <span className="border-y px-3 h-14 flex items-center duration-100 focus-within:shadow-[0_1px_0_0_#fc591e] hover:shadow-[0_1px_0_0_#fc591e]">
           <span className="p-2">
             <MagnifyingGlassIcon className="size-7" />
           </span>
           <Input
-            className="flex-1 border-none p-2 focus-visible:shadow-none"
+            className="flex-1 shadow-none! p-2 focus-visible:shadow-none focus-visible:outline-none"
             id="password"
             required
             placeholder={`Search for ${category}`}
             name="password"
+            spellCheck="false"
             defaultValue={searchParams.get("query")?.toString()}
             onChange={(e) => {
               handleSearch(e.target.value);
@@ -72,24 +75,26 @@ export default function GlobalSearch({ category }: { category: string }) {
         </span>
       </div>
 
-      <div className="border-border-non-interactive flex gap-4 border-b border-dashed py-3">
+      <div className="border-border-non-interactive border-b flex p-3">
         <Link
           href="/search/feeds"
-          className={
+          className={cn(
             pathname === "/search/feeds"
               ? "text-brand-primary"
-              : "text-text-secondary"
-          }
+              : "text-text-secondary",
+            "px-4 py-2",
+          )}
         >
           Feeds
         </Link>
         <Link
           href="/search/users"
-          className={
+          className={cn(
             pathname === "/search/users"
               ? "text-brand-primary"
-              : "text-text-secondary"
-          }
+              : "text-text-secondary",
+            "px-4 py-2",
+          )}
         >
           Users
         </Link>

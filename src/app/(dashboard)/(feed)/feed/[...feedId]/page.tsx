@@ -1,5 +1,9 @@
+import { cookies } from "next/headers";
+
 import { currentUser } from "@clerk/nextjs/server";
+import { getCookie, hasCookie } from "cookies-next/server";
 import dayjs from "dayjs";
+import LZString from "lz-string";
 import Parser from "rss-parser";
 
 import RouteBack from "@/components/route-back";
@@ -19,25 +23,48 @@ const parser = new Parser({
 
 export default async function Feed(props: {
   params: Promise<{ feedId: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const params = await props.params;
+
+  // console.log({ params });
+
+  // const rssUrl = LZString.decompressFromEncodedURIComponent(params);
+
+  // console.log({ rssUrl });
+  // const rssUrl = (await props.searchParams).rssUrl;
   // await new Promise((resolve) => setTimeout(resolve, 30000));
   const user = await currentUser();
 
-  const feed = await xata.db.feeds
-    .filter({
-      username: user?.username,
-      feedId: params.feedId[0],
-    })
-    .select(["*", "folderName.folder"])
-    .getFirst();
+  // const feed = await xata.db.feeds
+  //   .filter({
+  //     username: user?.username,
+  //     feedId: params.feedId[0],
+  //   })
+  //   .select(["*", "folderName.folder"])
+  //   .getFirst();
   // console.log(feed);
   // console.log({ favicon: feed[0].favicon });
-  console.log({ feed });
-  const feedUrl = feed?.rssURL;
+  // console.log({ feed });
+  // const feedUrl = feed?.rssURL;
+
+  let feedUrl = await getCookie("feedUrl", { cookies });
+
+  if (!feedUrl) {
+    console.log("RAN");
+    const feed = await xata.db.feeds
+      .filter({
+        username: user?.username,
+        feedId: params.feedId[0],
+      })
+      .select(["*", "folderName.folder"])
+      .getFirst();
+
+    feedUrl = feed?.rssURL as string;
+  }
 
   const feedList = (await parser.parseURL(
-    feed?.rssURL as string,
+    feedUrl as string,
   )) as unknown as FeedListType;
 
   console.log({ feedList });
@@ -50,9 +77,9 @@ export default async function Feed(props: {
     return <div>Feed is empty!</div>; //TODO:
   }
 
-  console.log({ feedItem: feedList.items.slice(0, 1) });
+  // console.log({ feedItem: feedList.items.slice(0, 1) });
 
-  console.log({ podcastChapters: feedList.items[0]["podcast:chapters"] });
+  // console.log({ podcastChapters: feedList.items[0]["podcast:chapters"] });
 
   // const itemsCategorized = feedList.items;
 
@@ -73,7 +100,7 @@ export default async function Feed(props: {
     <div className="flex flex-col px-4 py-14">
       <div className="relative mb-5 flex items-center">
         <RouteBack className="absolute -left-9 border" />
-        <h1 className="border text-lg font-medium">{feed?.title}</h1>
+        <h1 className="border text-lg font-medium">{feedList.title}</h1>
       </div>
       <YouTubeModal />
 
@@ -82,7 +109,7 @@ export default async function Feed(props: {
           JSON.stringify(categorizedFeedItemsList),
         )}
         feedList={JSON.parse(JSON.stringify(feedList))}
-        folderName={feed?.folderName?.folder as string} //TODO:
+        // folderName={feed?.folderName?.folder as string} //TODO:
       />
       <a
         target="_blank"

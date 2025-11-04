@@ -400,7 +400,11 @@ const ArticlePost = ({
               </div>
               {/* <p className="text-gray-500">{post.feedItemAuthor}</p> */}
             </div>
-            <p className="line-clamp-2">{feedItem.contentSnippet}</p>
+            <p className="line-clamp-2">
+              {feedItem?.summary ||
+                feedItem?.contentSnippet ||
+                feedItem.content}
+            </p>
           </Link>
         </div>
       </div>

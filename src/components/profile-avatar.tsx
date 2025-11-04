@@ -110,8 +110,8 @@ export default function ProfileAvatar({
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content
-          className="border-shadow bg-background-primary text-text-primary data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-40 min-w-[180px] rounded-md p-[5px]"
-          sideOffset={11}
+          className="border-shadow bg-background-primary text-text-primary data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-40 min-w-[220px] rounded-md p-[5px]"
+          sideOffset={5}
           align="start"
         >
           <AvatarDropdownItem to={`/user/${username}`} Icon={UserIcon}>

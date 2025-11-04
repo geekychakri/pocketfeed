@@ -6,15 +6,20 @@ import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import { getXataClient } from "@/xata";
 
 const xata = getXataClient();
-export async function addPost(prevState: any, formData: FormData) {
+export async function addPost(
+  link: string,
+  prevState: any,
+  formData: FormData,
+) {
   try {
     const { userId }: { userId: string | null } = await auth();
     if (!userId) {
       return {
-        type: "user-error",
+        type: "auth-error",
         message: "You must be signed in to update your profile!",
       };
     }
+
     const user = await currentUser();
     const post = formData.get("post") as string;
     const feedItemUrl = (formData.get("feedItemUrl") as string) || "";
@@ -29,6 +34,10 @@ export async function addPost(prevState: any, formData: FormData) {
     // console.log({ feedItem });
 
     console.log({ feedAlbumCover });
+
+    if (link !== websiteLink) {
+      return { type: "user-error", message: "Something doesn't look right!" };
+    }
 
     // const metadata = await urlMetadata(feedItemUrl);  //Check  url  is present
 

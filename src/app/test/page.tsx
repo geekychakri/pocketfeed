@@ -321,13 +321,39 @@
 // "use client";
 import { startTransition } from "react";
 
+import { parseFeed } from "feedsmith";
+// Works with RSS, Atom, RDF, and JSON Feed
+
+import truncateUrl from "truncate-url";
+
 import { testAction } from "../actions/test-action";
 
-export default function Test() {
-  const msg = "hello";
-  const handleServerAction = async () => {
-    "use server";
-    console.log(msg);
-  };
-  return <button onClick={handleServerAction}>hello</button>;
+export default async function Test() {
+  // const msg = "hello";
+  // const handleServerAction = async () => {
+  //   "use server";
+  //   console.log(msg);
+  // };
+  // return <button onClick={handleServerAction}>hello</button>;
+
+  // const res = await fetch("https://www.joshwcomeau.com/rss.xml");
+  // const feedContent = await res.text();
+  // const { format, feed } = parseFeed(feedContent);
+
+  // console.log("Feed format:", format); // rss, atom, json, rdf
+  // console.log("Feed title:", feed.title);
+
+  // console.log({ feed });
+
+  // if (format === "rss") {
+  //   console.log("RSS feed link:", feed.link);
+  // }
+
+  return (
+    <a
+      href={`${truncateUrl("https://www.youtube.com/watch?v=VMDydLUCLtE", 10)}`}
+    >
+      hello
+    </a>
+  );
 }

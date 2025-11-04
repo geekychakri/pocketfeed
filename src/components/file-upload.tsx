@@ -80,7 +80,7 @@ function FileUpload({
       <div className="border-shadow flex gap-6 rounded-md p-8">
         <div className="relative">
           {avatarUrl ? (
-            <Avatar className="hover:ring-ui-normal bg-ui-normal ring-ui-normal inline-flex h-16 w-16 flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full align-middle ring-1 transition-shadow select-none hover:ring-4">
+            <Avatar className="hover:ring-ui-normal bg-ui-normal ring-ui-normal inline-flex size-16 flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full align-middle ring-1 transition-shadow select-none hover:ring-4">
               <AvatarImage
                 className="h-full w-full rounded-[inherit] object-cover"
                 src={file}
