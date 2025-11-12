@@ -9,6 +9,7 @@ import { SelectedPick } from "@xata.io/client";
 import CollapsibleFolders from "@/components/collapsible-folders";
 import ProfileAvatar from "@/components/profile-avatar";
 
+import { ActivityIcon } from "@/icons/activity";
 import { BookmarkIcon } from "@/icons/bookmark";
 import { ExploreIcon } from "@/icons/explore";
 import { SearchIcon } from "@/icons/search";
@@ -20,7 +21,8 @@ import { UsersRecord } from "@/xata";
 import ProfileAvatarWrapper from "./profile-avatar-wrapper";
 
 const links = [
-  { label: "Activity", path: "/activity/discover", icon: ExploreIcon },
+  { label: "Daily", path: "/daily", icon: ExploreIcon },
+  { label: "Activity", path: "/activity/discover", icon: ActivityIcon },
   { label: "Bookmarks", path: "/bookmarks", icon: BookmarkIcon },
 ];
 

@@ -319,41 +319,128 @@
 //   );
 // }
 // "use client";
-import { startTransition } from "react";
+import { startTransition, Suspense } from "react";
+import { connection } from "next/server";
 
 import { parseFeed } from "feedsmith";
+// import FetchStream from "./components/fetch-stream";
+
+// async function fetchStreamedData(url: string, maxResponseSizeKB = 10) {
+//   return new Promise((resolve, reject) => {
+//     const controller = new AbortController();
+//     const decoder = new TextDecoder(); // to decode Uint8Array chunks
+//     let accumulatedData = ""; // store the data as it comes
+//     let receivedBytes = 0;
+
+//     fetch(url, { signal: controller.signal })
+//       .then((response) => {
+//         if (!response.body) {
+//           reject(
+//             new Error("ReadableStream not supported or empty response body"),
+//           );
+//           return;
+//         }
+
+//         const reader = response.body.getReader();
+
+//         const readStream = () => {
+//           reader
+//             .read()
+//             .then(({ done, value }) => {
+//               if (done) {
+//                 // Stream finished
+//                 resolve({
+//                   data: accumulatedData,
+//                   status: response.status,
+//                   statusText: response.statusText,
+//                   truncated: false,
+//                 });
+//                 return;
+//               }
+
+//               // Decode and accumulate the chunk
+//               accumulatedData += decoder.decode(value, { stream: true });
+//               receivedBytes += value.length;
+
+//               console.log({ receivedBytes });
+
+//               // Stop if we exceed limit
+//               if (receivedBytes >= 100000) {
+//                 controller.abort();
+//                 resolve({
+//                   data: accumulatedData,
+//                   status: response.status,
+//                   statusText: response.statusText,
+//                   truncated: true,
+//                 });
+//               } else {
+//                 // Continue reading next chunk
+//                 readStream();
+//               }
+//             })
+//             .catch((err) => {
+//               reject(err);
+//             });
+//         };
+
+//         readStream();
+//       })
+//       .catch((error) => {
+//         if (error.name === "AbortError") {
+//           console.log("Request aborted");
+//           // Don’t reject because we already resolved when truncating
+//           return;
+//         }
+//         reject(error);
+//       });
+//   });
+// }
+
+// async function limitedFetch(url: string) {
+//   return new Promise((resolve, reject) => {
+//     try {
+//       const xhr = new XMLHttpRequest();
+//       xhr.onprogress = (ev) => {
+//         console.log(`Received ${ev.loaded} bytes`);
+//         // if (ev.loaded < 200000) return;
+//         resolve(ev.target.responseText);
+//         xhr.abort();
+//       };
+//       xhr.onload = (ev) => {
+//         resolve(ev.target.responseText);
+//       };
+//       xhr.onerror = (ev) => {
+//         reject(new Error(ev.target.status));
+//       };
+
+//       xhr.open("GET", url);
+//       xhr.send();
+//     } catch (err) {
+//       reject(err);
+//     }
+//   });
+// }
+
+import Parser from "rss-parser";
 // Works with RSS, Atom, RDF, and JSON Feed
 
 import truncateUrl from "truncate-url";
 
 import { testAction } from "../actions/test-action";
 
+const parser = new Parser();
+
 export default async function Test() {
-  // const msg = "hello";
-  // const handleServerAction = async () => {
-  //   "use server";
-  //   console.log(msg);
-  // };
-  // return <button onClick={handleServerAction}>hello</button>;
-
-  // const res = await fetch("https://www.joshwcomeau.com/rss.xml");
-  // const feedContent = await res.text();
-  // const { format, feed } = parseFeed(feedContent);
-
-  // console.log("Feed format:", format); // rss, atom, json, rdf
-  // console.log("Feed title:", feed.title);
-
-  // console.log({ feed });
-
-  // if (format === "rss") {
-  //   console.log("RSS feed link:", feed.link);
-  // }
+  const data = await parser.parseURL(
+    "https://shoptalkshow.com/feed/podcast/default-podcast/",
+  );
+  console.log({ data: data.items[0] });
+  // co
 
   return (
-    <a
-      href={`${truncateUrl("https://www.youtube.com/watch?v=VMDydLUCLtE", 10)}`}
-    >
+    <div>
       hello
-    </a>
+      {/* <FetchStream /> */}
+    </div>
   );
 }

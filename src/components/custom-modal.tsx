@@ -27,12 +27,12 @@ export const ModalContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ title, children, className, ...props }, forwardedRef) => (
   <DialogPrimitive.Portal>
-    <DialogPrimitive.Overlay className="bg-background-secondary/50 data-[state=open]:animate-overlayShow fixed inset-0 z-120 backdrop-blur-[1px]" />
+    <DialogPrimitive.Overlay className="bg-background-secondary/50 data-[state=open]:animate-overlayShow fixed inset-0  backdrop-blur-[1px]" />
     <DialogPrimitive.Content
       {...props}
       ref={forwardedRef}
       className={cn(
-        "data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] z-130 max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-lg py-[25px] shadow-[0_8px_30px_0px_rgba(0,0,0,0.12)] focus:outline-none",
+        "data-[state=open]:animate-contentShow fixed top-[50%] left-[50%]  max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-lg py-[25px] shadow-[0_8px_30px_0px_rgba(0,0,0,0.12)] focus:outline-none",
         className,
       )}
     >

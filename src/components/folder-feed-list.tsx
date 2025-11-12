@@ -86,7 +86,7 @@ export function FolderFeedList({
               // href={`/feed/${item.title?.trim().replace(/\s+/g, "-").toLowerCase()}`}
               // href={`/feed/${item.feedId}`}
               key={item.id}
-              className="group/folder-feed relative isolate flex w-full items-center justify-between gap-4 py-[10px] font-medium shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color] last:shadow-none"
+              className="group/folder-feed relative px-4 isolate flex w-full items-center justify-between gap-4 py-[10px] font-medium shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color] last:shadow-none"
               // onBlur={(e) => alert("BLURREd")}
             >
               <span className="flex items-center gap-3">
@@ -152,21 +152,23 @@ export function FolderFeedList({
         // >
         //   {loading ? "Loading..." : "Load More"}
         // </button>
-        <Button
-          onClick={loadMore}
-          disabled={loading}
-          className="bg-ui-normal text-text-primary hover:bg-ui-hover border-shadow pointer-events-auto mt-[10px] flex items-center justify-center px-2 py-4 text-sm transition-[background-color]"
-        >
-          {loading ? (
-            <SpinnerRotate fill="currentColor" />
-          ) : (
-            <span>Show More</span>
-          )}
-        </Button>
+        <div className="px-4">
+          <Button
+            onClick={loadMore}
+            disabled={loading}
+            className="bg-ui-normal text-text-primary w-full hover:bg-ui-hover border-shadow pointer-events-auto mt-[10px] flex items-center justify-center px-2 py-4 text-sm transition-[background-color]"
+          >
+            {loading ? (
+              <SpinnerRotate fill="currentColor" />
+            ) : (
+              <span>Show More</span>
+            )}
+          </Button>
+        </div>
       )}
 
       {!pageInfo.hasNextPage && feeds.length >= 1 && (
-        <p className="text-text-secondary mt-5">End of list!</p>
+        <p className="text-text-secondary text-center mt-5">End of list!</p>
       )}
     </>
   );

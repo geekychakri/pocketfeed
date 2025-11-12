@@ -67,7 +67,7 @@ export default function RootLayout({
                 defaultTheme="system"
                 enableSystem
               >
-                {children}
+                <div className="isolate">{children}</div>
               </ThemeProvider>
             </NuqsAdapter>
             <Toaster

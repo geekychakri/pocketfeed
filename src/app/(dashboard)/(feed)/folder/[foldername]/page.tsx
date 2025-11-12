@@ -95,8 +95,8 @@ export default async function FolderPage(props: {
   // }
 
   return (
-    <div className="px-4 py-14">
-      <h1 className="flex h-14 items-center text-lg font-semibold">
+    <div className="py-14 group">
+      <h1 className="flex h-14 group-hover:text-text-primary px-4 text-brand-primary items-center text-lg font-semibold duration-150">
         {decodeURIComponent(folderName)}
       </h1>
 

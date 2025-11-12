@@ -73,6 +73,8 @@ export default async function Feed(props: {
     .slice(0, 10)
     .sort((a, b) => (dayjs(a.isoDate).isAfter(dayjs(b.isoDate)) ? -1 : 1));
 
+  console.log(sortFirstTenFeedsByDate);
+
   if (feedList.items.length === 0) {
     return <div>Feed is empty!</div>; //TODO:
   }
