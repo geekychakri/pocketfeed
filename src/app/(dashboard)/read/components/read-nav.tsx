@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
+import { setCookie } from "cookies-next/client";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import BookmarkPodcast from "@/components/PodcastPlayer/bookmark-podcast";
@@ -17,9 +18,12 @@ import { BookmarkIcon } from "@/icons/bookmark";
 import { FullScreenCircleIcon } from "@/icons/full-screen";
 import { FullScreenCircleBoldIcon } from "@/icons/fullscreen-bold";
 import { GlobalIcon } from "@/icons/globe";
+import { NotebookIcon } from "@/icons/notebook";
+import { NotebookBoldIcon } from "@/icons/notebook-bold";
 import { PostIcon } from "@/icons/post";
 import { useArticles } from "@/store/articles-list";
 import { useFullscreen } from "@/store/read-fullscreen";
+import { useToggleNotebook } from "@/store/toggle-notebook";
 import useStore from "@/store/useStore";
 
 import Bookmark from "./bookmark";
@@ -53,9 +57,18 @@ export default function ReadNav({
   // const articleItem = articles.find((item, _) => item.link === articleUrl);
 
   const fullscreen = useStore(useFullscreen, (state) => state.fullscreen);
+  const isNoteBookOpen = useStore(
+    useToggleNotebook,
+    (state) => state.isNotebookOpen,
+  );
   const toggleFullscreen = useStore(
     useFullscreen,
     (state) => state.toggleFullscreen,
+  );
+
+  const toggleNotebook = useStore(
+    useToggleNotebook,
+    (state) => state.toggleNotebook,
   );
   // const toggleFullScreen = () => {
   //   localStorage.setItem("fullscreen", "on");
@@ -63,6 +76,9 @@ export default function ReadNav({
   useHotkeys("W", () => window.open(articleUrl, "_blank", "noreferrer"));
   useHotkeys("F", () => {
     toggleFullscreen();
+  });
+  useHotkeys("N", () => {
+    toggleNotebook();
   });
 
   // useEffect(() => {
@@ -76,25 +92,25 @@ export default function ReadNav({
   const blogName = searchParams.get("author");
 
   return (
-    <nav className="border-border-non-interactive bg-background-primary sticky top-0 z-10 flex h-14 items-center justify-between gap-3 border-b px-4">
+    <div className="border-border-non-interactive bg-background-primary sticky top-0 z-10 flex h-14 items-center justify-between gap-3 border-b px-4">
       <div className="flex items-center gap-4">
         <RouteBack />
         <p className="text-text-secondary">{blogName}</p>
       </div>
 
       <div className="flex items-center">
-        <TooltipPrimitive.Provider delayDuration={800} skipDelayDuration={500}>
+        <TooltipPrimitive.Provider delayDuration={700}>
           <ExtractArticle />
           <CustomTooltip
             content={
               <span>
-                Fullscreen <kbd>[F]</kbd>
+                {fullscreen ? "Disable" : "Enable"} fullscreen <kbd>[F]</kbd>
               </span>
             }
           >
             <IconOnlyAction
               onClick={() => toggleFullscreen()}
-              className="relative"
+              className="relative rounded-md"
             >
               {fullscreen ? (
                 <FullScreenCircleBoldIcon className="size-[18px] shrink-0" />
@@ -134,8 +150,38 @@ export default function ReadNav({
               <GlobalIcon className="size-[18px] shrink-0" />
             </IconOnlyAction>
           </CustomTooltip>
+
+          <CustomTooltip
+            content={
+              <span>
+                {isNoteBookOpen ? "Close" : "Open"} Notebook <kbd>[N]</kbd>
+              </span>
+            }
+          >
+            <IconOnlyAction
+              className="rounded-md"
+              onClick={() => toggleNotebook()}
+            >
+              {isNoteBookOpen ? (
+                <NotebookBoldIcon className="shrink-0" />
+              ) : (
+                <NotebookIcon className="shrink-0" />
+              )}
+            </IconOnlyAction>
+          </CustomTooltip>
+
+          {/* <CustomTooltip
+            content={
+              <span>
+                {isNoteBookOpen ? "Close" : "Open"} Notebook <kbd>[N]</kbd>
+              </span>
+            }
+          >
+            // the tooltip doesn't show on focus because the element is not focusable
+            <span>hello</span>
+          </CustomTooltip> */}
         </TooltipPrimitive.Provider>
       </div>
-    </nav>
+    </div>
   );
 }

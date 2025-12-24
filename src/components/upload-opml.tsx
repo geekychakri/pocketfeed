@@ -294,7 +294,10 @@ function FileUpload() {
                   setFile(files[0]);
                 }}
               >
-                <AriaButton className="cursor-pointer rounded-md border px-4 py-2 font-semibold">
+                <AriaButton
+                  className="cursor-pointer rounded-md border px-4 py-2 font-semibold"
+                  id="main-item"
+                >
                   Select a file
                 </AriaButton>
                 <p>{file ? file.name : "No file selected"}</p>

@@ -1,6 +1,9 @@
 import { Suspense } from "react";
+import dynamic from "next/dynamic";
+import { cookies } from "next/headers";
 
 import { ClerkProvider } from "@clerk/nextjs";
+import { getCookie } from "cookies-next/server";
 
 import CollapsibleFolders from "@/components/collapsible-folders";
 import FolderList from "@/components/folder-list";
@@ -17,7 +20,7 @@ export default async function MainLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="flex w-full">
+    <div className="flex w-full">
       <SidebarNavigation>
         <CollapsibleFolders>
           <Suspense fallback={<FolderListFallback />}>
@@ -32,9 +35,11 @@ export default async function MainLayout({
       <PodcastLoader />
       {/* <ReparentChild /> */}
       <ClerkProvider dynamic>
-        <div className="flex-1">{children}</div>
+        <main className="flex-1" id="main">
+          {children}
+        </main>
       </ClerkProvider>
-    </main>
+    </div>
   );
 }
 

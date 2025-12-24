@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 
+import { setCookie } from "cookies-next/client";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -348,9 +349,11 @@ function FeedItem({
         // }
         // href={`/read/${encodeURIComponent("https://www.alanwsmith.com/en/2v/mq/vc/om/")}`} //TODO:
         href={`/read/${encodeURIComponent(item.link as string)}?author=${feedList.title}`}
+        id="main-item"
         onNavigate={(e) => {
           // setArticleData(item.content, item.title);
           localStorage.setItem("feedItem", JSON.stringify(item));
+          setCookie("articleId", item.id || item.guid);
           // setFolderName(folderName);
         }}
         className="absolute inset-0 z-1"

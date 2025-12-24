@@ -3,6 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ["geist"],
   cacheComponents: true,
+  typedRoutes: true,
   devIndicators: {
     position: "bottom-left",
   },
@@ -10,6 +11,9 @@ const nextConfig = {
     fetches: {
       fullUrl: true,
     },
+  },
+  experimental: {
+    typedEnv: true,
   },
 };
 

@@ -50,15 +50,19 @@ export default function RootLayout({
   return (
     <Suspense fallback={null}>
       <ClerkProvider>
-        <html lang="en" className={inter.variable} suppressHydrationWarning>
+        <html lang="en" className={geist.variable} suppressHydrationWarning>
           <head>
+            <meta
+              name="format-detection"
+              content="telephone=no, date=no, email=no, address=no"
+            />
             {/* <script
             src="https://unpkg.com/react-scan/dist/auto.global.js"
             async
           /> */}
           </head>
           <body className="bg-background-primary text-text-primary overflow-x-hidden leading-snug tracking-tight antialiased selection:bg-[#ff5a1f] selection:text-[#fff]">
-            <a href="#main" id="skip-link">
+            <a href="#main-item" id="skip-link">
               Skip to content
             </a>
             <NuqsAdapter>
@@ -76,7 +80,7 @@ export default function RootLayout({
               toastOptions={{
                 style: {
                   fontSize: "15px",
-                  fontFamily: "var(--font-inter)",
+                  fontFamily: "var(--font-geist)",
                   background: "rgba(var(--background-secondary))",
                   boxShadow: "0 0 0 1px var(--border-interactive)",
                 },

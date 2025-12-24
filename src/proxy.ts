@@ -11,6 +11,7 @@ const isPublicRoute = createRouteMatcher([
   "/api/inngest(.*)",
   "/",
   "/test",
+  "/dynamic-html-highlight",
 ]);
 
 const isProtectedRoute = createRouteMatcher(["/folder(.*)"]);

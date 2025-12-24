@@ -101,6 +101,7 @@ export default function FollowButton({ followeeId }: { followeeId: string }) {
       <Link
         href="/settings"
         className="bg-ui-normal hover:bg-ui-hover h-9 content-center rounded-md px-4 text-sm font-medium duration-150"
+        id="main-item"
       >
         Edit Profile
       </Link>

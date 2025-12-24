@@ -16,6 +16,7 @@ export function NavigationEvents() {
   useEffect(() => {
     // reset article data on route change
     deleteCookie("feedUrl");
+    deleteCookie("articleId");
     if (!pathname.startsWith("/read")) {
       setArticleData("", "", false);
     }

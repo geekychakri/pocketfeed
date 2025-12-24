@@ -23,8 +23,11 @@ import { ExtractArticle } from "@/lib/extract-article";
 import { checkLinkIsBroken } from "@/lib/utils";
 import { getXataClient } from "@/xata";
 
+import ArticleContent from "../components/article-content";
 import { ClientArticle } from "../components/client-article";
+import Notebook from "../components/notebook";
 import ReadNav from "../components/read-nav";
+import ToggleMenu from "../components/toggle-menu";
 
 // async function checkBookmarkExists(
 //   filterCondition: Record<string, any>,
@@ -74,19 +77,24 @@ export default async function Read(props: {
   }
 
   return (
-    <main className="w-full flex-1">
-      <ReadNav
-        // articleSiteName={article?.siteName}
-        articleUrl={articleUrl}
+    <div className="w-full grid grid-cols-[1fr_65ch_1fr]">
+      <ToggleMenu />
+      {/* <div className="w-full max-w-[60ch] pb-14 border-x min-h-screen">
+        <ReadNav
+          // articleSiteName={article?.siteName}
+          articleUrl={articleUrl}
 
-        // bookmarkExists={bookmarkItem?.isBookmarkExists}
-        // bookmarkId={bookmarkItem?.id}
-      />
+          // bookmarkExists={bookmarkItem?.isBookmarkExists}
+          // bookmarkId={bookmarkItem?.id}
+        />
+        <div>
+          <div className="h-14"></div>
+          <ClientArticle articleUrl={articleUrl} />
+        </div>
+      </div> */}
+      <ArticleContent articleUrl={articleUrl} />
 
-      <div className="mx-auto w-full max-w-[60ch] px-4 pb-14">
-        <div className="h-14"></div>
-        <ClientArticle articleUrl={articleUrl} />
-      </div>
-    </main>
+      <Notebook />
+    </div>
   );
 }

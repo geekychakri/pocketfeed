@@ -1,5 +1,6 @@
 "use server";
 
+import { updateTag } from "next/cache";
 import { permanentRedirect } from "next/navigation";
 
 import { auth } from "@clerk/nextjs/server";
@@ -32,6 +33,7 @@ export async function updateFolder(
     const updateFolder = await xata.db.folders.update(folderId, {
       folder: newFolderName,
     });
+    updateTag(`${userId}-folders-list`); //Invalidate cache tags so the new folder name is immediately visible
     shouldRedirect = true;
   } catch (e) {
     return { type: "internal-error", message: INTERNAL_ERROR_MESSAGE };

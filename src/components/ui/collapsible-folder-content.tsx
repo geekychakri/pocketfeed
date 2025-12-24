@@ -185,6 +185,7 @@ const FolderItem = ({
                 <DropdownMenu.Content
                   className="border-shadow bg-background-primary data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-2000 min-w-[180px] overflow-hidden rounded-md p-[5px]"
                   sideOffset={5}
+                  onCloseAutoFocus={(e) => e.preventDefault()}
                 >
                   <DropdownMenu.Item
                     className="group data-highlighted:bg-ui-hover data-disabled:text-mauve8 relative flex h-[28px] cursor-pointer items-center rounded-[3px] px-2 text-[13px] leading-none outline-none select-none data-disabled:pointer-events-none"

@@ -36,7 +36,7 @@ export default async function Home() {
                 <span className="text-brand-primary">algorithm</span>.
               </span>
             </h1>
-            <h2 className="text-2xl text-gray-400">
+            <h2 className="text-2xl text-[#969696]">
               All of your favorite content in one place.
             </h2>
           </div>
@@ -44,7 +44,7 @@ export default async function Home() {
           <div className="flex gap-7">
             <Link
               href="/join"
-              className="w-48 rounded-md bg-[#181818] px-6 py-3 text-center text-lg font-medium text-white select-none"
+              className="w-48 rounded-md bg-[#313236] px-6 py-3 text-center text-lg font-medium text-white select-none"
             >
               Join for free
             </Link>

@@ -84,22 +84,17 @@ export default function BookmarkPodcast({
     return (
       <button
         className={cn(
-          "relative flex size-6 cursor-wait items-center justify-center rounded-full",
+          "relative flex size-6 cursor-wait items-center justify-center rounded-full p-4",
           btnClassName,
         )}
       >
-        <BookmarkBoldIcon className={cn("size-5", iconClassName)} />
+        <BookmarkBoldIcon className="size-5 shrink-0" />
       </button>
     );
   } else if (isLoading || isValidating) {
     return (
-      <button
-        className={cn(
-          "relative flex size-6 cursor-wait items-center justify-center rounded-full",
-          btnClassName,
-        )}
-      >
-        <BookmarkIcon className={cn("size-5", iconClassName)} />
+      <button className="relative flex size-6 cursor-wait items-center justify-center rounded-full p-4">
+        <BookmarkIcon className="size-5 shrink-0" />
       </button>
     );
   }
@@ -223,29 +218,27 @@ export default function BookmarkPodcast({
           />
         )}
       </form>
-      <Tooltip.Provider>
-        <CustomTooltip content={<span>Bookmark</span>}>
-          <IconOnlyAction
-            type="submit"
-            form="bookmarkForm"
-            className={btnClassName}
-            // onClick={() => {
-            //   startTransition(() => {
-            //     addOptimisticBookmark(undefined);
-            //   });
-            //   setIsBookmarked((prevState) => !prevState);
-            // }}
-          >
-            {data.isBookmarkExists ? (
-              <BookmarkBoldIcon
-                className={cn("size-5 shrink-0", iconClassName)}
-              />
-            ) : (
-              <BookmarkIcon className={cn("size-5 shrink-0", iconClassName)} />
-            )}
-          </IconOnlyAction>
-        </CustomTooltip>
-      </Tooltip.Provider>
+
+      <IconOnlyAction
+        type="submit"
+        form="bookmarkForm"
+        className={btnClassName}
+        // onClick={() => {
+        //   startTransition(() => {
+        //     addOptimisticBookmark(undefined);
+        //   });
+        //   setIsBookmarked((prevState) => !prevState);
+        // }}
+      >
+        {data.isBookmarkExists ? (
+          <BookmarkBoldIcon
+            className={cn("size-[18px] shrink-0", iconClassName)}
+          />
+        ) : (
+          <BookmarkIcon className={cn("size-[18px] shrink-0", iconClassName)} />
+        )}
+        <span className="sr-only">Add to bookmarks</span>
+      </IconOnlyAction>
     </>
   );
 }

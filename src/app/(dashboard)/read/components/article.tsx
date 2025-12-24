@@ -2,6 +2,7 @@
 
 import {
   useActionState,
+  useCallback,
   useEffect,
   useLayoutEffect,
   useRef,
@@ -13,9 +14,20 @@ import Script from "next/script";
 
 import nord from "@shikijs/themes/nord";
 import { decode } from "html-entities";
+import parse from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
+import {
+  clearSelection,
+  findTextInElement,
+  highlightRange,
+  isRangeAlreadyHighlighted,
+  isRangeWithinHighlight,
+  isValidSelection,
+  removeHighlight,
+} from "lisere";
 import { animate } from "motion/mini";
 import { motion } from "motion/react";
+import { nanoid } from "nanoid";
 import { useFormState } from "react-dom";
 import ReactDOM from "react-dom/client";
 import { createHighlighter } from "shiki";
@@ -35,6 +47,22 @@ import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import { fetcher, internalErrorToast } from "@/lib/utils";
 import { useArticleContent } from "@/store/article-content";
 import { useArticles } from "@/store/articles-list";
+
+import ArticleText from "./article-text";
+
+export interface TextSelection {
+  /** The selected text content */
+  text: string;
+  /** The DOM range object representing the selection */
+  range: Range;
+  /** Absolute position coordinates of the selection */
+  position: {
+    x: number;
+    y: number;
+  };
+  /** Bounding rectangle of the selection */
+  boundingRect: DOMRect;
+}
 
 // function makeRelativeUrl(url, origin) {
 //   try {
@@ -70,6 +98,11 @@ DOMPurify.addHook("afterSanitizeAttributes", function (node) {
 
   if (node.tagName === "A" && !node.hasAttribute("target")) {
     node.setAttribute("target", "_blank");
+  }
+
+  if (node.tagName === "P") {
+    //TODO: flatten p tag for highlighting
+    node.textContent = node.textContent;
   }
 
   // if (node.tagName === "PRE") {
@@ -235,6 +268,96 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
 
   const { onError } = useSWRConfig();
 
+  // // text highlight
+  // const [highlights, setHighlights] = useState<
+  //   Map<
+  //     string,
+  //     { element: HTMLElement; selection: TextSelection; temporary?: boolean }
+  //   >
+  // >(new Map());
+  // const [currentSelection, setCurrentSelection] = useState<string>("");
+  // const [position, setPosition] = useState<Record<string, number>>();
+
+  // const addHighlight = useCallback(
+  //   (
+  //     highlightId: string,
+  //     highlightData: {
+  //       element: HTMLElement;
+  //       selection: TextSelection;
+  //       temporary?: boolean;
+  //     },
+  //   ) => {
+  //     setHighlights((prev) => {
+  //       const newHighlights = new Map(prev);
+  //       newHighlights.set(highlightId, highlightData);
+  //       return newHighlights;
+  //     });
+  //   },
+  //   [],
+  // );
+
+  // const handleHighlight = () => {
+  //   if (articleRef.current) {
+  //     const ranges = findTextInElement(
+  //       articleRef.current as HTMLElement,
+  //       currentSelection.trim(),
+  //     );
+  //     // console.log({ ranges });
+  //     ranges.forEach((range) => {
+  //       const highlight = highlightRange(range, "span", {
+  //         className:
+  //           "bg-yellow-50 outline select-none outline-yellow-50 shadow-[0_0_0_2px,0_1px_2px_1px,0_2px_4px_-2px,inset_0_-1px_1px_-2px,inset_0_0.5px_1px_-2px_rgba(255,255,255,0.2)] shadow-yellow-900/20 rounded-[6px]",
+  //       });
+  //       highlight.setAttribute("data-manual-highlight", nanoid());
+  //       highlight.id = nanoid();
+  //     });
+  //     // setHighlightCount((prev) => prev + ranges.length);
+  //     setCurrentSelection(undefined);
+  //   }
+  // };
+
+  // const handleMouseUp = () => {
+  //   const selection = window.getSelection();
+  //   if (selection && selection.rangeCount > 0 && !selection.isCollapsed) {
+  //     const range = selection.getRangeAt(0);
+  //     const text = range.toString().trim();
+
+  //     if (!selection && !text) {
+  //       setCurrentSelection(undefined);
+  //       return;
+  //     }
+
+  //     // console.log("Mouse up - Selection detected:", text);
+  //     setCurrentSelection(text);
+  //     const rect = selection.getRangeAt(0).getBoundingClientRect();
+
+  //     setPosition({
+  //       // 80 represents the width of the share button, this may differ for you
+  //       x: rect.left + rect.width / 2 - 80 / 2,
+  //       // 30 represents the height of the share button, this may differ for you
+  //       y: rect.top + window.scrollY - 30,
+  //       width: rect.width,
+  //       height: rect.height,
+  //     });
+  //   }
+  // };
+
+  // function onSelectStart() {
+  //   setCurrentSelection(undefined);
+  // }
+
+  // console.log({ currentSelection });
+
+  // useEffect(() => {
+  //   document.addEventListener("selectstart", onSelectStart);
+  //   window.addEventListener("mouseup", handleMouseUp);
+  //   return () => {
+  //     document.removeEventListener("selectstart", onSelectStart);
+  //     window.removeEventListener("mouseup", handleMouseUp);
+  //   };
+  // }, []);
+  // // text highlight
+
   // If someone deletes localstorage by mistake
   const { data, error, isLoading } = useSWR<{
     content: string;
@@ -306,6 +429,8 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
     // if (!effectRan.current) {
     console.log("select code ran");
     document.querySelectorAll("pre").forEach((pre) => {
+      if (pre.dataset.processed === "true") return;
+      pre.dataset.processed = "true";
       // Create wrapper, button, and message elements
       const wrapper = document.createElement("div");
       const button = document.createElement("button");
@@ -317,8 +442,8 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
       // const message = document.createElement("div");
       // Set up the wrapper and button
       wrapper.style.position = "relative";
-      button.innerHTML = svgIconCopy;
-      button.style.cursor = "pointer";
+      button.innerHTML = "Copy";
+      // button.style.cursor = "pointer";
       // button.style.position = "absolute";
       // button.style.width = "32px";
       // button.style.height = "32px";
@@ -343,7 +468,7 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
       wrapper.appendChild(button);
       // wrapper.appendChild(popoverEle);
 
-      animate("#svgIconCopy", { opacity: 1 }, { duration: 0.5 });
+      // animate("#svgIconCopy", { opacity: 1 }, { duration: 0.5 });
 
       // const popover = document.getElementById("poppy") as HTMLDivElement;
 
@@ -362,16 +487,16 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
       // Copy action
       button.addEventListener("click", () => {
         button.disabled = true;
-        button.innerHTML = svgIconCheck;
-        animate("#svgIconCheck", { opacity: 1 }, { duration: 0.5 });
+        button.innerHTML = "Copied!";
+        // animate("#svgIconCheck", { opacity: 1 }, { duration: 0.5 });
         copySound();
         navigator.clipboard
           .writeText(pre.textContent as string)
           .then(() => {
             setTimeout(() => {
-              button.innerHTML = svgIconCopy;
+              button.innerHTML = "Copy";
               button.disabled = false;
-              animate("#svgIconCopy", { opacity: 1 }, { duration: 0.5 });
+              // animate("#svgIconCopy", { opacity: 1 }, { duration: 0.5 });
             }, 3000);
           })
           .catch((err) => console.error("Error copying text: ", err));
@@ -417,9 +542,11 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
     );
   }
 
+  // toggle article tag based on fetch data it article is extracted on user click remove article tag
+
   return (
     <>
-      <div className="relative mb-12 flex flex-col gap-2 pt-[10px]">
+      <div className="relative mb-12 flex flex-col gap-2 pt-[10px] px-4">
         {/* <RouteBack className="absolute -left-9 p-2" /> */}
         <h1 className="flex min-h-14 items-center gap-2 text-[48px] leading-[52px] font-[575] tracking-tighter text-balance">
           {decode(feedItem?.title) || decode(data?.title)}
@@ -429,21 +556,12 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
         ) : null}
       </div>
 
-      <motion.article
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.8, -0.4, 0.5, 1] }}
-        dangerouslySetInnerHTML={{
-          __html: DOMPurify.sanitize(contentToRead, {
-            FORBID_TAGS: ["style"],
-            FORBID_ATTR: ["style"],
-          }),
-        }}
-        ref={articleRef}
-        // className="relative text-lg leading-normal"
-        className="content-visibility-auto prose prose-a:hover:text-text-secondary prose-a:hover:transition-[color] text-text-primary prose-headings:text-text-primary prose-h1:text-base prose-h1:font-medium prose-headings:text-[24px] prose-headings:font-medium prose-headings:leading-8 prose-headings:tracking-tight prose-a:text-text-primary prose-a:no-underline prose-blockquote:text-text-primary prose-strong:text-text-primary prose-pre:rounded-md prose-pre:border prose-pre:border-border-non-interactive prose-pre:bg-background-secondary prose-pre:text-base prose-pre:text-text-secondary prose-pre:select-all prose-inline-code:rounded-md prose-inline-code:border prose-inline-code:border-border-non-interactive prose-inline-code:bg-background-secondary prose-inline-code:px-1 prose-inline-code:py-[2px] prose-inline-code:text-text-secondary prose-inline-code:before:hidden prose-inline-code:after:hidden text-base leading-7 break-words max-sm:leading-6"
-        suppressHydrationWarning
-      ></motion.article>
+      <ArticleText
+        contentToRead={DOMPurify.sanitize(contentToRead, {
+          FORBID_TAGS: ["style", "em"],
+          FORBID_ATTR: ["style"],
+        })}
+      />
 
       {/* {isNewArticle ? null : (
         <>
@@ -462,7 +580,7 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
 }
 
 const svgIconCopy = `<svg xmlns="http://www.w3.org/2000/svg" id="svgIconCopy" opacity="0"  width="18" height="18" viewBox="0 0 24 24"><path fill="#888888" fill-rule="evenodd" d="M15 1.25h-4.056c-1.838 0-3.294 0-4.433.153c-1.172.158-2.121.49-2.87 1.238c-.748.749-1.08 1.698-1.238 2.87c-.153 1.14-.153 2.595-.153 4.433V16a3.75 3.75 0 0 0 3.166 3.705c.137.764.402 1.416.932 1.947c.602.602 1.36.86 2.26.982c.867.116 1.97.116 3.337.116h3.11c1.367 0 2.47 0 3.337-.116c.9-.122 1.658-.38 2.26-.982s.86-1.36.982-2.26c.116-.867.116-1.97.116-3.337v-5.11c0-1.367 0-2.47-.116-3.337c-.122-.9-.38-1.658-.982-2.26c-.531-.53-1.183-.795-1.947-.932A3.75 3.75 0 0 0 15 1.25m2.13 3.021A2.25 2.25 0 0 0 15 2.75h-4c-1.907 0-3.261.002-4.29.14c-1.005.135-1.585.389-2.008.812S4.025 4.705 3.89 5.71c-.138 1.029-.14 2.383-.14 4.29v6a2.25 2.25 0 0 0 1.521 2.13c-.021-.61-.021-1.3-.021-2.075v-5.11c0-1.367 0-2.47.117-3.337c.12-.9.38-1.658.981-2.26c.602-.602 1.36-.86 2.26-.981c.867-.117 1.97-.117 3.337-.117h3.11c.775 0 1.464 0 2.074.021M7.408 6.41c.277-.277.665-.457 1.4-.556c.754-.101 1.756-.103 3.191-.103h3c1.435 0 2.436.002 3.192.103c.734.099 1.122.28 1.399.556c.277.277.457.665.556 1.4c.101.754.103 1.756.103 3.191v5c0 1.435-.002 2.436-.103 3.192c-.099.734-.28 1.122-.556 1.399c-.277.277-.665.457-1.4.556c-.755.101-1.756.103-3.191.103h-3c-1.435 0-2.437-.002-3.192-.103c-.734-.099-1.122-.28-1.399-.556c-.277-.277-.457-.665-.556-1.4c-.101-.755-.103-1.756-.103-3.191v-5c0-1.435.002-2.437.103-3.192c.099-.734.28-1.122.556-1.399" clip-rule="evenodd"/></svg>`;
-const svgIconCheck = `<svg xmlns="http://www.w3.org/2000/svg" opacity="0" id="svgIconCheck" width="18" height="18" viewBox="0 0 24 24"><path fill="#888888" fill-rule="evenodd" d="M18.493 6.935a.75.75 0 0 1 .072 1.058l-7.857 9a.75.75 0 0 1-1.13 0l-3.143-3.6a.75.75 0 0 1 1.13-.986l2.578 2.953l7.292-8.353a.75.75 0 0 1 1.058-.072" clip-rule="evenodd"/></svg>`;
+const svgIconCheck = `<svg xmlns="http://www.w3.org/2000/svg" opacity="0" id="svgIconCheck" width="20" height="20" viewBox="0 0 24 24"><path fill="#888888" fill-rule="evenodd" d="M18.493 6.935a.75.75 0 0 1 .072 1.058l-7.857 9a.75.75 0 0 1-1.13 0l-3.143-3.6a.75.75 0 0 1 1.13-.986l2.578 2.953l7.292-8.353a.75.75 0 0 1 1.058-.072" clip-rule="evenodd"/></svg>`;
 
 // function processHtmlWithSyntaxHighlighting(
 //   htmlContent: string,

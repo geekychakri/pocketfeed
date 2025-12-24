@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* light theme */
-@config '../../tailwind.config.ts';
+/* @config '../../tailwind.config.ts'; */
 
 @plugin "@tailwindcss/typography";
 
@@ -62,7 +62,7 @@
     border-color: var(--color-gray-200, currentcolor);
   }
 
-  @font-face {
+  /* @font-face {
     font-family: "Monaspace";
     src: url("../../public/SyntaxHighlightRegular.woff2") format("woff2");
   }
@@ -78,13 +78,13 @@
       5 hsl(210 40% 2%),
       6 hsl(210 10% 30%),
       7 hsl(327 100% 54%);
-  }
+  } */
 
   [data-theme="light"] {
     /* --color-primary: 248, 79, 57; */
 
     --brand-primary: 252, 89, 30;
-    --background-primary: 252, 252, 247;
+    --background-primary: 250, 250, 251;
     --background-secondary: 245, 245, 240;
     /* --ui-normal: #242424;
     --ui-hover: #181818;
@@ -102,7 +102,7 @@
     --border-interactive: #e5e5e5;
     --border-focus-ring: #bbbbbb;
     --border-primary: #d9d9d9;
-    --text-primary: #333;
+    --text-primary: #313236;
     --text-secondary: #646464;
     --skeleton-highlight: #e8e8e8;
     --danger: 235, 87, 87;
@@ -141,7 +141,7 @@
   }
 
   html {
-    font-family: var(--font-inter);
+    font-family: var(--font-geist);
     caret-color: rgb(var(--brand-primary));
     accent-color: rgb(var(--brand-primary));
 
@@ -159,6 +159,12 @@
     scrollbar-width: thin;
     /* scrollbar-color: #6969dd #e0e0e0; */
     /* scrollbar-color: rebeccapurple green; */
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      /* scroll-behavior: smooth; */
+    }
   }
 
   /*Fix for radix select when using scrollbar gutter to prevent layout shift*/
@@ -183,6 +189,7 @@
   }
 
   body {
+    position: relative; /* iOS 26+ Safari base ui */
     overflow-x: hidden;
     /* background-color: #fafafa;
     background-color: #fcfcfc; */
@@ -253,10 +260,10 @@
     scrollbar-color: rgb(var(--color-primary)) #eee !important;
   }
 
-  code {
+  /* code {
     font-family: "Monaspace", monospace !important;
     font-palette: --kung-fury !important;
-  }
+  } */
 
   textarea::-webkit-scrollbar {
     width: 18px;
@@ -438,17 +445,23 @@
 @layer components {
   .copy-code-btn {
     position: absolute;
-    width: 32px;
+    width: 72px;
+    font-size: 13px;
+    font-weight: 500;
     height: 32px;
     top: 0;
     right: 0;
     display: flex;
+    /* gap: 4px; */
     align-items: center;
     justify-content: center;
     margin: -17px 10px;
     background: rgb(var(--background-primary));
-    border: 2px solid var(--border-interactive);
+    border: 1px solid rgb(var(--brand-primary));
     border-radius: 6px;
+    padding: 4px;
+    cursor: pointer;
+    will-change: transform;
   }
 }
 
@@ -713,8 +726,10 @@
 
 /* Copy code btn */
 .copy-code-btn:active {
+  /* outline: none !important;
+  border: none !important; */
   transform: scale(0.97);
-  transition: scale 150ms;
+  transition: transform 150ms;
 }
 
 /* Popover */
@@ -722,6 +737,17 @@
   margin: 0;
   inset: auto;
   position-area: bottom right;
+}
+
+/* text highlighter */
+[data-highlighted] {
+  user-select: none;
+  cursor: pointer;
+}
+
+pre:has(code) {
+  user-select: none !important;
+  /* cursor: not-allowed !important; */
 }
 
 /* ::-webkit-scrollbar {
@@ -736,4 +762,11 @@
 ::-webkit-scrollbar-thumb {
   background-color: #fc591e;
   border-radius: 100px;
+} */
+
+/* q::before {
+  content: "";
+}
+q::after {
+  content: "";
 } */

@@ -91,8 +91,9 @@ export default function ExtractArticle() {
     >
       <IconOnlyAction
         onClick={handleClick}
-        className={isLoading ? "cursor-progress" : "cursor-pointer"}
+        className={`rounded-md ${isLoading ? "cursor-progress" : "cursor-pointer"}`}
         disabled={isLoading}
+        id="main-item"
       >
         <ExtractArticleIcon size={18} ref={extractArticleIconRef} />
       </IconOnlyAction>

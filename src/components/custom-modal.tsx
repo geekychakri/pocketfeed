@@ -35,6 +35,10 @@ export const ModalContent = React.forwardRef<
         "data-[state=open]:animate-contentShow fixed top-[50%] left-[50%]  max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-lg py-[25px] shadow-[0_8px_30px_0px_rgba(0,0,0,0.12)] focus:outline-none",
         className,
       )}
+      // onCloseAutoFocus={(event) => {
+      //   event.preventDefault();
+      //   document.body.style.pointerEvents = "";
+      // }}
     >
       <div className="px-[25px]">
         <DialogPrimitive.Title className="mb-4 text-lg font-medium">

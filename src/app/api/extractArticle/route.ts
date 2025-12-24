@@ -1,7 +1,23 @@
 import { extract } from "@extractus/article-extractor";
 import { isProbablyReaderable, Readability } from "@mozilla/readability";
 import { JSDOM, VirtualConsole } from "jsdom";
+import { DOMParser } from "linkedom";
 
+const modifyImgUrlAndReturnHTML = (html, url) => {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+
+  Array.from(doc.getElementsByTagName("img")).forEach((element) => {
+    const src = element.getAttribute("data-src") ?? element.getAttribute("src");
+    const imgUrl = src.replace(/^.*?blog\/?/, "");
+    if (src) {
+      element.setAttribute("src", `${url}/${imgUrl}`);
+    }
+  });
+
+  return Array.from(doc.childNodes)
+    .map((element) => element.outerHTML)
+    .join("");
+};
 export async function GET(request: Request) {
   try {
     // throw new Error("");
@@ -17,12 +33,24 @@ export async function GET(request: Request) {
 
     if (isProbablyReaderable(dom.window.document)) {
       // const reader = new Readability(dom.window.document); //TODO:
-      const article = await extract(articleLink);
+      const article = await extract(articleLink, null, {
+        signal: AbortSignal.timeout(10000),
+      });
       // const article = reader.parse();
 
       console.log({ extractedArticle: article });
 
-      return Response.json(article);
+      const modifiedHTML = modifyImgUrlAndReturnHTML(
+        article?.content,
+        articleLink,
+      );
+
+      const articleResponse = {
+        ...article,
+        content: modifiedHTML,
+      };
+
+      return Response.json(articleResponse);
     } else {
       console.log("NOT READABLE");
       return Response.json({ content: null });

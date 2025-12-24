@@ -18,6 +18,8 @@ export default async function FolderList() {
   //   .select(["folder"])
   //   .getMany();
 
+  console.log({ folders });
+
   const foldersList = folders.map((item) => ({
     id: item.id,
     folder: item.folder,

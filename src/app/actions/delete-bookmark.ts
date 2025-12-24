@@ -7,7 +7,7 @@ import { getXataClient } from "@/xata";
 
 const xata = getXataClient();
 
-export async function deleteBookmarkAction(prevState: any, formData: FormData) {
+export async function deleteBookmarkAction(formData: FormData) {
   // console.log("DELETE FEED");
   try {
     // throw new Error("");

@@ -59,7 +59,7 @@ export default function YouTubePlayButton({
         setYtBookmarkId(bookmarkId as string); //TODO:: for handling bookmarks in bookmarks page to delete
       }}
       className={cn(
-        "bg-ui-normal hover:bg-ui-hover flex size-10 cursor-pointer items-center justify-center gap-1 rounded-full px-4 py-2 text-base font-medium transition-transform duration-150 active:scale-95",
+        "bg-ui-normal hover:bg-ui-hover flex size-10 cursor-pointer items-center justify-center gap-1 rounded-full px-4 py-2 text-base font-medium will-change-[transform] transition-transform duration-150 active:scale-95",
         className,
       )}
     >

@@ -193,7 +193,7 @@ function VaulDrawer({ audioRef }: { audioRef: any }) {
                       dangerouslySetInnerHTML={{
                         __html: DOMPurify.sanitize(content),
                       }}
-                      className="prose text-text-primary prose-headings:text-text-primary prose-h1:text-xl prose-h1:font-medium prose-h2:font-semibold prose-a:text-text-primary prose-a:no-underline hover:prose-a:text-text-secondary hover:prose-a:transition-[color] prose-blockquote:text-text-primary prose-strong:text-text-primary prose-pre:rounded-md prose-pre:border prose-pre:border-border-non-interactive prose-pre:bg-background-secondary prose-pre:text-base prose-pre:text-text-secondary prose-inline-code:rounded-md prose-inline-code:border prose-inline-code:border-border-non-interactive prose-inline-code:bg-background-secondary prose-inline-code:px-1 prose-inline-code:py-[2px] prose-inline-code:text-text-secondary prose-inline-code:before:hidden prose-inline-code:after:hidden text-base leading-7 break-words max-sm:leading-6"
+                      className="prose"
                       id="description"
                     ></div>
                   </Tabs.Content>

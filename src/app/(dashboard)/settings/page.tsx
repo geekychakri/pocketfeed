@@ -54,7 +54,7 @@ export default async function Settings() {
           </span>
         </div>
         <div>
-          <Button>Upgrade</Button>
+          <Button id="main-item">Upgrade</Button>
         </div>
       </div>
       <div>

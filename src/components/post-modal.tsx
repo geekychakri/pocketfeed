@@ -105,7 +105,7 @@ export default function PostModal({}: {
         <TooltipPrimitive.Trigger onClick={() => setIsModalOpen(true)} asChild>
           {/* <span className="absolute top-1/2 left-1/2 size-12 -translate-x-1/2 -translate-y-1/2 pointer-fine:hidden"></span>
           <PostIcon className="size-[18px] shrink-0" /> */}
-          <IconOnlyAction>
+          <IconOnlyAction className="rounded-md">
             <PostIcon className="size-[18px] shrink-0" />
           </IconOnlyAction>
         </TooltipPrimitive.Trigger>

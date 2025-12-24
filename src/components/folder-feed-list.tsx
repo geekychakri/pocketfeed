@@ -85,10 +85,22 @@ export function FolderFeedList({
             <div
               // href={`/feed/${item.title?.trim().replace(/\s+/g, "-").toLowerCase()}`}
               // href={`/feed/${item.feedId}`}
+              // id={i === 0 ? "main-item" : ""}
               key={item.id}
               className="group/folder-feed relative px-4 isolate flex w-full items-center justify-between gap-4 py-[10px] font-medium shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color] last:shadow-none"
               // onBlur={(e) => alert("BLURREd")}
             >
+              <Link
+                href={`/feed/${item.feedId}/${slugify(item.title, {
+                  decamelize: false,
+                })}`}
+                {...(i === 0 ? { id: "main-item" } : {})}
+                className="absolute inset-0 z-1"
+                onNavigate={() => {
+                  setFolderName(folderName); //TODO: to highlight folder on navigation
+                  setCookie("feedUrl", item.rssURL);
+                }}
+              />
               <span className="flex items-center gap-3">
                 <Avatar className="bg-ui-normal inline-flex h-[30px] w-[30px] flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full select-none">
                   <AvatarImage
@@ -115,16 +127,6 @@ export function FolderFeedList({
                 feedId={item.id as string}
                 folderName={folderName}
                 folders={JSON.parse(JSON.stringify(folders))}
-              />
-              <Link
-                href={`/feed/${item.feedId}/${slugify(item.title, {
-                  decamelize: false,
-                })}`}
-                className="absolute inset-0 z-1"
-                onNavigate={() => {
-                  setFolderName(folderName); //TODO: to highlight folder on navigation
-                  setCookie("feedUrl", item.rssURL);
-                }}
               />
             </div>
           ))
