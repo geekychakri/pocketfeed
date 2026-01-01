@@ -59,12 +59,13 @@ const CollapsibleFolders = ({ children }: { children: React.ReactNode }) => {
   console.log({ currentFolderName });
   return (
     <Collapsible.Root
-      open={open}
-      onOpenChange={(isOpen) => {
-        setOpen(!open);
-        isOpen ? playFolderOpen() : playFolderClose();
-      }}
+      // open={open}
+      // onOpenChange={(isOpen) => {
+      //   setOpen(!open);
+      //   isOpen ? playFolderOpen() : playFolderClose();
+      // }}
       className="flex flex-col gap-1"
+      open
     >
       <Collapsible.Trigger asChild className="group/collapsible">
         <div className="px-3">
