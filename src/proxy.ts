@@ -1,29 +1,31 @@
-import { NextResponse } from "next/server";
+// import { NextResponse } from "next/server";
 
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+// import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-const isPublicRoute = createRouteMatcher([
-  "/join(.*)",
-  "/sign-up(.*)",
-  "/signin(.*)",
-  "/new-password",
-  "/api/webhooks(.*)",
-  "/api/inngest(.*)",
-  "/",
-  "/test",
-  "/dynamic-html-highlight",
-]);
+// const isPublicRoute = createRouteMatcher([
+//   "/join(.*)",
+//   "/sign-up(.*)",
+//   "/signin(.*)",
+//   "/new-password",
+//   "/api/webhooks(.*)",
+//   "/api/inngest(.*)",
+//   "/",
+//   "/test",
+//   "/dynamic-html-highlight",
+// ]);
 
-const isProtectedRoute = createRouteMatcher(["/folder(.*)"]);
-export default clerkMiddleware(async (auth, request) => {
-  // console.log({ request });
-  console.log("Requested URL:", request.nextUrl.pathname);
-  console.log("Is public route:", isPublicRoute(request));
-  if (!isPublicRoute(request)) {
-    console.log("MIDDLEWARE");
-    await auth.protect();
-  }
-});
+// const isProtectedRoute = createRouteMatcher(["/folder(.*)"]);
+// export default clerkMiddleware(async (auth, request) => {
+//   // console.log({ request });
+//   console.log("Requested URL:", request.nextUrl.pathname);
+//   console.log("Is public route:", isPublicRoute(request));
+//   if (!isPublicRoute(request)) {
+//     console.log("MIDDLEWARE");
+//     await auth.protect();
+//   }
+// });
+
+export function proxy() {}
 
 export const config = {
   matcher: [

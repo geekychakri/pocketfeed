@@ -1,36 +1,53 @@
-//@ts-nocheck
-
 import { auth } from "@clerk/nextjs/server";
+// import { Pool } from "pg";
 import { neon, NeonQueryFunction } from "@neondatabase/serverless";
-import { drizzle, NeonHttpDatabase } from "drizzle-orm/neon-http";
+// import { drizzle, NeonHttpDatabase } from "drizzle-orm/neon-http";
 
-import * as schema from "@/db/schema";
+import { attachDatabasePool } from "@vercel/functions";
+import dotenv from "dotenv";
+import { drizzle } from "drizzle-orm/node-postgres";
+import { createRemoteJWKSet, jwtVerify } from "jose";
+import { Pool } from "pg";
 
-export async function fetchWithDrizzle<T>(
-  callback: (
-    db: Omit<
-      NeonHttpDatabase<typeof schema> & {
-        $client: NeonQueryFunction<false, false>;
-      },
-      "_" | "transaction" | "$withAuth" | "batch" | "$with" | "$client"
-    >,
-    { userId, authToken }: { userId: string; authToken: string },
-  ) => Promise<T>,
-) {
-  const { getToken, userId } = await auth();
-  const authToken = await getToken();
+dotenv.config({
+  path: ".env.local",
+});
 
-  if (!authToken) {
-    throw new Error("No token");
-  }
+const jwksURL = new URL(process.env.CLERK_JWKS_DEV_URL!);
 
-  if (!userId) {
-    throw new Error("No userId");
-  }
+const globalForPool = globalThis as unknown as { pool: Pool };
 
-  const db = drizzle(neon(process.env.NEON_DB_AUTH_URL), {
-    schema,
+if (!globalForPool.pool) {
+  globalForPool.pool = new Pool({
+    connectionString: process.env.NEON_APP_USER_DB_URL!,
+    idleTimeoutMillis: 5000,
   });
-  const dbWithAuth = db.$withAuth(authToken);
-  return callback(dbWithAuth, { userId, authToken });
 }
+
+//  const pool =
+//   globalForPool.pool ||   new Pool({
+//       connectionString: process.env.NEON_DB_AUTH_URL!,
+//     });
+
+//     if (process.env.NODE_ENV !== 'production') globalForPool.pool = pool;
+
+attachDatabasePool(globalForPool.pool);
+
+export const db = drizzle(globalForPool.pool);
+
+export const verifyAuth = async (): Promise<any> => {
+  try {
+    const { getToken, userId } = await auth();
+    const token = await getToken();
+    if (!token || !userId) {
+      throw new Error("Authentication is required.");
+    }
+
+    const { payload } = await jwtVerify(token, createRemoteJWKSet(jwksURL));
+    const claims = JSON.stringify(payload);
+    return { userId, claims };
+  } catch (error) {
+    console.error("JWT Verification failed:", error);
+    throw new Error("Invalid authentication token.");
+  }
+};

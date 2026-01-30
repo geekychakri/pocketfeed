@@ -5,11 +5,14 @@ import {
   boolean,
   integer,
   pgPolicy,
+  pgRole,
   pgTable,
   serial,
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
+
+// export const appUser = pgRole("app_user"); //TODO:
 
 export const users = pgTable(
   "users",
@@ -22,7 +25,7 @@ export const users = pgTable(
     email: text("email").notNull().unique(),
     website: text("website"),
     bio: text("bio"),
-    fullname: text("bio"),
+    fullname: text("fullname"),
     birthday: text("birthday"),
     avatarUrl: text("avatar_url"),
     avatarPublicId: text("avatar_public_id"),
@@ -35,5 +38,15 @@ export const users = pgTable(
     }),
   ],
 );
+
+export const authState = pgTable("auth_state", {
+  key: text("key").primaryKey(),
+  value: text("value").notNull(),
+});
+
+export const authSession = pgTable("auth_session", {
+  key: text("key").primaryKey(),
+  value: text("value").notNull(),
+});
 
 export type User = InferSelectModel<typeof users>;
