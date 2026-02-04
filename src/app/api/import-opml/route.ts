@@ -3,13 +3,15 @@ import { NextResponse } from "next/server";
 import { auth, currentUser } from "@clerk/nextjs/server";
 
 import { inngest } from "@/inngest/client";
+import { getSessionAgent } from "@/lib/auth/session";
 import { checkOPMLFileFormat } from "@/lib/zod/schemas/check-opml-file-format";
 import { getXataClient } from "@/xata";
 
 const xata = getXataClient();
 
 export async function POST(request: Request) {
-  const userId = (await auth()).userId as string;
+  // const userId = (await auth()).userId as string;
+  const agent = await getSessionAgent();
   const formData = await request.formData();
   const file = formData.get("opmlFile") as File;
 
@@ -26,24 +28,24 @@ export async function POST(request: Request) {
     );
   }
 
-  const checkOPMLFile = await xata.db["opml-files"]
-    .filter({
-      userId,
-      filename: file.name,
-    })
-    .getFirst();
+  // const checkOPMLFile = await xata.db["opml-files"]
+  //   .filter({
+  //     userId,
+  //     filename: file.name,
+  //   })
+  //   .getFirst();
 
-  if (checkOPMLFile) {
-    return NextResponse.json(
-      {
-        error: "You have already imported this opml file. Please check once.",
-      },
-      { status: 409 },
-    );
-  }
+  // if (checkOPMLFile) {
+  //   return NextResponse.json(
+  //     {
+  //       error: "You have already imported this opml file. Please check once.",
+  //     },
+  //     { status: 409 },
+  //   );
+  // }
 
   try {
-    const user = await currentUser();
+    // const user = await currentUser();
 
     const buffer = Buffer.from(await file.arrayBuffer());
 
@@ -52,10 +54,12 @@ export async function POST(request: Request) {
     const { ids } = await inngest.send({
       name: "import/opml",
       data: {
-        fileName: file.name,
+        // fileName: file.name,
+        agent,
         fileData,
-        username: user?.username,
-        userId,
+
+        // username: user?.username,
+        // userId,
       },
     });
 

@@ -18,8 +18,9 @@ import Modal from "@/components/custom-modal";
 import { SpinnerRotate } from "@/components/spinner-rotate";
 import Button from "@/components/ui/custom-button";
 
+import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import { revalidateCachePath } from "@/lib/revalidateCachePath";
-import { fetcher } from "@/lib/utils";
+import { fetcher, internalErrorToast } from "@/lib/utils";
 
 const fileTypes = ["XML", "OPML"];
 
@@ -124,9 +125,51 @@ function FileUpload() {
   //   }
   // };
 
-  const handleImport = async () => {
-    // e.preventDefault();
+  // const handleImport = async () => {
+  //   // e.preventDefault();
 
+  //   if (!file) {
+  //     playCaution();
+  //     toast.warning("Please select a file to import.");
+  //     return;
+  //   }
+
+  //   setLoading(true);
+  //   setOpenImportAlertModal(true);
+  //   setIsCompleted(false);
+  //   setInngestExecutionId(null);
+
+  //   const formData = new FormData();
+  //   formData.append("opmlFile", file as File);
+
+  //   // console.log({ file });
+
+  //   try {
+  //     const res = await fetch("/api/import-opml", {
+  //       method: "POST",
+  //       body: formData,
+  //     });
+  //     if (!res.ok) {
+  //       const data = await res.json();
+  //       console.log({ data });
+  //       throw new Error(data.error);
+  //     }
+  //     const data = await res.json();
+  //     console.log(data);
+  //     setInngestExecutionId(data.id);
+  //     localStorage.setItem("inngestExecutionId", JSON.stringify(data.id));
+  //   } catch (err) {
+  //     // let message;
+  //     // if (err instanceof Error) message = err.message;
+  //     // else message = String(err);
+  //     const message = getErrorMessage(err);
+  //     toast.error(message);
+  //     console.error(message);
+  //     setLoading(false);
+  //   }
+  // };
+
+  const handleImport = async () => {
     if (!file) {
       playCaution();
       toast.warning("Please select a file to import.");
@@ -135,8 +178,8 @@ function FileUpload() {
 
     setLoading(true);
     setOpenImportAlertModal(true);
-    setIsCompleted(false);
-    setInngestExecutionId(null);
+    // setIsCompleted(false);
+    // setInngestExecutionId(null);
 
     const formData = new FormData();
     formData.append("opmlFile", file as File);
@@ -144,27 +187,24 @@ function FileUpload() {
     // console.log({ file });
 
     try {
-      const res = await fetch("/api/import-opml", {
+      const res = await fetch("/api/createBulkSubscriptions", {
         method: "POST",
         body: formData,
       });
       if (!res.ok) {
-        const data = await res.json();
-        console.log({ data });
-        throw new Error(data.error);
+        throw new Error(INTERNAL_ERROR_MESSAGE);
       }
       const data = await res.json();
       console.log(data);
-      setInngestExecutionId(data.id);
-      localStorage.setItem("inngestExecutionId", JSON.stringify(data.id));
-    } catch (err) {
-      // let message;
-      // if (err instanceof Error) message = err.message;
-      // else message = String(err);
-      const message = getErrorMessage(err);
-      toast.error(message);
-      console.error(message);
+
+      toast.success("Imported successfully!");
+    } catch (error) {
+      let message;
+      if (error instanceof Error) message = error.message;
+      internalErrorToast(INTERNAL_ERROR_MESSAGE);
+    } finally {
       setLoading(false);
+      setOpenImportAlertModal(false);
     }
   };
 

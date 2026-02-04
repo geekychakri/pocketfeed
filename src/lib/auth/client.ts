@@ -56,6 +56,8 @@ async function getKeyset(): Promise<Keyset | undefined> {
 export async function getOAuthClient(): Promise<NodeOAuthClient> {
   if (client) return client;
 
+  console.log("CLIENT NOT RETURNED!");
+
   client = new NodeOAuthClient({
     clientMetadata: getClientMetadata(),
     keyset: await getKeyset(),

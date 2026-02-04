@@ -82,7 +82,7 @@ const FolderSelect = ({ folders }: { folders: any }) => {
       {showNewFolderInput && (
         <Input
           type="text"
-          name="newFolder"
+          name="folder"
           placeholder="New folder name"
           className="border-shadow w-full rounded-md bg-transparent px-4 py-2"
           required

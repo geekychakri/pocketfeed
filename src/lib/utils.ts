@@ -367,3 +367,14 @@ export function verifyUrl(signed: string) {
   if (sig !== expected) throw new Error("Tampered URL");
   return url;
 }
+
+export function transformFeedUrltoRkey(feedUrl: string) {
+  const url = new URL(feedUrl); //remove url extension e.g .xml and trailing slash from url
+
+  if (url.pathname !== "/") {
+    const pathname = url.pathname.replace(/\/@?/g, "-"); //removes @ in youtube feed url and replace / with -
+    return `${url.hostname.replace(/^www\./, "")}` + pathname;
+  } else {
+    return `${url.hostname.replace(/^www\./, "")}`;
+  }
+}

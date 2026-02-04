@@ -6,14 +6,14 @@ import { useRouter } from "next/navigation";
 
 import { ArrowLeftIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import * as Switch from "@radix-ui/react-switch";
-import DOMPurify from "isomorphic-dompurify";
+// import DOMPurify from "isomorphic-dompurify";
 import qs from "qs";
-import { useFormState, useFormStatus } from "react-dom";
+// import { useFormState, useFormStatus } from "react-dom";
 import { toast } from "sonner";
 import useSound from "use-sound";
 
-import FolderSelect from "@/components/folder-select";
-import RouteBack from "@/components/route-back";
+// import FolderSelect from "@/components/folder-select";
+// import RouteBack from "@/components/route-back";
 import { SpinnerRotate } from "@/components/spinner-rotate";
 import Button from "@/components/ui/custom-button";
 import Input from "@/components/ui/custom-input";
@@ -28,6 +28,8 @@ import {
   isHttpValid,
   toastError,
 } from "@/lib/utils";
+
+import FolderSelect from "./folder-select";
 
 type RssDataType = {
   url: string;
@@ -95,17 +97,13 @@ export default function AddFeed() {
       setRssData(data);
     } catch (error) {
       playCaution();
-      // let message;
-      // if (error instanceof Error) message = error.message;
-      // else message = String(error);
-      // toastError(message);
       internalErrorToast(INTERNAL_ERROR_MESSAGE);
     } finally {
       setIsLoading(false);
     }
   };
 
-  console.log({ rssData });
+  // console.log({ rssData });
 
   const handleFormDataSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -121,7 +119,7 @@ export default function AddFeed() {
       toast.error(state?.message);
       playCaution();
     }
-  }, [state]);
+  }, [state, playCaution]);
 
   return (
     <div className="relative mx-auto flex w-full max-w-md flex-col gap-3">
@@ -183,11 +181,7 @@ export default function AddFeed() {
       {!isRssDataEmpty && (
         <div className="border-shadow flex flex-col gap-6 rounded-md p-4">
           <img
-            src={
-              rssData.url?.includes("youtube.com")
-                ? rssData.favicon
-                : `https://www.google.com/s2/favicons?domain=${rssData.url}&sz=128`
-            }
+            src={rssData.favicon}
             width={28}
             height={28}
             className="rounded-full"
@@ -255,7 +249,7 @@ export default function AddFeed() {
                     <input
                       type="hidden"
                       value={item.url}
-                      name={`feeds[${i}][rssURL]`}
+                      name={`feeds[${i}][rssUrl]`}
                     />
 
                     <p className="overflow-hidden text-sm text-ellipsis whitespace-nowrap text-gray-500">
@@ -268,10 +262,13 @@ export default function AddFeed() {
               {rssData?.favicon && (
                 <input type="hidden" value={rssData?.favicon} name="favicon" />
               )}
-              <input type="hidden" value={rssData?.url} name="siteURL" />
+              <input type="hidden" value={rssData?.url} name="siteUrl" />
+              {/* <input type="hidden" value={rssData?.url} name="random" /> */}
 
               {/* <div className="flex flex-col gap-3">{children}</div> */}
+              <FolderSelect folders={["home", "test"]} />
             </div>
+
             <p aria-live="polite" className="sr-only">
               {state?.message}
             </p>

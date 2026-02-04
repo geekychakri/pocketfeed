@@ -21,7 +21,7 @@ export default async function MainLayout({
 }>) {
   return (
     <div className="flex w-full">
-      <SidebarNavigation>
+      {/* <SidebarNavigation>
         <CollapsibleFolders>
           <Suspense fallback={<FolderListFallback />}>
             <FolderList />
@@ -30,15 +30,15 @@ export default async function MainLayout({
         <Suspense fallback={<ProfileAvatarFallback />}>
           <ProfileAvatarWrapper />
         </Suspense>
-      </SidebarNavigation>
+      </SidebarNavigation> */}
 
       <PodcastLoader />
       {/* <ReparentChild /> */}
-      <ClerkProvider dynamic>
-        <main className="flex-1" id="main">
-          {children}
-        </main>
-      </ClerkProvider>
+      {/* <ClerkProvider dynamic> */}
+      <main className="flex-1" id="main">
+        {children}
+      </main>
+      {/* </ClerkProvider> */}
     </div>
   );
 }

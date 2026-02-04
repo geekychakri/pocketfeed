@@ -1,13 +1,9 @@
-import { FetcherError, SelectedPick } from "@xata.io/client";
-import { nanoid } from "nanoid";
+import { NextRequest, NextResponse } from "next/server";
+
 import xml2js from "xml2js";
 
-// import { getSessionAgent } from "@/lib/auth/session";
-import { FoldersRecord, getXataClient } from "@/xata";
-
-import { transformFeedUrltoRkey } from "./utils";
-
-// const xata = getXataClient();
+import { getSession, getSessionAgent } from "@/lib/auth/session";
+import { transformFeedUrltoRkey } from "@/lib/utils";
 
 function chunkArray(array: [], size: number) {
   const chunks = [];
@@ -17,40 +13,29 @@ function chunkArray(array: [], size: number) {
   return chunks;
 }
 
-// async function createAllRecords(records: []) {
-//   const batches = chunkArray(records, 10);
-//   const results = [];
-
-//   for (const batch of batches) {
-//     const response = await api.createRecords(batch);
-//     results.push(response);
-
-//     // Optional: add a small delay to avoid rate limits
-//     await new Promise((resolve) => setTimeout(resolve, 100));
-//   }
-
-//   return results;
-// }
-
-export async function ImportOPML(
-  // fileName: string,
-  agent: any,
-  fileData: any,
-
-  // userId: string,
-) {
-  //   const user = await currentUser();
-  //   const userId = (await auth()).userId as string;
-
-  // return { message: "error" };
-
-  // const agent = await getSessionAgent();
-
-  console.log({ agent });
-
-  // return { message: "success" };
-
+export async function GET(request: NextRequest, response: NextResponse) {
   try {
+    const agent = await getSessionAgent();
+    if (!agent) {
+      return Response.json(
+        {
+          message: "You must be signed in to add feeds.",
+        },
+        { status: 401 },
+      );
+    }
+    console.log({ agent });
+    const formData = await request.formData();
+    const file = formData.get("opmlFile") as File;
+
+    if (!file) {
+      return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
+    }
+
+    const buffer = Buffer.from(await file.arrayBuffer());
+
+    const fileData = buffer.toString("utf8");
+
     // console.log({ userId });
     function extractFeeds(outline: any) {
       let feeds = [];
@@ -102,7 +87,12 @@ export async function ImportOPML(
 
     // atproto create records TODO:
     const bulkRecords = feeds.map((record) => {
-      const rkey = transformFeedUrltoRkey(record.feedUrl);
+      let rkey;
+      if (record.feedUrl.includes("youtube.com")) {
+        rkey = transformFeedUrltoRkey(record.siteUrl);
+      } else {
+        rkey = transformFeedUrltoRkey(record.feedUrl);
+      }
       return {
         $type: "com.atproto.repo.applyWrites#create" as const,
         collection: "app.pocketfeed.feed.subscription",
@@ -114,6 +104,8 @@ export async function ImportOPML(
         },
       };
     });
+
+    console.log({ bulkRecords });
 
     //TODO: types
     async function createBulkSubscriptions(records: any) {
@@ -139,13 +131,9 @@ export async function ImportOPML(
 
     await createBulkSubscriptions(bulkRecords);
 
-    return { message: "success" };
+    return NextResponse.json({ message: "success" });
   } catch (err) {
     console.log(err);
-    if (err instanceof FetcherError) {
-      console.log(err.status);
-      console.log(err.errors);
-    }
-    return { message: "error" };
+    return NextResponse.json({ message: "error" }, { status: 500 });
   }
 }

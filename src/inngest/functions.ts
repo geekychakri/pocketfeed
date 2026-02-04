@@ -8,10 +8,12 @@ export const importOpmlJob = inngest.createFunction(
   async ({ event, step }) => {
     // await step.sleep("wait-a-moment", "25s");
     const { message } = await ImportOPML(
-      event.data.fileName,
+      // event.data.fileName,
+      event.data.agent,
       event.data.fileData,
-      event.data.username,
-      event.data.userId,
+
+      // event.data.username,
+      // event.data.userId,
     );
     return { message };
   },
