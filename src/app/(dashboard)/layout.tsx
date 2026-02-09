@@ -28,9 +28,9 @@ export default async function MainLayout({
           </Suspense>
         </CollapsibleFolders>
 
-        {/* <Suspense fallback={<ProfileAvatarFallback />}>
+        <Suspense fallback={<ProfileAvatarFallback />}>
           <ProfileAvatarWrapper />
-        </Suspense> */}
+        </Suspense>
       </SidebarNavigation>
 
       <PodcastLoader />
@@ -48,7 +48,7 @@ function ProfileAvatarFallback() {
   return (
     <div className="px-3 py-4 shadow-[0_-1px_0_0_var(--border-non-interactive)]">
       <div className="flex items-center animate-pulse space-x-4">
-        <div className="size-10 rounded-full bg-ui-normal"></div>
+        <div className="size-10 flex-none  rounded-full bg-ui-normal"></div>
         <div className="w-full h-6 rounded bg-ui-normal"></div>
       </div>
     </div>

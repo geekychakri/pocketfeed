@@ -13,6 +13,7 @@ import type {
   MutableRefObject,
   RefAttributes,
 } from "react";
+import type { Route } from "next";
 import Link from "next/link";
 
 // import * as Avatar from "@radix-ui/react-avatar";
@@ -41,17 +42,20 @@ interface UserIconHandle {
   startAnimation: () => void;
   stopAnimation: () => void;
 }
-const AvatarDropdownItem = ({
-  to,
-  children,
-  Icon,
-}: {
-  to: string;
+
+type AvatarDropdownItemProps<T extends string = string> = {
+  href: Route<T> | URL;
   children: ReactNode;
   Icon: ForwardRefExoticComponent<
     UserIconProps & RefAttributes<UserIconHandle>
   >;
-}) => {
+};
+
+const AvatarDropdownItem = ({
+  href,
+  children,
+  Icon,
+}: AvatarDropdownItemProps) => {
   const [hovered, setHovered] = useState(false);
 
   const iconRef = useRef<UserIconHandle>(null);
@@ -64,7 +68,7 @@ const AvatarDropdownItem = ({
       // onMouseLeave={() => iconRef.current?.stopAnimation()}
     >
       <Link
-        href={to}
+        href={href}
         onMouseEnter={() => iconRef.current?.startAnimation()}
         onMouseLeave={() => iconRef.current?.stopAnimation()}
       >
@@ -114,17 +118,20 @@ export default function ProfileAvatar({
           sideOffset={5}
           align="start"
         >
-          <AvatarDropdownItem to={`/user/${username}`} Icon={UserIcon}>
+          <AvatarDropdownItem
+            href={`/user/${username}` as Route}
+            Icon={UserIcon}
+          >
             <span>Profile</span>
           </AvatarDropdownItem>
-          <AvatarDropdownItem to="/settings" Icon={SettingsGearIcon}>
+          <AvatarDropdownItem href="/settings" Icon={SettingsGearIcon}>
             <span>Settings</span>
           </AvatarDropdownItem>
           <DropdownMenu.Separator className="bg-border-non-interactive my-[5px] h-[1px]" />
-          <AvatarDropdownItem to="/feedback" Icon={MessageCircleMoreIcon}>
+          <AvatarDropdownItem href="/feedback" Icon={MessageCircleMoreIcon}>
             <span>Feedback</span>
           </AvatarDropdownItem>
-          <AvatarDropdownItem to="/pricing" Icon={PartyPopperIcon}>
+          <AvatarDropdownItem href="/pricing" Icon={PartyPopperIcon}>
             <span>Upgrade</span>
           </AvatarDropdownItem>
 
