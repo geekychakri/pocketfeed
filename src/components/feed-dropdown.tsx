@@ -30,7 +30,7 @@ import { deleteFeed } from "@/app/actions/delete-feed";
 import { moveToFolder } from "@/app/actions/move-to-folder";
 // import { useFolderFeedStore } from "@/store/folder-feed";
 
-import { useFeedsDelete } from "@/hooks/useFeedsDelete";
+// import { useFeedsDelete } from "@/hooks/useFeedsDelete";
 import { DeleteIcon } from "@/icons/delete";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import { revalidateCachePath } from "@/lib/revalidateCachePath";
@@ -38,42 +38,42 @@ import { internalErrorToast } from "@/lib/utils";
 import { Folders, FoldersRecord } from "@/xata";
 
 const FeedDropdown = ({
-  feedId,
+  record,
   folderName,
   folders,
 }: {
-  feedId: string;
+  record: any;
   folderName: string;
   folders: Folders[];
 }) => {
   const pathname = usePathname();
   const currentFolder = decodeURIComponent(pathname.split("/")[2]);
 
-  const deleteFeedStoreFn = useFeedsDelete();
+  // const deleteFeedStoreFn = useFeedsDelete();
 
-  const moveToFolderAction = async (id: string, newFolder: string) => {
-    try {
-      const { type, message } = await moveToFolder(
-        id,
-        currentFolder,
-        newFolder,
-      );
-      if (type === "success") {
-        deleteFeedStoreFn(feedId);
-        toast.success("Successfully moved!");
-        return "success";
-      } else if (type === "internal-error") {
-        internalErrorToast(message);
-        return "error";
-      } else if (type === "user-error") {
-        toast.error(message);
-        return "error";
-      }
-    } catch (err) {
-      internalErrorToast(INTERNAL_ERROR_MESSAGE);
-      return "error";
-    }
-  };
+  // const moveToFolderAction = async (id: string, newFolder: string) => {
+  //   try {
+  //     const { type, message } = await moveToFolder(
+  //       id,
+  //       currentFolder,
+  //       newFolder,
+  //     );
+  //     if (type === "success") {
+  //       deleteFeedStoreFn(feedId);
+  //       toast.success("Successfully moved!");
+  //       return "success";
+  //     } else if (type === "internal-error") {
+  //       internalErrorToast(message);
+  //       return "error";
+  //     } else if (type === "user-error") {
+  //       toast.error(message);
+  //       return "error";
+  //     }
+  //   } catch (err) {
+  //     internalErrorToast(INTERNAL_ERROR_MESSAGE);
+  //     return "error";
+  //   }
+  // };
   return (
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger
@@ -96,7 +96,7 @@ const FeedDropdown = ({
               e.preventDefault();
             }}
           >
-            <DeleteFeedForm feedId={feedId} folderName={folderName} />
+            <DeleteFeedForm recordId={record.cid} folderName={folderName} />
           </DropdownMenu.Item>
 
           {folders.length > 1 ? (
@@ -114,8 +114,8 @@ const FeedDropdown = ({
                   alignOffset={-5}
                 >
                   {folders
-                    .filter((item) => item.folder !== currentFolder)
-                    .map((item, i) => {
+                    .filter((folderItem) => folderItem.folder !== currentFolder)
+                    .map((folderItem, i) => {
                       return (
                         // <DropdownMenu.Item
                         //   key={item.id}
@@ -136,10 +136,10 @@ const FeedDropdown = ({
                         //   )}
                         // </DropdownMenu.Item>
                         <FeedDropdownItem
-                          key={item.id}
-                          item={item}
-                          feedId={feedId}
-                          moveToFolderAction={moveToFolderAction}
+                          key={i}
+                          folderItem={folderItem}
+                          record={record}
+                          moveToFolderAction={moveToFolder}
                         />
                       );
                     })}
@@ -155,23 +155,35 @@ const FeedDropdown = ({
   );
 };
 
-const FeedDropdownItem = ({ item, feedId, moveToFolderAction }) => {
+const FeedDropdownItem = ({
+  folderItem,
+  record,
+  moveToFolderAction,
+}: {
+  folderItem: any;
+  record: any;
+  moveToFolderAction: any;
+}) => {
   const [isMovingLoading, setIsMovingLoading] = useState(false);
   return (
     <DropdownMenu.Item
-      key={item.id}
+      key={folderItem.id}
       className="group data-highlighted:bg-ui-hover relative flex h-[25px] items-center gap-2 rounded-[3px] px-2 py-4 text-sm leading-none outline-none select-none"
       onSelect={async (e) => {
         e.preventDefault();
         setIsMovingLoading(true);
-        console.log(item.folder);
-        const status = await moveToFolderAction(feedId, item.folder as string);
+        console.log(folderItem.folder);
+        const status = await moveToFolderAction(
+          record,
+          folderItem.folder as string,
+        );
         if (status === "error") {
           setIsMovingLoading(false);
         }
       }}
     >
-      {item.folder} {isMovingLoading && <SpinnerRotate className="size-4" />}
+      {folderItem.folder}{" "}
+      {isMovingLoading && <SpinnerRotate className="size-4" />}
     </DropdownMenu.Item>
   );
 };
@@ -182,10 +194,10 @@ const initialState = {
 };
 
 function DeleteFeedForm({
-  feedId,
+  recordId,
   folderName,
 }: {
-  feedId: string;
+  recordId: string;
   folderName: string;
 }) {
   const router = useRouter();
@@ -196,8 +208,8 @@ function DeleteFeedForm({
 
   const [success] = useSound("/sounds/success.wav");
 
-  const deleteFeedStoreFn = useFeedsDelete();
-  console.log({ deleteFeedStoreFn });
+  // const deleteFeedStoreFn = useFeedsDelete();
+  // console.log({ deleteFeedStoreFn });
 
   console.log("RE RENDERED");
 
@@ -206,7 +218,7 @@ function DeleteFeedForm({
   useEffect(() => {
     if (state.type === "success") {
       console.log("AWEEEEEEEEEEESOMMEEEEEEEE");
-      deleteFeedStoreFn(feedId);
+      // deleteFeedStoreFn(feedId);
       success();
       toast.success("Deleted");
       // revalidateCachePath("/folder/Home");
@@ -219,7 +231,7 @@ function DeleteFeedForm({
   }, [state]);
   return (
     <form action={formAction} className="w-full">
-      <input type="hidden" name="feedId" value={feedId} />
+      <input type="hidden" name="feedId" value={recordId} />
       <input type="hidden" name="folderName" value={folderName} />
       {/* <DeleteFeedButton /> */}
 

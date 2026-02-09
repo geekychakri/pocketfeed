@@ -14,8 +14,7 @@ import PodcastDrawerTabs from "@/components/podcast-drawer-tabs";
 import Button from "@/components/ui/custom-button";
 import Textarea from "@/components/ui/custom-textarea";
 
-import PodcastPlayButton from "@/app/(dashboard)/(feed)/feed/[...feedId]/components/PodcastPlayButton"; //TODO:
-
+import PodcastPlayButton from "@/app/(dashboard)/(feed)/feed/components/PodcastPlayButton";
 import { addPost } from "@/app/actions/add-post";
 import { extractTimestampTags } from "@/lib/utils";
 import { useShowPodcastPlayer } from "@/store/podcastplayer";

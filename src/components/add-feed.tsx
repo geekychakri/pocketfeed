@@ -180,6 +180,7 @@ export default function AddFeed() {
 
       {!isRssDataEmpty && (
         <div className="border-shadow flex flex-col gap-6 rounded-md p-4">
+          {/* eslint-disable @next/next/no-img-element */}
           <img
             src={rssData.favicon}
             width={28}
@@ -266,7 +267,7 @@ export default function AddFeed() {
               {/* <input type="hidden" value={rssData?.url} name="random" /> */}
 
               {/* <div className="flex flex-col gap-3">{children}</div> */}
-              <FolderSelect folders={["home", "test"]} />
+              <FolderSelect folders={["Home", "test"]} />
             </div>
 
             <p aria-live="polite" className="sr-only">

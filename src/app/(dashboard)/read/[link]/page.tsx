@@ -57,7 +57,7 @@ export default async function Read(props: {
   params: Promise<{ link: string }>;
 }) {
   const params = await props.params;
-  const userId = (await auth()).userId as string;
+  // const userId = (await auth()).userId as string;
 
   let article, articleUrl;
 

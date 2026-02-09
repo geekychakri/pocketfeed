@@ -13,9 +13,9 @@ export const FolderFeedStoreProvider = ({ children, initialData }) => {
       actions: {
         addFeed: (data) =>
           set((state) => ({ feeds: [...state.feeds, ...data] })),
-        deleteFeed: (id: string) => {
+        deleteFeed: (cid: string) => {
           set((state) => ({
-            feeds: state.feeds.filter((item) => item.id !== id),
+            feeds: state.feeds.filter((item) => item.cid !== cid),
           }));
         },
       },

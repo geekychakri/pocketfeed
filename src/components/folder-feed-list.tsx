@@ -24,107 +24,116 @@ import { useFolderFeedStore } from "@/store/folder-feed";
 import { useFolderName } from "@/store/folder-name";
 
 export function FolderFeedList({
-  initialPageInfo,
+  // initialPageInfo,
   folders,
+  records,
   folderName,
 }: {
-  initialPageInfo: any;
+  // initialPageInfo: any;
   folders: any;
+  records: any;
   folderName: string;
 }) {
-  const feeds = useFolderFeedStore((state) => state.feeds);
-  const { setFolderName } = useFolderName();
+  // const feeds = useFolderFeedStore((state) => state.feeds);
+  // const { setFolderName } = useFolderName();
   // console.log({ folderStoreData });
   // const [feeds, setFeeds] = useState(initialFeeds);
-  const [pageInfo, setPageInfo] = useState(initialPageInfo);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // const [pageInfo, setPageInfo] = useState(initialPageInfo);
+  // const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState<string | null>(null);
   // const pathname = usePathname();
   // const folderName = pathname.split("/")[2];
 
   console.log({ folderName });
 
-  const addFeeds = useFeedsAdd();
+  // const addFeeds = useFeedsAdd();
   // console.log({ addFeeds });
 
-  const loadMore = async () => {
-    if (!pageInfo.hasNextPage || !pageInfo.cursor) return;
+  // const loadMore = async () => {
+  //   if (!pageInfo.hasNextPage || !pageInfo.cursor) return;
 
-    setLoading(true);
-    try {
-      const response = await fetch(
-        `/api/loadMoreFeed?cursor=${encodeURIComponent(pageInfo.cursor)}&folderName=${folderName}`,
-      );
+  //   setLoading(true);
+  //   try {
+  //     const response = await fetch(
+  //       `/api/loadMoreFeed?cursor=${encodeURIComponent(pageInfo.cursor)}&folderName=${folderName}`,
+  //     );
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch more posts");
-      }
+  //     if (!response.ok) {
+  //       throw new Error("Failed to fetch more posts");
+  //     }
 
-      const data = await response.json();
+  //     const data = await response.json();
 
-      // setFeeds((prevPosts: any) => [...prevPosts, ...data.posts]);
-      addFeeds(data.posts);
-      setPageInfo(data.pageInfo);
-    } catch (err) {
-      // let message;
-      // if (err instanceof Error) message = err.message;
-      // else message = String(error);
-      // // toast.error(message);
-      // setError(message);
-      // console.error("Error loading more posts:", err);
-      internalErrorToast(INTERNAL_ERROR_MESSAGE);
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     // setFeeds((prevPosts: any) => [...prevPosts, ...data.posts]);
+  //     addFeeds(data.posts);
+  //     setPageInfo(data.pageInfo);
+  //   } catch (err) {
+  //     // let message;
+  //     // if (err instanceof Error) message = err.message;
+  //     // else message = String(error);
+  //     // // toast.error(message);
+  //     // setError(message);
+  //     // console.error("Error loading more posts:", err);
+  //     internalErrorToast(INTERNAL_ERROR_MESSAGE);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   return (
     <>
       <div className="flex flex-col empty:border-none">
-        {feeds.length >= 1 ? (
-          feeds.map((item, i) => (
+        {records.length >= 1 ? (
+          records.map((record: any, i: any) => (
             <div
               // href={`/feed/${item.title?.trim().replace(/\s+/g, "-").toLowerCase()}`}
               // href={`/feed/${item.feedId}`}
               // id={i === 0 ? "main-item" : ""}
-              key={item.id}
+              key={record.cid}
               className="group/folder-feed relative px-4 isolate flex w-full items-center justify-between gap-4 py-[10px] font-medium shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color] last:shadow-none"
               // onBlur={(e) => alert("BLURREd")}
             >
               <Link
-                href={`/feed/${item.feedId}/${slugify(item.title, {
-                  decamelize: false,
-                })}`}
+                // href={`/feed/${record.value.}/${slugify(item.title, {
+                //   decamelize: false,
+                // })}`}
+                // href={
+                //   record.uri.includes("youtube.com")
+                //     ? `/feed/${record.uri.split("/").pop()}?id=${new URL(record.value.feedUrl).searchParams.get("channel_id")}`
+                //     : `/feed/${record.uri.split("/").pop()}`
+                // }
+                // href="/"
+                href={`/feed?feedUrl=${record.value.feedUrl}`}
                 {...(i === 0 ? { id: "main-item" } : {})}
                 className="absolute inset-0 z-1"
                 onNavigate={() => {
-                  setFolderName(folderName); //TODO: to highlight folder on navigation
-                  setCookie("feedUrl", item.rssURL);
+                  // setFolderName(folderName); //TODO: to highlight folder on navigation
+                  // setCookie("feedUrl", record.value.feedUrl);
                 }}
               />
               <span className="flex items-center gap-3">
                 <Avatar className="bg-ui-normal inline-flex h-[30px] w-[30px] flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full select-none">
                   <AvatarImage
                     className="h-full w-full rounded-[inherit] object-cover"
-                    // src={
-                    //   item.siteURL.includes("youtube.com")
-                    //     ? item.favicon
-                    //     : `https://www.google.com/s2/favicons?domain=${item.siteURL}&sz=128`
-                    // }
-                    src={item.favicon} //TODO:
-                    alt={item.title}
+                    src={
+                      record.value.siteUrl.includes("youtube.com")
+                        ? record.value.favicon
+                        : `https://www.google.com/s2/favicons?domain=${record.value.siteUrl}&sz=64`
+                    }
+                    // src={record.value?.favicon} //TODO:
+                    alt={record.value.title}
                   />
                   <AvatarFallback>
-                    {getInitials(item.title, "folder")}
+                    {getInitials(record.value.title, "folder")}
                   </AvatarFallback>
                 </Avatar>
 
                 <span className="group-hover/folder-feed:text-brand-primary line-clamp-1 transition-[color]">
-                  {decode(item.title)}
+                  {decode(record.value.title)}
                 </span>
               </span>
 
               <FeedDropdown
-                feedId={item.id as string}
+                record={record}
                 folderName={folderName}
                 folders={JSON.parse(JSON.stringify(folders))}
               />
@@ -146,7 +155,7 @@ export function FolderFeedList({
         )}
       </div>
 
-      {pageInfo.hasNextPage && (
+      {/* {pageInfo.hasNextPage && (
         // <button
         //   onClick={loadMore}
         //   disabled={loading}
@@ -171,7 +180,7 @@ export function FolderFeedList({
 
       {!pageInfo.hasNextPage && feeds.length >= 1 && (
         <p className="text-text-secondary text-center mt-5">End of list!</p>
-      )}
+      )} */}
     </>
   );
 }

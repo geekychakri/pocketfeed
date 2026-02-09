@@ -14,18 +14,43 @@ import { getXataClient } from "@/xata";
 import FeedList from "./components/feed-list";
 import YouTubeModal from "./components/YouTubeModal";
 
-const xata = getXataClient();
+// const xata = getXataClient();
 const parser = new Parser({
   customFields: {
     item: ["podcast:chapters"],
   },
 });
 
+function transformStringToUrl(str: string) {
+  const match = str.match(/^(.*\.[a-z]{2,})-(.+)$/i);
+  if (!match) return str;
+
+  const host = match[1];
+  const rest = match[2];
+
+  // Only restore the first path separator
+  return `${host}/${rest}`;
+
+  // YouTube special case
+  // if (url.startsWith("youtube.com/")) {
+  //   url = url.replace(/^youtube\.com\/([^/]+)/, "youtube.com/@$1");
+  // }
+}
+
 export default async function Feed(props: {
   params: Promise<{ feedId: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const params = await props.params;
+  // const feedString = (await props.params).feedId[0];
+  const feedUrl = (await props.searchParams).feedUrl;
+
+  // console.log({ ytChannelId });
+
+  // return <div>feed</div>;
+
+  // console.log({ searchParams: await props.searchParams });
+
+  // console.log({ params: params.feedId });
 
   // console.log({ params });
 
@@ -34,7 +59,7 @@ export default async function Feed(props: {
   // console.log({ rssUrl });
   // const rssUrl = (await props.searchParams).rssUrl;
   // await new Promise((resolve) => setTimeout(resolve, 30000));
-  const user = await currentUser();
+  // const user = await currentUser();
 
   // const feed = await xata.db.feeds
   //   .filter({
@@ -48,20 +73,32 @@ export default async function Feed(props: {
   // console.log({ feed });
   // const feedUrl = feed?.rssURL;
 
-  let feedUrl = await getCookie("feedUrl", { cookies });
+  // let feedUrl = await getCookie("feedUrl", { cookies });
 
-  if (!feedUrl) {
-    console.log("RAN");
-    const feed = await xata.db.feeds
-      .filter({
-        username: user?.username,
-        feedId: params.feedId[0],
-      })
-      .select(["*", "folderName.folder"])
-      .getFirst();
+  // if (!feedUrl) {
+  //   console.log("RAN");
+  //   const feed = await xata.db.feeds
+  //     .filter({
+  //       username: user?.username,
+  //       feedId: params.feedId[0],
+  //     })
+  //     .select(["*", "folderName.folder"])
+  //     .getFirst();
 
-    feedUrl = feed?.rssURL as string;
-  }
+  //   feedUrl = feed?.rssURL as string;
+  // }
+
+  // let feedUrl;
+
+  // if (ytChannelId) {
+  //   feedUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${ytChannelId}`;
+  // } else {
+  //   feedUrl = `https://${transformStringToUrl(feedString)}`;
+  // }
+
+  // console.log({ feedUrl });
+
+  // return <div>feed id</div>;
 
   const feedList = (await parser.parseURL(
     feedUrl as string,

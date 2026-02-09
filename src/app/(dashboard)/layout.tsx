@@ -21,16 +21,17 @@ export default async function MainLayout({
 }>) {
   return (
     <div className="flex w-full">
-      {/* <SidebarNavigation>
+      <SidebarNavigation>
         <CollapsibleFolders>
           <Suspense fallback={<FolderListFallback />}>
             <FolderList />
           </Suspense>
         </CollapsibleFolders>
-        <Suspense fallback={<ProfileAvatarFallback />}>
+
+        {/* <Suspense fallback={<ProfileAvatarFallback />}>
           <ProfileAvatarWrapper />
-        </Suspense>
-      </SidebarNavigation> */}
+        </Suspense> */}
+      </SidebarNavigation>
 
       <PodcastLoader />
       {/* <ReparentChild /> */}

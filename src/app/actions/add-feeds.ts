@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
+import { revalidateTag, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { TID } from "@atproto/common";
@@ -341,6 +341,8 @@ export async function addFeeds(prevState: any, formData: FormData) {
     }
 
     console.log({ response });
+
+    updateTag("user-did:plc:fhhygitymqyet5inny6klful");
 
     return {
       type: "success",

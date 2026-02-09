@@ -13,7 +13,7 @@ function chunkArray(array: [], size: number) {
   return chunks;
 }
 
-export async function GET(request: NextRequest, response: NextResponse) {
+export async function POST(request: NextRequest, response: NextResponse) {
   try {
     const agent = await getSessionAgent();
     if (!agent) {
@@ -83,10 +83,21 @@ export async function GET(request: NextRequest, response: NextResponse) {
       feeds.push(...extractFeeds(outline));
     }
 
-    console.log({ feeds });
+    // console.log({ feeds });
+
+    const feedUrls = new Set();
+
+    // filter duplicate feeds
+    const uniqueFeeds = feeds.filter(
+      ({ feedUrl }) => !feedUrls.has(feedUrl) && feedUrls.add(feedUrl),
+    );
+
+    console.log({ uniqueFeeds });
+
+    // return NextResponse.json({ message: "success" });
 
     // atproto create records TODO:
-    const bulkRecords = feeds.map((record) => {
+    const bulkRecords = uniqueFeeds.map((record) => {
       let rkey;
       if (record.feedUrl.includes("youtube.com")) {
         rkey = transformFeedUrltoRkey(record.siteUrl);
