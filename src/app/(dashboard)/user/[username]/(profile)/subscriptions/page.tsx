@@ -10,22 +10,27 @@ import LoadingUI from "@/components/loading-ui";
 import Button from "@/components/ui/custom-button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/user-avatar";
 
+import { getAllRecords } from "@/lib/atproto/queries";
 import { getInitials } from "@/lib/utils";
-import { getXataClient } from "@/xata";
+
+// import { getXataClient } from "@/xata";
 
 import SubscriptionList from "./subscription-list";
 
-const xata = getXataClient();
+// const xata = getXataClient();
 
 export default async function SubscriptionPage(props: {
   params: Promise<any>;
 }) {
-  const params = await props.params;
-  const username = params.username;
-  // const user = await currentUser();
-  // console.log({ user });
-  const feeds = await xata.db.feeds.filter({ username }).getAll();
-  console.log(feeds);
+  // return "Subscriptions";
+  // const params = await props.params;
+  // const username = params.username;
+  // // const user = await currentUser();
+  // // console.log({ user });
+  // const feeds = await xata.db.feeds.filter({ username }).getAll();
+  // console.log(feeds);
 
-  return <SubscriptionList feeds={JSON.parse(JSON.stringify(feeds))} />;
+  const records = await getAllRecords();
+
+  return <SubscriptionList records={records} />;
 }

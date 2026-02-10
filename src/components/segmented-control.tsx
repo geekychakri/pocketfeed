@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { JSX, useEffect } from "react";
+import type { Route } from "next";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -11,22 +12,22 @@ import { cn } from "@/lib/utils";
 
 type SegmentedControlProps = {
   items: { href: string; title: string }[];
-  birthday: string;
+  // birthday: string;
 };
 
 const SegmentedControl = ({
   items,
-  birthday,
+  // birthday,
 }: SegmentedControlProps): JSX.Element => {
   const pathname = usePathname();
 
-  useEffect(() => {
-    if (birthday) {
-      if (new Date().getDate().toString() === birthday.split("-")[2]) {
-        balloons();
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (birthday) {
+  //     if (new Date().getDate().toString() === birthday.split("-")[2]) {
+  //       balloons();
+  //     }
+  //   }
+  // }, []);
 
   return (
     <motion.ul className="border-border-non-interactive flex border-b text-center">
@@ -42,7 +43,7 @@ const SegmentedControl = ({
             className="relative flex-1 list-none"
           >
             <Link
-              href={item.href}
+              href={item.href as Route}
               className={cn("inline-block w-full p-4")}
               // replace
             >

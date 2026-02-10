@@ -32,7 +32,7 @@ const initialState = {
 
 type FeedsType = PageRecordArray<Readonly<SelectedPick<FeedsRecord, ["*"]>>>;
 
-export default function SubscriptionList({ feeds }: { feeds: FeedsType }) {
+export default function SubscriptionList({ records }: { records: any }) {
   const [state, formAction, isPending] = useActionState(
     deleteSubscriptions,
     initialState,
@@ -71,7 +71,7 @@ export default function SubscriptionList({ feeds }: { feeds: FeedsType }) {
     }
   }, [state]);
 
-  if (feeds.length === 0) {
+  if (records.length === 0) {
     return (
       <div className="flex min-h-[300px] flex-col items-center justify-center gap-8">
         <div className="flex flex-col items-center justify-center gap-2">
@@ -94,15 +94,15 @@ export default function SubscriptionList({ feeds }: { feeds: FeedsType }) {
   return (
     <div className="flex flex-col gap-2">
       <form action={formAction} id="subscriptionForm">
-        <SubscriptionListStatusBar feeds={feeds} isPending={isPending} />
+        <SubscriptionListStatusBar records={records} isPending={isPending} />
         <div className="flex flex-col empty:border-none">
-          {feeds.length >= 1 ? (
+          {records.length >= 1 ? (
             <WindowVirtualizer>
-              {feeds.map((feed, i) => (
+              {records.map((record: any) => (
                 <div
                   // href={`/feed/${item.title?.trim().replace(/\s+/g, "-").toLowerCase()}`}
                   // href={`/feed/${item.feedId}`}
-                  key={feed.id}
+                  key={record.cid}
                   className="group/folder-feed relative isolate flex w-full items-center justify-between py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]"
                 >
                   <span className="flex items-center gap-3">
@@ -114,28 +114,31 @@ export default function SubscriptionList({ feeds }: { feeds: FeedsType }) {
                         //     ? item.favicon
                         //     : `https://www.google.com/s2/favicons?domain=${item.siteURL}&sz=128`
                         // }
-                        src={feed.favicon as string} //TODO:
-                        alt={feed.title as string}
+                        src={
+                          record?.value.favicon ||
+                          `https://www.google.com/s2/favicons?domain=${record.value.siteUrl}&sz=128`
+                        } //TODO:
+                        alt={record.value.title as string}
                       />
                       <AvatarFallback delayMs={400}>
-                        {getInitials(feed.title as string, "folder")}
+                        {getInitials(record.value.title as string, "folder")}
                       </AvatarFallback>
                     </Avatar>
                     <span className="group-hover/folder-feed:text-brand-primary line-clamp-1 transition-[color]">
-                      {decode(feed.title)}
+                      {decode(record.value.title)}
                     </span>
                   </span>
                   <label
-                    htmlFor={feed.id}
+                    htmlFor={record.cid}
                     className="hover:bg-ui-hover z-2 flex size-[50px] items-center justify-center rounded-full duration-150"
                   >
                     {/* <input id="test" type="checkbox" className="size-4" /> */}
                     <Checkbox.Root
                       className="bg-ui-normal flex size-[20px] cursor-auto appearance-none items-center justify-center rounded outline-none"
                       // defaultChecked
-                      name={`feedIdList[${feed.id}]`}
-                      value={feed.id}
-                      id={feed.id}
+                      name={`feedIdList[${record.cid}]`}
+                      value={record.cid}
+                      id={record.cid}
                       onCheckedChange={() => {
                         selectSound();
                       }}
@@ -151,7 +154,7 @@ export default function SubscriptionList({ feeds }: { feeds: FeedsType }) {
                   name={`feeds[${i}][feedId]`}
                 /> */}
                   <Link
-                    href={`/feed/${feed.feedId}`}
+                    href={`/feed?feedUrl=${record.value.feedUrl}`}
                     className="absolute inset-0 z-1"
                   />
                 </div>
@@ -167,10 +170,10 @@ export default function SubscriptionList({ feeds }: { feeds: FeedsType }) {
 }
 
 function SubscriptionListStatusBar({
-  feeds,
+  records,
   isPending,
 }: {
-  feeds: FeedsType;
+  records: any;
   isPending: boolean;
 }) {
   const [isSticky, setIsSticky] = useState(false);
@@ -188,7 +191,7 @@ function SubscriptionListStatusBar({
       className={`bg-background-primary sticky -top-[1px] z-10 flex h-[56px] items-center justify-between transition-[box-shadow] ${isSticky && "shadow-[0_1px_0_0_var(--border-non-interactive)]"}`}
     >
       <h2>
-        {feeds.length}{" "}
+        {records.length}{" "}
         <span className="text-text-secondary">subscriptions</span>
       </h2>
       <Button className="bg-transparent" type="submit" disabled={isPending}>

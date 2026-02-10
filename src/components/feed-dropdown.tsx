@@ -49,6 +49,10 @@ const FeedDropdown = ({
   const pathname = usePathname();
   const currentFolder = decodeURIComponent(pathname.split("/")[2]);
 
+  console.log({ record });
+
+  const recordKey = record.uri.split("/").pop();
+
   // const deleteFeedStoreFn = useFeedsDelete();
 
   // const moveToFolderAction = async (id: string, newFolder: string) => {
@@ -96,7 +100,7 @@ const FeedDropdown = ({
               e.preventDefault();
             }}
           >
-            <DeleteFeedForm recordId={record.cid} folderName={folderName} />
+            <DeleteFeedForm recordKey={recordKey} folderName={folderName} />
           </DropdownMenu.Item>
 
           {folders.length > 1 ? (
@@ -194,10 +198,10 @@ const initialState = {
 };
 
 function DeleteFeedForm({
-  recordId,
+  recordKey,
   folderName,
 }: {
-  recordId: string;
+  recordKey: string;
   folderName: string;
 }) {
   const router = useRouter();
@@ -228,10 +232,10 @@ function DeleteFeedForm({
     } else if (state.type === "user-error") {
       toast.error(state.message);
     }
-  }, [state]);
+  }, [state, success]);
   return (
     <form action={formAction} className="w-full">
-      <input type="hidden" name="feedId" value={recordId} />
+      <input type="hidden" name="recordKey" value={recordKey} />
       <input type="hidden" name="folderName" value={folderName} />
       {/* <DeleteFeedButton /> */}
 

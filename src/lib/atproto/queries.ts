@@ -22,7 +22,7 @@ export let getAllRecords = async () => {
   const response = await fetch(
     "https://bsky.social/xrpc/com.atproto.repo.listRecords?repo=did:plc:fhhygitymqyet5inny6klful&collection=app.pocketfeed.feed.subscription&limit=100",
   );
-  console.log({ response });
+  // console.log({ response });
 
   const data = await response.json();
   // const agent = await getSessionAgent();
@@ -37,7 +37,7 @@ export let getAllRecords = async () => {
 
   console.log({ feeds });
 
-  console.log({ feed: feeds?.[0].value });
+  // console.log({ feed: feeds?.[0].value });
 
   // cache.set(did as string, feeds);
 

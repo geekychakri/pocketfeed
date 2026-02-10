@@ -21,22 +21,31 @@ import { getXataClient, UsersRecord } from "@/xata";
 const xata = getXataClient();
 
 export default async function UserProfile({ username }: { username: string }) {
-  const { userId }: { userId: string | null } = await auth();
-  const loggedInUserId = userId as string;
-  const loggedInUserInfo = await currentUser();
+  // const { userId }: { userId: string | null } = await auth();
+  // const loggedInUserId = userId as string;
+  // const loggedInUserInfo = await currentUser();
 
-  const user = (await xata.db.users
-    .filter({ username: username })
-    .getFirst()) as UsersRecord;
+  // const user = (await xata.db.users
+  //   .filter({ username: username })
+  //   .getFirst()) as UsersRecord;
 
-  console.log({ user });
+  // console.log({ user });
+
+  const res = await fetch(
+    "https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=did:plc:fhhygitymqyet5inny6klful",
+  ); //TODO: actor pass dynamic did
+
+  const profile = await res.json();
 
   const items = [
-    { href: `/user/${user.username}`, title: "Posts" },
-    { href: `/user/${user.username}/subscriptions`, title: "Subscriptions" },
+    { href: `/user/${profile.displayName}`, title: "Posts" },
+    {
+      href: `/user/${profile.displayName}/subscriptions`,
+      title: "Subscriptions",
+    },
   ];
 
-  if (!user) {
+  if (!profile) {
     return (
       <div>
         <div className="h-14"></div>
@@ -48,27 +57,28 @@ export default async function UserProfile({ username }: { username: string }) {
     );
   }
 
-  const followingRecord = await xata.db.follows
-    .filter({ followerId: loggedInUserId, followeeId: user.userId as string })
-    .getFirst(); //TODO:
+  // const followingRecord = await xata.db.follows
+  //   .filter({ followerId: loggedInUserId, followeeId: user.userId as string })
+  //   .getFirst(); //TODO:
 
-  console.log({ followingRecord });
+  // console.log({ followingRecord });
 
   return (
     <div>
       <ProfileInfo>
         {/* <ProfileTitle username={user.username as string} /> */}
-        <ProfileHeader user={user}>
-          <FollowButton followeeId={followingRecord?.id as string} />
+        <ProfileHeader profile={profile}>
+          {/* <FollowButton followeeId={followingRecord?.id as string} /> */}
         </ProfileHeader>
         <ProfileBody
-          user={user}
-          loggedInUsername={loggedInUserInfo?.username as string}
+          profile={profile}
+          loggedInUsername={profile?.displayName as string}
         />
-        <ProfileFooter username={user.username as string} />
+        <ProfileFooter username={profile?.displayName as string} />
       </ProfileInfo>
 
-      <SegmentedControl items={items} birthday={user.birthday as string} />
+      {/* <SegmentedControl items={items} birthday={user.birthday as string} /> */}
+      <SegmentedControl items={items} />
     </div>
   );
 }
@@ -87,11 +97,11 @@ async function ProfileInfo({ children }: { children: React.ReactNode }) {
 // }
 
 function ProfileHeader({
-  children,
-  user,
+  // children,
+  profile,
 }: {
-  children: React.ReactNode;
-  user: UsersRecord;
+  // children: React.ReactNode;
+  profile: any;
 }) {
   return (
     <div className="flex items-center justify-between">
@@ -99,21 +109,19 @@ function ProfileHeader({
         <Avatar className="bg-background-secondary ring-ui-normal inline-flex h-[92px] w-[92px] flex-none items-center justify-center overflow-hidden rounded-full align-middle ring-1 select-none">
           <AvatarImage
             className="h-full w-full rounded-[inherit] object-cover"
-            src={user.avatarUrl as string}
-            alt={user?.fullname as string}
+            src={profile.avatar as string}
+            alt={profile?.fullname as string}
           />
           <AvatarFallback
             className="bg-background-secondary flex h-full w-full items-center justify-center text-3xl leading-1 font-medium"
             delayMs={600}
           >
-            {getInitials((user.fullname || user.username) as string)}
+            {getInitials(profile.displayName as string)}
           </AvatarFallback>
         </Avatar>
         <div className="flex flex-col gap-2">
           <p className="flex items-center gap-2 text-xl">
-            <span className="font-medium">
-              {user.fullname || user.username}
-            </span>
+            <span className="font-medium">{profile.displayName}</span>
             <span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -132,39 +140,40 @@ function ProfileHeader({
               </svg>
             </span>
           </p>
-          <span className="text-text-secondary">@{user.username}</span>
+          <span className="text-text-secondary">@{profile.handle}</span>
         </div>
       </div>
-      {children}
+      {/* {children} */}
     </div>
   );
 }
 
 function ProfileBody({
-  user,
+  profile,
   loggedInUsername,
 }: {
-  user: UsersRecord;
+  profile: any;
   loggedInUsername: string;
 }) {
   return (
     <div className="flex flex-col gap-2">
-      {user.bio ? (
+      {profile.description ? (
         <p
           className="prose text-text-secondary prose-a:text-brand-primary prose-a:no-underline whitespace-pre-wrap"
           dangerouslySetInnerHTML={{
-            __html: convertTextToLinks(user.bio as string),
+            __html: convertTextToLinks(profile?.description as string),
           }}
         ></p>
-      ) : loggedInUsername === user.username ? (
-        <Link
-          href="/settings"
+      ) : loggedInUsername === profile.displayName ? (
+        <a
+          href={`https://bsky.app/profile/${profile.handle}`}
+          target="_blank"
           className="custom-underline text-text-secondary hover:text-text-primary self-start duration-150"
         >
           Say hi with a short bio!
-        </Link>
+        </a>
       ) : null}
-      {user.website && (
+      {/* {user.website && (
         <a
           href={`https://${user.website as string}`}
           target="_blank"
@@ -173,81 +182,82 @@ function ProfileBody({
         >
           {user.website}
         </a>
-      )}
+      )} */}
     </div>
   );
 }
 
 function ProfileFooter({ username }: { username: string }) {
-  return (
-    <div className="flex items-center gap-5">
-      <ErrorBoundary
-        fallback={
-          <CustomTooltip
-            content={
-              <div className="flex flex-col gap-1">
-                <span className="text-danger">Something went wrong!</span>
-                <span>Click to view your followers list.</span>
-              </div>
-            }
-            side="bottom"
-            sideOffset={10}
-          >
-            <Link
-              href={`/user/${username}/followers`}
-              className="hover:custom-underline text-danger flex items-center gap-1 text-sm"
-            >
-              <UserErrorIcon className="size-5" />
-              <span>Followers</span>
-            </Link>
-          </CustomTooltip>
-        }
-      >
-        <Suspense
-          fallback={
-            <div className="flex animate-pulse space-x-4">
-              <div className="bg-ui-normal h-5 w-20 rounded-md"></div>
-            </div>
-          }
-        >
-          <TotalFollowersCount username={username as string} />
-        </Suspense>
-      </ErrorBoundary>
+  return "Profile Footer";
+  // return (
+  //   <div className="flex items-center gap-5">
+  //     <ErrorBoundary
+  //       fallback={
+  //         <CustomTooltip
+  //           content={
+  //             <div className="flex flex-col gap-1">
+  //               <span className="text-danger">Something went wrong!</span>
+  //               <span>Click to view your followers list.</span>
+  //             </div>
+  //           }
+  //           side="bottom"
+  //           sideOffset={10}
+  //         >
+  //           <Link
+  //             href={`/user/${username}/followers`}
+  //             className="hover:custom-underline text-danger flex items-center gap-1 text-sm"
+  //           >
+  //             <UserErrorIcon className="size-5" />
+  //             <span>Followers</span>
+  //           </Link>
+  //         </CustomTooltip>
+  //       }
+  //     >
+  //       <Suspense
+  //         fallback={
+  //           <div className="flex animate-pulse space-x-4">
+  //             <div className="bg-ui-normal h-5 w-20 rounded-md"></div>
+  //           </div>
+  //         }
+  //       >
+  //         <TotalFollowersCount username={username as string} />
+  //       </Suspense>
+  //     </ErrorBoundary>
 
-      <ErrorBoundary
-        fallback={
-          <CustomTooltip
-            content={
-              <div className="flex flex-col gap-1">
-                <span className="text-danger">Something went wrong!</span>
-                <span>Click to view your following list.</span>
-              </div>
-            }
-            side="bottom"
-            sideOffset={10}
-          >
-            <Link
-              href={`/user/${username}/follows`}
-              className="hover:custom-underline text-danger flex items-center gap-1 text-sm"
-            >
-              <UserErrorIcon className="size-5" />
-              <span>Following</span>
-            </Link>
-          </CustomTooltip>
-        }
-      >
-        <Suspense
-          fallback={
-            <div className="flex animate-pulse space-x-4">
-              <div className="bg-ui-normal h-5 w-20 rounded-md"></div>
-            </div>
-          }
-        >
-          <TotalFollowingCount username={username as string} />
-        </Suspense>
-      </ErrorBoundary>
-    </div>
-  );
+  //     <ErrorBoundary
+  //       fallback={
+  //         <CustomTooltip
+  //           content={
+  //             <div className="flex flex-col gap-1">
+  //               <span className="text-danger">Something went wrong!</span>
+  //               <span>Click to view your following list.</span>
+  //             </div>
+  //           }
+  //           side="bottom"
+  //           sideOffset={10}
+  //         >
+  //           <Link
+  //             href={`/user/${username}/follows`}
+  //             className="hover:custom-underline text-danger flex items-center gap-1 text-sm"
+  //           >
+  //             <UserErrorIcon className="size-5" />
+  //             <span>Following</span>
+  //           </Link>
+  //         </CustomTooltip>
+  //       }
+  //     >
+  //       <Suspense
+  //         fallback={
+  //           <div className="flex animate-pulse space-x-4">
+  //             <div className="bg-ui-normal h-5 w-20 rounded-md"></div>
+  //           </div>
+  //         }
+  //       >
+  //         <TotalFollowingCount username={username as string} />
+  //       </Suspense>
+  //     </ErrorBoundary>
+  //   </div>
+  // );
 }
 
 async function TotalFollowersCount({ username }: { username: string }) {
