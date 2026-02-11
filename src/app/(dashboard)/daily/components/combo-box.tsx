@@ -14,17 +14,17 @@ export default function MultipleFeedsCombobox({
   initialData,
   selectedFeeds,
 }: {
-  initialData: JSONData<Readonly<SelectedPick<FeedsRecord, ["*"]>>>[];
-  selectedFeeds: JSONData<Readonly<SelectedPick<DailyRecord, ["*"]>>>[];
+  initialData: any;
+  selectedFeeds: any;
 }) {
   console.log({ selectedFeeds });
   const containerRef = React.useRef<HTMLDivElement | null>(null);
   const id = React.useId();
 
-  const rssUrls = new Set(selectedFeeds.map((item) => item.rssURL));
+  const rssUrls = new Set(selectedFeeds.map((item: any) => item?.feedUrl));
 
   const common = initialData.filter((item) =>
-    rssUrls.has(item.rssURL as string),
+    rssUrls.has(item.feedUrl as string),
   );
 
   // const common = initialData.filter((item) =>
@@ -76,7 +76,7 @@ export default function MultipleFeedsCombobox({
                     {value.map((language) => {
                       return (
                         <Combobox.Chip
-                          key={language.id}
+                          key={language.title}
                           className="flex items-center gap-1 rounded-md bg-gray-100 px-1.5 py-[0.2rem] text-sm text-gray-900 outline-none cursor-default [@media(hover:hover)]:[&[data-highlighted]]:bg-blue-800 [@media(hover:hover)]:[&[data-highlighted]]:text-gray-50 focus-within:bg-blue-800 focus-within:text-gray-50"
                           aria-label={language.title}
                         >
@@ -115,7 +115,7 @@ export default function MultipleFeedsCombobox({
               <Combobox.List>
                 {(language: ProgrammingLanguage) => (
                   <Combobox.Item
-                    key={language.id}
+                    key={language.title}
                     className="grid cursor-default grid-cols-[0.75rem_1fr] items-center gap-2 py-2 pr-8 pl-4 text-base leading-6 outline-none select-none [@media(hover:hover)]:[&[data-highlighted]]:relative [@media(hover:hover)]:[&[data-highlighted]]:z-0 [@media(hover:hover)]:[&[data-highlighted]]:text-gray-50 [@media(hover:hover)]:[&[data-highlighted]]:before:absolute [@media(hover:hover)]:[&[data-highlighted]]:before:inset-x-2 [@media(hover:hover)]:[&[data-highlighted]]:before:inset-y-0 [@media(hover:hover)]:[&[data-highlighted]]:before:z-[-1] [@media(hover:hover)]:[&[data-highlighted]]:before:rounded-sm [@media(hover:hover)]:[&[data-highlighted]]:before:bg-brand-primary group/combobox-item"
                     value={language}
                   >

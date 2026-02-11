@@ -15,6 +15,13 @@
       "when": 1769600289978,
       "tag": "0001_same_night_nurse",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1770798342452,
+      "tag": "0002_unique_black_bird",
+      "breakpoints": true
     }
   ]
 }

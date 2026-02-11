@@ -10,13 +10,14 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { decode } from "html-entities";
 import Parser from "rss-parser";
 
-import PodcastPlayButton from "@/app/(dashboard)/(feed)/feed/[...feedId]/components/PodcastPlayButton";
-import YouTubePlayButton from "@/app/(dashboard)/(feed)/feed/[...feedId]/components/YouTubePlayButton";
+import { getSelectedFeeds } from "@/db/queries";
 import { convertTimeStringToReadable, getYoutubeVideoId } from "@/lib/utils";
 import { FeedItemType, FeedListType } from "@/types";
 import { getXataClient } from "@/xata";
 
-import YouTubeModal from "../../(feed)/feed/[...feedId]/components/YouTubeModal";
+import PodcastPlayButton from "../../(feed)/feed/components/PodcastPlayButton";
+import YouTubeModal from "../../(feed)/feed/components/YouTubeModal";
+import YouTubePlayButton from "../../(feed)/feed/components/YouTubePlayButton";
 import FeedItem from "./feed-item";
 
 const parser = new Parser();
@@ -42,16 +43,20 @@ sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 3);
 export default async function DailyFeedList() {
   const feedItems = [];
 
-  const userId = (await auth()).userId as string;
+  // const userId = (await auth()).userId as string;
 
-  const feedList = await xata.db.daily
-    .filter({ userId })
-    .select(["rssURL", "title"])
-    .getAll();
+  // const feedList = await xata.db.daily
+  //   .filter({ userId })
+  //   .select(["rssURL", "title"])
+  //   .getAll();
+
+  const feedList = await getSelectedFeeds();
+
+  console.log({ feedList });
 
   const feedSources = feedList.map((item) => {
     return {
-      rssUrl: item.rssURL,
+      feedUrl: item.feedUrl,
       title: item.title,
     };
   });
@@ -61,7 +66,7 @@ export default async function DailyFeedList() {
   const data = await Promise.allSettled(
     feedSources.map(async (source) => {
       try {
-        const feed = await parser.parseURL(source.rssUrl);
+        const feed = await parser.parseURL(source.feedUrl as string);
         const latestFeed = feed.items.splice(0, 10).map((item) => {
           return {
             ...item,
@@ -99,7 +104,7 @@ export default async function DailyFeedList() {
             });
         });
       } catch (error) {
-        console.error(`Error fetching feed from ${source.rssUrl}:`, error);
+        console.error(`Error fetching feed from ${source.feedUrl}:`, error);
       }
     }),
   );

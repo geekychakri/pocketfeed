@@ -35,7 +35,7 @@ export let getAllRecords = async () => {
 
   const feeds = data.records;
 
-  console.log({ feeds });
+  // console.log({ feeds });
 
   // console.log({ feed: feeds?.[0].value });
 

@@ -10,6 +10,7 @@ import {
   serial,
   text,
   timestamp,
+  uuid,
 } from "drizzle-orm/pg-core";
 
 // export const appUser = pgRole("app_user"); //TODO:
@@ -47,6 +48,14 @@ export const authState = pgTable("auth_state", {
 export const authSession = pgTable("auth_session", {
   key: text("key").primaryKey(),
   value: text("value").notNull(),
+});
+
+export const todayFeeds = pgTable("today_feeds", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  did: text("did").notNull(),
+  title: text("title"),
+  feedUrl: text("feedUrl"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
 export type User = InferSelectModel<typeof users>;

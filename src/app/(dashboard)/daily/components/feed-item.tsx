@@ -9,10 +9,11 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { decode } from "html-entities";
 
-import PodcastPlayButton from "@/app/(dashboard)/(feed)/feed/[...feedId]/components/PodcastPlayButton";
-import YouTubePlayButton from "@/app/(dashboard)/(feed)/feed/[...feedId]/components/YouTubePlayButton";
 import { convertTimeStringToReadable, getYoutubeVideoId } from "@/lib/utils";
 import { FeedItemType, FeedListType } from "@/types";
+
+import PodcastPlayButton from "../../(feed)/feed/components/PodcastPlayButton";
+import YouTubePlayButton from "../../(feed)/feed/components/YouTubePlayButton";
 
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
