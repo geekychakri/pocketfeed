@@ -17,11 +17,11 @@ import type { BookmarksRecord } from "@/xata";
 
 export default function BookmarkDelete({
   bookmarkId,
-  bookmarkLink,
+  // bookmarkLink,
   // removeBookmark,
 }: {
   bookmarkId: string;
-  bookmarkLink: string;
+  // bookmarkLink: string;
   // removeBookmark: (
   //   id: string,
   // ) => JSONData<Readonly<SelectedPick<BookmarksRecord, ["*"]>>>[];
@@ -41,20 +41,20 @@ export default function BookmarkDelete({
     if (state.message === "success") {
       console.log("AWEEEEEEEEEEESOMMEEEEEEEE");
 
-      mutate(
-        (key) =>
-          typeof key === "string" &&
-          key.startsWith(
-            `/api/checkBookmarkExists?bookmarkLink=${encodeURIComponent(bookmarkLink)}`,
-          ),
-        { isBookmarkExists: false, type: "success" },
-        { revalidate: false },
-      );
+      // mutate(
+      //   (key) =>
+      //     typeof key === "string" &&
+      //     key.startsWith(
+      //       `/api/checkBookmarkExists?bookmarkLink=${encodeURIComponent(bookmarkLink)}`,
+      //     ),
+      //   { isBookmarkExists: false, type: "success" },
+      //   { revalidate: false },
+      // );
       // deleteBookmarkFn(bookmarkId);
       // removeBookmark(bookmarkId);
       success();
       toast.success("Deleted");
-      revalidateCachePath(`/bookmarks`, "page");
+      // revalidateCachePath(`/bookmarks`, "page");
       // revalidateCachePath("/folder/Home");
       // router.refresh();
     }

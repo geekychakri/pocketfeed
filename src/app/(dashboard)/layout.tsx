@@ -14,6 +14,8 @@ import ReparentComponent2 from "@/components/reparent-component-2";
 import SidebarNavigation from "@/components/sidebar-navigation";
 import TestNav from "@/components/test-nav";
 
+import YouTubeModal from "./(feed)/feed/components/YouTubeModal";
+
 export default async function MainLayout({
   children,
 }: Readonly<{
@@ -34,6 +36,7 @@ export default async function MainLayout({
       </SidebarNavigation>
 
       <PodcastLoader />
+      <YouTubeModal />
       {/* <ReparentChild /> */}
       {/* <ClerkProvider dynamic> */}
       <main className="flex-1" id="main">

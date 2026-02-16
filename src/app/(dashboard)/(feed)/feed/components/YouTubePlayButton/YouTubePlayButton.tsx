@@ -28,7 +28,7 @@ export default function YouTubePlayButton({
   bookmarkId?: string;
 }) {
   console.log({ youtubeId });
-  console.log({ feedItemType: feedItem });
+  console.log({ feedItem: feedItem });
   const { openYoutubePlayer, setYoutubeId, isOpen, setYtVideoTitle } =
     useShowYTPlayer();
   const { setFeedItem } = useFeedItem();
@@ -53,7 +53,7 @@ export default function YouTubePlayButton({
         openYoutubePlayer();
         setYoutubeId(youtubeId);
         setYtVideoTitle(ytVideoTitle);
-        setFeedItem(JSON.stringify(feedItem));
+        setFeedItem(feedItem); //TODO:
         audioPlayerRef.current?.pause();
         tap();
         setYtBookmarkId(bookmarkId as string); //TODO:: for handling bookmarks in bookmarks page to delete

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { cookies } from "next/headers";
 
 import { currentUser } from "@clerk/nextjs/server";
@@ -8,6 +9,9 @@ import Parser from "rss-parser";
 
 import RouteBack from "@/components/route-back";
 
+import { db } from "@/db/db";
+import { getBookmarks } from "@/db/queries";
+import * as schema from "@/db/schema";
 import { FeedItemType, FeedListType } from "@/types";
 import { getXataClient } from "@/xata";
 
@@ -100,22 +104,6 @@ export default async function Feed(props: {
 
   // return <div>feed id</div>;
 
-  const feedList = (await parser.parseURL(
-    feedUrl as string,
-  )) as unknown as FeedListType;
-
-  console.log({ feedList });
-
-  const sortFirstTenFeedsByDate = feedList.items
-    .slice(0, 10)
-    .sort((a, b) => (dayjs(a.isoDate).isAfter(dayjs(b.isoDate)) ? -1 : 1));
-
-  console.log(sortFirstTenFeedsByDate);
-
-  if (feedList.items.length === 0) {
-    return <div>Feed is empty!</div>; //TODO:
-  }
-
   // console.log({ feedItem: feedList.items.slice(0, 1) });
 
   // console.log({ podcastChapters: feedList.items[0]["podcast:chapters"] });
@@ -125,29 +113,69 @@ export default async function Feed(props: {
   // console.log({ itemsCategorized });
 
   // console.log(feedList?.image?.url);
-  const categorizedFeedItemsList = categorizeFeedItems(sortFirstTenFeedsByDate);
+  // const categorizedFeedItemsList = categorizeFeedItems(sortFirstTenFeedsByDate);
 
-  console.log({
-    categorizedFeedItemsList: categorizedFeedItemsList,
-  });
+  // console.log({
+  //   categorizedFeedItemsList: categorizedFeedItemsList,
+  // });
 
   // const olderPosts = reverseObj(categorizedFeedItemsList.older);
 
   // console.log({ olderPosts });
 
+  // return <div>Feed</div>;
+
   return (
     <div className="flex flex-col px-4 py-14">
       <div className="relative mb-5 flex items-center">
         <RouteBack className="absolute -left-9 border" />
-        <h1 className="border text-lg font-medium">{feedList.title}</h1>
+        {/* <h1 className="border text-lg font-medium">{feedList.title}</h1> */}
+        <h1>Feed Title</h1>
       </div>
-      <YouTubeModal />
+      {/*<YouTubeModal />*/}
 
+      <Suspense fallback="Loading...">
+        <FeedListWrapper feedUrl={feedUrl as string} />
+      </Suspense>
+    </div>
+  );
+}
+
+const FeedListWrapper = async ({ feedUrl }: { feedUrl: string }) => {
+  // preload bookmarks data
+  const getBookmarksPromise = getBookmarks();
+
+  const feedList = (await parser.parseURL(
+    feedUrl as string,
+  )) as unknown as FeedListType;
+
+  console.log({ feedList });
+
+  // stringify and parse to counter serialization error object null prototype
+  const sortFirstTenFeedsByDate = JSON.parse(JSON.stringify(feedList))
+    .items.slice(0, 10)
+    .sort((a, b) => (dayjs(a.isoDate).isAfter(dayjs(b.isoDate)) ? -1 : 1));
+
+  const fList = {
+    ...feedList,
+    items: [...sortFirstTenFeedsByDate],
+  };
+
+  console.dir({ fListItems: fList.items });
+
+  // console.log(sortFirstTenFeedsByDate);
+
+  // return "Feed";
+
+  if (feedList.items.length === 0) {
+    return <div>Feed is empty!</div>; //TODO:
+  }
+  return (
+    <>
       <FeedList
-        categorizedFeedItemsList={JSON.parse(
-          JSON.stringify(categorizedFeedItemsList),
-        )}
-        feedList={JSON.parse(JSON.stringify(feedList))}
+        feedList={fList}
+        getBookmarksPromise={getBookmarksPromise}
+        // feedItems={feedList.items}
         // folderName={feed?.folderName?.folder as string} //TODO:
       />
       <a
@@ -159,9 +187,9 @@ export default async function Feed(props: {
         <span className="custom-underline">Visit original page</span>
         {/* <ArrowTopRightIcon /> */}
       </a>
-    </div>
+    </>
   );
-}
+};
 
 // function categorizeFeedItems(feedItems: FeedItemType[]) {
 //   const now = new Date();
@@ -253,73 +281,73 @@ export default async function Feed(props: {
 //   return categorized;
 // }
 
-function categorizeFeedItems(feedItems: FeedItemType[]) {
-  // Pre-calculate all date boundaries once
-  const now = new Date();
-  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const yesterdayStart = new Date(todayStart);
-  yesterdayStart.setDate(todayStart.getDate() - 1);
+// function categorizeFeedItems(feedItems: FeedItemType[]) {
+//   // Pre-calculate all date boundaries once
+//   const now = new Date();
+//   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+//   const yesterdayStart = new Date(todayStart);
+//   yesterdayStart.setDate(todayStart.getDate() - 1);
 
-  const thisWeekStart = new Date(todayStart);
-  thisWeekStart.setDate(todayStart.getDate() - todayStart.getDay());
+//   const thisWeekStart = new Date(todayStart);
+//   thisWeekStart.setDate(todayStart.getDate() - todayStart.getDay());
 
-  const lastWeekStart = new Date(thisWeekStart);
-  lastWeekStart.setDate(thisWeekStart.getDate() - 7);
+//   const lastWeekStart = new Date(thisWeekStart);
+//   lastWeekStart.setDate(thisWeekStart.getDate() - 7);
 
-  const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+//   const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
 
-  const lastMonthStart = new Date(thisMonthStart);
-  lastMonthStart.setMonth(thisMonthStart.getMonth() - 1);
+//   const lastMonthStart = new Date(thisMonthStart);
+//   lastMonthStart.setMonth(thisMonthStart.getMonth() - 1);
 
-  const thisYearStart = new Date(now.getFullYear(), 0, 1);
+//   const thisYearStart = new Date(now.getFullYear(), 0, 1);
 
-  const lastYearStart = new Date(thisYearStart);
-  lastYearStart.setFullYear(thisYearStart.getFullYear() - 1);
+//   const lastYearStart = new Date(thisYearStart);
+//   lastYearStart.setFullYear(thisYearStart.getFullYear() - 1);
 
-  // Initialize result object
-  const categorized = {
-    today: [] as FeedItemType[],
-    yesterday: [] as FeedItemType[],
-    thisWeek: [] as FeedItemType[],
-    lastWeek: [] as FeedItemType[],
-    thisMonth: [] as FeedItemType[],
-    lastMonth: [] as FeedItemType[],
-    thisYear: [] as FeedItemType[],
-    lastYear: [] as FeedItemType[],
-    older: {} as { [year: string]: FeedItemType[] },
-  };
+//   // Initialize result object
+//   const categorized = {
+//     today: [] as FeedItemType[],
+//     yesterday: [] as FeedItemType[],
+//     thisWeek: [] as FeedItemType[],
+//     lastWeek: [] as FeedItemType[],
+//     thisMonth: [] as FeedItemType[],
+//     lastMonth: [] as FeedItemType[],
+//     thisYear: [] as FeedItemType[],
+//     lastYear: [] as FeedItemType[],
+//     older: {} as { [year: string]: FeedItemType[] },
+//   };
 
-  // Process all items in a single pass with timestamp comparisons
-  feedItems.forEach((item: FeedItemType) => {
-    const date = new Date(item.isoDate);
-    const timestamp = date.getTime();
+//   // Process all items in a single pass with timestamp comparisons
+//   feedItems.forEach((item: FeedItemType) => {
+//     const date = new Date(item.isoDate);
+//     const timestamp = date.getTime();
 
-    // Using timestamp comparison for speed
-    if (timestamp >= todayStart.getTime()) {
-      categorized.today.push(item);
-    } else if (timestamp >= yesterdayStart.getTime()) {
-      categorized.yesterday.push(item);
-    } else if (timestamp >= thisWeekStart.getTime()) {
-      categorized.thisWeek.push(item);
-    } else if (timestamp >= lastWeekStart.getTime()) {
-      categorized.lastWeek.push(item);
-    } else if (timestamp >= thisMonthStart.getTime()) {
-      categorized.thisMonth.push(item);
-    } else if (timestamp >= lastMonthStart.getTime()) {
-      categorized.lastMonth.push(item);
-    } else if (timestamp >= thisYearStart.getTime()) {
-      categorized.thisYear.push(item);
-    } else if (timestamp >= lastYearStart.getTime()) {
-      categorized.lastYear.push(item);
-    } else {
-      // If it's older than last year, group by year
-      const year = date.getFullYear().toString();
-      if (!categorized.older[year]) {
-        categorized.older[year] = [];
-      }
-      categorized.older[year].push(item);
-    }
-  });
+//     // Using timestamp comparison for speed
+//     if (timestamp >= todayStart.getTime()) {
+//       categorized.today.push(item);
+//     } else if (timestamp >= yesterdayStart.getTime()) {
+//       categorized.yesterday.push(item);
+//     } else if (timestamp >= thisWeekStart.getTime()) {
+//       categorized.thisWeek.push(item);
+//     } else if (timestamp >= lastWeekStart.getTime()) {
+//       categorized.lastWeek.push(item);
+//     } else if (timestamp >= thisMonthStart.getTime()) {
+//       categorized.thisMonth.push(item);
+//     } else if (timestamp >= lastMonthStart.getTime()) {
+//       categorized.lastMonth.push(item);
+//     } else if (timestamp >= thisYearStart.getTime()) {
+//       categorized.thisYear.push(item);
+//     } else if (timestamp >= lastYearStart.getTime()) {
+//       categorized.lastYear.push(item);
+//     } else {
+//       // If it's older than last year, group by year
+//       const year = date.getFullYear().toString();
+//       if (!categorized.older[year]) {
+//         categorized.older[year] = [];
+//       }
+//       categorized.older[year].push(item);
+//     }
+//   });
 
-  return categorized;
-}
+//   return categorized;
+// }

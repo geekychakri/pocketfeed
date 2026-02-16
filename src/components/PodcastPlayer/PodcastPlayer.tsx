@@ -63,6 +63,8 @@ const PodcastPlayer = () => {
 
   const { feedItem } = useFeedItem();
 
+  console.log({ podcastFeedItem: feedItem });
+
   // console.log({ albumCover });
 
   // references
@@ -143,7 +145,7 @@ const PodcastPlayer = () => {
 
         <BookmarkPodcast
           // bookmarked={bookmarkExists}
-          bookmarkFeedItem={JSON.stringify(feedItem)} //TODO:
+          bookmarkFeedItem={feedItem} //TODO:
           bookmarkLink={audioUrl}
           bookmarkType="podcast"
           // bookmarkId={bookmarkId}

@@ -1,18 +1,21 @@
+import { memo, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
 import { Dialog } from "@base-ui/react/dialog";
-import { YouTubeEmbed } from "@next/third-parties/google";
+// import { YouTubeEmbed } from "@next/third-parties/google";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { useHotkeys } from "react-hotkeys-hook";
+import LiteYouTubeEmbed from "react-lite-youtube-embed";
 
 import Bookmark from "@/app/(dashboard)/read/components/bookmark";
 import { cn } from "@/lib/utils";
 
 import BookmarkPodcast from "./PodcastPlayer/bookmark-podcast";
-import { SpinnerRotate } from "./SpinnerRotate";
 
-export default function CustomYouTubeModal({
+import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
+
+function CustomYouTubeModal({
   //   trigger,
   feedItem,
   videoId,
@@ -39,6 +42,10 @@ export default function CustomYouTubeModal({
   //   });
 
   // });
+
+  //TODO: bookmarkItem is received as as string - parse it - check
+  // console.log({ feedItem: JSON.parse(feedItem) });
+
   return (
     <Dialog.Root
       open={open}
@@ -77,7 +84,8 @@ export default function CustomYouTubeModal({
             {/* <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                 <SpinnerRotate />
               </div> */}
-            <YouTubeEmbed
+            {/*<YouTubeEmbed
+              key={videoId}
               videoid={videoId}
               // title="HEllo"
               // width={100}
@@ -87,10 +95,13 @@ export default function CustomYouTubeModal({
               params="rel=0"
 
               // params="controls=0"
-            />
+            />*/}
+            <LiteYouTubeEmbed id={videoId} title={title} params="rel=0" />
           </div>
         </Dialog.Popup>
       </Dialog.Portal>
     </Dialog.Root>
   );
 }
+
+export default memo(CustomYouTubeModal);

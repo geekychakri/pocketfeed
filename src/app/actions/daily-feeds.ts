@@ -25,6 +25,8 @@ export async function dailyFeedsAction(formData: FormData) {
   // const records = await xata.db.daily.create(feeds as []);
   // console.log("DONE");
 
+  //TODO: add auth check
+
   const did = await getDid();
 
   console.log({ did });

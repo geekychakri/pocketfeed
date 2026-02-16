@@ -110,7 +110,7 @@ export default function PodcastPlayButton({
         setFeedUrl(feedUrl);
         setChaptersUrl(chaptersUrl);
         setFeedItem({
-          ...JSON.parse(feedItem),
+          ...feedItem,
           albumName,
           albumCover,
         }); //TODO:

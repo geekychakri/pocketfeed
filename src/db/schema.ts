@@ -58,4 +58,13 @@ export const todayFeeds = pgTable("today_feeds", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
+export const bookmarks = pgTable("bookmarks", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  bookmarkLink: text("bookmark_link").notNull(),
+  bookmarkType: text("bookmark_type").notNull(),
+  bookmarkTitle: text("bookmark_title").notNull(),
+  bookmarkItem: text("bookmark_item").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 export type User = InferSelectModel<typeof users>;

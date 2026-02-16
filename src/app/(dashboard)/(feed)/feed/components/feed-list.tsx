@@ -1,5 +1,6 @@
 "use client";
 
+import { use } from "react";
 import Link from "next/link";
 
 import { setCookie } from "cookies-next/client";
@@ -21,15 +22,129 @@ import YouTubePlayButton from "./YouTubePlayButton";
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
 
+function categorizeFeedItems(feedItems: FeedItemType[]) {
+  // Pre-calculate all date boundaries once
+  const now = new Date();
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const yesterdayStart = new Date(todayStart);
+  yesterdayStart.setDate(todayStart.getDate() - 1);
+
+  const thisWeekStart = new Date(todayStart);
+  thisWeekStart.setDate(todayStart.getDate() - todayStart.getDay());
+
+  const lastWeekStart = new Date(thisWeekStart);
+  lastWeekStart.setDate(thisWeekStart.getDate() - 7);
+
+  const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  const lastMonthStart = new Date(thisMonthStart);
+  lastMonthStart.setMonth(thisMonthStart.getMonth() - 1);
+
+  const thisYearStart = new Date(now.getFullYear(), 0, 1);
+
+  const lastYearStart = new Date(thisYearStart);
+  lastYearStart.setFullYear(thisYearStart.getFullYear() - 1);
+
+  // Initialize result object
+  const categorized = {
+    today: [] as FeedItemType[],
+    yesterday: [] as FeedItemType[],
+    thisWeek: [] as FeedItemType[],
+    lastWeek: [] as FeedItemType[],
+    thisMonth: [] as FeedItemType[],
+    lastMonth: [] as FeedItemType[],
+    thisYear: [] as FeedItemType[],
+    lastYear: [] as FeedItemType[],
+    older: {} as { [year: string]: FeedItemType[] },
+  };
+
+  // Process all items in a single pass with timestamp comparisons
+  feedItems.forEach((item: FeedItemType) => {
+    const date = new Date(item.isoDate);
+    const timestamp = date.getTime();
+
+    // Using timestamp comparison for speed
+    if (timestamp >= todayStart.getTime()) {
+      categorized.today.push(item);
+    } else if (timestamp >= yesterdayStart.getTime()) {
+      categorized.yesterday.push(item);
+    } else if (timestamp >= thisWeekStart.getTime()) {
+      categorized.thisWeek.push(item);
+    } else if (timestamp >= lastWeekStart.getTime()) {
+      categorized.lastWeek.push(item);
+    } else if (timestamp >= thisMonthStart.getTime()) {
+      categorized.thisMonth.push(item);
+    } else if (timestamp >= lastMonthStart.getTime()) {
+      categorized.lastMonth.push(item);
+    } else if (timestamp >= thisYearStart.getTime()) {
+      categorized.thisYear.push(item);
+    } else if (timestamp >= lastYearStart.getTime()) {
+      categorized.lastYear.push(item);
+    } else {
+      // If it's older than last year, group by year
+      const year = date.getFullYear().toString();
+      if (!categorized.older[year]) {
+        categorized.older[year] = [];
+      }
+      categorized.older[year].push(item);
+    }
+  });
+
+  return categorized;
+}
+
 export default function FeedList({
   feedList,
-  categorizedFeedItemsList,
+  getBookmarksPromise,
   // folderName,
 }: {
-  categorizedFeedItemsList: any;
   feedList: any;
+  getBookmarksPromise: any;
   // folderName: string;
 }) {
+  //  const sortFirstTenFeedsByDate = feedList.items
+  //   .slice(0, 10)
+  //   .sort((a, b) => (dayjs(a.isoDate).isAfter(dayjs(b.isoDate)) ? -1 : 1));
+  const bookmarks = use(getBookmarksPromise) as [];
+
+  const modBookmarks = bookmarks.map((item: any) => {
+    return {
+      bookmarkId: item.id,
+      bookmarkFeedItemId:
+        JSON.parse(item.bookmarkItem).id || JSON.parse(item.bookmarkItem).guid,
+    };
+  });
+
+  // const bookmarkIds = bookmarks.map((item: any) => item.id);
+
+  const modFeedList = feedList.items.map((item: any) => {
+    const feedItemId = item.id || item.guid;
+    // const isBookmarked = modBookmarks.includes(feedItemId);
+    const bookmark = modBookmarks.find(
+      (b) => b.bookmarkFeedItemId === feedItemId,
+    );
+    return {
+      ...item,
+      isBookmarked: !!bookmark,
+      ...(bookmark && { bookmarkId: bookmark?.bookmarkId }),
+    };
+  });
+
+  console.log({ modFeedList });
+
+  // const bookmarksIds = bookmarks.map(bookmark => JSON.parse(bookmark.bookmarkItem) );
+
+  // console.log({ bookmarks });
+
+  // const modifiedFeedItems = JSON.parse(feedList).items.map(item => {
+
+  // })
+
+  const categorizedFeedItemsList = categorizeFeedItems(modFeedList);
+
+  // console.log({
+  //   categorizedFeedItemsList: categorizedFeedItemsList,
+  // });
   return (
     <>
       {/* <SaveArticles feedList={feedList} /> */}
@@ -413,7 +528,7 @@ const PodcastCard = ({
       {item.enclosure?.length && (
         <div className="flex-none">
           <PodcastPlayButton
-            feedItem={JSON.stringify(item)}
+            feedItem={item}
             title={title}
             audioUrl={audioUrl}
             albumCover={coverImage}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { use, useState } from "react";
 import Link from "next/link";
 
 import { ChevronRightIcon, ReaderIcon } from "@radix-ui/react-icons";
@@ -16,22 +16,24 @@ import { getYoutubeVideoId } from "@/lib/utils";
 import { useBookmarksStore } from "@/store/bookmark-store";
 import { BookmarksRecord } from "@/xata";
 
-import PodcastPlayButton from "../../(feed)/feed/[...feedId]/components/PodcastPlayButton";
-import YouTubeModal from "../../(feed)/feed/[...feedId]/components/YouTubeModal";
-import YouTubePlayButton from "../../(feed)/feed/[...feedId]/components/YouTubePlayButton";
+import PodcastPlayButton from "../../(feed)/feed/components/PodcastPlayButton";
+import YouTubeModal from "../../(feed)/feed/components/YouTubeModal";
+import YouTubePlayButton from "../../(feed)/feed/components/YouTubePlayButton";
 import BookmarkDelete from "./bookmark-delete";
 
-type BookmarkListType = {
-  // initialBookmarks: JSONData<Readonly<SelectedPick<BookmarksRecord, ["*"]>>>[];
-  // initialPageInfo: any;
-  bookmarks: JSONData<Readonly<SelectedPick<BookmarksRecord, ["*"]>>>[];
-};
+// type BookmarkListType = {
+//   // initialBookmarks: JSONData<Readonly<SelectedPick<BookmarksRecord, ["*"]>>>[];
+//   // initialPageInfo: any;
+//   bookmarks: JSONData<Readonly<SelectedPick<BookmarksRecord, ["*"]>>>[];
+// };
 
 export default function BookmarkList({
   // initialBookmarks,
   // initialPageInfo,
-  bookmarks,
-}: BookmarkListType) {
+  bookmarksPromise,
+}: {
+  bookmarksPromise: any;
+}) {
   // console.log({ initialBookmarks });
   // const [bookmarksList, setBookmarksList] = useState(bookmarks);
 
@@ -85,88 +87,86 @@ export default function BookmarkList({
   //   }
   // };
 
+  const bookmarks = use(bookmarksPromise);
+
   return (
     <>
-      <div className="flex flex-col gap-4 [&>:first-child>:not(:last-child)]:shadow-[0_1px_0_0_var(--border-non-interactive)]">
-        <WindowVirtualizer>
-          {bookmarks.map((bookmark) => {
-            return (
-              <div
-                key={bookmark.id}
-                className="relative flex justify-between gap-2 py-[10px]"
-              >
-                <span className="flex flex-col gap-2">
-                  <span>{bookmark.bookmarkTitle}</span>
+      <div className="flex flex-col gap-4">
+        {/*<WindowVirtualizer>*/}
+        {bookmarks.map((bookmark) => {
+          return (
+            <div
+              key={bookmark.id}
+              className="relative flex justify-between gap-2 py-[10px] border-b px-4"
+            >
+              <span className="flex flex-col gap-2">
+                <span>{bookmark.bookmarkTitle}</span>
 
-                  <span className="text-text-secondary text-sm">
-                    {JSON.parse(bookmark.bookmarkFeedItem).albumName ||
-                      JSON.parse(bookmark.bookmarkFeedItem).author}
-                  </span>
+                <span className="text-text-secondary text-sm">
+                  {JSON.parse(bookmark.bookmarkItem).albumName ||
+                    JSON.parse(bookmark.bookmarkItem).author}
                 </span>
+              </span>
 
-                <div className="flex shrink-0 items-center gap-3">
-                  <BookmarkDelete
-                    bookmarkId={bookmark.id}
-                    bookmarkLink={bookmark.bookmarkLink as string}
-                    // removeBookmark={removeBookmark}
+              <div className="flex shrink-0 items-center gap-3">
+                <BookmarkDelete
+                  bookmarkId={bookmark.id}
+                  // bookmarkLink={bookmark.bookmarkLink as string}
+                  // removeBookmark={removeBookmark}
+                />
+
+                {bookmark.bookmarkType === "podcast" ? (
+                  <PodcastPlayButton
+                    // showText={true}
+                    // className="border-border-primary bg-background-primary h-9 w-24 rounded-md border text-sm transition-[background] hover:bg-transparent"
+                    // parse db bookmark item string
+                    feedItem={JSON.parse(bookmark.bookmarkItem)}
+                    title={JSON.parse(bookmark.bookmarkItem).title}
+                    audioUrl={JSON.parse(bookmark.bookmarkItem).enclosure.url}
+                    albumCover={
+                      JSON.parse(bookmark.bookmarkItem)?.albumCover as string
+                    }
+                    episodeNumber={JSON.parse(bookmark.bookmarkItem).guid}
+                    content={
+                      JSON.parse(bookmark.bookmarkItem)["content:encoded"] ||
+                      JSON.parse(bookmark.bookmarkItem).content
+                    }
+                    author={JSON.parse(bookmark.bookmarkItem).author}
+                    albumName={
+                      JSON.parse(bookmark.bookmarkItem).albumName as string
+                    }
+                    // feedUrl={feedUrl}
+                    chaptersUrl={
+                      JSON.parse(bookmark.bookmarkItem)["podcast:chapters"]?.[
+                        "$"
+                      ]?.url ?? null
+                    }
                   />
-
-                  {/* {bookmark.bookmarkType === "podcast" ? (
-                    <PodcastPlayButton
-                      // showText={true}
-                      // className="border-border-primary bg-background-primary h-9 w-24 rounded-md border text-sm transition-[background] hover:bg-transparent"
-                      feedItem={bookmark.bookmarkFeedItem}
-                      title={JSON.parse(bookmark.bookmarkFeedItem).title}
-                      audioUrl={
-                        JSON.parse(bookmark.bookmarkFeedItem).enclosure.url
-                      }
-                      albumCover={
-                        JSON.parse(bookmark.bookmarkFeedItem)
-                          ?.albumCover as string
-                      }
-                      episodeNumber={JSON.parse(bookmark.bookmarkFeedItem).guid}
-                      content={
-                        JSON.parse(bookmark.bookmarkFeedItem)[
-                          "content:encoded"
-                        ] || JSON.parse(bookmark.bookmarkFeedItem).content
-                      }
-                      author={JSON.parse(bookmark.bookmarkFeedItem).author}
-                      albumName={
-                        JSON.parse(bookmark.bookmarkFeedItem)
-                          .albumName as string
-                      }
-                      // feedUrl={feedUrl}
-                      chaptersUrl={
-                        JSON.parse(bookmark.bookmarkFeedItem)[
-                          "podcast:chapters"
-                        ]?.["$"]?.url ?? null
-                      }
+                ) : bookmark.bookmarkType === "youtube" ? (
+                  <>
+                    <YouTubePlayButton
+                      feedItem={JSON.parse(bookmark.bookmarkItem)}
+                      ytVideoTitle={bookmark.bookmarkTitle}
+                      youtubeId={bookmark.bookmarkLink}
+                      // bookmarkId={bookmark.id}
                     />
-                  ) : bookmark.bookmarkType === "youtube" ? (
-                    <>
-                      <YouTubePlayButton
-                        feedItem={bookmark.bookmarkFeedItem}
-                        ytVideoTitle={bookmark.bookmarkTitle}
-                        youtubeId={bookmark.bookmarkLink}
-                        bookmarkId={bookmark.id}
-                      />
-                    </>
-                  ) : (
-                    <Link
-                      href={`/read/${encodeURIComponent(bookmark.bookmarkLink)}`}
-                      // className="absolute inset-0 z-10"
-                      className="bg-ui-normal hover:bg-ui-hover flex size-10 cursor-pointer items-center justify-center gap-1 rounded-full px-4 py-2 text-base font-medium transition-transform will-change-transform active:scale-95"
-                    >
-                      <ReaderIcon className="size-5 shrink-0" />
-                    </Link>
-                  )} */}
-                </div>
+                  </>
+                ) : (
+                  <Link
+                    href={`/read/${encodeURIComponent(bookmark.bookmarkLink)}`}
+                    // className="absolute inset-0 z-10"
+                    className="bg-ui-normal hover:bg-ui-hover flex size-10 cursor-pointer items-center justify-center gap-1 rounded-full px-4 py-2 text-base font-medium transition-transform will-change-transform active:scale-95"
+                  >
+                    <ReaderIcon className="size-5 shrink-0" />
+                  </Link>
+                )}
               </div>
-            );
-          })}
-        </WindowVirtualizer>
+            </div>
+          );
+        })}
+        {/*</WindowVirtualizer>*/}
       </div>
-      <YouTubeModal />
+      {/*<YouTubeModal />*/}
 
       {/* {pageInfo.hasNextPage && (
         <Button

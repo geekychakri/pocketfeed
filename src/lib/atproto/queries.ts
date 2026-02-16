@@ -10,9 +10,9 @@ import { getDid, getSessionAgent } from "../auth/session";
 // });
 
 export let getAllRecords = async () => {
-  "use cache";
-  cacheLife("hours");
-  cacheTag("user-did:plc:fhhygitymqyet5inny6klful");
+  // "use cache";
+  // cacheLife("hours");
+  // cacheTag("user-did:plc:fhhygitymqyet5inny6klful");
   // const did = await getDid();
 
   // const cached = cache.get(did as string);
@@ -21,6 +21,9 @@ export let getAllRecords = async () => {
 
   const response = await fetch(
     "https://bsky.social/xrpc/com.atproto.repo.listRecords?repo=did:plc:fhhygitymqyet5inny6klful&collection=app.pocketfeed.feed.subscription&limit=100",
+    {
+      cache: "force-cache",
+    },
   );
   // console.log({ response });
 
@@ -35,7 +38,7 @@ export let getAllRecords = async () => {
 
   const feeds = data.records;
 
-  // console.log({ feeds });
+  console.log({ feeds });
 
   // console.log({ feed: feeds?.[0].value });
 

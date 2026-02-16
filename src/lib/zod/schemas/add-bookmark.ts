@@ -16,5 +16,5 @@ export const addBookmarkSchema = z.object({
   bookmarkLink: z.union([sanitizedString, sanitizedUrl]),
   bookmarkType: sanitizedString,
   bookmarkTitle: sanitizedString,
-  bookmarkFeedItem: z.string(),
+  bookmarkItem: z.any(), //TODO:
 });
