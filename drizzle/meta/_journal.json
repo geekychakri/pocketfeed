@@ -29,6 +29,55 @@
       "when": 1770889982456,
       "tag": "0003_spooky_nico_minoru",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1771342128514,
+      "tag": "0004_striped_tyrannus",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1771404114845,
+      "tag": "0005_daffy_tyrannus",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1771487437275,
+      "tag": "0006_spicy_bloodaxe",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1771568167429,
+      "tag": "0007_neat_puma",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1771579773539,
+      "tag": "0008_dry_golden_guardian",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1771840331942,
+      "tag": "0009_lush_korvac",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1771840485936,
+      "tag": "0010_closed_thanos",
+      "breakpoints": true
     }
   ]
 }

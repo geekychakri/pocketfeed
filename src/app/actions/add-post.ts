@@ -2,42 +2,48 @@
 
 import { auth, currentUser } from "@clerk/nextjs/server";
 
-import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
-import { getXataClient } from "@/xata";
+// import { getXataClient } from "@/xata";
 
-const xata = getXataClient();
+// const xata = getXataClient();
+
+import { db } from "@/db/db";
+import * as schema from "@/db/schema";
+import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
+
 export async function addPost(
   link: string,
   prevState: any,
   formData: FormData,
 ) {
   try {
-    const { userId }: { userId: string | null } = await auth();
-    if (!userId) {
-      return {
-        type: "auth-error",
-        message: "You must be signed in to update your profile!",
-      };
-    }
+    // GET did from the session
 
-    const user = await currentUser();
+    // const { userId }: { userId: string | null } = await auth();
+    // if (!userId) {
+    //   return {
+    //     type: "auth-error",
+    //     message: "You must be signed in to update your profile!",
+    //   };
+    // }
+
+    // const user = await currentUser();
     const post = formData.get("post") as string;
-    const feedItemUrl = (formData.get("feedItemUrl") as string) || "";
+    // const feedItemUrl = (formData.get("feedItemUrl") as string) || "";
 
-    // const itemType = formData.get("type");
+    // // const itemType = formData.get("type");
 
     const feedItem = formData.get("feedItem") as string;
-    const feedAlbumCover = formData.get("feedAlbumCover") as string;
-    const feedTitle = formData.get("feedTitle") as string;
-    const websiteLink = formData.get("websiteLink") as string;
+    // const feedAlbumCover = formData.get("feedAlbumCover") as string;
+    // const feedTitle = formData.get("feedTitle") as string;
+    // const websiteLink = formData.get("websiteLink") as string;
 
     // console.log({ feedItem });
 
-    console.log({ feedAlbumCover });
+    // console.log({ feedAlbumCover });
 
-    if (link !== websiteLink) {
-      return { type: "user-error", message: "Something doesn't look right!" };
-    }
+    // if (link !== websiteLink) {
+    //   return { type: "user-error", message: "Something doesn't look right!" };
+    // }
 
     // const metadata = await urlMetadata(feedItemUrl);  //Check  url  is present
 
@@ -45,18 +51,26 @@ export async function addPost(
 
     // console.log({ metadata });
 
-    await xata.db.posts.create({
-      body: post,
-      // feedItemUrl,
-      // feedItemTitle: title,
-      // feedItemDescription: description,
-      // feedItemAuthor: author,
-      feedItem,
-      feedTitle,
-      feedAlbumCover,
-      websiteLink,
-      username: user?.username as string,
+    // await xata.db.posts.create({
+    //   body: post,
+    //   // feedItemUrl,
+    //   // feedItemTitle: title,
+    //   // feedItemDescription: description,
+    //   // feedItemAuthor: author,
+    //   feedItem,
+    //   feedTitle,
+    //   feedAlbumCover,
+    //   websiteLink,
+    //   username: user?.username as string,
+    // });
+
+    const data = await db.insert(schema.posts).values({
+      did: "did:plc:fhhygitymqyet5inny6klful",
+      text: post,
+      sharedFeedItem: feedItem,
     });
+
+    console.log({ data });
 
     return { type: "success", message: "success" };
   } catch (err) {

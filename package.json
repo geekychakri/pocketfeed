@@ -10,6 +10,8 @@
     "lint": "next lint",
     "inngest:dev": "npx inngest-cli@latest dev --no-discovery -u http://localhost:3000/api/inngest",
     "prettier": "prettier . --write",
+    "drizzle-generate": "npx drizzle-kit generate",
+    "drizzle-migrate": "npx drizzle-kit migrate",
     "gen-key": "tsx src/scripts/gen-key.ts",
     "lex-gen": "lex build --lexicons ./lexicons --out ./src/lexicon",
     "lex-gen-build": "lex gen-server ./src/lexicon ./lexicons/**/*"
@@ -123,7 +125,7 @@
     "sonner": "^1.4.41",
     "string-strip-html": "^13.4.8",
     "svix": "^1.35.0",
-    "swr": "^2.3.8",
+    "swr": "^2.4.0",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
     "truncate-url": "^3.0.0",

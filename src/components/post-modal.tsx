@@ -3,6 +3,7 @@
 import { use, useActionState, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
+import { Dialog } from "@base-ui-components/react/dialog";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import DOMPurify from "isomorphic-dompurify";
 import { useFormState } from "react-dom";
@@ -121,76 +122,108 @@ export default function PostModal({}: {
         </TooltipPrimitive.Content>
       </TooltipPrimitive.Root>
 
-      <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <Modal.Content title="What's up?" className="bg-background-primary">
-          {loading ? (
-            "Loading..."
-          ) : (
-            <form className="flex flex-col gap-4 px-[25px]" action={formAction}>
-              {/* <span className="text-right text-sm tabular-nums text-text-secondary">
-              {text.length} / {MAX_TEXT_LENGTH}
-            </span> */}
-              <Textarea
-                placeholder="Share something on your mind about this!"
-                className="min-h-24 resize-none scroll-pb-2"
-                name="post"
-              />
-              <div className="border-shadow flex flex-col gap-3 rounded-md p-4">
-                <div className="flex flex-col gap-1">
-                  <p className="text-primary">{feedItem.title}</p>
-                  <p
-                    className="text-text-secondary line-clamp-2 text-sm"
-                    dangerouslySetInnerHTML={{
-                      __html: DOMPurify.sanitize(feedItem.content),
-                    }}
-                  ></p>
-                  <p className="text-text-secondary/70 text-sm">
-                    {decodeURIComponent(link)}
+      <Dialog.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <Dialog.Portal>
+          <Dialog.Backdrop className="fixed inset-0 min-h-dvh bg-black opacity-20 transition-all duration-150 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0 dark:opacity-70 supports-[-webkit-touch-callout:none]:absolute" />
+          <Dialog.Popup className="fixed top-1/2 left-1/2 -mt-8 w-[90vw] max-w-[450px] border-shadow focus-visible:outline focus-visible:outline-brand-primary -translate-x-1/2 -translate-y-1/2 rounded-lg bg-background-primary p-6 transition-all duration-150 data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[starting-style]:scale-90 data-[starting-style]:opacity-0">
+            <Dialog.Title className="-mt-1.5 mb-1 text-lg font-medium">
+              <label htmlFor="post">What&apos;s on your mind?</label>
+            </Dialog.Title>
+            {/* <Dialog.Description className="mb-6 text-base text-gray-600">
+              You are all caught up. Good job!
+            </Dialog.Description> */}
+
+            {loading ? (
+              "Loading..."
+            ) : (
+              <form className="flex flex-col gap-4" action={formAction}>
+                {/* <span className="text-right text-sm tabular-nums text-text-secondary">
+                {text.length} / {MAX_TEXT_LENGTH}
+              </span> */}
+                <Textarea
+                  placeholder="Share a thought or just Post :)"
+                  className="min-h-24 resize-none scroll-pb-2"
+                  name="post"
+                  id="post"
+                  required
+                />
+                <div className="border-shadow flex flex-col gap-3 rounded-md p-4">
+                  <div className="flex flex-col gap-1">
+                    <p className="text-primary">{feedItem.title}</p>
+                    {/*{feedItem.content && (
+                      <p
+                        className="text-text-secondary line-clamp-2 text-sm"
+                        dangerouslySetInnerHTML={{
+                          __html: DOMPurify.sanitize(feedItem.content),
+                        }}
+                      ></p>
+                    )}*/}
+                    {/*<p className="text-text-secondary/70 text-sm">
+                      {feedItem.link}
+                    </p>*/}
+                    <p className="text-text-secondary/70 text-sm">
+                      {feedItem.author}
+                    </p>
+                  </div>
+                  {/* {parsedFeedItem.contentSnippet || parsedFeedItem.content ? (
+                  <p className="line-clamp-2 text-text-secondary">
+                    {parsedFeedItem.contentSnippet ||
+                      (Boolean(parsedFeedItem.content) &&
+                        stripHtml(parsedFeedItem.content).result)}
                   </p>
+                ) : (
+                  <p>{feedTitle || articleMetaData.title}</p>
+                )} */}
                 </div>
-                {/* {parsedFeedItem.contentSnippet || parsedFeedItem.content ? (
-                <p className="line-clamp-2 text-text-secondary">
-                  {parsedFeedItem.contentSnippet ||
-                    (Boolean(parsedFeedItem.content) &&
-                      stripHtml(parsedFeedItem.content).result)}
-                </p>
-              ) : (
-                <p>{feedTitle || articleMetaData.title}</p>
-              )} */}
-              </div>
-              <input
-                type="text"
-                name="feedTitle"
-                hidden
-                defaultValue={feedItem.title}
-              />
-              <input
-                type="text"
-                name="feedAlbumCover"
-                hidden
-                defaultValue={feedItem?.albumCover}
-              />
-              <input
-                type="text"
-                name="websiteLink"
-                hidden
-                defaultValue={feedItem?.link}
-              />
+                {/*<input
+                  type="text"
+                  name="feedTitle"
+                  hidden
+                  defaultValue={feedItem.title}
+                />
+                <input
+                  type="text"
+                  name="feedAlbumCover"
+                  hidden
+                  defaultValue={feedItem?.albumCover}
+                />
+                <input
+                  type="text"
+                  name="websiteLink"
+                  hidden
+                  defaultValue={feedItem?.link}
+                />*/}
 
-              <input
-                type="text"
-                name="feedItem"
-                hidden
-                defaultValue={JSON.stringify(feedItem)}
-              />
+                <input
+                  type="text"
+                  name="feedItem"
+                  hidden
+                  defaultValue={JSON.stringify(feedItem)}
+                />
 
-              <Button className="bg-ui-normal hover:bg-ui-hover transition-[background-color]">
-                {isPending ? <SpinnerRotate /> : "Post"}
-              </Button>
-            </form>
-          )}
-        </Modal.Content>
-      </Modal>
+                <div className="flex gap-5">
+                  <Button
+                    type="button"
+                    onClick={() => setIsModalOpen(false)}
+                    className="border-shadow flex-1 bg-transparent"
+                  >
+                    Cancel
+                  </Button>
+                  <Button className="bg-ui-normal flex-1 hover:bg-ui-hover transition-[background-color]">
+                    {isPending ? <SpinnerRotate /> : "Post"}
+                  </Button>
+                </div>
+              </form>
+            )}
+
+            {/* <div className="flex justify-end gap-4">
+              <Dialog.Close className="flex h-10 items-center justify-center rounded-md border border-gray-200 bg-gray-50 px-3.5 text-base font-medium text-gray-900 select-none hover:bg-gray-100 focus-visible:outline focus-visible:-outline-offset-1 focus-visible:outline-blue-800 active:bg-gray-100">
+                Close
+              </Dialog.Close>
+            </div> */}
+          </Dialog.Popup>
+        </Dialog.Portal>
+      </Dialog.Root>
     </>
   );
 }

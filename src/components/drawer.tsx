@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useEffect, useState } from "react";
+import { memo, useActionState, useEffect, useState } from "react";
 
 import { Cross2Icon, ReaderIcon } from "@radix-ui/react-icons";
 import * as Tabs from "@radix-ui/react-tabs";
@@ -67,7 +67,7 @@ function VaulDrawer({ audioRef }: { audioRef: any }) {
       feedUrl: state.feedUrl,
     }));
 
-  const [state, formAction] = useFormState(addPost, initialState);
+  const [state, formAction] = useActionState(addPost, initialState);
 
   console.log({ isOpen });
 

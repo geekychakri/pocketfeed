@@ -1,20 +1,33 @@
 "use client";
 
 import React, { memo, useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { useSelectedLayoutSegment } from "next/navigation";
 
 import { Cross2Icon } from "@radix-ui/react-icons";
+import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 
 import VaulDrawer from "@/components/drawer";
 
+import { PostIcon } from "@/icons/post";
 import { useFeedItem } from "@/store/feed-item";
 import { useGlobalRef } from "@/store/globalRef";
 import { useShowPodcastPlayer } from "@/store/podcastplayer";
 import { useFullscreen } from "@/store/read-fullscreen";
 import useStore from "@/store/useStore";
 
+import IconOnlyAction from "./../ui/icon-only-action";
 import BookmarkPodcast from "./bookmark-podcast";
 import CustomMediaPlayer from "./custom-media-player";
+
+const PostModal = dynamic(() => import("@/components/post-modal"), {
+  ssr: false,
+  loading: () => (
+    <IconOnlyAction>
+      <PostIcon className="size-[18px] shrink-0" />
+    </IconOnlyAction>
+  ),
+});
 
 const PodcastPlayer = () => {
   console.log("RE RENDERED");
@@ -142,36 +155,38 @@ const PodcastPlayer = () => {
         {/* <button>
           <Share2Icon className="size-5" />
         </button> */}
+        <TooltipPrimitive.Provider>
+          <PostModal />
+          <BookmarkPodcast
+            // bookmarked={bookmarkExists}
+            bookmarkFeedItem={feedItem} //TODO:
+            bookmarkLink={audioUrl}
+            bookmarkType="podcast"
+            // bookmarkId={bookmarkId}
+            bookmarkTitle={title}
+            btnClassName="border-border-interactive bg-background-secondary flex size-7 items-center justify-center rounded-full border"
+            iconClassName="size-4"
+          />
 
-        <BookmarkPodcast
-          // bookmarked={bookmarkExists}
-          bookmarkFeedItem={feedItem} //TODO:
-          bookmarkLink={audioUrl}
-          bookmarkType="podcast"
-          // bookmarkId={bookmarkId}
-          bookmarkTitle={title}
-          btnClassName="border-border-interactive bg-background-secondary flex size-7 items-center justify-center rounded-full border"
-          iconClassName="size-4"
-        />
-
-        <VaulDrawer audioRef={audioPlayerRef} />
-        {/* <BookmarkPodcast
+          <VaulDrawer audioRef={audioPlayerRef} />
+          {/* <BookmarkPodcast
           bookmarkFeedItem={JSON.stringify(feedItem)}
           bookmarkLink={audioUrl}
           bookmarkTitle={title}
           bookmarkType="podcast"
         /> */}
 
-        <button
-          onClick={() => {
-            hidePodcastPlayer();
-            // setIsPlaying(false);
-            audioPlayerRef.current?.pause();
-          }}
-          className="border-border-interactive bg-background-secondary flex size-7 items-center justify-center rounded-full border"
-        >
-          <Cross2Icon className="size-4" />
-        </button>
+          <button
+            onClick={() => {
+              hidePodcastPlayer();
+              // setIsPlaying(false);
+              audioPlayerRef.current?.pause();
+            }}
+            className="border-border-interactive bg-background-secondary flex size-7 items-center justify-center rounded-full border"
+          >
+            <Cross2Icon className="size-4" />
+          </button>
+        </TooltipPrimitive.Provider>
       </div>
 
       {/* <div>

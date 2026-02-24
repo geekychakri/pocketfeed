@@ -3,6 +3,7 @@ import { authenticatedRole, authUid, crudPolicy } from "drizzle-orm/neon";
 import {
   bigint,
   boolean,
+  index,
   integer,
   pgPolicy,
   pgRole,
@@ -66,5 +67,21 @@ export const bookmarks = pgTable("bookmarks", {
   bookmarkItem: text("bookmark_item").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
+
+export const posts = pgTable(
+  "posts",
+  {
+    id: uuid("id")
+      .primaryKey()
+      .default(sql`uuid_generate_v7()`),
+    did: text("did").notNull(),
+    username: text("username").notNull(),
+    avatar: text("avatar").notNull(),
+    text: text("text").notNull(),
+    sharedFeedItem: text("shared_feed_item").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => [index("posts_created_at_id_idx").on(table.createdAt, table.id)],
+);
 
 export type User = InferSelectModel<typeof users>;

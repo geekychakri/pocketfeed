@@ -59,13 +59,13 @@ const CollapsibleFolders = ({ children }: { children: React.ReactNode }) => {
   console.log({ currentFolderName });
   return (
     <Collapsible.Root
-      // open={open}
-      // onOpenChange={(isOpen) => {
-      //   setOpen(!open);
-      //   isOpen ? playFolderOpen() : playFolderClose();
-      // }}
+      open={open}
+      onOpenChange={(isOpen) => {
+        setOpen(!open);
+        // isOpen ? playFolderOpen() : playFolderClose();
+      }}
       className="flex flex-col gap-1"
-      open
+      // open
     >
       <Collapsible.Trigger asChild className="group/collapsible">
         <div className="px-3">
@@ -79,7 +79,7 @@ const CollapsibleFolders = ({ children }: { children: React.ReactNode }) => {
           >
             <span className="flex items-center gap-3">
               <span>{open ? <FolderOpenIcon /> : <FolderClosedIcon />}</span>
-              <span>Folders</span>
+              <span className="font-medium">Folders</span>
             </span>
             <span className="flex size-9 items-center justify-center rounded-md">
               <ChevronRightIcon

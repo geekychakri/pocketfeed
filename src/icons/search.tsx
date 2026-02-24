@@ -9,7 +9,7 @@ export function SearchIcon(props: SVGProps<SVGSVGElement>) {
       viewBox="0 0 24 24"
       {...props}
     >
-      <g fill="none" stroke="currentColor" strokeWidth="1.5">
+      <g fill="none" stroke="currentColor" strokeWidth="2">
         <circle cx="11.5" cy="11.5" r="9.5"></circle>
         <path strokeLinecap="round" d="M18.5 18.5L22 22"></path>
       </g>

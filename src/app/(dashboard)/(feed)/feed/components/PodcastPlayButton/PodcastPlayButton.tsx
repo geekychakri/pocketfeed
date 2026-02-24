@@ -115,6 +115,8 @@ export default function PodcastPlayButton({
           albumCover,
         }); //TODO:
         setPodcastBookmarkId(bookmarkId as string); //TODO:: for handling bookmarks in bookmarks page to delete
+
+        localStorage.setItem("feedItem", JSON.stringify(feedItem)); // save item in a localStorage for a post share
       }}
     >
       {activeEpisode == episodeNumber && isPlaying ? (

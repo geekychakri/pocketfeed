@@ -5,6 +5,7 @@ import { Dialog } from "@base-ui/react/dialog";
 // import { YouTubeEmbed } from "@next/third-parties/google";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Cross2Icon } from "@radix-ui/react-icons";
+import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import { useHotkeys } from "react-hotkeys-hook";
 import LiteYouTubeEmbed from "react-lite-youtube-embed";
 
@@ -14,6 +15,21 @@ import { cn } from "@/lib/utils";
 import BookmarkPodcast from "./PodcastPlayer/bookmark-podcast";
 
 import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
+
+import dynamic from "next/dynamic";
+
+import { PostIcon } from "@/icons/post";
+
+import IconOnlyAction from "./ui/icon-only-action";
+
+const PostModal = dynamic(() => import("@/components/post-modal"), {
+  ssr: false,
+  loading: () => (
+    <IconOnlyAction>
+      <PostIcon className="size-[18px] shrink-0" />
+    </IconOnlyAction>
+  ),
+});
 
 function CustomYouTubeModal({
   //   trigger,
@@ -64,21 +80,24 @@ function CustomYouTubeModal({
           <div className="flex h-14 items-center justify-between gap-4 px-2 py-5">
             <h1 className="line-clamp-1 flex-1">{title}</h1>
 
-            <div className="flex gap-1 items-center">
-              <BookmarkPodcast
-                // bookmarked={bookmarkExists}
-                bookmarkFeedItem={feedItem}
-                bookmarkLink={videoId}
-                bookmarkType="youtube"
-                // bookmarkId={bookmarkId}
-                bookmarkTitle={title}
-                btnClassName="relative flex size-6 items-center justify-center rounded-full p-4"
-              />
-              <Dialog.Close className="flex cursor-pointer hover:bg-ui-hover transition-[background-color] duration-150 size-8 rounded-full items-center justify-center">
-                <Cross2Icon className="size-[18px] flex-none" />
-                <span className="sr-only">Close</span>
-              </Dialog.Close>
-            </div>
+            <TooltipPrimitive.Provider delayDuration={700}>
+              <div className="flex gap-1 items-center">
+                <PostModal />
+                <BookmarkPodcast
+                  // bookmarked={bookmarkExists}
+                  bookmarkFeedItem={feedItem}
+                  bookmarkLink={videoId}
+                  bookmarkType="youtube"
+                  // bookmarkId={bookmarkId}
+                  bookmarkTitle={title}
+                  btnClassName="relative flex size-6 items-center justify-center rounded-full p-4"
+                />
+                <Dialog.Close className="flex cursor-pointer hover:bg-ui-hover transition-[background-color] duration-150 size-8 rounded-full items-center justify-center">
+                  <Cross2Icon className="size-[18px] flex-none stroke-2" />
+                  <span className="sr-only">Close</span>
+                </Dialog.Close>
+              </div>
+            </TooltipPrimitive.Provider>
           </div>
           <div>
             {/* <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
