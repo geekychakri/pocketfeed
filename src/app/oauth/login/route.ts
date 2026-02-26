@@ -1,10 +1,17 @@
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 import { getOAuthClient, SCOPE } from "@/lib/auth/client";
 
 export async function POST(request: NextRequest) {
+  const cookieStore = await cookies();
+
   try {
     const { handle } = await request.json();
+
+    cookieStore.set("pf_bsky_handle", handle);
+
+    console.log("LOGIN ROUTE");
 
     if (!handle || typeof handle !== "string") {
       return NextResponse.json(

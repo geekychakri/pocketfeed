@@ -2,6 +2,7 @@
 
 import {
   startTransition,
+  use,
   useActionState,
   useEffect,
   useOptimistic,
@@ -12,6 +13,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { useUser } from "@clerk/clerk-react";
 import { useAuth } from "@clerk/nextjs";
+import { getCookie } from "cookies-next/client";
 import { toast } from "sonner";
 
 import Button from "@/components/ui/custom-button";
@@ -20,24 +22,43 @@ import { followUser } from "@/app/actions/follow-user";
 import { unFollowUser } from "@/app/actions/unfollow-user";
 import { internalErrorToast } from "@/lib/utils";
 
-export default function FollowButton({ followeeId }: { followeeId: string }) {
-  const { user, isLoaded } = useUser();
+export default function FollowButton({
+  checkIsFollowingPromise,
+  did,
+  loggedInUserDid,
+  // isFollowing,
+  displayName,
+}: {
+  checkIsFollowingPromise: any;
+  did: string;
+  loggedInUserDid: string;
+  // isFollowing: boolean;
+  displayName: string;
+}) {
+  // const { user, isLoaded } = useUser();
+  //
 
-  const [follow, setFollow] = useState(followeeId ? true : false);
+  const data = use(checkIsFollowingPromise);
+
+  console.log({ data });
+
+  const isFollowing = data?.length >= 1 ? true : false;
+
+  const [follow, setFollow] = useState(isFollowing);
   const [recordId, setRecordId] = useState("");
 
   const [isOptimisticFollowingUser, setIsOptimisticFollowingUser] =
-    useOptimistic(follow, (_, optimisticValue: boolean) => optimisticValue);
+    useOptimistic(follow);
 
-  const pathname = usePathname();
+  // const pathname = usePathname();
 
-  const followeeName = pathname.split("/")[2];
+  // const followeeName = pathname.split("/")[2];
 
-  if (!isLoaded) {
-    return null;
-  }
+  // if (!isLoaded) {
+  //   return null;
+  // }
 
-  console.log({ pathname });
+  // console.log({ pathname });
 
   const handleFollow = () => {
     // const res = await fetch("/api/follow/follow", {
@@ -56,10 +77,10 @@ export default function FollowButton({ followeeId }: { followeeId: string }) {
 
     startTransition(async () => {
       setIsOptimisticFollowingUser(true);
-      const { type, recordId, message } = await followUser(followeeName);
+      const { type, message } = await followUser(loggedInUserDid, did);
       if (type === "success") {
-        toast.success(`Following ${followeeName}`);
-        setRecordId(recordId as string);
+        toast.success(`Following ${displayName}`);
+        // setRecordId(recordId as string);
         setFollow(true);
       } else if (type === "user-error") {
         toast.error(message);
@@ -85,9 +106,9 @@ export default function FollowButton({ followeeId }: { followeeId: string }) {
     // toast.success("No longer Following  username");
     startTransition(async () => {
       setIsOptimisticFollowingUser(false);
-      const { type, message } = await unFollowUser(recordId || followeeId);
+      const { type, message } = await unFollowUser(loggedInUserDid, did);
       if (type === "success") {
-        toast.success(`Unfollowed ${followeeName}`);
+        toast.success(`No longer following ${displayName}`);
         setFollow(false);
       } else if (type === "user-error") {
         toast.error(message);
@@ -96,23 +117,24 @@ export default function FollowButton({ followeeId }: { followeeId: string }) {
       }
     });
   };
-  if (user?.username === pathname.split("/")[2]) {
-    return (
-      <Link
-        href="/settings"
-        className="bg-ui-normal hover:bg-ui-hover h-9 content-center rounded-md px-4 text-sm font-medium duration-150"
-        id="main-item"
-      >
-        Edit Profile
-      </Link>
-    );
-  }
+
+  // if (loggedInUserDid === did) {
+  //   return (
+  //     <Link
+  //       href="/settings"
+  //       className="bg-ui-normal hover:bg-ui-hover h-9 content-center rounded-md px-4 text-sm font-medium duration-150"
+  //       id="main-item"
+  //     >
+  //       Settings
+  //     </Link>
+  //   );
+  // }
   return (
     <Button
       className="w-[200px]"
       onClick={follow ? handleUnFollow : handleFollow}
       {...(!isOptimisticFollowingUser && { variant: "cta" })}
-      disabled={!isLoaded}
+      // disabled={!isLoaded}
     >
       {isOptimisticFollowingUser ? "Following" : "Follow"}
     </Button>

@@ -177,7 +177,7 @@
   /* html {
     animation: smoothscroll1 1s;
   }
-  
+
 
   html:focus-within {
     animation-name: smoothscroll2;
@@ -662,7 +662,7 @@
 }
 
 @keyframes slideUp {
- 
+
   0% {
     bottom: -288px;
   }

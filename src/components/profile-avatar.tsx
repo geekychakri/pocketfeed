@@ -81,11 +81,13 @@ const AvatarDropdownItem = ({
 };
 
 export default function ProfileAvatar({
-  avatarUrl,
-  username,
+  avatar,
+  handle,
+  displayName,
 }: {
-  avatarUrl: string;
-  username: string;
+  avatar: string;
+  handle: string;
+  displayName: string;
 }) {
   // console.log({ username });
   // console.log({ avatarUrl });
@@ -96,18 +98,18 @@ export default function ProfileAvatar({
           <Avatar className="hover:ring-ui-normal ring-ui-normal inline-flex h-[35px] w-[35px] flex-none items-center justify-center overflow-hidden rounded-full align-middle ring-1 duration-150 select-none hover:ring-4">
             <AvatarImage
               className="h-full w-full rounded-[inherit] object-cover"
-              src={avatarUrl}
-              alt={username}
+              src={avatar}
+              alt={displayName}
             />
             <AvatarFallback
               className="bg-ui-normal flex h-full w-full items-center justify-center text-[15px] leading-1 font-medium"
               delayMs={600}
             >
-              {getInitials(username)}
+              {getInitials(displayName || handle)}
             </AvatarFallback>
           </Avatar>
           <span className="text-text-secondary truncate text-sm font-medium">
-            {username}
+            {displayName || handle}
           </span>
         </button>
       </DropdownMenu.Trigger>
@@ -118,10 +120,7 @@ export default function ProfileAvatar({
           sideOffset={5}
           align="start"
         >
-          <AvatarDropdownItem
-            href={`/user/${username}` as Route}
-            Icon={UserIcon}
-          >
+          <AvatarDropdownItem href={`/user/${handle}` as Route} Icon={UserIcon}>
             <span>Profile</span>
           </AvatarDropdownItem>
           <AvatarDropdownItem href="/settings" Icon={SettingsGearIcon}>

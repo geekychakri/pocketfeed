@@ -3,34 +3,39 @@
 import { revalidatePath } from "next/cache";
 
 import { auth, currentUser } from "@clerk/nextjs/server";
+import { and, eq } from "drizzle-orm";
 
+// import { getXataClient } from "@/xata";
+
+// const xata = getXataClient();
+
+import { db } from "@/db/db";
+import * as schema from "@/db/schema";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
-import { getXataClient } from "@/xata";
 
-const xata = getXataClient();
-
-export async function unFollowUser(recordId: string) {
-  console.log({ recordId });
+export async function unFollowUser(followerDid: string, followingDid: string) {
+  // console.log({ recordId });
   try {
-    const followerId = (await auth()).userId as string;
-    if (!followerId) {
-      return {
-        type: "user-error",
-        message: "You must be signed in to un-follow others.",
-      };
-    }
+    // const followerId = (await auth()).userId as string;
+    // if (!followerId) {
+    //   return {
+    //     type: "user-error",
+    //     message: "You must be signed in to un-follow others.",
+    //   };
+    // }
 
-    // const followeeUser = await xata.db.users
-    //   .filter({ username: followeeName })
-    //   .getFirst();
+    // const result = await xata.db.follows.delete(recordId as string);
 
-    // const record = await xata.db.follows
-    //   .filter({ followerId, followeeId: followeeUser?.userId as string })
-    //   .getFirst();
+    const data = await db
+      .delete(schema.follows)
+      .where(
+        and(
+          eq(schema.follows.followerDid, followerDid),
+          eq(schema.follows.followingDid, followingDid),
+        ),
+      );
 
-    const result = await xata.db.follows.delete(recordId as string);
-
-    revalidatePath("/user/[username]/(content)", "layout");
+    // revalidatePath("/user/[username]/(content)", "layout"); //TODO:
 
     return { type: "success", message: "success" };
   } catch (err) {

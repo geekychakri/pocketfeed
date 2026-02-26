@@ -41,7 +41,6 @@ export default function SocialOauth() {
   };
 
   //atproto signin
-
   async function handleSubmit(e: React.FormEvent) {
     console.log("SUBMIT LOGIN BSKY");
     e.preventDefault();

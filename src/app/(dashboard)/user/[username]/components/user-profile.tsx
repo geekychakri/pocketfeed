@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 
 import { auth, currentUser } from "@clerk/nextjs/server";
+import { and, eq } from "drizzle-orm";
 import { ErrorBoundary } from "react-error-boundary";
 
 import FollowButton from "@/components/follow-button";
@@ -10,17 +11,20 @@ import SegmentedControl from "@/components/segmented-control";
 import { CustomTooltip } from "@/components/ui/custom-tooltip";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/user-avatar";
 
+// import DOMPurify from "isomorphic-dompurify";
+
+// import { getXataClient, UsersRecord } from "@/xata";
+// const xata = getXataClient();
+
+import { db } from "@/db/db";
+import * as schema from "@/db/schema";
 import { DotsLoaderIcon } from "@/icons/dots-loader";
 import { GlobeErrorIcon } from "@/icons/globe-error";
 import { UserErrorIcon } from "@/icons/user-error";
+import { getDid, getSessionAgent } from "@/lib/auth/session";
 import { compactNumber, convertTextToLinks, getInitials } from "@/lib/utils";
-// import DOMPurify from "isomorphic-dompurify";
 
-import { getXataClient, UsersRecord } from "@/xata";
-
-const xata = getXataClient();
-
-export default async function UserProfile({ username }: { username: string }) {
+export default async function UserProfile({ handle }: { handle: string }) {
   // const { userId }: { userId: string | null } = await auth();
   // const loggedInUserId = userId as string;
   // const loggedInUserInfo = await currentUser();
@@ -31,21 +35,35 @@ export default async function UserProfile({ username }: { username: string }) {
 
   // console.log({ user });
 
-  const res = await fetch(
-    "https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=did:plc:fhhygitymqyet5inny6klful",
-  ); //TODO: actor pass dynamic did
+  console.log({ handle });
 
-  const profile = await res.json();
+  let isFollowing = false;
+  // let checkIsFollowingPromise = Promise.resolve([]);
 
-  const items = [
-    { href: `/user/${profile.displayName}`, title: "Posts" },
+  const loggedInUserDid = (await getDid()) as string;
+
+  const checkIfUserExists = db
+    .select()
+    .from(schema.users)
+    .where(eq(schema.users.handle, handle));
+
+  const getProfile = fetch(
+    `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${handle}`,
     {
-      href: `/user/${profile.displayName}/subscriptions`,
-      title: "Subscriptions",
+      cache: "force-cache",
     },
-  ];
+  ).then((r) => r.json()); //TODO: actor pass dynamic did
 
-  if (!profile) {
+  const [userExists, profile] = await Promise.all([
+    checkIfUserExists,
+    getProfile,
+  ]);
+
+  console.log({ userExists });
+  console.log({ profile });
+
+  if (userExists.length === 0) {
+    // await getProfileResponse.body?.cancel(); //TODO:
     return (
       <div>
         <div className="h-14"></div>
@@ -56,6 +74,31 @@ export default async function UserProfile({ username }: { username: string }) {
       </div>
     );
   }
+
+  // if (profile.did !== loggedInUserDid) {
+  //   checkIsFollowingPromise = db
+  //     .select()
+  //     .from(schema.follows)
+  //     .where(
+  //       and(
+  //         eq(schema.follows.followerDid, loggedInUserDid),
+  //         eq(schema.follows.followingDid, profile.did),
+  //       ),
+  //     );
+  //   // console.log({ checkIsFollowing });
+
+  //   // if (checkIsFollowing.length > 0) {
+  //   //   isFollowing = true;
+  //   // }
+  // }
+
+  const items = [
+    { href: `/user/${profile.displayName}`, title: "Posts" },
+    {
+      href: `/user/${profile.displayName}/subscriptions`,
+      title: "Subscriptions",
+    },
+  ];
 
   // const followingRecord = await xata.db.follows
   //   .filter({ followerId: loggedInUserId, followeeId: user.userId as string })
@@ -68,7 +111,20 @@ export default async function UserProfile({ username }: { username: string }) {
       <ProfileInfo>
         {/* <ProfileTitle username={user.username as string} /> */}
         <ProfileHeader profile={profile}>
-          {/* <FollowButton followeeId={followingRecord?.id as string} /> */}
+          {loggedInUserDid === profile.did ? (
+            <Link
+              href="/settings"
+              className="bg-ui-normal hover:bg-ui-hover h-9 content-center rounded-md px-4 text-sm font-medium duration-150"
+              id="main-item"
+            >
+              Settings
+            </Link>
+          ) : (
+            <FollowButtonWrapper
+              loggedInUserDid={loggedInUserDid}
+              profile={profile}
+            />
+          )}
         </ProfileHeader>
         <ProfileBody
           profile={profile}
@@ -80,6 +136,36 @@ export default async function UserProfile({ username }: { username: string }) {
       {/* <SegmentedControl items={items} birthday={user.birthday as string} /> */}
       <SegmentedControl items={items} />
     </div>
+  );
+}
+
+async function FollowButtonWrapper({
+  loggedInUserDid,
+  profile,
+}: {
+  loggedInUserDid: string;
+  profile: any;
+}) {
+  const checkIsFollowingPromise = db
+    .select()
+    .from(schema.follows)
+    .where(
+      and(
+        eq(schema.follows.followerDid, loggedInUserDid),
+        eq(schema.follows.followingDid, profile.did),
+      ),
+    );
+
+  return (
+    <Suspense fallback="Loading...">
+      <FollowButton
+        checkIsFollowingPromise={checkIsFollowingPromise}
+        did={profile.did}
+        loggedInUserDid={loggedInUserDid}
+        // isFollowing={isFollowing}
+        displayName={profile.displayName}
+      />
+    </Suspense>
   );
 }
 
@@ -97,10 +183,10 @@ async function ProfileInfo({ children }: { children: React.ReactNode }) {
 // }
 
 function ProfileHeader({
-  // children,
+  children,
   profile,
 }: {
-  // children: React.ReactNode;
+  children: React.ReactNode;
   profile: any;
 }) {
   return (
@@ -109,7 +195,7 @@ function ProfileHeader({
         <Avatar className="bg-background-secondary ring-ui-normal inline-flex h-[92px] w-[92px] flex-none items-center justify-center overflow-hidden rounded-full align-middle ring-1 select-none">
           <AvatarImage
             className="h-full w-full rounded-[inherit] object-cover"
-            src={profile.avatar as string}
+            src={profile?.avatar as string}
             alt={profile?.fullname as string}
           />
           <AvatarFallback
@@ -143,7 +229,7 @@ function ProfileHeader({
           <span className="text-text-secondary">@{profile.handle}</span>
         </div>
       </div>
-      {/* {children} */}
+      {children}
     </div>
   );
 }

@@ -64,7 +64,7 @@ export default async function UserLayout({
         <p>{username}</p>
       </div>
       <Suspense fallback={<UserProfileFallback />}>
-        <UserProfile username={username} />
+        <UserProfile handle={username} />
         {children}
       </Suspense>
     </main>
