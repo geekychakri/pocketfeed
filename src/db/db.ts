@@ -24,12 +24,17 @@ if (!globalForPool.pool) {
   });
 }
 
-//  const pool =
-//   globalForPool.pool ||   new Pool({
-//       connectionString: process.env.NEON_DB_AUTH_URL!,
-//     });
+// const globalForDb = globalThis as unknown as {
+//   client: Pool | undefined;
+// };
 
-//     if (process.env.NODE_ENV !== 'production') globalForPool.pool = pool;
+// const client =
+//   globalForDb.client ??
+//   new Pool({
+//     connectionString: process.env.DATABASE_URL,
+//   });
+
+// if (process.env.NODE_ENV !== "production") globalForDb.client = client;
 
 attachDatabasePool(globalForPool.pool);
 

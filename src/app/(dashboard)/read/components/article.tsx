@@ -42,7 +42,7 @@ import NothingToReadSVG from "@/components/svg/nothing-to-read";
 import Button from "@/components/ui/custom-button";
 import Textarea from "@/components/ui/custom-textarea";
 
-import { addPost } from "@/app/actions/add-post";
+// import { addPostAction } from "@/app/actions/add-post";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import { fetcher, internalErrorToast } from "@/lib/utils";
 import { useArticleContent } from "@/store/article-content";
@@ -253,7 +253,7 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
 
   const [fetchArticle, setFetchArticle] = useState(false);
 
-  const [state, formAction] = useActionState(addPost, initialState);
+  // const [state, formAction] = useActionState(addPostAction, initialState);
 
   const pathname = usePathname();
 

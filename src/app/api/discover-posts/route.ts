@@ -11,7 +11,7 @@ export async function GET(request: Request) {
     const cursor = searchParams.get("cursor");
     console.log({ cursor });
 
-    let limit = 1;
+    let limit = 50; //TODO:
     let hasNextPage = false;
     let nextCursor = null;
 

@@ -9,44 +9,44 @@ import { getXataClient } from "@/xata";
 
 import FollowingPostsList from "./components/following-posts-list";
 
-const xata = getXataClient();
+// const xata = getXataClient();
 export default async function Page() {
-  const user = await currentUser();
+  // const user = await currentUser();
 
-  const followingNames = await xata.db.follows
-    .filter({ followerName: user?.username as string })
-    .select(["followeeName"])
-    .getAll(); //TODO:
-  console.log({ followingNames });
+  // const followingNames = await xata.db.follows
+  //   .filter({ followerName: user?.username as string })
+  //   .select(["followeeName"])
+  //   .getAll(); //TODO:
+  // console.log({ followingNames });
 
-  const followedUserNames = followingNames.map((record) => record.followeeName);
+  // const followedUserNames = followingNames.map((record) => record.followeeName);
 
-  console.log({ followedUserNames });
+  // console.log({ followedUserNames });
 
-  let pageInfo;
+  // let pageInfo;
 
-  if (followedUserNames.length >= 1) {
-    const page = await xata.db.posts
-      .filter({ username: { $any: followedUserNames } })
-      .getPaginated({
-        pagination: {
-          size: 3,
-        },
-      }); //TODO: sort the results by desc  order
-    console.log({ page });
-    const hasNextPage = page.hasNextPage();
-    pageInfo = {
-      hasNextPage,
-      cursor: page.meta.page.cursor, // Contains cursor information
-    };
-  } else {
-    return (
-      <div className="flex flex-col items-center gap-4 py-6">
-        <EmptyFeedSVG width={320} />
-        <p>Looks quiet! Follow others to see their latest posts here.</p>
-      </div>
-    );
-  }
+  // if (followedUserNames.length >= 1) {
+  //   const page = await xata.db.posts
+  //     .filter({ username: { $any: followedUserNames } })
+  //     .getPaginated({
+  //       pagination: {
+  //         size: 3,
+  //       },
+  //     }); //TODO: sort the results by desc  order
+  //   console.log({ page });
+  //   const hasNextPage = page.hasNextPage();
+  //   pageInfo = {
+  //     hasNextPage,
+  //     cursor: page.meta.page.cursor, // Contains cursor information
+  //   };
+  // } else {
+  //   return (
+  //     <div className="flex flex-col items-center gap-4 py-6">
+  //       <EmptyFeedSVG width={320} />
+  //       <p>Looks quiet! Follow others to see their latest posts here.</p>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="flex flex-col gap-5">
@@ -87,8 +87,8 @@ export default async function Page() {
           );
         })} */}
         <FollowingPostsList
-          posts={page.records.toSerializable()}
-          initialPageInfo={pageInfo}
+        // posts={page.records.toSerializable()}
+        // initialPageInfo={pageInfo}
         />
       </div>
     </div>

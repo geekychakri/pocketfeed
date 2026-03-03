@@ -170,7 +170,7 @@ async function FollowButtonWrapper({
 }
 
 async function ProfileInfo({ children }: { children: React.ReactNode }) {
-  return <div className="flex flex-col gap-4">{children}</div>;
+  return <div className="flex flex-col gap-4 px-4">{children}</div>;
 }
 
 // function ProfileTitle({ username }: { username: string }) {

@@ -8,6 +8,7 @@ import {
   pgPolicy,
   pgRole,
   pgTable,
+  primaryKey,
   serial,
   text,
   timestamp,
@@ -47,23 +48,47 @@ export const bookmarks = pgTable("bookmarks", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const posts = pgTable("posts", {
-  id: uuid("id")
-    .primaryKey()
-    .default(sql`uuid_generate_v7()`),
-  did: text("did").notNull(),
-  displayName: text("display_name").notNull(),
-  handle: text("handle").notNull(),
-  avatar: text("avatar").notNull(),
-  text: text("text").notNull(),
-  sharedFeedItem: text("shared_feed_item").notNull(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-});
+export const posts = pgTable(
+  "posts",
+  {
+    id: uuid("id")
+      .primaryKey()
+      .default(sql`uuid_generate_v7()`),
+    did: text("did").notNull(),
+    displayName: text("display_name"),
+    handle: text("handle").notNull(),
+    avatar: text("avatar"),
+    text: text("text").notNull(),
+    sharedFeedItem: text("shared_feed_item").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => [index("posts_author_id_idx").on(table.did, table.id)],
+);
 
-export const follows = pgTable("follows", {
-  followerDid: text("follower_did").notNull(),
-  followingDid: text("following_did").notNull(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-});
+export const follows = pgTable(
+  "follows",
+  {
+    followerDid: text("follower_did").notNull(),
+    followingDid: text("following_did").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => [
+    index("follows_following_idx").on(table.followingDid),
+    index("follows_follower_idx").on(table.followerDid),
+  ],
+);
+
+export const userFeed = pgTable(
+  "user_feed",
+  {
+    userDid: text("user_did").notNull(),
+    postId: uuid("post_id").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.userDid, table.postId] }),
+    index("user_feed_user_created_idx").on(table.userDid, table.createdAt),
+  ],
+);
 
 export type User = InferSelectModel<typeof users>;

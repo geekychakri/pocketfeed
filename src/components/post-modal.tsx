@@ -1,11 +1,19 @@
 "use client";
 
-import { use, useActionState, useEffect, useState } from "react";
+import {
+  use,
+  useActionState,
+  useEffect,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
 import { useParams } from "next/navigation";
 
 import { Dialog } from "@base-ui-components/react/dialog";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import DOMPurify from "isomorphic-dompurify";
+import localForage from "localforage";
 import { useFormState } from "react-dom";
 import { useHotkeys } from "react-hotkeys-hook";
 import { toast } from "sonner";
@@ -29,6 +37,7 @@ import IconOnlyAction from "./ui/icon-only-action";
 const initialState = {
   type: "",
   message: "",
+  postText: "",
 };
 
 const parseJSON = (val: any) => {
@@ -39,6 +48,101 @@ const parseJSON = (val: any) => {
   }
 };
 
+const loadingSkeleton = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24px"
+    height="24px"
+    viewBox="0 0 24 24"
+  >
+    <g>
+      <rect
+        width="2"
+        height="5"
+        x="11"
+        y="1"
+        fill="currentColor"
+        opacity=".14"
+        rx="1"
+        ry="1"
+      ></rect>
+      <rect
+        width="2"
+        height="5"
+        x="11"
+        y="1"
+        fill="currentColor"
+        opacity=".29"
+        transform="rotate(30 12 12)"
+        rx="1"
+        ry="1"
+      ></rect>
+      <rect
+        width="2"
+        height="5"
+        x="11"
+        y="1"
+        fill="currentColor"
+        opacity=".43"
+        transform="rotate(60 12 12)"
+        rx="1"
+        ry="1"
+      ></rect>
+      <rect
+        width="2"
+        height="5"
+        x="11"
+        y="1"
+        fill="currentColor"
+        opacity=".57"
+        transform="rotate(90 12 12)"
+        rx="1"
+        ry="1"
+      ></rect>
+      <rect
+        width="2"
+        height="5"
+        x="11"
+        y="1"
+        fill="currentColor"
+        opacity=".71"
+        transform="rotate(120 12 12)"
+        rx="1"
+        ry="1"
+      ></rect>
+      <rect
+        width="2"
+        height="5"
+        x="11"
+        y="1"
+        fill="currentColor"
+        opacity=".86"
+        transform="rotate(150 12 12)"
+        rx="1"
+        ry="1"
+      ></rect>
+      <rect
+        width="2"
+        height="5"
+        x="11"
+        y="1"
+        fill="currentColor"
+        transform="rotate(180 12 12)"
+        rx="1"
+        ry="1"
+      ></rect>
+      <animateTransform
+        attributeName="transform"
+        calcMode="discrete"
+        dur="0.75s"
+        repeatCount="indefinite"
+        type="rotate"
+        values="0 12 12;30 12 12;60 12 12;90 12 12;120 12 12;150 12 12;180 12 12;210 12 12;240 12 12;270 12 12;300 12 12;330 12 12;360 12 12"
+      ></animateTransform>
+    </g>
+  </svg>
+);
+
 export default function PostModal({}: {
   // feedItem?: any;
   // feedTitle?: string;
@@ -46,17 +150,18 @@ export default function PostModal({}: {
   // websiteLink?: string;
   // className?: string;
 }) {
-  const [feedItem, _] = useState(() => {
+  const [feedItem] = useState(() => {
     const localFeedItem = localStorage.getItem("feedItem");
     return localFeedItem !== null ? JSON.parse(localFeedItem) : {};
   });
+
   console.log({ feedItem });
   const [loading, setLoading] = useState(false);
   const [newItemData, setNewItemData] = useState({});
   const { link } = useParams<{ link: string }>();
   console.log({ link });
 
-  const { articleTitle, articleContent } = useArticleContent();
+  // const { articleTitle, articleContent } = useArticleContent();
 
   // const { articles, articleMetaData } = useArticles();
   // const findArticle = articles.find(
@@ -68,12 +173,13 @@ export default function PostModal({}: {
   console.log({ parsedFeedItem });
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const addPostAction = addPost.bind(null, decodeURIComponent(link));
+  const postRef = useRef<HTMLTextAreaElement | null>(null);
 
-  const [state, formAction, isPending] = useActionState(
-    addPostAction,
-    initialState,
-  );
+  // const [isPending, startTransition] = useTransition();
+
+  // const addPostAction = addPost.bind(null, decodeURIComponent(link));
+
+  const [state, formAction, isPending] = useActionState(addPost, initialState);
 
   useHotkeys("P", (e) => {
     setIsModalOpen(true);
@@ -83,6 +189,8 @@ export default function PostModal({}: {
   useEffect(() => {
     if (state?.type === "success") {
       setIsModalOpen(false);
+    } else if (state.type === "duplicate-post") {
+      toast.warning(state.message);
     } else if (state.type === "internal-error") {
       internalErrorToast(state.message);
     } else if (state.type === "auth-error") {
@@ -99,6 +207,46 @@ export default function PostModal({}: {
   //   setLoading(false);
   // };
   // console.log({ feedTitle });
+
+  // const handleAddPost = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   try {
+  //     e.preventDefault();
+
+  //     const formData = new FormData(e.currentTarget);
+
+  //     const postValue = formData.get("post");
+
+  //     console.log({ postValue });
+
+  //     startTransition(async () => {
+  //       const { type, message } = await addPostAction(formData);
+  //       setIsModalOpen(false);
+  //     });
+
+  //     // localForage
+  //     //   .getItem("post")
+  //     //   .then(async (value) => {
+  //     //     if (value !== postValue) {
+  //     //       localForage.setItem("post", postRef.current?.value);
+  //     //       startTransition(async () => {
+  //     //         const { type, message } = await addPostAction(formData);
+  //     //         startTransition(() => {
+  //     //           if (type === "success") {
+  //     //             setIsModalOpen(false);
+  //     //           } else if (type === "internal-error") {
+  //     //             internalErrorToast(message);
+  //     //           } else if (type === "auth-error") {
+  //     //             toast.error(message);
+  //     //           }
+  //     //         });
+  //     //       });
+  //     //     } else {
+  //     //       toast.info("Whoops! You already said that.");
+  //     //     }
+  //     //   })
+  //     //   .catch((err) => console.log(err));
+  //   } catch (err) {}
+  // };
 
   return (
     <>
@@ -136,16 +284,39 @@ export default function PostModal({}: {
             {loading ? (
               "Loading..."
             ) : (
-              <form className="flex flex-col gap-4" action={formAction}>
+              <form
+                className="flex flex-col gap-4"
+                action={formAction}
+                // onSubmit={handleAddPost}
+                // action={(formData) => {
+                //   const postValue = formData.get("post");
+
+                //   console.log({ postValue });
+
+                //   localForage
+                //     .getItem("post")
+                //     .then((value) => {
+                //       if (value === postValue) {
+                //         return toast.info("Whoops! You already said that.");
+                //       }
+                //     })
+                //     .catch((err) => console.log(err));
+                //   // localForage.setItem("post", postRef.current?.value);
+                //   // formAction(formData);
+                //   // alert("hello");
+                // }}
+              >
                 {/* <span className="text-right text-sm tabular-nums text-text-secondary">
                 {text.length} / {MAX_TEXT_LENGTH}
               </span> */}
                 <Textarea
-                  placeholder="Share a thought or just Post :)"
+                  placeholder="Share a thought (optional) or just Post :)"
                   className="min-h-24 resize-none scroll-pb-2"
                   name="post"
                   id="post"
-                  required
+                  // required
+                  ref={postRef}
+                  defaultValue={state.postText}
                 />
                 <div className="border-shadow flex flex-col gap-3 rounded-md p-4">
                   <div className="flex flex-col gap-1">
@@ -210,7 +381,7 @@ export default function PostModal({}: {
                     Cancel
                   </Button>
                   <Button className="bg-ui-normal flex-1 hover:bg-ui-hover transition-[background-color]">
-                    {isPending ? <SpinnerRotate /> : "Post"}
+                    {isPending ? loadingSkeleton : "Post"}
                   </Button>
                 </div>
               </form>

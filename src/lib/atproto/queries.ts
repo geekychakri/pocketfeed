@@ -69,3 +69,19 @@ export let getFolderList = async () => {
 
   return folderList;
 };
+
+export let getProfile = async (did: string) => {
+  const res = await fetch(
+    `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${did}`,
+    {
+      cache: "force-cache",
+      next: {
+        revalidate: 60 * 60 * 24, // 1 day
+      },
+    },
+  ); //TODO: actor pass dynamic did
+
+  const profile = await res.json();
+
+  return profile;
+};

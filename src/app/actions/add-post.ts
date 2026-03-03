@@ -1,6 +1,7 @@
 "use server";
 
 import { auth, currentUser } from "@clerk/nextjs/server";
+import { desc, eq, sql } from "drizzle-orm";
 
 // import { getXataClient } from "@/xata";
 
@@ -8,14 +9,25 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
+import { getProfile } from "@/lib/atproto/queries";
+import { getDid } from "@/lib/auth/session";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 
 export async function addPost(
-  link: string,
+  // link: string,
   prevState: any,
   formData: FormData,
 ) {
+  let text = "";
   try {
+    console.log("RAN TX");
+
+    const did = (await getDid()) as string;
+
+    const profile = await getProfile(did as string);
+
+    const { handle, avatar, displayName } = profile;
+
     // GET did from the session
 
     // const { userId }: { userId: string | null } = await auth();
@@ -27,53 +39,46 @@ export async function addPost(
     // }
 
     // const user = await currentUser();
-    const post = formData.get("post") as string;
-    // const feedItemUrl = (formData.get("feedItemUrl") as string) || "";
-
-    // // const itemType = formData.get("type");
-
+    text = formData.get("post") as string;
     const feedItem = formData.get("feedItem") as string;
-    // const feedAlbumCover = formData.get("feedAlbumCover") as string;
-    // const feedTitle = formData.get("feedTitle") as string;
-    // const websiteLink = formData.get("websiteLink") as string;
 
-    // console.log({ feedItem });
+    const d = await db.transaction(async (tx) => {
+      const [post] = await tx
+        .insert(schema.posts)
+        .values({
+          did,
+          displayName,
+          handle,
+          avatar,
+          text,
+          sharedFeedItem: feedItem,
+        })
+        .returning();
 
-    // console.log({ feedAlbumCover });
+      // query profile posts from posts table, so not required
+      // await tx
+      //   .insert(schema.userFeed)
+      //   .values({
+      //     userDid: did,
+      //     postId: post.id,
+      //   })
+      //   .onConflictDoNothing();
 
-    // if (link !== websiteLink) {
-    //   return { type: "user-error", message: "Something doesn't look right!" };
-    // }
-
-    // const metadata = await urlMetadata(feedItemUrl);  //Check  url  is present
-
-    // const { title = "", author = "", description = "" } = metadata;
-
-    // console.log({ metadata });
-
-    // await xata.db.posts.create({
-    //   body: post,
-    //   // feedItemUrl,
-    //   // feedItemTitle: title,
-    //   // feedItemDescription: description,
-    //   // feedItemAuthor: author,
-    //   feedItem,
-    //   feedTitle,
-    //   feedAlbumCover,
-    //   websiteLink,
-    //   username: user?.username as string,
-    // });
-
-    const data = await db.insert(schema.posts).values({
-      did: "did:plc:fhhygitymqyet5inny6klful",
-      text: post,
-      sharedFeedItem: feedItem,
+      await tx.execute(sql`
+        insert into ${schema.userFeed} (user_did, post_id, created_at)
+        select ${schema.follows.followerDid}, ${sql.param(post.id)}, now()
+        from ${schema.follows}
+        where ${schema.follows.followingDid} = ${did}
+        on conflict do nothing
+      `);
     });
-
-    console.log({ data });
 
     return { type: "success", message: "success" };
   } catch (err) {
-    return { type: "internal-error", message: INTERNAL_ERROR_MESSAGE };
+    return {
+      type: "internal-error",
+      message: INTERNAL_ERROR_MESSAGE,
+      postText: text,
+    };
   }
 }

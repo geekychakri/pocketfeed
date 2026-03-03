@@ -14,12 +14,15 @@ import { set } from "zod";
 
 import DeletePostModal from "@/components/delete-post-modal";
 import { SpinnerRotate } from "@/components/spinner-rotate";
+import TimelineFeed from "@/components/timeline-feed";
 import Button from "@/components/ui/custom-button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/user-avatar";
 
 import PodcastPlayButton from "@/app/(dashboard)/(feed)/feed/components/PodcastPlayButton";
 import YouTubePlayButton from "@/app/(dashboard)/(feed)/feed/components/YouTubePlayButton";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import {
+  getInitials,
   getRelativeTimeString,
   humanReadableDate,
   internalErrorToast,
@@ -159,7 +162,12 @@ export default function DiscoverPostsList(
 
   return (
     <>
-      <div className="flex flex-col">
+      <TimelineFeed
+        posts={posts}
+        hasNextPage={hasNextPage}
+        onSetSize={() => setSize(size + 1)}
+      />
+      {/*<div className="flex flex-col">
         {posts.map((post, index) => {
           console.log({ rawFeedItem: post.sharedFeedItem });
           const feedItem = JSON.parse(post.sharedFeedItem as string);
@@ -169,7 +177,7 @@ export default function DiscoverPostsList(
             console.log({ audioUrl: feedItem.enclosure.url });
             return (
               <PodcastPost key={post.id} post={post} feedItem={feedItem}>
-                {/*<button
+                <button
                   className="hover:bg-background-secondary flex size-10 cursor-pointer items-center justify-center rounded-full transition-[background-color]"
                   onClick={() => {
                     setIsDeleteModalOpen(true);
@@ -177,15 +185,15 @@ export default function DiscoverPostsList(
                   }}
                 >
                   {post.username === username && (
-                    <TrashIcon className="text-danger size-5" />
+                    <TrashIcon className="text-danger size-11" />
                   )}
-                </button>*/}
+                </button>
               </PodcastPost>
             );
           } else if (feedItem?.link?.includes("youtube.com")) {
             return (
               <YouTubePost key={post.id} post={post} feedItem={feedItem}>
-                {/*<button
+                <button
                   className="hover:bg-background-secondary flex size-10 cursor-pointer items-center justify-center rounded-full transition-[background-color]"
                   onClick={() => {
                     setIsDeleteModalOpen(true);
@@ -193,15 +201,15 @@ export default function DiscoverPostsList(
                   }}
                 >
                   {post.username === username && (
-                    <TrashIcon className="text-danger size-5" />
+                    <TrashIcon className="text-danger size-11" />
                   )}
-                </button>*/}
+                </button>
               </YouTubePost>
             );
           }
           return (
             <ArticlePost key={post.id} post={post} feedItem={feedItem}>
-              {/*<button
+              <button
                 className="hover:bg-background-secondary flex size-10 cursor-pointer items-center justify-center rounded-full transition-[background-color]"
                 onClick={() => {
                   setIsDeleteModalOpen(true);
@@ -209,9 +217,9 @@ export default function DiscoverPostsList(
                 }}
               >
                 {post.username === username && (
-                  <TrashIcon className="text-danger size-5" />
+                  <TrashIcon className="text-danger size-11" />
                 )}
-              </button>*/}
+              </button>
             </ArticlePost>
           );
         })}
@@ -223,7 +231,7 @@ export default function DiscoverPostsList(
         ) : (
           <p>You&apos;ve reached the end of your feed!</p>
         )}
-      </div>
+      </div>*/}
 
       {/*<button disabled={isLoadingMore} onClick={() => setSize(size + 1)}>
         {isLoadingMore ? "loading..." : "load more"}
@@ -284,17 +292,27 @@ const PodcastPost = ({
           href={`/user/${post.username}`}
           className="flex items-center gap-1 self-start"
         >
-          <img
-            src={post.avatar}
-            alt={post.username}
-            className="size-12 rounded-full"
-          />
+          <Avatar className="hover:ring-ui-normal bg-ui-normal ring-ui-normal inline-flex size-11 flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full align-middle ring-1 transition-shadow select-none hover:ring-4">
+            <AvatarImage
+              className="h-full w-full rounded-[inherit] object-cover"
+              src={post.avatar}
+              alt={post.displayName || post.handle}
+            />
+            <AvatarFallback
+              // className="bg-ui-normal flex h-full w-full items-center justify-center text-[15px] leading-1 font-medium"
+              delayMs={600}
+            >
+              {getInitials(post.displayName || post.handle)}
+            </AvatarFallback>
+          </Avatar>
         </Link>
         <div className="flex flex-1 flex-col gap-5">
           <div className="flex flex-col">
             <div className="flex items-center justify-between">
               <div className="flex gap-2">
-                <span className="font-medium">Minicodecamp </span>
+                <span className="font-medium">
+                  {post.displayName || post.handle}
+                </span>
                 <span className="flex gap-1">
                   <span className="text-text-secondary">@{post.username}</span>
                   <span>·</span>
@@ -378,19 +396,34 @@ const YouTubePost = ({
           href={`/user/${post.username}`}
           className="flex items-center gap-1 self-start"
         >
-          <img
+          {/*<img
             src={post.avatar}
             alt={post.username}
             className="size-11 rounded-full"
-          />
+          />*/}
+          <Avatar className="hover:ring-ui-normal bg-ui-normal ring-ui-normal inline-flex size-11 flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full align-middle ring-1 transition-shadow select-none hover:ring-4">
+            <AvatarImage
+              className="h-full w-full rounded-[inherit] object-cover"
+              src={post.avatar}
+              alt={post.displayName || post.handle}
+            />
+            <AvatarFallback
+              // className="bg-ui-normal flex h-full w-full items-center justify-center text-[15px] leading-1 font-medium"
+              delayMs={600}
+            >
+              {getInitials(post.displayName || post.handle)}
+            </AvatarFallback>
+          </Avatar>
         </Link>
         <div className="flex flex-1 flex-col gap-1">
           <div className="flex flex-col">
             <div className="flex items-center justify-between">
               <div className="flex gap-2">
-                <span className="font-medium">Minicodecamp </span>
+                <span className="font-medium">
+                  {post.displayName || post.handle}
+                </span>
                 <span className="flex gap-1">
-                  <span className="text-text-secondary">@{post.username}</span>
+                  <span className="text-text-secondary">@{post.handle}</span>
                   <span>·</span>
                   <time
                     dateTime={post.createdAt}
@@ -469,19 +502,29 @@ const ArticlePost = ({
     >
       <div className="flex gap-4">
         <Link href={`/user/${post.username}`} className="flex gap-1 self-start">
-          <img
-            src={post.avatar}
-            alt={post.username}
-            className="size-12 rounded-full"
-          />
+          <Avatar className="hover:ring-ui-normal bg-ui-normal ring-ui-normal inline-flex size-11 flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full align-middle ring-1 transition-shadow select-none hover:ring-4">
+            <AvatarImage
+              className="h-full w-full rounded-[inherit] object-cover"
+              src={post.avatar}
+              alt={post.displayName || post.handle}
+            />
+            <AvatarFallback
+              // className="bg-ui-normal flex h-full w-full items-center justify-center text-[15px] leading-1 font-medium"
+              delayMs={600}
+            >
+              {getInitials(post.displayName || post.handle)}
+            </AvatarFallback>
+          </Avatar>
         </Link>
         <div className="flex flex-1 flex-col gap-5">
           <div className="flex flex-col">
             <div className="flex items-center justify-between">
               <div className="flex gap-2">
-                <span className="font-medium">Minicodecamp </span>
+                <span className="font-medium">
+                  {post.displayName || post.handle}
+                </span>
                 <span className="flex gap-1">
-                  <span className="text-text-secondary">@{post.username}</span>
+                  <span className="text-text-secondary">@{post.handle}</span>
                   <span>·</span>
                   <span className="text-text-secondary">2h</span>
                 </span>

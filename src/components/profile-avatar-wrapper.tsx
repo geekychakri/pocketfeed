@@ -1,5 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 
+import { getProfile } from "@/lib/atproto/queries";
 import { getDid, getSessionAgent } from "@/lib/auth/session";
 import { getXataClient } from "@/xata";
 
@@ -27,13 +28,21 @@ export default async function ProfileAvatarWrapper() {
 
   const did = await getDid();
 
-  const res = await fetch(
-    `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${did}`,
-  ); //TODO: actor pass dynamic did
+  // const res = await fetch(
+  //   `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=did:plc:qyztynppr2jon3zaenyxkifj`,
+  //   {
+  //     cache: "force-cache",
+  //     next: {
+  //       revalidate: 60 * 60 * 24,
+  //     },
+  //   },
+  // ); //TODO: actor pass dynamic did
 
-  const profile = await res.json();
+  // const profile = await res.json();
 
-  console.log({ profile });
+  // console.log({ profile });
+
+  const profile = await getProfile(did as string);
 
   return (
     <div className="px-3 py-4 shadow-[0_-1px_0_0_var(--border-non-interactive)]">
