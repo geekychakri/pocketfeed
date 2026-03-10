@@ -93,9 +93,9 @@ export default async function UserProfile({ handle }: { handle: string }) {
   // }
 
   const items = [
-    { href: `/user/${profile.displayName}`, title: "Posts" },
+    { href: `/user/${profile.handle}`, title: "Posts" },
     {
-      href: `/user/${profile.displayName}/subscriptions`,
+      href: `/user/${profile.handle}/subscriptions`,
       title: "Subscriptions",
     },
   ];

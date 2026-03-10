@@ -56,6 +56,8 @@ export default function ReadNav({
   // console.log({ articleMetaData });
   // const articleItem = articles.find((item, _) => item.link === articleUrl);
 
+  console.log({ readNavUrl: articleUrl });
+
   const fullscreen = useStore(useFullscreen, (state) => state.fullscreen);
   const isNoteBookOpen = useStore(
     useToggleNotebook,
@@ -73,7 +75,9 @@ export default function ReadNav({
   // const toggleFullScreen = () => {
   //   localStorage.setItem("fullscreen", "on");
   // };
-  useHotkeys("W", () => window.open(articleUrl, "_blank", "noreferrer"));
+  useHotkeys("W", () =>
+    window.open(decodeURIComponent(articleUrl), "_blank", "noreferrer"),
+  );
   useHotkeys("F", () => {
     toggleFullscreen();
   });
@@ -101,7 +105,7 @@ export default function ReadNav({
       <div className="flex items-center">
         <TooltipPrimitive.Provider delayDuration={700}>
           <ExtractArticle />
-          <CustomTooltip
+          {/*<CustomTooltip
             content={
               <span>
                 {fullscreen ? "Disable" : "Enable"} fullscreen <kbd>[F]</kbd>
@@ -118,7 +122,7 @@ export default function ReadNav({
                 <FullScreenCircleIcon className="size-[18px] shrink-0" />
               )}
             </IconOnlyAction>
-          </CustomTooltip>
+          </CustomTooltip>*/}
 
           {/* <button>
             <PostIcon />
@@ -142,7 +146,7 @@ export default function ReadNav({
           >
             <IconOnlyAction
               as="a"
-              href={articleUrl}
+              href={decodeURIComponent(articleUrl)}
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-full"
@@ -151,7 +155,7 @@ export default function ReadNav({
             </IconOnlyAction>
           </CustomTooltip>
 
-          <CustomTooltip
+          {/*<CustomTooltip
             content={
               <span>
                 {isNoteBookOpen ? "Close" : "Open"} Notebook <kbd>[N]</kbd>
@@ -168,7 +172,7 @@ export default function ReadNav({
                 <NotebookIcon className="shrink-0" />
               )}
             </IconOnlyAction>
-          </CustomTooltip>
+          </CustomTooltip>*/}
 
           {/* <CustomTooltip
             content={

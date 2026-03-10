@@ -23,17 +23,7 @@ export default async function MainLayout({
 }>) {
   return (
     <div className="flex w-full">
-      <SidebarNavigation>
-        <CollapsibleFolders>
-          <Suspense fallback={<FolderListFallback />}>
-            <FolderList />
-          </Suspense>
-        </CollapsibleFolders>
-
-        <Suspense fallback={<ProfileAvatarFallback />}>
-          <ProfileAvatarWrapper />
-        </Suspense>
-      </SidebarNavigation>
+      <SidebarNavigation></SidebarNavigation>
 
       <PodcastLoader />
       <YouTubeModal />
@@ -43,31 +33,6 @@ export default async function MainLayout({
         {children}
       </main>
       {/* </ClerkProvider> */}
-    </div>
-  );
-}
-
-function ProfileAvatarFallback() {
-  return (
-    <div className="px-3 py-4 shadow-[0_-1px_0_0_var(--border-non-interactive)]">
-      <div className="flex items-center animate-pulse space-x-4">
-        <div className="size-10 flex-none  rounded-full bg-ui-normal"></div>
-        <div className="w-full h-6 rounded bg-ui-normal"></div>
-      </div>
-    </div>
-  );
-}
-
-function FolderListFallback() {
-  return (
-    <div className="pt-3">
-      <div className="flex flex-col animate-pulse space-y-4">
-        <div className="flex-1 space-y-4 px-3.5">
-          <div className="h-8 rounded-md bg-ui-normal"></div>
-          <div className="h-8 rounded-md bg-ui-normal"></div>
-          <div className="h-8 rounded-md bg-ui-normal"></div>
-        </div>
-      </div>
     </div>
   );
 }

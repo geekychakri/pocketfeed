@@ -46,7 +46,9 @@ export default async function Feed(props: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   // const feedString = (await props.params).feedId[0];
-  const feedUrl = (await props.searchParams).feedUrl;
+  const feedUrlSearchParamPromise = props.searchParams.then((sp) => ({
+    feedUrl: sp.feedUrl,
+  }));
 
   // console.log({ ytChannelId });
 
@@ -135,13 +137,20 @@ export default async function Feed(props: {
       {/*<YouTubeModal />*/}
 
       <Suspense fallback="Loading...">
-        <FeedListWrapper feedUrl={feedUrl as string} />
+        <FeedListWrapper
+          feedUrlSearchParamPromise={feedUrlSearchParamPromise}
+        />
       </Suspense>
     </div>
   );
 }
 
-const FeedListWrapper = async ({ feedUrl }: { feedUrl: string }) => {
+const FeedListWrapper = async ({
+  feedUrlSearchParamPromise,
+}: {
+  feedUrlSearchParamPromise: any;
+}) => {
+  const { feedUrl } = await feedUrlSearchParamPromise;
   // preload bookmarks data
   const getBookmarksPromise = getBookmarks();
 

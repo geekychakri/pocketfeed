@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { Combobox } from "@base-ui-components/react/combobox";
 import { JSONData, SelectedPick } from "@xata.io/client";
+import { toast } from "sonner";
 
 import Button from "@/components/ui/custom-button";
 
@@ -52,18 +53,22 @@ export default function MultipleFeedsCombobox({
         value={selected}
         onValueChange={(next) => {
           console.log({ next });
-          // if (next.length === 10) {
-          //   return;
-          // }
+          if (next.length > 25) {
+            toast.info("Maximum feeds selected.", {
+              id: "max-feeds-toast",
+            });
+            return; //TODO:
+          }
           setSelected([...next]);
         }}
       >
         <div className="w-full  flex flex-col gap-3">
           <label
-            className="text-lg leading-5 font-medium text-gray-900"
+            className="text-lg flex justify-between leading-5 font-medium text-gray-900"
             htmlFor={id}
           >
-            Select Feeds
+            <span>Select Feeds: {selected.length}</span>
+            <span className="text-text-secondary text-sm">25 max.</span>
           </label>
           <Combobox.Chips
             className="flex flex-wrap items-center gap-0.5 rounded-md border-shadow px-1.5 py-1 focus-within:outline focus-within:outline-brand-primary w-full"

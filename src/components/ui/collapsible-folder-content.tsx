@@ -54,59 +54,64 @@ export default function CollapsibleFolderContent({
       ? folderName
       : decodeURIComponent(pathname.split("/")[2]); //
 
+  const TAGS = Array.from({ length: 50 }).map(
+    (_, i, a) => `v1.2.0-beta.${a.length - i}`,
+  );
+
   return (
     <Collapsible.Content className="data-[state=closed]:animate-collapsible-slide-up data-[state=open]:animate-collapsible-slide-down relative overflow-hidden">
+      {/*<ScrollArea.Root className="w-full h-full overflow-hidden rounded bg-white shadow-[0_2px_10px] shadow-blackA4">
+        <ScrollArea.Viewport className="size-full rounded">
+          <div className="px-5 py-[15px]">
+            <div className="text-[15px] font-medium leading-[18px] text-violet11">
+              Tags
+            </div>
+            {TAGS.map((tag) => (
+              <div
+                className="mt-2.5 border-t border-t-mauve6 pt-2.5 text-[13px] leading-[18px] text-mauve12"
+                key={tag}
+              >
+                {tag}
+              </div>
+            ))}
+          </div>
+        </ScrollArea.Viewport>
+        <ScrollArea.Scrollbar
+          className="flex touch-none select-none bg-black p-0.5 transition-colors duration-[160ms] ease-out hover:bg-black data-[orientation=horizontal]:h-2.5 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col"
+          orientation="vertical"
+        >
+          <ScrollArea.Thumb className="relative flex-1 rounded-[10px] bg-black before:absolute before:left-1/2 before:top-1/2 before:size-full before:min-h-11 before:min-w-11 before:-translate-x-1/2 before:-translate-y-1/2" />
+        </ScrollArea.Scrollbar>
+        <ScrollArea.Scrollbar
+          className="flex touch-none select-none bg-black p-0.5 transition-colors duration-[160ms] ease-out hover:bg-black data-[orientation=horizontal]:h-2.5 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col"
+          orientation="horizontal"
+        >
+          <ScrollArea.Thumb className="relative flex-1 rounded-[10px] bg-black before:absolute before:left-1/2 before:top-1/2 before:size-full before:min-h-[44px] before:min-w-[44px] before:-translate-x-1/2 before:-translate-y-1/2" />
+        </ScrollArea.Scrollbar>
+        <ScrollArea.Corner className="bg-blackA5" />
+      </ScrollArea.Root>*/}
       <ScrollArea.Root
-        className="bg-background-primary relative h-[225px] overflow-hidden shadow-[0_2px_10px]"
+        className=" relative w-full h-full overflow-hidden shadow-[0_2px_10px]"
         // type="always"
       >
-        {/* <VList style={{ height: 225 }} className="overflow-hidden"> */}
-        <ScrollArea.Viewport
-          ref={scrollViewportRef}
-          // id="scrollAreaViewport"
-          className="relative size-full rounded py-1"
-          onScroll={() => {
-            if (scrollViewportRef.current) {
-              const element = scrollViewportRef.current;
-              const scrollProgress =
-                element.scrollTop /
-                (element.scrollHeight - element.clientHeight);
-              console.log({ scrollProgress });
-
-              // scrollAwareRef.current.style.opacity = 1 - scrollProgress;
-
-              const isAtBottom =
-                Math.abs(
-                  element.scrollHeight -
-                    element.scrollTop -
-                    element.clientHeight,
-                ) < 1;
-
-              if (isAtBottom) {
-                setIsScrollAtBottom(true);
-              } else {
-                setIsScrollAtBottom(false);
-              }
-              console.log("Scrolled to bottom:", isAtBottom);
-            }
-          }}
-        >
-          <Virtualizer scrollRef={scrollViewportRef} ssrCount={5}>
-            <div className="flex flex-col gap-1 rounded-md px-3">
-              {foldersList.map((folder, i) => {
-                return (
-                  <FolderItem
-                    key={i}
-                    folder={folder}
-                    currentFolderName={currentFolderName}
-                    sound={tap}
-                  />
-                );
-              })}
-            </div>
-          </Virtualizer>
+        <ScrollArea.Viewport className="size-full rounded">
+          <div className="flex flex-col gap-1 rounded-md px-3 py-1">
+            {foldersList.map((folder, i) => {
+              return (
+                <FolderItem
+                  key={i}
+                  folder={folder}
+                  currentFolderName={currentFolderName}
+                  sound={tap}
+                />
+              );
+            })}
+            {/*{TAGS.map((i) => (
+              <div>{i}</div>
+            ))}*/}
+          </div>
         </ScrollArea.Viewport>
-        {/* </VList> */}
+
         <ScrollArea.Scrollbar
           className="hover:bg-background-primary data-[state=hidden]:animate-scroll-fade-out data-[state=visible]:animate-scroll-fade-in z-40 flex touch-none p-0.5 transition-colors ease-out select-none data-[orientation=vertical]:w-2.5"
           orientation="vertical"
@@ -114,10 +119,6 @@ export default function CollapsibleFolderContent({
           <ScrollArea.Thumb className="bg-ui-normal hover:bg-ui-hover relative flex-1 rounded-[10px] before:absolute before:top-1/2 before:left-1/2 before:size-full before:min-h-11 before:min-w-5 before:-translate-x-1/2 before:-translate-y-1/2" />
         </ScrollArea.Scrollbar>
       </ScrollArea.Root>
-      <div
-        ref={scrollAwareRef}
-        className={`from-background-primary pointer-events-none absolute bottom-0 left-0 h-24 w-full bg-linear-to-t ${isScrollAtBottom ? "opacity-0" : "opacity-100"} transition-opacity`}
-      ></div>
     </Collapsible.Content>
   );
 }

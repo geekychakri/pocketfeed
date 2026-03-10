@@ -10,43 +10,22 @@ import {
 } from "react";
 import Link from "next/link";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
-import Script from "next/script";
 
-import nord from "@shikijs/themes/nord";
 import { decode } from "html-entities";
 import parse from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
-import {
-  clearSelection,
-  findTextInElement,
-  highlightRange,
-  isRangeAlreadyHighlighted,
-  isRangeWithinHighlight,
-  isValidSelection,
-  removeHighlight,
-} from "lisere";
-import { animate } from "motion/mini";
-import { motion } from "motion/react";
-import { nanoid } from "nanoid";
-import { useFormState } from "react-dom";
-import ReactDOM from "react-dom/client";
-import { createHighlighter } from "shiki";
-import { toast } from "sonner";
 import useSWR, { useSWRConfig } from "swr";
 import useSound from "use-sound";
 
-import Modal from "@/components/custom-modal";
-import RouteBack from "@/components/route-back";
 import { SpinnerRotate } from "@/components/spinner-rotate";
 import NothingToReadSVG from "@/components/svg/nothing-to-read";
-import Button from "@/components/ui/custom-button";
-import Textarea from "@/components/ui/custom-textarea";
 
 // import { addPostAction } from "@/app/actions/add-post";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import { fetcher, internalErrorToast } from "@/lib/utils";
 import { useArticleContent } from "@/store/article-content";
-import { useArticles } from "@/store/articles-list";
+
+// import { useArticles } from "@/store/articles-list";
 
 import ArticleText from "./article-text";
 
@@ -64,32 +43,6 @@ export interface TextSelection {
   boundingRect: DOMRect;
 }
 
-// function makeRelativeUrl(url, origin) {
-//   try {
-//     const absoluteUrl = new URL(url);
-//     if (absoluteUrl.origin === origin) {
-//       return absoluteUrl.pathname + absoluteUrl.search + absoluteUrl.hash;
-//     }
-//   } catch (error) {
-//     // Invalid URL, return null to keep original
-//   }
-//   return null;
-// }
-
-DOMPurify.addHook("afterSanitizeElements", function (node) {
-  // if (node.tagName === "IMG" && node.src) {
-  //   node.src = `https://jakearchibald.com/${node.src}`;
-  // }
-  // // Handle links
-  // if (node.tagName === "A" && node.href) {
-  //  node.href = `https://jakearchibald.com/${node.}`;
-  // }
-  // Handle other elements with src
-  // if (["AUDIO", "VIDEO", "SOURCE"].includes(node.tagName) && node.src) {
-  //   node.src = `https://jakearchibald.com/${node.src}`;
-  // }
-});
-
 DOMPurify.addHook("afterSanitizeAttributes", function (node) {
   //TODO:
   if (node.tagName === "A" && node.getAttribute("href")?.startsWith("#")) {
@@ -104,52 +57,6 @@ DOMPurify.addHook("afterSanitizeAttributes", function (node) {
     //TODO: flatten p tag for highlighting
     node.textContent = node.textContent;
   }
-
-  // if (node.tagName === "PRE") {
-  //   // document.querySelectorAll("pre").forEach((pre) => {
-  //   // Create wrapper, button, and message elements
-  //   const wrapper = document.createElement("div");
-  //   const button = document.createElement("button");
-  //   // const message = document.createElement("div");
-  //   // Set up the wrapper and button
-  //   wrapper.style.position = "relative";
-  //   button.innerHTML = svgIconCopy;
-  //   // button.style.position = "absolute";
-  //   // button.style.width = "32px";
-  //   // button.style.height = "32px";
-  //   // button.style.top = "0";
-  //   // button.style.right = "0";
-  //   // button.style.display = "flex";
-  //   // button.style.alignItems = "center";
-  //   // button.style.justifyContent = "center";
-  //   // button.style.margin = "-17px 10px";
-  //   // button.style.background = "#fff";
-  //   // button.style.border = "1px solid #d1d5db";
-  //   // button.style.borderRadius = "6px";
-  //   button.className = "copy-code-btn";
-  //   // button.style.color = "#2F2F2F";
-  //   // button.style.padding = "5px 12px";
-
-  //   // Add wrapper and button to the DOM
-  //   node.parentNode?.insertBefore(wrapper, node);
-  //   wrapper.appendChild(node);
-  //   wrapper.appendChild(button);
-
-  //   // Copy action
-  //   button.addEventListener("click", () => {
-  //     button.innerHTML = svgIconCheck;
-  //     // copySound();
-  //     navigator.clipboard
-  //       .writeText(node.textContent as string)
-  //       .then(() => {
-  //         setTimeout(() => {
-  //           button.innerHTML = svgIconCopy;
-  //         }, 1000);
-  //       })
-  //       .catch((err) => console.error("Error copying text: ", err));
-  //   });
-  //   // });
-  // }
 });
 
 function convertRelativeUrlsToAbsolute(html: string, baseUrl: string) {
@@ -175,27 +82,6 @@ function convertRelativeUrlsToAbsolute(html: string, baseUrl: string) {
   const elementsWithUrls = doc.querySelectorAll("[href], [srcset], [src]");
 
   elementsWithUrls.forEach((el) => {
-    // if (el.hasAttribute("href")) {
-    //   const href = el.getAttribute("href");
-    //   if (!href.includes(baseUrl)) {
-    //     try {
-    //       el.setAttribute("href", new URL(href, baseUrl).href);
-    //     } catch (_) {}
-    //   }
-    // }
-
-    // if (el.hasAttribute("srcset")) {
-    //   const srcset = el.getAttribute("srcset");
-    //   // try {
-    //   //   el.setAttribute("srcset", new URL(src, baseUrl).href);
-    //   // } catch (_) {}
-    //   if (!srcset?.includes(baseUrl)) {
-    //     try {
-    //       el.setAttribute("srcset", new URL(srcset as string, baseUrl).href);
-    //     } catch (_) {}
-    //   }
-    // }
-
     if (el.hasAttribute("src")) {
       const src = el.getAttribute("src");
       // try {
@@ -247,7 +133,7 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
       ? JSON.parse(localStorage.getItem("feedItem") as string)
       : null;
   });
-  console.log({ articleUrl });
+  // console.log({ articleUrl });
   let isNewArticle = false;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -255,234 +141,87 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
 
   // const [state, formAction] = useActionState(addPostAction, initialState);
 
-  const pathname = usePathname();
-
-  const [copySound] = useSound("/sounds/copy.wav");
-
-  console.log({ pathname });
-
-  const articleRef = useRef(null);
-  const effectRan = useRef(false);
-
-  const { articleContent, articleTitle, isExtracted } = useArticleContent();
-
-  const { onError } = useSWRConfig();
-
-  // // text highlight
-  // const [highlights, setHighlights] = useState<
-  //   Map<
-  //     string,
-  //     { element: HTMLElement; selection: TextSelection; temporary?: boolean }
-  //   >
-  // >(new Map());
-  // const [currentSelection, setCurrentSelection] = useState<string>("");
-  // const [position, setPosition] = useState<Record<string, number>>();
-
-  // const addHighlight = useCallback(
-  //   (
-  //     highlightId: string,
-  //     highlightData: {
-  //       element: HTMLElement;
-  //       selection: TextSelection;
-  //       temporary?: boolean;
-  //     },
-  //   ) => {
-  //     setHighlights((prev) => {
-  //       const newHighlights = new Map(prev);
-  //       newHighlights.set(highlightId, highlightData);
-  //       return newHighlights;
-  //     });
-  //   },
-  //   [],
-  // );
-
-  // const handleHighlight = () => {
-  //   if (articleRef.current) {
-  //     const ranges = findTextInElement(
-  //       articleRef.current as HTMLElement,
-  //       currentSelection.trim(),
-  //     );
-  //     // console.log({ ranges });
-  //     ranges.forEach((range) => {
-  //       const highlight = highlightRange(range, "span", {
-  //         className:
-  //           "bg-yellow-50 outline select-none outline-yellow-50 shadow-[0_0_0_2px,0_1px_2px_1px,0_2px_4px_-2px,inset_0_-1px_1px_-2px,inset_0_0.5px_1px_-2px_rgba(255,255,255,0.2)] shadow-yellow-900/20 rounded-[6px]",
-  //       });
-  //       highlight.setAttribute("data-manual-highlight", nanoid());
-  //       highlight.id = nanoid();
-  //     });
-  //     // setHighlightCount((prev) => prev + ranges.length);
-  //     setCurrentSelection(undefined);
-  //   }
-  // };
-
-  // const handleMouseUp = () => {
-  //   const selection = window.getSelection();
-  //   if (selection && selection.rangeCount > 0 && !selection.isCollapsed) {
-  //     const range = selection.getRangeAt(0);
-  //     const text = range.toString().trim();
-
-  //     if (!selection && !text) {
-  //       setCurrentSelection(undefined);
-  //       return;
-  //     }
-
-  //     // console.log("Mouse up - Selection detected:", text);
-  //     setCurrentSelection(text);
-  //     const rect = selection.getRangeAt(0).getBoundingClientRect();
-
-  //     setPosition({
-  //       // 80 represents the width of the share button, this may differ for you
-  //       x: rect.left + rect.width / 2 - 80 / 2,
-  //       // 30 represents the height of the share button, this may differ for you
-  //       y: rect.top + window.scrollY - 30,
-  //       width: rect.width,
-  //       height: rect.height,
-  //     });
-  //   }
-  // };
-
-  // function onSelectStart() {
-  //   setCurrentSelection(undefined);
-  // }
-
-  // console.log({ currentSelection });
-
-  // useEffect(() => {
-  //   document.addEventListener("selectstart", onSelectStart);
-  //   window.addEventListener("mouseup", handleMouseUp);
-  //   return () => {
-  //     document.removeEventListener("selectstart", onSelectStart);
-  //     window.removeEventListener("mouseup", handleMouseUp);
-  //   };
-  // }, []);
-  // // text highlight
-
-  // If someone deletes localstorage by mistake
-  const { data, error, isLoading } = useSWR<{
-    content: string;
-    title: string;
-    author: string;
-    source: string;
-  }>(
-    feedItem ? null : `/api/extractArticle?articleLink=${articleUrl}`,
-    fetcher,
-    {
-      keepPreviousData: true,
-      // revalidateIfStale: true,
-      // revalidateOnMount: true,
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      onError: (error, key) => {
-        if (error.status === 500) {
-          internalErrorToast(INTERNAL_ERROR_MESSAGE);
-        }
-      },
-      onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
-        // Never retry on 404.
-        if (error.status === 500) return;
-
-        // Only retry up to 5 times.
-        if (retryCount >= 5) return;
-      },
-    },
-  );
-
-  // console.log(data?.content);
-
-  const { link } = useParams<{ link: string }>();
-  console.log({ link });
-  const articleLinkOrigin = new URL(decodeURIComponent(link)).origin;
-
-  // const { articles } = useArticles();
-
-  console.log({ articleContent });
+  // const pathname = usePathname();
+  // const { link } = useParams<{ link: string }>();
+  const articleLinkOrigin = new URL(decodeURIComponent(articleUrl)).origin;
 
   const searchParams = useSearchParams();
 
   const blogName = searchParams.get("author");
 
-  console.log({ data });
+  const [copySound] = useSound("/sounds/copy.wav");
 
-  // console.log({ articles });
+  // console.log({ pathname });
 
-  // isNewArticle = articles.every(
-  //   (article, _) => article.link !== decodeURIComponent(link),
-  // ); // store article url in local storage
-  // console.log({ isNewArticle });
-  // useEffect(() => {
-  //   useArticles.persist.rehydrate();
-  // }, []);
+  const articleRef = useRef(null);
+  const effectRan = useRef(false);
+
+  const { articleContent, articleTitle, articleLink, isExtracted } =
+    useArticleContent();
+
+  // const { onError } = useSWRConfig();
+
+  // If someone deletes localstorage by mistake
+  // const { data, error, isLoading } = useSWR<{
+  //   content: string;
+  //   title: string;
+  //   author: string;
+  //   source: string;
+  // }>(
+  //   feedItem ? null : `/api/extractArticle?articleLink=${articleUrl}`,
+  //   fetcher,
+  //   {
+  //     keepPreviousData: true,
+  //     // revalidateIfStale: true,
+  //     // revalidateOnMount: true,
+  //     revalidateIfStale: false,
+  //     revalidateOnFocus: false,
+  //     revalidateOnReconnect: false,
+  //     onError: (error, key) => {
+  //       if (error.status === 500) {
+  //         internalErrorToast(INTERNAL_ERROR_MESSAGE);
+  //       }
+  //     },
+  //     onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+  //       // Never retry on 404.
+  //       if (error.status === 500) return;
+
+  //       // Only retry up to 5 times.
+  //       if (retryCount >= 5) return;
+  //     },
+  //   },
+  // );
 
   let contentToRead: string;
 
-  if (isExtracted) {
+  if (decodeURIComponent(articleUrl) === articleLink) {
     contentToRead = articleContent;
   } else {
-    contentToRead = feedItem
-      ? convertRelativeUrlsToAbsolute(feedItem.content, articleLinkOrigin)
-      : (data?.content as string);
+    contentToRead = convertRelativeUrlsToAbsolute(
+      feedItem.content,
+      articleLinkOrigin,
+    );
   }
 
+  console.log({ contentToRead });
+
   useEffect(() => {
-    // if (!effectRan.current) {
-    console.log("select code ran");
     document.querySelectorAll("pre").forEach((pre) => {
       if (pre.dataset.processed === "true") return;
       pre.dataset.processed = "true";
       // Create wrapper, button, and message elements
       const wrapper = document.createElement("div");
       const button = document.createElement("button");
-      // const popoverEle = document.createElement("div");
-      // popoverEle.id = "poppy";
-      // popoverEle.setAttribute("popover", "hint");
-      // popoverEle.innerText = "Copy code";
 
-      // const message = document.createElement("div");
-      // Set up the wrapper and button
       wrapper.style.position = "relative";
       button.innerHTML = "Copy";
-      // button.style.cursor = "pointer";
-      // button.style.position = "absolute";
-      // button.style.width = "32px";
-      // button.style.height = "32px";
-      // button.style.top = "0";
-      // button.style.right = "0";
-      // button.style.display = "flex";
-      // button.style.alignItems = "center";
-      // button.style.justifyContent = "center";
-      // button.style.margin = "-17px 10px";
-      // button.style.background = "#fff";
-      // button.style.border = "1px solid #d1d5db";
-      // button.style.borderRadius = "6px";
-      button.className = "copy-code-btn";
-      // button.style.color = "#2F2F2F";
-      // button.style.padding = "5px 12px";
 
-      //popover Ele
+      button.className = "copy-code-btn";
 
       // Add wrapper and button to the DOM
       pre.parentNode?.insertBefore(wrapper, pre);
       wrapper.appendChild(pre);
       wrapper.appendChild(button);
-      // wrapper.appendChild(popoverEle);
-
-      // animate("#svgIconCopy", { opacity: 1 }, { duration: 0.5 });
-
-      // const popover = document.getElementById("poppy") as HTMLDivElement;
-
-      // button.onmouseenter = () => {
-      //   setTimeout(() => {
-      //     popover.showPopover();
-      //   }, 500);
-      // };
-
-      // button.onmouseleave = () => {
-      //   setTimeout(() => {
-      //     popover.hidePopover();
-      //   }, 500);
-      // };
 
       // Copy action
       button.addEventListener("click", () => {
@@ -502,16 +241,7 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
           .catch((err) => console.error("Error copying text: ", err));
       });
     });
-    // }
-
-    // return () => {
-    //   effectRan.current = true;
-    // };
   }, [copySound, isExtracted]);
-
-  if (error) {
-    throw new Error("Something went wrong!"); //TODO: Catch nearest error boundary
-  }
 
   if (isExtracted) {
     console.log("IS EXTRACTED!");
@@ -525,22 +255,22 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
     }
   }
 
-  if (data?.content === null) {
-    return (
-      <div className="flex flex-col items-center justify-center gap-6">
-        <NothingToReadSVG className="w-[320px]" />
-        <p>Hmm, there&apos;s nothing to read!</p>
-      </div>
-    );
-  }
+  // if (data?.content === null) {
+  //   return (
+  //     <div className="flex flex-col items-center justify-center gap-6">
+  //       <NothingToReadSVG className="w-[320px]" />
+  //       <p>Hmm, there&apos;s nothing to read!</p>
+  //     </div>
+  //   );
+  // }
 
-  if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center">
-        <SpinnerRotate />
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="flex flex-col items-center justify-center">
+  //       <SpinnerRotate />
+  //     </div>
+  //   );
+  // }
 
   // toggle article tag based on fetch data it article is extracted on user click remove article tag
 
@@ -549,7 +279,7 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
       <div className="relative mb-12 flex flex-col gap-2 pt-[10px] px-4">
         {/* <RouteBack className="absolute -left-9 p-2" /> */}
         <h1 className="flex min-h-14 items-center gap-2 text-[48px] leading-[52px] font-[575] tracking-tighter text-balance">
-          {decode(feedItem?.title) || decode(data?.title)}
+          {decode(feedItem?.title)}
         </h1>
         {!blogName ? (
           <span className="text-text-secondary">{feedItem?.author}</span>
@@ -562,19 +292,6 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
           FORBID_ATTR: ["style"],
         })}
       />
-
-      {/* {isNewArticle ? null : (
-        <>
-          <span className="border-border-non-interactive inline-block h-1 w-full border-t border-dotted"></span>
-          <div className="inline-flex flex-col gap-3">
-            {articleSiteName && (
-              <p className="text-text-secondary text-lg">
-                {articleSiteName}&apos;s latest articles&#58;
-              </p>
-            )}
-          </div>
-        </>
-      )} */}
     </>
   );
 }

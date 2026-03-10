@@ -48,15 +48,15 @@ const CollapsibleFolders = ({ children }: { children: React.ReactNode }) => {
 
   console.log({ overflown });
 
-  const pathname = usePathname();
+  // const pathname = usePathname();
 
-  const currentFolderName =
-    pathname.includes("/feed") || pathname.includes("/read")
-      ? folderName
-      : decodeURIComponent(pathname.split("/")[2]); //TODO: folderName store
+  // const currentFolderName =
+  //   pathname.includes("/feed") || pathname.includes("/read")
+  //     ? folderName
+  //     : decodeURIComponent(pathname.split("/")[2]); //TODO: folderName store
 
   // console.log("Collapsible folders");
-  console.log({ currentFolderName });
+  // console.log({ currentFolderName });
   return (
     <Collapsible.Root
       open={open}
@@ -64,7 +64,7 @@ const CollapsibleFolders = ({ children }: { children: React.ReactNode }) => {
         setOpen(!open);
         // isOpen ? playFolderOpen() : playFolderClose();
       }}
-      className="flex flex-col gap-1"
+      className="flex flex-col overflow-auto mb-1 pt-1"
       // open
     >
       <Collapsible.Trigger asChild className="group/collapsible">
@@ -72,9 +72,9 @@ const CollapsibleFolders = ({ children }: { children: React.ReactNode }) => {
           <Button
             className={cn(
               "hover:bg-ui-normal flex w-full items-center justify-between gap-3 rounded-md bg-transparent px-0 py-[10px] pl-3 font-normal",
-              pathname.includes("/activity") || pathname.includes("/bookmarks")
-                ? null
-                : "bg-ui-normal hover:bg-ui-hover font-medium",
+              // pathname.includes("/activity") || pathname.includes("/bookmarks")
+              //   ? null
+              //   : "bg-ui-normal hover:bg-ui-hover font-medium",
             )}
           >
             <span className="flex items-center gap-3">

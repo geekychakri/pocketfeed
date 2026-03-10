@@ -4,6 +4,7 @@ import { ClientArticle } from "./client-article";
 import ReadNav from "./read-nav";
 
 export default function ArticleContent({ articleUrl }: { articleUrl: string }) {
+  console.log({ articleUrl });
   return (
     <div
       // className={`${isNotebookOpen ? "flex-1" : "w-full max-w-[60ch]"} pb-14 border-x min-h-screen`}

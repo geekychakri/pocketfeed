@@ -38,7 +38,7 @@ export default function SubscriptionList({ records }: { records: any }) {
     initialState,
   );
 
-  const { user: loggedInUser } = useUser();
+  // const { user: loggedInUser } = useUser();
   const params = useParams();
   const displayedUserName = params.username;
 
@@ -71,24 +71,24 @@ export default function SubscriptionList({ records }: { records: any }) {
     }
   }, [state]);
 
-  if (records.length === 0) {
-    return (
-      <div className="flex min-h-[300px] flex-col items-center justify-center gap-8">
-        <div className="flex flex-col items-center justify-center gap-2">
-          <FeedIcon className="size-20" />
-          <span>No subscriptions yet!</span>
-        </div>
-        {loggedInUser?.username === displayedUserName && (
-          <Link
-            href="/add"
-            className="bg-ui-normal hover:bg-ui-hover flex items-center justify-center rounded-md px-4 py-2 font-medium text-white duration-100"
-          >
-            Add a feed
-          </Link>
-        )}
-      </div>
-    );
-  }
+  // if (records.length === 0) {
+  //   return (
+  //     <div className="flex min-h-[300px] flex-col items-center justify-center gap-8">
+  //       <div className="flex flex-col items-center justify-center gap-2">
+  //         <FeedIcon className="size-20" />
+  //         <span>No subscriptions yet!</span>
+  //       </div>
+  //       {loggedInUser?.username === displayedUserName && (
+  //         <Link
+  //           href="/add"
+  //           className="bg-ui-normal hover:bg-ui-hover flex items-center justify-center rounded-md px-4 py-2 font-medium text-white duration-100"
+  //         >
+  //           Add a feed
+  //         </Link>
+  //       )}
+  //     </div>
+  //   );
+  // }
 
   console.log("CHECKED");
   return (

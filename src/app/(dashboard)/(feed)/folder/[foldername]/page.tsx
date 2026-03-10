@@ -34,17 +34,13 @@ const getLastModified = async (url: string) => {
 export default async function FolderPage(props: {
   params: Promise<{ foldername: string }>;
 }) {
-  const params = await props.params;
-  // const userId = (await auth()).userId || "";
-  // const user = await currentUser();
-  const folderName = decodeURIComponent(params.foldername);
+  const folderNameParamPromise = props.params.then((pa) => ({
+    foldername: pa.foldername,
+  }));
+  // const folderName = decodeURIComponent(params.foldername);
 
   return (
     <div className="py-14 group">
-      <h1 className="flex h-14 group-hover:text-text-primary px-4 text-brand-primary items-center text-lg font-semibold duration-150">
-        {decodeURIComponent(folderName)}
-      </h1>
-
       {/* <div>
         {records?.map((record) => {
           return <div key={record.cid}>{record.value.title as string}</div>;
@@ -57,13 +53,18 @@ export default async function FolderPage(props: {
         ))}
       </div> */}
       <Suspense fallback={<FolderFeedFallback />}>
-        <FolderFeed folderName={folderName} />
+        <FolderFeed folderNameParamPromise={folderNameParamPromise} />
       </Suspense>
     </div>
   );
 }
 
-async function FolderFeed({ folderName }: { folderName: string }) {
+async function FolderFeed({
+  folderNameParamPromise,
+}: {
+  folderNameParamPromise: any;
+}) {
+  const { foldername } = await folderNameParamPromise;
   // const params = await props.params;
   // const userId = (await auth()).userId || "";
   // const user = await currentUser();
@@ -117,7 +118,7 @@ async function FolderFeed({ folderName }: { folderName: string }) {
   const recordsList = await getAllRecords();
 
   const records = recordsList.filter(
-    (record) => record.value.folder === folderName,
+    (record) => record.value.folder === foldername,
   );
 
   const folders = [
@@ -132,13 +133,16 @@ async function FolderFeed({ folderName }: { folderName: string }) {
   return (
     // <FolderFeedStoreProvider initialData={records}>
     <div className="flex flex-col">
+      <h1 className="flex h-14 group-hover:text-text-primary px-4 text-brand-primary items-center text-lg font-semibold duration-150">
+        {decodeURIComponent(foldername)}
+      </h1>
       {records.length >= 1 ? (
         <FolderFeedList
           // initialFeeds={JSON.parse(JSON.stringify(page.records))}
           // initialPageInfo={pageInfo}
           folders={foldersList}
           records={records}
-          folderName={folderName}
+          folderName={foldername}
         />
       ) : (
         <div className="flex flex-col items-center justify-center gap-6">
@@ -161,7 +165,10 @@ async function FolderFeed({ folderName }: { folderName: string }) {
 
 function FolderFeedFallback() {
   return (
-    <div className="flex flex-col animate-pulse space-y-6">
+    <div className="flex flex-col animate-pulse space-y-6 px-4">
+      <div className="h-14 w-24 flex items-center">
+        <div className="rounded bg-ui-normal h-7 w-full"></div>
+      </div>
       <div className="flex-1 space-y-6">
         <div className="h-8 rounded bg-ui-normal"></div>
         <div className="h-8 rounded bg-ui-normal"></div>

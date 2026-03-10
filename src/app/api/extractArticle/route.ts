@@ -3,21 +3,22 @@ import { isProbablyReaderable, Readability } from "@mozilla/readability";
 import { JSDOM, VirtualConsole } from "jsdom";
 import { DOMParser } from "linkedom";
 
-const modifyImgUrlAndReturnHTML = (html, url) => {
-  const doc = new DOMParser().parseFromString(html, "text/html");
+// const modifyImgUrlAndReturnHTML = (html, url) => {
+//   const doc = new DOMParser().parseFromString(html, "text/html");
 
-  Array.from(doc.getElementsByTagName("img")).forEach((element) => {
-    const src = element.getAttribute("data-src") ?? element.getAttribute("src");
-    const imgUrl = src.replace(/^.*?blog\/?/, "");
-    if (src) {
-      element.setAttribute("src", `${url}/${imgUrl}`);
-    }
-  });
+//   Array.from(doc.getElementsByTagName("img")).forEach((element) => {
+//     const src = element.getAttribute("data-src") ?? element.getAttribute("src");
+//     const imgUrl = src.replace(/^.*?blog\/?/, "");
+//     if (src) {
+//       element.setAttribute("src", `${url}/${imgUrl}`);
+//     }
+//   });
 
-  return Array.from(doc.childNodes)
-    .map((element) => element.outerHTML)
-    .join("");
-};
+//   return Array.from(doc.childNodes)
+//     .map((element) => element.outerHTML)
+//     .join("");
+// };
+
 export async function GET(request: Request) {
   try {
     // throw new Error("");
@@ -32,23 +33,26 @@ export async function GET(request: Request) {
     });
 
     if (isProbablyReaderable(dom.window.document)) {
-      // const reader = new Readability(dom.window.document); //TODO:
-      const article = await extract(articleLink, null, {
-        signal: AbortSignal.timeout(10000),
-      });
+      const reader = new Readability(dom.window.document); //TODO:
+      // const article = await extract(articleLink, null, {
+      //   signal: AbortSignal.timeout(10000),
+      // });
       // const article = reader.parse();
 
-      console.log({ extractedArticle: article });
+      // console.log({ extractedArticle: article });
 
-      const modifiedHTML = modifyImgUrlAndReturnHTML(
-        article?.content,
-        articleLink,
-      );
-
+      // const modifiedHTML = modifyImgUrlAndReturnHTML(
+      //   article?.content,
+      //   articleLink,
+      // );
+      const article = reader.parse();
       const articleResponse = {
         ...article,
-        content: modifiedHTML,
+        content: article?.content,
+        link: articleLink,
       };
+
+      console.log({ article: articleResponse });
 
       return Response.json(articleResponse);
     } else {

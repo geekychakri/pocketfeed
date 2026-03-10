@@ -45,7 +45,7 @@ export default async function ProfileAvatarWrapper() {
   const profile = await getProfile(did as string);
 
   return (
-    <div className="px-3 py-4 shadow-[0_-1px_0_0_var(--border-non-interactive)]">
+    <div className="px-3 flex items-center justify-between shadow-[0_-1px_0_0_var(--border-non-interactive)]">
       <ProfileAvatar
         avatar={profile.avatar as string}
         handle={profile.handle as string}

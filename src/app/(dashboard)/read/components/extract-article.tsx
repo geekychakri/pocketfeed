@@ -32,43 +32,50 @@ export default function ExtractArticle() {
     handleClick();
   });
 
-  const { data, error, isLoading, mutate } = useSWR<{
+  const { data, error, isValidating, mutate } = useSWR<{
     content: string;
     title: string;
-  }>(`/api/extractArticle?articleLink=${params.link}`, fetcher, {
-    keepPreviousData: true,
-    revalidateIfStale: false,
-    revalidateOnFocus: false,
-    // revalidateOnReconnect: false,
-    revalidateOnMount: false, //TODO:
-    onSuccess(data, key, config) {
-      console.log({ data });
-      setArticleData(data?.content, data?.title, true);
-      extractArticleIconRef.current?.stopAnimation();
+    link: string;
+  }>(
+    shouldFetch ? `/api/extractArticle?articleLink=${params.link}` : null,
+    fetcher,
+    {
+      keepPreviousData: true,
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      // revalidateOnReconnect: false,
+      // revalidateOnMount: false, //TODO: doesn't fetch on initial render
+      onSuccess(data, key, config) {
+        console.log({ data });
+        setArticleData(data?.content, data?.title, data.link, true);
+        extractArticleIconRef.current?.stopAnimation();
+      },
     },
-  });
+  );
 
-  console.log({ data });
+  console.log({ isValidating });
+
+  console.log({ swrArticleData: data });
 
   const handleClick = useCallback(() => {
     // console.log({ data });
     if (!data) {
-      // setShouldFetch(true);
+      setShouldFetch(true);
       extractArticleIconRef.current?.startAnimation();
-      mutate();
+      // mutate();
     }
     // if (!shouldFetch) {
     //   setShouldFetch(true);
     //   extractArticleIconRef.current?.startAnimation();
     // }
-    if (data) {
-      console.log("RAN CACHE");
-      setArticleData(data?.content, data?.title, true);
-      // extractArticleIconRef.current?.stopAnimation();
-    }
+    // if (data) {
+    //   console.log("RAN CACHE");
+    //   setArticleData(data?.content, data?.title, true);
+    //   // extractArticleIconRef.current?.stopAnimation();
+    // }
   }, [data]);
 
-  console.log({ isLoading });
+  // console.log({ isLoading });
   // console.log({ data });
 
   // useEffect(() => {
@@ -91,12 +98,18 @@ export default function ExtractArticle() {
     >
       <IconOnlyAction
         onClick={handleClick}
-        className={`rounded-md ${isLoading ? "cursor-progress" : "cursor-pointer"}`}
-        disabled={isLoading}
-        id="main-item"
+        className={`rounded-md ${isValidating ? "cursor-progress" : "cursor-pointer"}`}
+        // disabled={isValidating}
+        // id="main-item"
       >
         <ExtractArticleIcon size={18} ref={extractArticleIconRef} />
       </IconOnlyAction>
+      {/*<form
+        id="extract-article"
+        className="relative flex rounded-md size-6 cursor-pointer items-center justify-center px-5 py-5 hover:bg-ui-hover transition-[background-color] duration-150"
+      >
+        <ExtractArticleIcon size={18} ref={extractArticleIconRef} />
+      </form>*/}
     </CustomTooltip>
   );
 }

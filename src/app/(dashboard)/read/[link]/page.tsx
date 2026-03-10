@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import dynamic from "next/dynamic";
 import localFont from "next/font/local";
 import Script from "next/script";
@@ -53,28 +54,12 @@ import ToggleMenu from "../components/toggle-menu";
 //   }
 // }
 
-export default async function Read(props: {
+type PageProps = {
   params: Promise<{ link: string }>;
-}) {
-  const params = await props.params;
+};
+export default function Read({ params }: PageProps) {
+  const linkParamsPromise = params.then((pa) => ({ link: pa.link }));
   // const userId = (await auth()).userId as string;
-
-  let article, articleUrl;
-
-  try {
-    console.log("article");
-    articleUrl = params.link;
-  } catch (err) {
-    console.log(err);
-
-    return (
-      <div className="flex h-screen flex-1 flex-col items-center justify-center gap-6">
-        <GlobeErrorIcon className="size-20" />
-        <span>Something went wrong! Please try again later.</span>
-        <RouteBack text="Back" />
-      </div>
-    );
-  }
 
   return (
     <div className="w-full grid grid-cols-[1fr_65ch_1fr]">
@@ -92,9 +77,20 @@ export default async function Read(props: {
           <ClientArticle articleUrl={articleUrl} />
         </div>
       </div> */}
-      <ArticleContent articleUrl={articleUrl} />
 
+      <Suspense fallback="Loading...">
+        <ArticleContentWrapper linkParamsPromise={linkParamsPromise} />
+      </Suspense>
       <Notebook />
     </div>
   );
+}
+
+async function ArticleContentWrapper({
+  linkParamsPromise,
+}: {
+  linkParamsPromise: any;
+}) {
+  const { link: articleUrl } = await linkParamsPromise;
+  return <ArticleContent articleUrl={articleUrl} />;
 }

@@ -17,7 +17,7 @@ interface UserIconHandle {
 
 const SignOutButton = () => {
   // const [hovered, setHovered] = useState(false);
-  const { signOut } = useClerk();
+  // const { signOut } = useClerk();
 
   const iconRef = useRef<UserIconHandle>(null);
 
@@ -27,7 +27,7 @@ const SignOutButton = () => {
       // onClick={() => signOut({ redirectUrl: "/" })}
       onSelect={(e) => {
         e.preventDefault();
-        signOut({ redirectUrl: "/" });
+        // signOut({ redirectUrl: "/" });
       }}
       onMouseEnter={() => iconRef.current?.startAnimation()}
       onMouseLeave={() => iconRef.current?.stopAnimation()}

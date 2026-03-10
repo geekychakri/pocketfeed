@@ -5,13 +5,9 @@ import useStore from "@/store/useStore";
 
 export default function HighlightToolbar({
   position,
-  handleHighlight,
-  handleNote,
   handleCopy,
 }: {
   position?: Record<string, number>;
-  handleHighlight: () => void;
-  handleNote: () => void;
   handleCopy: () => void;
 }) {
   const toggleNotebook = useStore(
@@ -26,118 +22,47 @@ export default function HighlightToolbar({
         transform: `translate3d(${position?.x}px, ${position?.y}px, 0)`,
       }}
     >
-      {/* <button
+      <button
         // className="flex w-full h-full justify-between items-center px-2"
-        className="text-[13px] flex-1 px-2 cursor-pointer rounded bg-ui-normal hover:bg-ui-hover"
-        onClick={() => {
-          //@ts-expect-error
-          toggleNotebook();
-          handleHighlight();
-          // window.getSelection()?.empty();
-          // handleNote();
-        }}
+        className="text-sm flex-1 px-2 cursor-pointer rounded hover:bg-ui-hover"
+        onClick={handleCopy}
       >
-        Note
-      </button> */}
+        Copy
+      </button>
 
-      {!showSocialShare && (
-        <>
-          <button
-            // className="flex w-full h-full justify-between items-center px-2"
-            className="text-[13px] flex-1 px-2 cursor-pointer rounded hover:bg-ui-hover"
-            onClick={handleCopy}
+      <a
+        className="text-[13px] no-underline bg-none flex items-center justify-center gap-2 flex-1 px-2 cursor-pointer rounded  hover:bg-ui-hover"
+        href={`https://bsky.app/intent/compose?text=${encodeURIComponent("hello https://github.com/")}`}
+        target="__blank"
+      >
+        <span>Share</span>
+        <span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
           >
-            Copy
-          </button>
-
-          <button
-            // className="flex w-full h-full justify-between items-center px-2"
-            className="text-[13px] flex-1 px-2 cursor-pointer rounded hover:bg-ui-hover"
-            // onClick={() => handleHighlight()}
-          >
-            Delete
-          </button>
-        </>
-      )}
-
-      {!showSocialShare ? (
-        <button
-          // className="flex w-full h-full justify-between items-center px-2"
-          className="text-[13px] flex-1 px-2 cursor-pointer rounded  hover:bg-ui-hover"
-          onClick={() => setShowSocialShare(true)}
-        >
-          Share
-        </button>
-      ) : (
-        <>
-          <a
-            className="text-[13px] no-underline bg-none flex justify-center items-center gap-2 flex-1 px-2 cursor-pointer rounded hover:bg-ui-hover"
-            href={`http://twitter.com/intent/tweet?text=hello&url=https://github.com/`}
-            target="_blank"
-          >
-            <span>Twitter</span>
-            <span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="none"
-                  stroke="#888888"
-                  strokeDasharray="64"
-                  strokeDashoffset="64"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M19.89 7.34c-0.09 0.33 -0.49 1.16 -1.17 1.95c-0.45 8.68 -8.87 11.5 -14.64 8.59c-0.79 -1.05 2.85 -0.62 4.18 -2.63c-5.03 -2.57 -4.63 -9.44 -3.62 -9.16c2.37 3.19 6.19 3.48 6.81 3.19c0 -0.73 -0.31 -2.32 1.41 -3.65c0.99 -0.71 3.06 -1.34 4.93 0.69c0.32 0.21 0.78 0.3 1.47 0.15c0.41 -0.21 0.95 -0.07 0.67 0.66Z"
-                >
-                  <animate
-                    fill="freeze"
-                    attributeName="stroke-dashoffset"
-                    dur="0.6s"
-                    values="64;0"
-                  />
-                </path>
-              </svg>
-            </span>
-          </a>
-          <a
-            className="text-[13px] no-underline bg-none flex items-center justify-center gap-2 flex-1 px-2 cursor-pointer rounded  hover:bg-ui-hover"
-            href={`https://bsky.app/intent/compose?text=${encodeURIComponent("hello https://github.com/")}`}
-            target="__blank"
-          >
-            <span>Bluesky</span>
-            <span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="none"
-                  stroke="#888888"
-                  strokeDasharray="80"
-                  strokeDashoffset="80"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M7.47 5.94c1.83 1.37 3.81 4.14 4.53 5.63c0.72 -1.49 2.7 -4.26 4.53 -5.63c1.33 -0.99 3.47 -1.75 3.47 0.68c0 0.49 -0.28 4.08 -0.45 4.66c-0.57 2.03 -2.65 2.55 -4.5 2.23c3.24 0.55 4.06 2.36 2.28 4.17c-3.38 3.44 -4.85 -0.87 -5.23 -1.97c-0.07 -0.2 -0.1 -0.3 -0.1 -0.22c-0 -0.08 -0.03 0.02 -0.1 0.22c-0.38 1.1 -1.86 5.41 -5.23 1.97c-1.78 -1.81 -0.96 -3.63 2.28 -4.17c-1.85 0.31 -3.93 -0.21 -4.5 -2.23c-0.17 -0.58 -0.45 -4.18 -0.45 -4.66c0 -2.43 2.14 -1.67 3.47 -0.68Z"
-                >
-                  <animate
-                    fill="freeze"
-                    attributeName="stroke-dashoffset"
-                    dur="0.6s"
-                    values="80;0"
-                  />
-                </path>
-              </svg>
-            </span>
-          </a>
-        </>
-      )}
+            <path
+              fill="none"
+              stroke="#888888"
+              strokeDasharray="80"
+              strokeDashoffset="80"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M7.47 5.94c1.83 1.37 3.81 4.14 4.53 5.63c0.72 -1.49 2.7 -4.26 4.53 -5.63c1.33 -0.99 3.47 -1.75 3.47 0.68c0 0.49 -0.28 4.08 -0.45 4.66c-0.57 2.03 -2.65 2.55 -4.5 2.23c3.24 0.55 4.06 2.36 2.28 4.17c-3.38 3.44 -4.85 -0.87 -5.23 -1.97c-0.07 -0.2 -0.1 -0.3 -0.1 -0.22c-0 -0.08 -0.03 0.02 -0.1 0.22c-0.38 1.1 -1.86 5.41 -5.23 1.97c-1.78 -1.81 -0.96 -3.63 2.28 -4.17c-1.85 0.31 -3.93 -0.21 -4.5 -2.23c-0.17 -0.58 -0.45 -4.18 -0.45 -4.66c0 -2.43 2.14 -1.67 3.47 -0.68Z"
+            >
+              <animate
+                fill="freeze"
+                attributeName="stroke-dashoffset"
+                dur="0.6s"
+                values="80;0"
+              />
+            </path>
+          </svg>
+        </span>
+      </a>
     </div>
   );
 }
