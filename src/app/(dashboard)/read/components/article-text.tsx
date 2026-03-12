@@ -173,7 +173,7 @@ export default function ArticleText({
     [contentToRead],
   );
   return (
-    <div className="prose prose-a:no-underline prose-pre:rounded-xl prose-pre:border prose-pre:border-border-non-interactive prose-pre:bg-background-secondary prose-pre:text-base prose-pre:text-text-secondary px-4">
+    <div className="prose prose-a:text-brand-primary prose-a:[text-decoration-skip-ink:none] prose-pre:rounded-xl prose-pre:border prose-pre:border-border-non-interactive prose-pre:bg-background-secondary prose-pre:text-base prose-pre:text-text-secondary px-4">
       {currentSelection && position && (
         <HighlightToolbar
           position={position}

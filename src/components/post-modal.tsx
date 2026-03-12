@@ -10,7 +10,7 @@ import {
 } from "react";
 import { useParams } from "next/navigation";
 
-import { Dialog } from "@base-ui-components/react/dialog";
+import { Dialog } from "@base-ui/react/dialog";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import DOMPurify from "isomorphic-dompurify";
 import localForage from "localforage";
@@ -150,12 +150,11 @@ export default function PostModal({}: {
   // websiteLink?: string;
   // className?: string;
 }) {
-  const [feedItem] = useState(() => {
-    const localFeedItem = localStorage.getItem("feedItem");
-    return localFeedItem !== null ? JSON.parse(localFeedItem) : {};
-  });
+  // const [feedItem] = useState(() => {
+  //   const localFeedItem = localStorage.getItem("feedItem");
+  //   return localFeedItem !== null ? JSON.parse(localFeedItem) : {};
+  // });
 
-  console.log({ feedItem });
   const [loading, setLoading] = useState(false);
   const [newItemData, setNewItemData] = useState({});
   const { link } = useParams<{ link: string }>();
@@ -169,6 +168,10 @@ export default function PostModal({}: {
   // );
   const MAX_TEXT_LENGTH = 160;
   const [text, setText] = useState("");
+
+  const feedItem = localStorage.getItem("feedItem")
+    ? JSON.parse(localStorage.getItem("feedItem") as string)
+    : null;
   const parsedFeedItem = parseJSON(feedItem);
   console.log({ parsedFeedItem });
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -270,7 +273,7 @@ export default function PostModal({}: {
         </TooltipPrimitive.Content>
       </TooltipPrimitive.Root>
 
-      <Dialog.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
+      <Dialog.Root open={isModalOpen} onOpenChange={setIsModalOpen} dis>
         <Dialog.Portal>
           <Dialog.Backdrop className="fixed inset-0 min-h-dvh bg-black opacity-20 transition-all duration-150 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0 dark:opacity-70 supports-[-webkit-touch-callout:none]:absolute" />
           <Dialog.Popup className="fixed top-1/2 left-1/2 -mt-8 w-[90vw] max-w-[450px] border-shadow focus-visible:outline focus-visible:outline-brand-primary -translate-x-1/2 -translate-y-1/2 rounded-lg bg-background-primary p-6 transition-all duration-150 data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[starting-style]:scale-90 data-[starting-style]:opacity-0">
@@ -332,8 +335,12 @@ export default function PostModal({}: {
                     {/*<p className="text-text-secondary/70 text-sm">
                       {feedItem.link}
                     </p>*/}
-                    <p className="text-text-secondary/70 text-sm">
-                      {feedItem.author}
+                    <p className="text-text-secondary/70 text-sm flex flex-col gap-1">
+                      <span className="line-clamp-2">
+                        {feedItem.contentSnippet}
+                      </span>
+
+                      <span>{feedItem.author || feedItem.creator}</span>
                     </p>
                   </div>
                   {/* {parsedFeedItem.contentSnippet || parsedFeedItem.content ? (

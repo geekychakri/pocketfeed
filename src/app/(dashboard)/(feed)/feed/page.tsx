@@ -12,6 +12,7 @@ import RouteBack from "@/components/route-back";
 import { db } from "@/db/db";
 import { getBookmarks } from "@/db/queries";
 import * as schema from "@/db/schema";
+import { ExternalLinkIcon } from "@/icons/external-link";
 import { FeedItemType, FeedListType } from "@/types";
 import { getXataClient } from "@/xata";
 
@@ -128,15 +129,10 @@ export default async function Feed(props: {
   // return <div>Feed</div>;
 
   return (
-    <div className="flex flex-col px-4 py-14">
-      <div className="relative mb-5 flex items-center">
-        <RouteBack className="absolute -left-9 border" />
-        {/* <h1 className="border text-lg font-medium">{feedList.title}</h1> */}
-        <h1>Feed Title</h1>
-      </div>
+    <div className="flex flex-col py-14">
       {/*<YouTubeModal />*/}
 
-      <Suspense fallback="Loading...">
+      <Suspense fallback={<FeedListFallback />}>
         <FeedListWrapper
           feedUrlSearchParamPromise={feedUrlSearchParamPromise}
         />
@@ -151,6 +147,10 @@ const FeedListWrapper = async ({
   feedUrlSearchParamPromise: any;
 }) => {
   const { feedUrl } = await feedUrlSearchParamPromise;
+
+  if (!feedUrl) {
+    return <div>Feed url missing!</div>;
+  }
   // preload bookmarks data
   const getBookmarksPromise = getBookmarks();
 
@@ -168,9 +168,12 @@ const FeedListWrapper = async ({
   const fList = {
     ...feedList,
     items: [...sortFirstTenFeedsByDate],
+    feedUrl,
   };
 
-  console.dir({ fListItems: fList.items });
+  console.log({ fList });
+
+  // console.dir({ fListItems: fList.items });
 
   // console.log(sortFirstTenFeedsByDate);
 
@@ -181,25 +184,72 @@ const FeedListWrapper = async ({
   }
   return (
     <>
+      <div className="relative mb-5 flex items-center px-4">
+        <RouteBack className="absolute -left-12 border" />
+        {/* <h1 classNameName="border text-lg font-medium">{feedList.title}</h1> */}
+        <h1 className="font-medium">{feedList.title}</h1>
+      </div>
       <FeedList
         feedList={fList}
         getBookmarksPromise={getBookmarksPromise}
         // feedItems={feedList.items}
         // folderName={feed?.folderName?.folder as string} //TODO:
       />
-      <a
+      {/*<a
         target="_blank"
         href={feedList.link}
         rel="noreferrer noopener"
-        className="hover:text-text-secondary mt-10 flex items-center gap-1 self-start rounded-md transition-[color]"
+        classNameName="hover:text-text-secondary mt-10 flex items-center gap-1 self-start rounded-md transition-[color]"
       >
-        <span className="custom-underline">Visit original page</span>
-        {/* <ArrowTopRightIcon /> */}
+        <span classNameName="custom-underline">Visit original page</span>
+
+      </a>*/}
+      <a
+        href={feedList.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-brand-primary flex items-center gap-1 mt-10 px-4"
+      >
+        Visit original page <ExternalLinkIcon />
       </a>
     </>
   );
 };
 
+function FeedListFallback() {
+  return (
+    <div className="animate-pulse flex flex-col gap-5 px-4">
+      <div className="h-7 w-56 bg-ui-normal rounded"></div>
+      <div className="flex flex-col  space-y-3">
+        <div className="h-14 w-full flex justify-between items-center">
+          <div className="rounded bg-ui-normal h-7 w-56"></div>
+          <div className="rounded bg-ui-normal h-7 w-20"></div>
+        </div>
+        <div className="flex-1 space-y-3">
+          <div className="h-5 rounded bg-ui-normal"></div>
+          <div className="h-5 rounded bg-ui-normal"></div>
+          <div className="h-5 rounded bg-ui-normal"></div>
+        </div>
+      </div>
+
+      {Array.from({ length: 10 }).map((_, i, a) => {
+        return (
+          <div key={i} className="flex flex-col  space-y-3 ">
+            <div className="h-14 w-full flex justify-between items-center">
+              <div className="rounded bg-ui-normal h-7 w-56"></div>
+              <div className="rounded bg-ui-normal h-7 w-20"></div>
+            </div>
+            <div className="flex-1 space-y-3">
+              <div className="h-5 rounded bg-ui-normal"></div>
+              <div className="h-5 rounded bg-ui-normal"></div>
+              <div className="h-5 rounded bg-ui-normal"></div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 // function categorizeFeedItems(feedItems: FeedItemType[]) {
 //   const now = new Date();
 

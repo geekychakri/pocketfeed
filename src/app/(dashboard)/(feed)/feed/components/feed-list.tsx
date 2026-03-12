@@ -1,6 +1,6 @@
 "use client";
 
-import { use } from "react";
+import { use, useEffect } from "react";
 import Link from "next/link";
 
 import { setCookie } from "cookies-next/client";
@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { decode } from "html-entities";
+import localforage from "localforage";
 import LZString from "lz-string";
 
 import { convertTimeStringToReadable, getYoutubeVideoId } from "@/lib/utils";
@@ -107,6 +108,19 @@ export default function FeedList({
   //   .sort((a, b) => (dayjs(a.isoDate).isAfter(dayjs(b.isoDate)) ? -1 : 1));
   const bookmarks = use(getBookmarksPromise) as [];
 
+  useEffect(() => {
+    localforage
+      .setItem("browse-feed", feedList)
+      .then(function (value) {
+        // Do other things once the value has been saved.
+        console.log(value);
+      })
+      .catch(function (err) {
+        // This code runs if there were any errors
+        console.log(err);
+      });
+  }, [feedList]);
+
   const modBookmarks = bookmarks.map((item: any) => {
     return {
       bookmarkId: item.id,
@@ -165,7 +179,7 @@ export default function FeedList({
           //   ))}
           // </div>
           <div className="group/today">
-            <h1 className="text-brand-primary group-hover/today:text-text-primary mb-[5px] font-medium transition-[color]">
+            <h1 className="text-brand-primary group-hover/today:text-text-primary mb-[5px] px-4 font-medium transition-[color]">
               Today
             </h1>
 
@@ -189,7 +203,7 @@ export default function FeedList({
           //   ))}
           // </>
           <div className="group/yesterday">
-            <h1 className="text-brand-primary group-hover/yesterday:text-text-primary mb-[5px] font-medium transition-[color]">
+            <h1 className="text-brand-primary group-hover/yesterday:text-text-primary mb-[5px] px-4 font-medium transition-[color]">
               Yesterday
             </h1>
 
@@ -213,7 +227,7 @@ export default function FeedList({
           //   ))}
           // </div>
           <div className="group/thisWeek">
-            <h1 className="text-brand-primary group-hover/thisWeek:text-text-primary mb-[5px] font-medium transition-[color]">
+            <h1 className="text-brand-primary group-hover/thisWeek:text-text-primary mb-[5px] px-4 font-medium transition-[color]">
               This Week
             </h1>
 
@@ -237,7 +251,7 @@ export default function FeedList({
           //   ))}
           // </>
           <div className="group/lastWeek">
-            <h1 className="text-brand-primary group-hover/lastWeek:text-text-primary mb-[5px] font-medium transition-[color]">
+            <h1 className="text-brand-primary group-hover/lastWeek:text-text-primary mb-[5px] px-4 font-medium transition-[color]">
               Last Week
             </h1>
 
@@ -253,7 +267,7 @@ export default function FeedList({
         )}
         {categorizedFeedItemsList.thisMonth.length > 0 && (
           <div className="group/thisMonth">
-            <h1 className="text-brand-primary group-hover/thisMonth:text-text-primary mb-[5px] font-medium transition-[color]">
+            <h1 className="text-brand-primary group-hover/thisMonth:text-text-primary mb-[5px] px-4 font-medium transition-[color]">
               This Month
             </h1>
 
@@ -277,7 +291,7 @@ export default function FeedList({
           //   ))}
           // </>
           <div className="group/lastMonth">
-            <h1 className="text-brand-primary group-hover/lastMonth:text-text-primary mb-[5px] font-medium transition-[color]">
+            <h1 className="text-brand-primary group-hover/lastMonth:text-text-primary mb-[5px] px-4 font-medium transition-[color]">
               Last Month
             </h1>
 
@@ -301,7 +315,7 @@ export default function FeedList({
           //   ))}
           // </>
           <div className="group/thisYear">
-            <h1 className="text-brand-primary group-hover/thisYear:text-text-primary mb-[5px] font-medium transition-[color]">
+            <h1 className="text-brand-primary group-hover/thisYear:text-text-primary mb-[5px] px-4 font-medium transition-[color]">
               This Year
             </h1>
 
@@ -325,7 +339,7 @@ export default function FeedList({
           //   ))}
           // </>
           <div className="group/lastYear">
-            <h1 className="text-brand-primary group-hover/lastYear:text-text-primary mb-[5px] font-medium transition-[color]">
+            <h1 className="text-brand-primary group-hover/lastYear:text-text-primary mb-[5px] px-4 font-medium transition-[color]">
               Last Year
             </h1>
 
@@ -354,7 +368,7 @@ export default function FeedList({
                 //   ))}
                 // </>
                 <div key={i} className="group/older">
-                  <h1 className="text-brand-primary group-hover/older:text-text-primary mb-[5px] font-medium transition-[color]">
+                  <h1 className="text-brand-primary group-hover/older:text-text-primary mb-[5px] px-4 font-medium transition-[color]">
                     {item}
                   </h1>
 
@@ -402,7 +416,7 @@ function FeedItem({
     );
   } else if (item.link?.includes("youtube.com")) {
     return (
-      <div className="hover:text-brand-primary flex items-center justify-between gap-5 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]">
+      <div className="hover:text-brand-primary flex items-center justify-between gap-5 px-4 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]">
         <div className="flex-1">
           <span className="tracking-tight text-pretty">
             {decode(item.title)}
@@ -434,27 +448,31 @@ function FeedItem({
   }
   return (
     <div
-      className="hover:text-brand-primary relative isolate flex items-center justify-between gap-4 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]"
+      className="hover:text-brand-primary relative isolate flex flex-col  gap-4 px-4 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]"
       // prefetch={false}
     >
-      <span className="flex w-4/5 flex-col text-pretty">
-        {decode(item.title) || feedList.title}
-        {/* <span className="line-clamp-2 text-text-secondary">
-            {item.contentSnippet}
-          </span> */}
-      </span>
+      <div className="flex-1 flex items-center">
+        <span className="flex-1 w-4/5 flex-col text-pretty">
+          {decode(item.title) || feedList.title}
+          {/* <span className="line-clamp-2 text-text-secondary">
+              {item.contentSnippet}
+            </span> */}
+        </span>
 
-      <span className="text-text-secondary flex w-1/5 justify-end text-sm">
-        <span>{dayjs(item.isoDate).format("ll")}</span>
-        {/* <span>·</span>
-          <span>{dayjs().to(dayjs(item.isoDate))}</span> */}
-      </span>
-      {/* <PostModal
-        feedItem={JSON.stringify(item)}
-        className="z-2"
-        feedTitle={feedList.title}
-        websiteLink={feedList.link}
-      /> */}
+        <span className="text-text-secondary flex w-1/5 justify-end text-sm">
+          <span>{dayjs(item.isoDate).format("ll")}</span>
+          {/* <span>·</span>
+            <span>{dayjs().to(dayjs(item.isoDate))}</span> */}
+        </span>
+        {/* <PostModal
+          feedItem={JSON.stringify(item)}
+          className="z-2"
+          feedTitle={feedList.title}
+          websiteLink={feedList.link}
+        /> */}
+      </div>
+
+      <p className="text-text-secondary line-clamp-3">{item.contentSnippet}</p>
 
       <Link
         // href={
@@ -463,12 +481,13 @@ function FeedItem({
         //     : `/read/${encodeURIComponent(`${feedList.link}/${item.link}` as string)}`
         // }
         // href={`/read/${encodeURIComponent("https://www.alanwsmith.com/en/2v/mq/vc/om/")}`} //TODO:
-        href={`/read/${encodeURIComponent(item.link as string)}?author=${feedList.title}`}
+        href={`/read?link=${item.link}`}
         id="main-item"
         onNavigate={(e) => {
           // setArticleData(item.content, item.title);
           localStorage.setItem("feedItem", JSON.stringify(item));
           setCookie("articleId", item.id || item.guid);
+          // alert("navigated");
           // setFolderName(folderName);
         }}
         className="absolute inset-0 z-1"
@@ -508,7 +527,7 @@ const PodcastCard = ({
 
   console.log({ duration: item?.itunes?.duration });
   return (
-    <div className="hover:text-brand-primary relative flex items-center justify-between gap-5 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]">
+    <div className="hover:text-brand-primary relative flex items-center justify-between gap-5 px-4 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]">
       <span className="flex flex-1 flex-col gap-1">
         <span className="tracking-tight text-pretty">{decode(item.title)}</span>
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 
 import { useHotkeys } from "react-hotkeys-hook";
 import useSWR, { useSWRConfig } from "swr";
@@ -20,7 +20,9 @@ export default function ExtractArticle() {
   const [shouldFetch, setShouldFetch] = useState(false);
   const extractArticleIconRef = useRef<ExtractArticleIconHandle>(null);
 
-  const params = useParams<{ link: string }>();
+  // const params = useParams<{ link: string }>();
+
+  const searchParams = useSearchParams();
 
   const { setArticleData } = useArticleContent();
 
@@ -37,7 +39,9 @@ export default function ExtractArticle() {
     title: string;
     link: string;
   }>(
-    shouldFetch ? `/api/extractArticle?articleLink=${params.link}` : null,
+    shouldFetch
+      ? `/api/extractArticle?articleLink=${searchParams.get("link")}`
+      : null,
     fetcher,
     {
       keepPreviousData: true,

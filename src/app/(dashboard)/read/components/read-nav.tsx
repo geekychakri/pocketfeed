@@ -1,14 +1,18 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import { Solitreo } from "next/font/google";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import { setCookie } from "cookies-next/client";
+import localforage from "localforage";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import BookmarkPodcast from "@/components/PodcastPlayer/bookmark-podcast";
+// import PostModal from "@/components/post-modal";
 import RouteBack from "@/components/route-back";
 import { CustomTooltip } from "@/components/ui/custom-tooltip";
 import IconOnlyAction from "@/components/ui/icon-only-action";
@@ -56,34 +60,38 @@ export default function ReadNav({
   // console.log({ articleMetaData });
   // const articleItem = articles.find((item, _) => item.link === articleUrl);
 
+  // const feedItem = use(getReadList);
+
+  // console.log({ readNavFeedItem: getReadList });
+
   console.log({ readNavUrl: articleUrl });
 
-  const fullscreen = useStore(useFullscreen, (state) => state.fullscreen);
-  const isNoteBookOpen = useStore(
-    useToggleNotebook,
-    (state) => state.isNotebookOpen,
-  );
-  const toggleFullscreen = useStore(
-    useFullscreen,
-    (state) => state.toggleFullscreen,
-  );
+  // const fullscreen = useStore(useFullscreen, (state) => state.fullscreen);
+  // const isNoteBookOpen = useStore(
+  //   useToggleNotebook,
+  //   (state) => state.isNotebookOpen,
+  // );
+  // const toggleFullscreen = useStore(
+  //   useFullscreen,
+  //   (state) => state.toggleFullscreen,
+  // );
 
-  const toggleNotebook = useStore(
-    useToggleNotebook,
-    (state) => state.toggleNotebook,
-  );
+  // const toggleNotebook = useStore(
+  //   useToggleNotebook,
+  //   (state) => state.toggleNotebook,
+  // );
   // const toggleFullScreen = () => {
   //   localStorage.setItem("fullscreen", "on");
   // };
   useHotkeys("W", () =>
     window.open(decodeURIComponent(articleUrl), "_blank", "noreferrer"),
   );
-  useHotkeys("F", () => {
-    toggleFullscreen();
-  });
-  useHotkeys("N", () => {
-    toggleNotebook();
-  });
+  // useHotkeys("F", () => {
+  //   toggleFullscreen();
+  // });
+  // useHotkeys("N", () => {
+  //   toggleNotebook();
+  // });
 
   // useEffect(() => {
   //   useBoundStore.persist.rehydrate();
@@ -91,17 +99,28 @@ export default function ReadNav({
 
   const extractArticleIconRef = useRef(null);
 
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
 
-  const blogName = searchParams.get("author");
+  // const blogName = searchParams.get("author");
+
+  // const [feedData, setFeedData] = useState();
+
+  // const searchParams = useSearchParams();
+
+  // const author = searchParams.get("author");
+
+  // useEffect(() => {
+  //   const getReadList = async () => {
+  //     const data = await localforage.getItem("browse-feed");
+  //     setFeedData(data);
+  //   };
+
+  //   getReadList();
+  // }, []);
 
   return (
     <div className="border-border-non-interactive bg-background-primary sticky top-0 z-10 flex h-14 items-center justify-between gap-3 border-b px-4">
-      <div className="flex items-center gap-4">
-        <RouteBack />
-        <p className="text-text-secondary">{blogName}</p>
-      </div>
-
+      <Author />
       <div className="flex items-center">
         <TooltipPrimitive.Provider delayDuration={700}>
           <ExtractArticle />
@@ -186,6 +205,43 @@ export default function ReadNav({
           </CustomTooltip> */}
         </TooltipPrimitive.Provider>
       </div>
+    </div>
+  );
+}
+
+function Author() {
+  const [feedData, setFeedData] = useState();
+
+  const searchParams = useSearchParams();
+
+  const author = searchParams.get("author");
+
+  useEffect(() => {
+    const getReadList = async () => {
+      const data = await localforage.getItem("browse-feed");
+      setFeedData(data);
+    };
+
+    getReadList();
+  }, []);
+
+  if (!feedData)
+    return (
+      <div className="animate-pulse">
+        <div className="h-8 w-36 flex items-center">
+          <div className="rounded bg-ui-normal h-full w-full"></div>
+        </div>
+      </div>
+    );
+  return (
+    <div className="flex items-center gap-4 relative">
+      <RouteBack className="absolute -left-12 cursor-pointer" />
+      <Link
+        href={`/feed?feedUrl=${feedData.feedUrl}`}
+        className="text-brand-primary hover:text-text-primary transition-[color] font-medium"
+      >
+        {feedData.title}
+      </Link>
     </div>
   );
 }

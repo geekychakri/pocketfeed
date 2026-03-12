@@ -14,12 +14,14 @@ import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { decode } from "html-entities";
 import parse from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
+import localforage from "localforage";
 import useSWR, { useSWRConfig } from "swr";
 import useSound from "use-sound";
 
 import { SpinnerRotate } from "@/components/spinner-rotate";
 import NothingToReadSVG from "@/components/svg/nothing-to-read";
 
+import { ExternalLinkIcon } from "@/icons/external-link";
 // import { addPostAction } from "@/app/actions/add-post";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import { fetcher, internalErrorToast } from "@/lib/utils";
@@ -49,14 +51,18 @@ DOMPurify.addHook("afterSanitizeAttributes", function (node) {
     node.removeAttribute("target");
   }
 
-  if (node.tagName === "A" && !node.hasAttribute("target")) {
-    node.setAttribute("target", "_blank");
-  }
+  // if (node.tagName === "A" && !node.hasAttribute("target")) {
+  //   node.setAttribute("target", "_blank");
+  // }
 
-  if (node.tagName === "P") {
-    //TODO: flatten p tag for highlighting
-    node.textContent = node.textContent;
-  }
+  // if (node.tagName === "A" && node.getAttribute("target") === "_blank") {
+  //   node.setAttribute("rel", "noopener noreferrer");
+  // }
+
+  // if (node.tagName === "P") {
+  //   //TODO: flatten p tag for highlighting
+  //   node.textContent = node.textContent;
+  // }
 });
 
 function convertRelativeUrlsToAbsolute(html: string, baseUrl: string) {
@@ -128,11 +134,18 @@ const initialState = {
 };
 
 export default function Article({ articleUrl }: { articleUrl: string }) {
-  const [feedItem, _] = useState(() => {
-    return localStorage.getItem("feedItem")
-      ? JSON.parse(localStorage.getItem("feedItem") as string)
-      : null;
-  });
+  // const [feedItem, _] = useState(() => {
+  //   return localStorage.getItem("feedItem")
+  //     ? JSON.parse(localStorage.getItem("feedItem") as string)
+  //     : null;
+  // });
+
+  const feedItem = localStorage.getItem("feedItem")
+    ? JSON.parse(localStorage.getItem("feedItem") as string)
+    : null;
+
+  console.log({ feedItem });
+
   // console.log({ articleUrl });
   let isNewArticle = false;
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -143,7 +156,7 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
 
   // const pathname = usePathname();
   // const { link } = useParams<{ link: string }>();
-  const articleLinkOrigin = new URL(decodeURIComponent(articleUrl)).origin;
+  const articleLinkOrigin = new URL(articleUrl).origin;
 
   const searchParams = useSearchParams();
 
@@ -192,13 +205,17 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
   //   },
   // );
 
+  console.log({ articleUrl });
+  console.log({ articleLink });
+
   let contentToRead: string;
 
-  if (decodeURIComponent(articleUrl) === articleLink) {
+  if (articleUrl === articleLink) {
     contentToRead = articleContent;
   } else {
     contentToRead = convertRelativeUrlsToAbsolute(
-      feedItem.content,
+      feedItem["content:encoded"] || feedItem.content,
+      // feedItem.content,
       articleLinkOrigin,
     );
   }
@@ -281,9 +298,9 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
         <h1 className="flex min-h-14 items-center gap-2 text-[48px] leading-[52px] font-[575] tracking-tighter text-balance">
           {decode(feedItem?.title)}
         </h1>
-        {!blogName ? (
+        {/*{!blogName ? (
           <span className="text-text-secondary">{feedItem?.author}</span>
-        ) : null}
+        ) : null}*/}
       </div>
 
       <ArticleText
@@ -292,6 +309,7 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
           FORBID_ATTR: ["style"],
         })}
       />
+      <ReadNextList />
     </>
   );
 }
@@ -321,3 +339,68 @@ const svgIconCheck = `<svg xmlns="http://www.w3.org/2000/svg" opacity="0" id="sv
 //     },
 //   );
 // }
+
+function ReadNextList() {
+  const [feedData, setFeedData] = useState();
+
+  const searchParams = useSearchParams();
+
+  const link = searchParams.get("link");
+
+  useEffect(() => {
+    const getFeedData = async () => {
+      const data = await localforage.getItem("browse-feed");
+      setFeedData(data);
+    };
+
+    getFeedData();
+  }, []);
+
+  if (!feedData) return null;
+
+  return (
+    <div className="p-4 flex flex-col gap-5">
+      <h2 className="font-medium text-lg">More from this blog</h2>
+      <div className="flex flex-col gap-4">
+        {/*{feedData.items.map((item, index) => {
+          return (
+            <Link
+              key={index}
+              href={`/read?link=${item.link}`}
+              onNavigate={(e) => {
+                localStorage.setItem("feedItem", JSON.stringify(item));
+              }}
+              className="custom-underline self-start"
+            >
+              {item.title}
+            </Link>
+          );
+        })}*/}
+        {feedData.items.flatMap((item, index) => {
+          if (item.link !== link) {
+            return (
+              <Link
+                key={index}
+                href={`/read?link=${item.link}`}
+                onNavigate={(e) => {
+                  localStorage.setItem("feedItem", JSON.stringify(item));
+                }}
+                className="custom-underline self-start"
+              >
+                {item.title}
+              </Link>
+            );
+          }
+        })}
+      </div>
+      <a
+        href={feedData.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-brand-primary flex items-center gap-1"
+      >
+        Visit original page <ExternalLinkIcon />
+      </a>
+    </div>
+  );
+}
