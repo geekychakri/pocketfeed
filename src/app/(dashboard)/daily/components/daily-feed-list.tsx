@@ -1,5 +1,8 @@
-import Link from "next/link";
+"use client";
 
+// import { cacheTag } from "next/cache";
+// import { cacheLife } from "next/dist/server/use-cache/cache-life";
+// import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import * as Tabs from "@radix-ui/react-tabs";
 import dayjs from "dayjs";
@@ -8,19 +11,28 @@ import isYesterday from "dayjs/plugin/isYesterday";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { decode } from "html-entities";
-import Parser from "rss-parser";
+// import Parser from "rss-parser";
+import useSWR from "swr";
 
-import { getSelectedFeeds } from "@/db/queries";
-import { convertTimeStringToReadable, getYoutubeVideoId } from "@/lib/utils";
+// import { getSelectedFeeds } from "@/db/queries";
+import { getDailyFeed } from "@/lib/dal/daily-feed";
+// const xata = getXataClient();
+import {
+  convertTimeStringToReadable,
+  fetcher,
+  getYoutubeVideoId,
+} from "@/lib/utils";
 import { FeedItemType, FeedListType } from "@/types";
-import { getXataClient } from "@/xata";
+
+// import { getXataClient } from "@/xata";
 
 import PodcastPlayButton from "../../(feed)/feed/components/PodcastPlayButton";
 import YouTubeModal from "../../(feed)/feed/components/YouTubeModal";
 import YouTubePlayButton from "../../(feed)/feed/components/YouTubePlayButton";
+import { useDailyFeeds } from "../hooks/useDailyFeeds";
 import FeedItem from "./feed-item";
 
-const parser = new Parser();
+// const parser = new Parser();
 
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
@@ -35,86 +47,38 @@ const feedSources = [
   "https://frontendmasters.com/blog/feed/",
 ];
 
-const xata = getXataClient();
-
 const sevenDaysAgo = new Date();
 sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 3);
 
-export default async function DailyFeedList() {
-  const feedItems = [];
-
-  // const userId = (await auth()).userId as string;
-
-  // const feedList = await xata.db.daily
-  //   .filter({ userId })
-  //   .select(["rssURL", "title"])
-  //   .getAll();
-
-  const feedList = await getSelectedFeeds();
-
-  console.log({ feedList });
-
-  const feedSources = feedList.map((item) => {
-    return {
-      feedUrl: item.feedUrl,
-      title: item.title,
-    };
-  });
-
-  // console.log({ feedSources });
-
-  const data = await Promise.allSettled(
-    feedSources.map(async (source) => {
-      try {
-        const feed = await parser.parseURL(source.feedUrl as string);
-        const latestFeed = feed.items.splice(0, 10).map((item) => {
-          return {
-            ...item,
-            feedUrl: feed.feedUrl,
-          };
-        });
-        // console.log({ latestFeed });
-        latestFeed.forEach((item) => {
-          const date = item.pubDate ? new Date(item.pubDate) : undefined;
-          if (date && date >= sevenDaysAgo)
-            //TODO:
-            feedItems.push({
-              // feed: feed.title,
-              // title: item.title,
-              // link: item.link,
-              // date,
-              ...item,
-              date,
-              // ...(item.feedUrl === source.rssUrl && {
-              //   feedTitle: source.title,
-              // }),
-              feedTitle: source.title,
-              ...(item.enclosure?.url && {
-                feedListMetaData: {
-                  itunes: {
-                    ...feed.tunes,
-                  },
-                  link: feed.link,
-                  title: source.title,
-                  image: {
-                    ...feed.image,
-                  },
-                },
-              }),
-            });
-        });
-      } catch (error) {
-        console.error(`Error fetching feed from ${source.feedUrl}:`, error);
-      }
-    }),
-  );
+export default function DailyFeedList() {
   // console.log({ feedItems });
 
-  const groupByFeedTitle = Object.groupBy(feedItems, ({ feedTitle }) => {
+  // const feedItems = await getDailyFeed();
+
+  const { data, isLoading } = useSWR("/api/daily-feeds", fetcher, {
+    // suspense: true,
+    fallbackData: { feedItems: [] },
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnMount: true,
+  });
+
+  // const { data, isLoading } = useDailyFeeds();
+
+  console.log({ swrData: data });
+
+  // return "Daily list";
+
+  if (data.feedItems.length === 0 && isLoading)
+    return <DailyFeedListFallback />;
+
+  const groupByFeedTitle = Object.groupBy(data.feedItems, ({ feedTitle }) => {
     return feedTitle;
   });
 
   console.log({ groupByFeedTitle });
+
+  console.log({ firstList: groupByFeedTitle["BWF TV - YouTube"] });
 
   // const sortedFeedItems = feedItems.sort(
   //   (a, b) =>
@@ -294,6 +258,42 @@ export default async function DailyFeedList() {
         End of feed! See ya tomorrow.
       </p>
       <YouTubeModal />
+    </div>
+  );
+}
+
+function DailyFeedListFallback() {
+  return (
+    <div className="animate-pulse flex flex-col gap-5 px-4 mt-5">
+      <p>Preparing your daily brew...</p>
+      <div className="h-7 w-56 bg-ui-normal rounded"></div>
+      <div className="flex flex-col  space-y-3">
+        <div className="h-14 w-full flex justify-between items-center">
+          <div className="rounded bg-ui-normal h-7 w-56"></div>
+          <div className="rounded bg-ui-normal h-7 w-20"></div>
+        </div>
+        <div className="flex-1 space-y-3">
+          <div className="h-5 rounded bg-ui-normal"></div>
+          <div className="h-5 rounded bg-ui-normal"></div>
+          <div className="h-5 rounded bg-ui-normal"></div>
+        </div>
+      </div>
+
+      {Array.from({ length: 10 }).map((_, i, a) => {
+        return (
+          <div key={i} className="flex flex-col  space-y-3 ">
+            <div className="h-14 w-full flex justify-between items-center">
+              <div className="rounded bg-ui-normal h-7 w-56"></div>
+              <div className="rounded bg-ui-normal h-7 w-20"></div>
+            </div>
+            <div className="flex-1 space-y-3">
+              <div className="h-5 rounded bg-ui-normal"></div>
+              <div className="h-5 rounded bg-ui-normal"></div>
+              <div className="h-5 rounded bg-ui-normal"></div>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

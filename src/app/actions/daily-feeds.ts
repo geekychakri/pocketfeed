@@ -1,6 +1,7 @@
 "use server";
 
 import { auth } from "@clerk/nextjs/server";
+import { count, eq, sql } from "drizzle-orm";
 
 import { db } from "@/db/db";
 // import { getXataClient } from "@/xata";
@@ -9,8 +10,11 @@ import { db } from "@/db/db";
 
 import * as schema from "@/db/schema";
 import { getDid } from "@/lib/auth/session";
+import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 
-export async function dailyFeedsAction(formData: FormData) {
+const MAX_FEEDS = 25;
+
+export async function dailyFeedsAction(prevState: any, formData: FormData) {
   // let userId = (await auth()).userId as string;
   // const data = formData.getAll("feeds");
   // console.log(data);
@@ -27,24 +31,53 @@ export async function dailyFeedsAction(formData: FormData) {
 
   //TODO: add auth check
 
-  const did = await getDid();
+  try {
+    const did = (await getDid()) as string;
 
-  console.log({ did });
+    console.log({ did });
 
-  const data = formData.getAll("feeds");
-  console.log(data);
+    const data = formData.getAll("daily-feeds");
+    console.log(data);
 
-  const feeds = data.map((item) => {
+    const feeds = data.map((item) => {
+      return {
+        did,
+        title: JSON.parse(item as string).title,
+        feedUrl: JSON.parse(item as string).feedUrl,
+      };
+    });
+
+    console.log({ feeds });
+
+    // const response = await db
+    //   .insert(schema.todayFeeds)
+    //   .values(feeds)
+    //   .onConflictDoNothing();
+
+    await db.transaction(async (tx) => {
+      const dailyFeedsCount = await tx
+        .select({ count: count() })
+        .from(schema.todayFeeds)
+        .where(eq(schema.todayFeeds.did, did));
+
+      if (dailyFeedsCount[0].count >= MAX_FEEDS) {
+        throw new Error("feed-limit-reached");
+      }
+
+      await tx.insert(schema.todayFeeds).values(feeds).onConflictDoNothing();
+    });
+
+    // console.log("Success!", response);
+
     return {
-      did,
-      title: JSON.parse(item as string).title,
-      feedUrl: JSON.parse(item as string).feedUrl,
+      type: "sucess",
+      message: "success",
     };
-  });
-
-  console.log({ feeds });
-
-  const response = await db.insert(schema.todayFeeds).values(feeds);
-
-  console.log("Success!", response);
+  } catch (err) {
+    if (err instanceof Error) {
+      return { type: "feed-limit-reached", message: "Max feed limit reached." };
+    } else {
+      return { type: "error", message: INTERNAL_ERROR_MESSAGE };
+    }
+  }
 }

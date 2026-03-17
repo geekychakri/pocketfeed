@@ -127,7 +127,7 @@ async function FolderFeed({
 
   const foldersList = folders.map((folder, _) => ({ id: nanoid(), folder }));
 
-  console.log({ records });
+  // console.log({ records });
   // };
 
   return (

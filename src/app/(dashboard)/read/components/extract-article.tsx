@@ -44,7 +44,7 @@ export default function ExtractArticle() {
       : null,
     fetcher,
     {
-      keepPreviousData: true,
+      // keepPreviousData: true,
       revalidateIfStale: false,
       revalidateOnFocus: false,
       // revalidateOnReconnect: false,
@@ -61,11 +61,11 @@ export default function ExtractArticle() {
 
   console.log({ swrArticleData: data });
 
-  const handleClick = useCallback(() => {
+  const handleClick = () => {
     // console.log({ data });
     if (!data) {
-      setShouldFetch(true);
       extractArticleIconRef.current?.startAnimation();
+      setShouldFetch(true);
       // mutate();
     }
     // if (!shouldFetch) {
@@ -77,7 +77,7 @@ export default function ExtractArticle() {
     //   setArticleData(data?.content, data?.title, true);
     //   // extractArticleIconRef.current?.stopAnimation();
     // }
-  }, [data]);
+  };
 
   // console.log({ isLoading });
   // console.log({ data });

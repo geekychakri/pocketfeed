@@ -1,6 +1,13 @@
 "use client";
 
-import * as React from "react";
+import {
+  Fragment,
+  useActionState,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from "react";
 
 import { Combobox } from "@base-ui-components/react/combobox";
 import { JSONData, SelectedPick } from "@xata.io/client";
@@ -9,7 +16,13 @@ import { toast } from "sonner";
 import Button from "@/components/ui/custom-button";
 
 import { dailyFeedsAction } from "@/app/actions/daily-feeds";
+import { internalErrorToast } from "@/lib/utils";
 import { DailyRecord, FeedsRecord } from "@/xata";
+
+const initialState = {
+  type: "",
+  message: "",
+};
 
 export default function MultipleFeedsCombobox({
   initialData,
@@ -18,38 +31,53 @@ export default function MultipleFeedsCombobox({
   initialData: any;
   selectedFeeds: any;
 }) {
-  console.log({ selectedFeeds });
-  const containerRef = React.useRef<HTMLDivElement | null>(null);
-  const id = React.useId();
-
   const rssUrls = new Set(selectedFeeds.map((item: any) => item?.feedUrl));
 
   const common = initialData.filter((item) =>
     rssUrls.has(item.feedUrl as string),
   );
+  const [selected, setSelected] = useState([...common]);
+  console.log({ selectedFeeds });
+
+  const [state, formAction, isPending] = useActionState(
+    dailyFeedsAction,
+    initialState,
+  );
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const id = useId();
 
   // const common = initialData.filter((item) =>
   //   selectedFeeds.some((selectedItem) => selectedItem.rssURL === item.rssURL),
   // );
 
-  const [selected, setSelected] = React.useState([...common]);
+  console.log({ selected });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
 
-    const data = new FormData(e.currentTarget);
+  //   const data = new FormData(e.currentTarget);
 
-    for (const p of data) {
-      console.log(p);
+  //   for (const p of data) {
+  //     console.log(p);
+  //   }
+  // };
+
+  useEffect(() => {
+    if (state.type === "success") {
+      toast.success(state.message);
+    } else if (state.type === "feed-limit-reached") {
+      toast.error(state.message);
+    } else if (state.message === "internal-error") {
+      internalErrorToast(state.message);
     }
-  };
+  }, [state]);
 
   return (
-    <form action={dailyFeedsAction} className="flex flex-col gap-5">
+    <form action={formAction} className="flex flex-col gap-5">
       <Combobox.Root
         items={initialData}
         multiple
-        name="feeds"
+        name="daily-feeds"
         value={selected}
         onValueChange={(next) => {
           console.log({ next });
@@ -68,7 +96,7 @@ export default function MultipleFeedsCombobox({
             htmlFor={id}
           >
             <span>Select Feeds: {selected.length}</span>
-            <span className="text-text-secondary text-sm">25 max.</span>
+            <span className="text-text-secondary text-sm">Max feeds: 25</span>
           </label>
           <Combobox.Chips
             className="flex flex-wrap items-center gap-0.5 rounded-md border-shadow px-1.5 py-1 focus-within:outline focus-within:outline-brand-primary w-full"
@@ -77,7 +105,7 @@ export default function MultipleFeedsCombobox({
             <Combobox.Value>
               {(value: ProgrammingLanguage[]) => {
                 return (
-                  <React.Fragment>
+                  <Fragment>
                     {value.map((language) => {
                       return (
                         <Combobox.Chip
@@ -100,7 +128,7 @@ export default function MultipleFeedsCombobox({
                       placeholder={value.length > 0 ? "" : "e.g. TypeScript"}
                       className="min-w-12 flex-1 h-8 rounded-md border-0 bg-transparent pl-2 text-base text-gray-900 outline-none"
                     />
-                  </React.Fragment>
+                  </Fragment>
                 );
               }}
             </Combobox.Value>
@@ -135,7 +163,7 @@ export default function MultipleFeedsCombobox({
           </Combobox.Positioner>
         </Combobox.Portal>
       </Combobox.Root>
-      <Button>Submit</Button>
+      <Button>{isPending ? "Submitting..." : "Submit"}</Button>
     </form>
   );
 }

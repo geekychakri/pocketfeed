@@ -53,12 +53,20 @@ async function getKeyset(): Promise<Keyset | undefined> {
   }
 }
 
-export async function getOAuthClient(): Promise<NodeOAuthClient> {
-  if (client) return client;
+const globalForOAuth = globalThis as typeof globalThis & {
+  oauthClientPromise: Promise<NodeOAuthClient> | undefined;
+};
 
-  console.log("CLIENT NOT RETURNED!");
+export function getOAuthClient(): Promise<NodeOAuthClient> {
+  if (!globalForOAuth.oauthClientPromise) {
+    globalForOAuth.oauthClientPromise = createOAuthClient();
+    console.log("globalForOauth reused");
+  }
+  return globalForOAuth.oauthClientPromise;
+}
 
-  client = new NodeOAuthClient({
+async function createOAuthClient(): Promise<NodeOAuthClient> {
+  return new NodeOAuthClient({
     clientMetadata: getClientMetadata(),
     keyset: await getKeyset(),
 
@@ -149,6 +157,4 @@ export async function getOAuthClient(): Promise<NodeOAuthClient> {
       },
     },
   });
-
-  return client;
 }

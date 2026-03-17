@@ -8,6 +8,7 @@ import { db } from "@/db/db";
 import { getSelectedFeeds } from "@/db/queries";
 import * as schema from "@/db/schema";
 import { getAllRecords } from "@/lib/atproto/queries";
+import { preloadDailyFeed } from "@/lib/dal/daily-feed";
 import { getXataClient } from "@/xata";
 
 import MultipleFeedsCombobox from "./components/combo-box";
@@ -16,7 +17,7 @@ import SelectFeedsModal from "./components/select-feeds-modal";
 
 export default function Page() {
   return (
-    <div className="mx-auto w-full max-w-[750px] border-r border-l min-h-screen">
+    <div className="mx-auto w-full max-w-[750px] border-r border-l min-h-screen shadow-[0_0px_10px_1px_var(--border-non-interactive)]">
       {/* <div className="h-14"></div> */}
 
       <div className="flex  justify-between gap-2 h-14 items-center border-b px-4">
@@ -36,9 +37,9 @@ export default function Page() {
       {/* <Suspense fallback="Loading...">
         <MultipleFeedsComboboxWrapper />
       </Suspense> */}
-      <Suspense fallback="loading feeds...">
-        <DailyFeedList />
-      </Suspense>
+      {/*<Suspense fallback={<DailyFeedListFallback />}>*/}
+      <DailyFeedList />
+      {/*</Suspense>*/}
     </div>
   );
 }
@@ -79,3 +80,38 @@ const MultipleFeedsComboboxWrapper = async () => {
     </SelectFeedsModal>
   );
 };
+
+function DailyFeedListFallback() {
+  return (
+    <div className="animate-pulse flex flex-col gap-5 px-4 mt-5">
+      <div className="h-7 w-56 bg-ui-normal rounded"></div>
+      <div className="flex flex-col  space-y-3">
+        <div className="h-14 w-full flex justify-between items-center">
+          <div className="rounded bg-ui-normal h-7 w-56"></div>
+          <div className="rounded bg-ui-normal h-7 w-20"></div>
+        </div>
+        <div className="flex-1 space-y-3">
+          <div className="h-5 rounded bg-ui-normal"></div>
+          <div className="h-5 rounded bg-ui-normal"></div>
+          <div className="h-5 rounded bg-ui-normal"></div>
+        </div>
+      </div>
+
+      {Array.from({ length: 10 }).map((_, i, a) => {
+        return (
+          <div key={i} className="flex flex-col  space-y-3 ">
+            <div className="h-14 w-full flex justify-between items-center">
+              <div className="rounded bg-ui-normal h-7 w-56"></div>
+              <div className="rounded bg-ui-normal h-7 w-20"></div>
+            </div>
+            <div className="flex-1 space-y-3">
+              <div className="h-5 rounded bg-ui-normal"></div>
+              <div className="h-5 rounded bg-ui-normal"></div>
+              <div className="h-5 rounded bg-ui-normal"></div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}

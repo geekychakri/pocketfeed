@@ -158,7 +158,7 @@ const FeedListWrapper = async ({
     feedUrl as string,
   )) as unknown as FeedListType;
 
-  console.log({ feedList });
+  // console.log({ feedList });
 
   // stringify and parse to counter serialization error object null prototype
   const sortFirstTenFeedsByDate = JSON.parse(JSON.stringify(feedList))
@@ -171,7 +171,7 @@ const FeedListWrapper = async ({
     feedUrl,
   };
 
-  console.log({ fList });
+  // console.log({ fList });
 
   // console.dir({ fListItems: fList.items });
 

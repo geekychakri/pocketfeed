@@ -18,6 +18,7 @@ export default function ArticleContent({ articleUrl }: { articleUrl: string }) {
       className="pb-14 min-h-screen"
     >
       <ReadNav
+        key={articleUrl}
         // articleSiteName={article?.siteName}
         articleUrl={articleUrl}
         // getReadList={getReadList}

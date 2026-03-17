@@ -79,20 +79,23 @@ export default function FeedItem({
   }
   return (
     <div
-      className="hover:text-brand-primary relative isolate px-4 flex items-center justify-between gap-4 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]"
+      className="hover:text-brand-primary relative isolate px-4 flex flex-col gap-1 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]"
       // prefetch={false}
     >
-      <span className="flex w-4/5 flex-col text-pretty">
-        {decode(item.title) || feedList.title}
-        {/* <span className="line-clamp-2 text-text-secondary">
-            {item.contentSnippet}
-          </span> */}
-      </span>
+      <div className="flex items-center">
+        <h2 className="flex w-4/5 flex-col text-pretty">
+          {decode(item.title) || feedList.title}
+        </h2>
 
-      <span className="text-text-secondary flex w-1/5 justify-end text-sm">
-        <span>{dayjs(item.isoDate).format("ll")}</span>
-        {/* <span>·</span>
-          <span>{dayjs().to(dayjs(item.isoDate))}</span> */}
+        <span className="text-text-secondary flex w-1/5 justify-end text-sm">
+          <span>{dayjs(item.isoDate).format("ll")}</span>
+          {/* <span>·</span>
+            <span>{dayjs().to(dayjs(item.isoDate))}</span> */}
+        </span>
+      </div>
+
+      <span className="line-clamp-2 text-text-secondary">
+        {item.contentSnippet}
       </span>
       {/* <PostModal
         feedItem={JSON.stringify(item)}
@@ -108,7 +111,7 @@ export default function FeedItem({
         //     : `/read/${encodeURIComponent(`${feedList.link}/${item.link}` as string)}`
         // }
         // href={`/read/${encodeURIComponent("https://www.alanwsmith.com/en/2v/mq/vc/om/")}`} //TODO:
-        href={`/read/${encodeURIComponent(item.link as string)}?author=${item.feedTitle}`}
+        href={`/read?link=${item.link}&source=daily`}
         onNavigate={(e) => {
           // setArticleData(item.content, item.title);
           localStorage.setItem("feedItem", JSON.stringify(item));

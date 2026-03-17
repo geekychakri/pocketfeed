@@ -13,14 +13,14 @@ export default function SocialOauth() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { signIn, isLoaded } = useSignIn();
+  // const { signIn, isLoaded } = useSignIn();
 
-  if (!isLoaded)
-    return (
-      <div className="flex h-28 items-center justify-center">
-        <SpinnerRotate />
-      </div>
-    );
+  // if (!isLoaded)
+  //   return (
+  //     <div className="flex h-28 items-center justify-center">
+  //       <SpinnerRotate />
+  //     </div>
+  //   );
 
   const signInWith = (strategy: OAuthStrategy) => {
     return signIn
@@ -85,7 +85,7 @@ export default function SocialOauth() {
           last time.
         </motion.p>
       )} */}
-      <Button className="flex items-center justify-center gap-2">
+      {/*<Button className="flex items-center justify-center gap-2">
         <span className="flex-none">
           <svg
             width="24"
@@ -131,7 +131,7 @@ export default function SocialOauth() {
           </svg>
         </span>
         <span>Continue with GitHub</span>
-      </Button>
+      </Button>*/}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>

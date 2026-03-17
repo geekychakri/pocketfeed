@@ -27,7 +27,6 @@ const SocialOauth = dynamic(() => import("@/components/social-oauth"), {
 });
 
 export default function SignIn() {
-  const { isLoaded, signIn, setActive } = useSignIn();
   // const [email, setEmail] = useState("");
   // const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);

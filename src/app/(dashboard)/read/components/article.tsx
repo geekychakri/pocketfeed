@@ -346,6 +346,9 @@ function ReadNextList() {
   const searchParams = useSearchParams();
 
   const link = searchParams.get("link");
+  const source = searchParams.get("source");
+
+  const getFeedItem = JSON.parse(localStorage.getItem("feedItem") as string);
 
   useEffect(() => {
     const getFeedData = async () => {
@@ -355,6 +358,19 @@ function ReadNextList() {
 
     getFeedData();
   }, []);
+
+  if (source === "daily") {
+    return (
+      <div className="p-4 flex flex-col gap-5">
+        <Link
+          href={`/feed?feedUrl=${getFeedItem.feedUrl}`}
+          className="text-brand-primary custom-underline flex items-center gap-1 self-start"
+        >
+          More from this blog
+        </Link>
+      </div>
+    );
+  }
 
   if (!feedData) return null;
 

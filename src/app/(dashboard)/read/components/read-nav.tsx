@@ -209,12 +209,17 @@ export default function ReadNav({
   );
 }
 
+// switch ssr off
 function Author() {
   const [feedData, setFeedData] = useState();
 
   const searchParams = useSearchParams();
 
   const author = searchParams.get("author");
+
+  const source = searchParams.get("source");
+
+  const getFeedItem = JSON.parse(localStorage.getItem("feedItem") as string);
 
   useEffect(() => {
     const getReadList = async () => {
@@ -224,6 +229,20 @@ function Author() {
 
     getReadList();
   }, []);
+
+  if (source === "daily") {
+    return (
+      <div className="flex items-center gap-4 relative">
+        <RouteBack className="absolute -left-12 cursor-pointer" />
+        <Link
+          href={`/daily`}
+          className="text-brand-primary hover:text-text-primary transition-[color] font-medium"
+        >
+          Back to daily | {getFeedItem.feedTitle}
+        </Link>
+      </div>
+    );
+  }
 
   if (!feedData)
     return (

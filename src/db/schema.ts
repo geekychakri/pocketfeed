@@ -12,6 +12,7 @@ import {
   serial,
   text,
   timestamp,
+  uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
 
@@ -31,13 +32,17 @@ export const users = pgTable("users", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const todayFeeds = pgTable("today_feeds", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  did: text("did").notNull(),
-  title: text("title"),
-  feedUrl: text("feedUrl"),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-});
+export const todayFeeds = pgTable(
+  "today_feeds",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    did: text("did").notNull(),
+    title: text("title").notNull(),
+    feedUrl: text("feedUrl").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => [uniqueIndex("user_feed_unique").on(table.did, table.feedUrl)],
+);
 
 export const bookmarks = pgTable("bookmarks", {
   id: uuid("id").primaryKey().defaultRandom(),
