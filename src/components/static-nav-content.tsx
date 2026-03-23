@@ -29,6 +29,7 @@ import { SearchIcon } from "@/icons/search";
 import { SidebarIcon } from "@/icons/sidebar";
 import { cn } from "@/lib/utils";
 import { useFullscreen } from "@/store/read-fullscreen";
+import { useToggleSidenav } from "@/store/toggle-sidenav";
 import useStore from "@/store/useStore";
 import { UsersRecord } from "@/xata";
 
@@ -59,6 +60,7 @@ const links: NavItem<Route>[] = [
 
 export default function SideNavClient() {
   const layoutSegment = useSelectedLayoutSegment();
+  const { setIsOpen } = useToggleSidenav();
   return (
     <div className="flex flex-col gap-1 pt-[10px] shadow-[0_-1px_0_0_var(--border-non-interactive)]">
       {links.map(({ label, path, segment, icon: Icon }, i) => {
@@ -74,6 +76,7 @@ export default function SideNavClient() {
                 "hover:bg-ui-hover flex h-11 items-center gap-3 rounded-md px-3 py-[10px] transition-[background-color]",
                 isActive && "bg-ui-hover font-medium",
               )}
+              onNavigate={setIsOpen}
             >
               <span>
                 <Icon />

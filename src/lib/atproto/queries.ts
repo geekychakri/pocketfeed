@@ -1,6 +1,6 @@
-import { cacheLife, cacheTag } from "next/cache";
+// "use server";
 
-import { LRUCache } from "lru-cache";
+import { cache } from "react";
 
 import { getDid, getSessionAgent } from "../auth/session";
 
@@ -70,7 +70,8 @@ export let getFolderList = async () => {
   return folderList;
 };
 
-export let getProfile = async (did: string) => {
+export let getProfile = cache(async () => {
+  const did = await getDid();
   const res = await fetch(
     `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${did}`,
     {
@@ -84,4 +85,4 @@ export let getProfile = async (did: string) => {
   const profile = await res.json();
 
   return profile;
-};
+});

@@ -26,7 +26,7 @@ export default async function ProfileAvatarWrapper() {
   //   })
   //   .catch(() => undefined);
 
-  const did = await getDid();
+  // const did = await getDid();
 
   // const res = await fetch(
   //   `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=did:plc:qyztynppr2jon3zaenyxkifj`,
@@ -42,7 +42,7 @@ export default async function ProfileAvatarWrapper() {
 
   // console.log({ profile });
 
-  const profile = await getProfile(did as string);
+  const profile = await getProfile();
 
   return (
     <div className="px-3 flex items-center justify-between shadow-[0_-1px_0_0_var(--border-non-interactive)]">

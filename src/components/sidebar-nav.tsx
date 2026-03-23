@@ -1,4 +1,4 @@
-// "use client";
+"use client";
 
 import {
   Activity,
@@ -22,19 +22,25 @@ import CollapsibleFolders from "@/components/collapsible-folders";
 import FolderList from "@/components/folder-list";
 import ProfileAvatar from "@/components/profile-avatar";
 
+import { getPlatform } from "@/app/actions/get-platform";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { ActivityIcon } from "@/icons/activity";
 import { BookmarkIcon } from "@/icons/bookmark";
 import { ExploreIcon } from "@/icons/explore";
 import { SearchIcon } from "@/icons/search";
 import { SidebarIcon } from "@/icons/sidebar";
+import { getProfile } from "@/lib/atproto/queries";
 import { cn } from "@/lib/utils";
+import { Media, MediaContextProvider } from "@/media";
 import { useFullscreen } from "@/store/read-fullscreen";
+import { useToggleSidenav } from "@/store/toggle-sidenav";
 import useStore from "@/store/useStore";
 import { UsersRecord } from "@/xata";
 
+import DrawerProfileLink from "./drawer-profile-link";
+import MobileNav from "./mobile-nav";
 import ProfileAvatarWrapper from "./profile-avatar-wrapper";
-import SideNavClient from "./sidebar-navigation-client";
+import StaticNavContent from "./static-nav-content";
 
 type NavItem<T extends string = string> = {
   label: string;
@@ -59,15 +65,14 @@ const links: NavItem<Route>[] = [
   },
 ];
 
-export default function SidebarNavigation(
-  {
-    // user,
-    // children,
-  }: {
-    // user: SelectedPick<UsersRecord, ("avatarUrl" | "username")[]> | null;
-    // children: React.ReactNode;
-  },
-) {
+export default function SidebarNavigation({
+  // user,
+  children,
+}: {
+  // user: SelectedPick<UsersRecord, ("avatarUrl" | "username")[]> | null;
+  children: React.ReactNode;
+}) {
+  const { isOpen } = useToggleSidenav();
   // const layoutSegment = useSelectedLayoutSegment();
   // // const pathname = usePathname();
   // console.log({ layoutSegment });
@@ -147,12 +152,40 @@ export default function SidebarNavigation(
   //   return null;
   // }
 
+  // const getProfilePromise = getProfile();
+
+  // const platform = await getPlatform();
+
+  // const isMobile = useMediaQuery("only screen and (max-width : 768px)");
+
+  // if (isMobile) {
+  //   return (
+  //     <div className="sticky bg-background-primary top-0 z-[200] px-4 py-2 flex items-center justify-between shadow-[0_1px_0_0_var(--border-non-interactive)]">
+  //       <h1>Pocket Feed</h1>
+  //       <MobileNav>
+  //         {/*<Suspense fallback="Loading...">
+  //           <DrawerProfileLink getProfilePromise={getProfilePromise} />
+  //         </Suspense>*/}
+  //         {/*<Suspense fallback={<ProfileAvatarFallback />}>
+  //           <ProfileAvatarWrapper />
+  //         </Suspense>*/}
+
+  //         <div>test</div>
+  //       </MobileNav>
+  //     </div>
+  //   );
+  // }
+
   return (
     // <Activity mode={pathname.startsWith("/read") ? "hidden" : "visible"}>
-    <header>
+
+    <>
       <nav
         id="sidebar"
-        className={`text-textColor bg-background-primary fixed top-0 bottom-0 left-0 isolate z-30 h-screen w-[240px]  grid grid-rows-[56px_56px_auto_1fr_56px] shadow-[1px_0_0_0_var(--border-non-interactive)] transition-[translate] duration-150 select-none translate-x-0`}
+        className={cn(
+          `text-textColor bg-background-primary fixed top-0 bottom-0 left-0 isolate z-30 h-screen w-[240px]  grid grid-rows-[56px_56px_auto_1fr_56px] shadow-[1px_0_0_0_var(--border-non-interactive)] transition-[translate] duration-150 select-none max-md:-translate-x-full`,
+          isOpen && "max-md:translate-x-0",
+        )}
       >
         <div className="flex  items-center justify-between px-3">
           <h1 className="font-medium">
@@ -176,69 +209,33 @@ export default function SidebarNavigation(
           </Link>
         </div>
 
-        {/*<div className="flex flex-1 flex-col gap-1 pt-[10px] shadow-[0_-1px_0_0_var(--border-non-interactive)]">
-          {links.map(({ label, path, segment, icon: Icon }, i) => {
-            // const isActive = layoutSegment === segment;
-            // const isActive =
-            //   path === "/activity/discover"
-            //     ? pathname.startsWith("/activity")
-            //     : path === pathname;
-
-            // console.log({ isActive });
-
-            return (
-              <div key={i} className="px-3">
-                <Link
-                  href={path}
-                  className={cn(
-                    "hover:bg-ui-hover flex h-11 items-center gap-3 rounded-md px-3 py-[10px] transition-[background-color]",
-                    // isActive && "bg-ui-hover font-medium",
-                  )}
-                >
-                  <span>
-                    <Icon />
-                  </span>
-                  <span>{label}</span>
-                </Link>
-              </div>
-            );
-          })}
-
-          <div className="flex flex-col justify-between flex-1">{children}</div>
-        </div>*/}
-
-        {/* <div className="flex h-14 items-center gap-2 px-3 shadow-[0_-1px_0_0_var(--border-non-interactive)]">
-          <ProfileAvatar
-            avatarUrl={user?.avatarUrl as string}
-            username={user?.username as string}
-          />
-        </div> */}
-
-        {/* <Suspense fallback="Loading...">
-          <ProfileAvatarWrapper />
-        </Suspense> */}
-        {/* <Link href={`/test-server/${1}`} prefetch={false}>
-          Test dynamic
-        </Link> */}
-
         <Suspense fallback={null}>
-          <SideNavClient />
+          <StaticNavContent />
         </Suspense>
         {/*<div className="border-2 border-red-600">{children}</div>*/}
-        <CollapsibleFolders>
-          <Suspense fallback={<FolderListFallback />}>
-            <FolderList />
-          </Suspense>
-        </CollapsibleFolders>
-
-        <Suspense fallback={<ProfileAvatarFallback />}>
-          <ProfileAvatarWrapper />
-        </Suspense>
+        {children}
       </nav>
-      <div id="dummy-sidebar hidden" className="w-[240px]"></div>
-    </header>
-    // </Activity>
+      <div
+        id="dummy-sidebar hidden"
+        className={cn("max-md:hidden w-[240px]")}
+      ></div>
+    </>
   );
+
+  // if (platform.isTouch) {
+  //   return (
+  //     <div className="sticky bg-background-primary top-0 z-[200] px-4 py-2 flex items-center justify-between shadow-[0_1px_0_0_var(--border-non-interactive)]">
+  //       <h1>Pocket Feed</h1>
+  //       <MobileNav>
+  //         <Suspense fallback="Loading...">
+  //           <DrawerProfileLink getProfilePromise={getProfilePromise} />
+  //         </Suspense>
+  //       </MobileNav>
+  //     </div>
+  //   );
+  // }
+
+  // return null;
 }
 
 function ProfileAvatarFallback() {

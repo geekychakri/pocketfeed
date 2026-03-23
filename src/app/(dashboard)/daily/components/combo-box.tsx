@@ -9,7 +9,7 @@ import {
   useState,
 } from "react";
 
-import { Combobox } from "@base-ui-components/react/combobox";
+import { Combobox } from "@base-ui/react/combobox";
 import { JSONData, SelectedPick } from "@xata.io/client";
 import { toast } from "sonner";
 

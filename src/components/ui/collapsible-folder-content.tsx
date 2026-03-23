@@ -22,6 +22,7 @@ import { FolderClosedIcon } from "@/icons/folder-closed";
 import { FolderOpenIcon } from "@/icons/folder-open";
 import { cn } from "@/lib/utils";
 import { useFolderName } from "@/store/folder-name";
+import { useToggleSidenav } from "@/store/toggle-sidenav";
 
 import DeleteFolderModal from "../delete-folder-modal";
 
@@ -219,11 +220,12 @@ const FolderItem = ({
               </DropdownMenu.Portal>
             </DropdownMenu.Root>
 
-            <Link
+            {/*<Link
               href={`/folder/${folder.folder}`}
               className="absolute inset-0 z-1 rounded-md"
               title={folder.folder}
-            />
+            />*/}
+            <FolderItemLink folder={folder} />
           </div>
         </ContextMenu.Trigger>
         <ContextMenu.Portal>
@@ -263,3 +265,15 @@ const FolderItem = ({
     </>
   );
 };
+
+function FolderItemLink({ folder }: { folder: any }) {
+  const { setIsOpen } = useToggleSidenav();
+  return (
+    <Link
+      href={`/folder/${folder.folder}`}
+      className="absolute inset-0 z-1 rounded-md"
+      title={folder.folder}
+      onNavigate={setIsOpen}
+    />
+  );
+}

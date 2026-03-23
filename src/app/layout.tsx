@@ -18,6 +18,9 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "sonner";
 
 import { NavigationEvents } from "@/components/navigation-events";
+import RootHead from "@/components/root-head";
+
+import { mediaStyles } from "@/media";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -60,6 +63,11 @@ export default function RootLayout({
             src="https://unpkg.com/react-scan/dist/auto.global.js"
             async
           /> */}
+        <style
+          key="fresnel-css"
+          dangerouslySetInnerHTML={{ __html: mediaStyles }}
+          type="text/css"
+        />
       </head>
       <body className="bg-background-primary text-text-primary overflow-x-hidden leading-snug tracking-tight antialiased selection:bg-[#ff5a1f] selection:text-[#fff]">
         <a href="#main-item" id="skip-link">

@@ -2,15 +2,20 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { Drawer } from "@base-ui/react/drawer";
+import { ScrollArea } from "@base-ui/react/scroll-area";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { ChevronRightIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { nanoid } from "nanoid";
 
 import { FolderFeedList } from "@/components/folder-feed-list";
+import FolderList from "@/components/folder-list";
+import MobileFolderDrawer from "@/components/mobile-folders-drawer";
 import SearchFeed from "@/components/search-feed";
 import EmptyFeedSVG from "@/components/svg/empty-feed";
 
 import { FolderFeedStoreProvider } from "@/context/folder-feed-provider";
+import { ChevronsDownUp } from "@/icons/chevron-up-down";
 import { getAllRecords, getFeedsByFolder } from "@/lib/atproto/queries";
 import { getDid, getSessionAgent } from "@/lib/auth/session";
 import { getCachedFeeds } from "@/lib/cache-functions/getFeeds";
@@ -40,7 +45,7 @@ export default async function FolderPage(props: {
   // const folderName = decodeURIComponent(params.foldername);
 
   return (
-    <div className="py-14 group">
+    <div className="max-md:py-4 py-14 group">
       {/* <div>
         {records?.map((record) => {
           return <div key={record.cid}>{record.value.title as string}</div>;
@@ -133,8 +138,8 @@ async function FolderFeed({
   return (
     // <FolderFeedStoreProvider initialData={records}>
     <div className="flex flex-col">
-      <h1 className="flex h-14 group-hover:text-text-primary px-4 text-brand-primary items-center text-lg font-semibold duration-150">
-        {decodeURIComponent(foldername)}
+      <h1 className="text-brand-primary font-medium text-lg px-4">
+        {foldername}
       </h1>
       {records.length >= 1 ? (
         <FolderFeedList
@@ -180,5 +185,35 @@ function FolderFeedFallback() {
         <div className="h-8 rounded bg-ui-normal"></div>
       </div>
     </div>
+  );
+}
+
+function FolderListFallback() {
+  return (
+    <div className="pt-3">
+      <div className="flex flex-col animate-pulse space-y-4">
+        <div className="flex-1 space-y-4 px-3.5">
+          <div className="h-8 rounded-md bg-ui-normal"></div>
+          <div className="h-8 rounded-md bg-ui-normal"></div>
+          <div className="h-8 rounded-md bg-ui-normal"></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DrawerContent({ children }: { children: React.ReactNode }) {
+  return (
+    <Drawer.Content className="w-full">
+      {/*<Drawer.Title className="m-0 mb-1 text-lg font-medium leading-7 tracking-[-0.0025em]">
+      Menu
+    </Drawer.Title>*/}
+      {/*<Drawer.Description className="m-0 mb-5 text-base leading-6 text-gray-600">
+      Scroll the long list. Flick down from the top to
+      dismiss.
+    </Drawer.Description>*/}
+
+      <div className="pb-8">{children}</div>
+    </Drawer.Content>
   );
 }
