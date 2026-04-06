@@ -24,7 +24,7 @@ import ProfileAvatar from "@/components/profile-avatar";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { ActivityIcon } from "@/icons/activity";
 import { BookmarkIcon } from "@/icons/bookmark";
-import { ExploreIcon } from "@/icons/explore";
+import { DailyIcon } from "@/icons/daily";
 import { SearchIcon } from "@/icons/search";
 import { SidebarIcon } from "@/icons/sidebar";
 import { cn } from "@/lib/utils";
@@ -43,7 +43,7 @@ type NavItem<T extends string = string> = {
 };
 
 const links: NavItem<Route>[] = [
-  { label: "Daily", path: "/daily", segment: "daily", icon: ExploreIcon },
+  { label: "Daily", path: "/daily", segment: "daily", icon: DailyIcon },
   {
     label: "Activity",
     path: "/activity/discover",
@@ -62,7 +62,7 @@ export default function SideNavClient() {
   const layoutSegment = useSelectedLayoutSegment();
   const { setIsOpen } = useToggleSidenav();
   return (
-    <div className="flex flex-col gap-1 pt-[10px] shadow-[0_-1px_0_0_var(--border-non-interactive)]">
+    <div className="flex flex-col gap-1 py-[10px] shadow-[0_-1px_0_0_var(--border-non-interactive)]">
       {links.map(({ label, path, segment, icon: Icon }, i) => {
         const isActive = layoutSegment === segment;
 
@@ -73,14 +73,14 @@ export default function SideNavClient() {
             <Link
               href={path}
               className={cn(
-                "hover:bg-ui-hover flex h-11 items-center gap-3 rounded-md px-3 py-[10px] transition-[background-color]",
+                "hover:bg-ui-hover flex h-11 items-center gap-3 px-3 rounded-md py-[10px] transition-[background-color]",
                 isActive && "bg-ui-hover font-medium",
               )}
               onNavigate={setIsOpen}
             >
-              <span>
+              {/*<span>
                 <Icon />
-              </span>
+              </span>*/}
               <span>{label}</span>
             </Link>
           </div>

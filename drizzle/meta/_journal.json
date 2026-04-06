@@ -64,6 +64,20 @@
       "when": 1773309744396,
       "tag": "0008_fearless_shadowcat",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1774506475659,
+      "tag": "0009_mean_gargoyle",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1775215653041,
+      "tag": "0010_red_ben_grimm",
+      "breakpoints": true
     }
   ]
 }

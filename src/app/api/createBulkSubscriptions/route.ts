@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { nanoid } from "nanoid";
 import xml2js from "xml2js";
 
 import { getSession, getSessionAgent } from "@/lib/auth/session";
@@ -15,16 +16,16 @@ function chunkArray(array: [], size: number) {
 
 export async function POST(request: NextRequest, response: NextResponse) {
   try {
-    const agent = await getSessionAgent();
-    if (!agent) {
-      return Response.json(
-        {
-          message: "You must be signed in to add feeds.",
-        },
-        { status: 401 },
-      );
-    }
-    console.log({ agent });
+    // const agent = await getSessionAgent();
+    // if (!agent?.assertDid) {
+    //   return Response.json(
+    //     {
+    //       message: "You must be signed in to add feeds.",
+    //     },
+    //     { status: 401 },
+    //   );
+    // }
+    // console.log({ agent });
     const formData = await request.formData();
     const file = formData.get("opmlFile") as File;
 
@@ -48,6 +49,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
             //   const feedtype =
             //     path.extname(attributes.xmlUrl) === ".json" ? "json" : "text";
             feeds.push({
+              id: nanoid(),
               title: attributes.title,
               siteUrl: attributes.htmlUrl,
               feedUrl: attributes.xmlUrl,
@@ -58,6 +60,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
         }
       } else {
         feeds.push({
+          id: nanoid(),
           title: outline.$.title,
           siteUrl: outline.$.htmlUrl,
           feedUrl: outline.$.xmlUrl,
@@ -88,13 +91,13 @@ export async function POST(request: NextRequest, response: NextResponse) {
     const feedUrls = new Set();
 
     // filter duplicate feeds
-    const uniqueFeeds = feeds.filter(
-      ({ feedUrl }) => !feedUrls.has(feedUrl) && feedUrls.add(feedUrl),
-    );
+    const uniqueFeeds = feeds
+      .filter(({ feedUrl }) => !feedUrls.has(feedUrl) && feedUrls.add(feedUrl))
+      .slice(0, 100);
 
     console.log({ uniqueFeeds });
 
-    // return NextResponse.json({ message: "success" });
+    return NextResponse.json({ feeds: uniqueFeeds });
 
     // atproto create records TODO:
     const bulkRecords = uniqueFeeds.map((record) => {

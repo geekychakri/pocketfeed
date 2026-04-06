@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
         .onConflictDoNothing({ target: schema.users.did });
     }
 
-    const response = NextResponse.redirect(new URL("/atmosphere", PUBLIC_URL));
+    const response = NextResponse.redirect(new URL("/daily", PUBLIC_URL)); //redirect after login
 
     // Set DID cookie
     response.cookies.set("did", session.did, {

@@ -5,14 +5,15 @@ import { useClerk } from "@clerk/nextjs";
 import Button from "@/components/ui/custom-button";
 
 export default function SettingsFooter() {
-  const { signOut } = useClerk();
+  // const { signOut } = useClerk();
   return (
     <div className="flex gap-4 font-medium *:flex-1 *:rounded-md *:px-4 *:py-2 *:text-[15px]">
       <Button
         onClick={() =>
-          signOut({
-            redirectUrl: "/",
-          })
+          // signOut({
+          //   redirectUrl: "/",
+          // })
+          console.log("SIGN OUT")
         }
       >
         Logout

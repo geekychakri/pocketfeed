@@ -1,6 +1,6 @@
 import { SVGProps } from "react";
 
-export function ExploreIcon(props: SVGProps<SVGSVGElement>) {
+export function DailyIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

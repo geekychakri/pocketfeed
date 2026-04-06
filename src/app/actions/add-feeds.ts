@@ -9,6 +9,8 @@ import LZString from "lz-string";
 import { nanoid } from "nanoid";
 import qs from "qs";
 
+import { db } from "@/db/db";
+import * as schema from "@/db/schema";
 import { validateRecord } from "@/lexicon/types/app/pocketfeed/feed/subscription";
 // import { getXataClient } from "@/xata";
 
@@ -207,17 +209,22 @@ type FeedsType = {
 
 export async function addFeeds(prevState: any, formData: FormData) {
   try {
-    const agent = await getSessionAgent();
+    const session = await getSession();
 
-    if (!agent) {
+    if (!session) {
       throw new Error("You must be signed in to add a feed.");
     }
+
+    const did = session.sub;
 
     const results = qs.parse(
       Object.fromEntries(formData.entries()) as {},
     ) as FeedsType;
+    // const results = Object.fromEntries(formData.entries());
 
-    console.log({ results });
+    // console.log({ results });
+
+    // return;
 
     if (results.feeds.length > 1) {
       const checkIfFeedIsPresent = results.feeds.some(
@@ -253,9 +260,10 @@ export async function addFeeds(prevState: any, formData: FormData) {
         .filter((item) => Boolean(item.isChecked))
         .map((item) => {
           return {
+            did,
             feedUrl: item?.rssUrl,
             title: item?.title,
-            folder: results.folder,
+            // folder: results.folder,
             favicon: results.favicon,
             siteUrl: results.siteUrl,
           };
@@ -263,8 +271,9 @@ export async function addFeeds(prevState: any, formData: FormData) {
     } else {
       feeds = results?.feeds.map((item) => {
         return {
+          did,
           feedUrl: item?.rssUrl,
-          folder: results.folder,
+          // folder: results.folder,
           favicon: results.favicon,
           siteUrl: results.siteUrl,
           title: item?.title,
@@ -274,75 +283,77 @@ export async function addFeeds(prevState: any, formData: FormData) {
 
     console.log(feeds);
 
-    let response;
+    // let response;
 
-    if (feeds.length > 1) {
-      const bulkRecords = feeds.map((record) => {
-        let rkey;
-        if (record.feedUrl.includes("youtube.com")) {
-          rkey = transformFeedUrltoRkey(record.siteUrl);
-        } else {
-          rkey = transformFeedUrltoRkey(record.feedUrl);
-        }
+    // if (feeds.length > 1) {
+    //   const bulkRecords = feeds.map((record) => {
+    //     let rkey;
+    //     if (record.feedUrl.includes("youtube.com")) {
+    //       rkey = transformFeedUrltoRkey(record.siteUrl);
+    //     } else {
+    //       rkey = transformFeedUrltoRkey(record.feedUrl);
+    //     }
 
-        return {
-          $type: "com.atproto.repo.applyWrites#create" as const,
-          collection: "app.pocketfeed.feed.subscription",
-          rkey,
-          value: {
-            $type: "app.pocketfeed.feed.subscription",
-            ...record,
-            createdAt: new Date().toISOString(),
-          },
-        };
-      });
-      // const bulkRecords1 = [
-      //   {
-      //   $type: "com.atproto.repo.applyWrites#create" as const,
-      //   collection: "xyz.pocketfeed.status",
-      //   value: {
-      //     status: "hello-from-pocket-feed-1",
-      //     createdAt: new Date().toISOString(),
-      //   },
-      // },
-      // {
-      //   $type: "com.atproto.repo.applyWrites#create" as const,
-      //   collection: "xyz.pocketfeed.status",
-      //   value: {
-      //     status: "hello-from-pocket-feed-2",
-      //     createdAt: new Date().toISOString(),
-      //   },
-      // },
-      // ]
-      response = await agent?.com.atproto.repo.applyWrites({
-        repo: agent.assertDid,
-        writes: [...bulkRecords],
-      });
-    } else {
-      let rkey;
-      if (feeds[0].feedUrl.includes("youtube.com")) {
-        rkey = transformFeedUrltoRkey(feeds[0].siteUrl);
-      } else {
-        rkey = transformFeedUrltoRkey(feeds[0].feedUrl);
-      }
+    //     return {
+    //       $type: "com.atproto.repo.applyWrites#create" as const,
+    //       collection: "app.pocketfeed.feed.subscription",
+    //       rkey,
+    //       value: {
+    //         $type: "app.pocketfeed.feed.subscription",
+    //         ...record,
+    //         createdAt: new Date().toISOString(),
+    //       },
+    //     };
+    //   });
+    //   // const bulkRecords1 = [
+    //   //   {
+    //   //   $type: "com.atproto.repo.applyWrites#create" as const,
+    //   //   collection: "xyz.pocketfeed.status",
+    //   //   value: {
+    //   //     status: "hello-from-pocket-feed-1",
+    //   //     createdAt: new Date().toISOString(),
+    //   //   },
+    //   // },
+    //   // {
+    //   //   $type: "com.atproto.repo.applyWrites#create" as const,
+    //   //   collection: "xyz.pocketfeed.status",
+    //   //   value: {
+    //   //     status: "hello-from-pocket-feed-2",
+    //   //     createdAt: new Date().toISOString(),
+    //   //   },
+    //   // },
+    //   // ]
+    //   response = await agent?.com.atproto.repo.applyWrites({
+    //     repo: agent.assertDid,
+    //     writes: [...bulkRecords],
+    //   });
+    // } else {
+    //   let rkey;
+    //   if (feeds[0].feedUrl.includes("youtube.com")) {
+    //     rkey = transformFeedUrltoRkey(feeds[0].siteUrl);
+    //   } else {
+    //     rkey = transformFeedUrltoRkey(feeds[0].feedUrl);
+    //   }
 
-      response = await agent?.com.atproto.repo.putRecord({
-        repo: agent.assertDid,
-        collection: "app.pocketfeed.feed.subscription",
-        rkey,
-        record: {
-          $type: "app.pocketfeed.feed.subscription",
-          ...feeds[0],
+    //   response = await agent?.com.atproto.repo.putRecord({
+    //     repo: agent.assertDid,
+    //     collection: "app.pocketfeed.feed.subscription",
+    //     rkey,
+    //     record: {
+    //       $type: "app.pocketfeed.feed.subscription",
+    //       ...feeds[0],
 
-          createdAt: new Date().toISOString(),
-        },
-        validate: false,
-      });
-    }
+    //       createdAt: new Date().toISOString(),
+    //     },
+    //     validate: false,
+    //   });
+    // }
 
-    console.log({ response });
+    // console.log({ response });
 
-    updateTag("user-did:plc:fhhygitymqyet5inny6klful");
+    // updateTag("user-did:plc:fhhygitymqyet5inny6klful");
+
+    const res = await db.insert(schema.feeds).values(feeds);
 
     return {
       type: "success",

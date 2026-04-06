@@ -267,7 +267,7 @@ export default function AddFeed() {
               {/* <input type="hidden" value={rssData?.url} name="random" /> */}
 
               {/* <div className="flex flex-col gap-3">{children}</div> */}
-              <FolderSelect folders={["Home", "test"]} />
+              {/*<FolderSelect folders={["Home", "test"]} />*/}
             </div>
 
             <p aria-live="polite" className="sr-only">

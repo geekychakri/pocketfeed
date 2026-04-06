@@ -11,20 +11,21 @@ import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 import { toast } from "sonner";
 import useSound from "use-sound";
 
+// const SocialOauth = dynamic(() => import("@/components/social-oauth"), {
+//   ssr: false,
+//   loading: () => (
+//     <div className="flex h-28 items-center justify-center">
+//       {/* <SpinnerRotate /> */}
+//     </div>
+//   ),
+// });
+
+import SocialOauth from "@/components/social-oauth";
 import { SpinnerRotate } from "@/components/spinner-rotate";
 import Button from "@/components/ui/custom-button";
 import Input from "@/components/ui/custom-input";
 
 import Divider from "../../components/divider";
-
-const SocialOauth = dynamic(() => import("@/components/social-oauth"), {
-  ssr: false,
-  loading: () => (
-    <div className="flex h-28 items-center justify-center">
-      {/* <SpinnerRotate /> */}
-    </div>
-  ),
-});
 
 export default function SignIn() {
   // const [email, setEmail] = useState("");
@@ -96,88 +97,7 @@ export default function SignIn() {
         </p>
       </div>
       <SocialOauth />
-      <Divider text="or continue using email" />
-      <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
-        <label htmlFor="email" className="flex flex-col gap-2">
-          <span className="font-medium">Email address</span>
-          <Input
-            type="email"
-            id="email"
-            required
-            placeholder="john@doe.com"
-            name="email"
-
-            // value={email}
-            // onChange={(e) => setEmail(e.target.value)}
-          />
-        </label>
-        <div className="flex flex-col gap-2">
-          <label htmlFor="password" className="font-medium">
-            Password
-          </label>
-
-          <div className="border-shadow focus-within:outline-brand-primary flex items-center rounded-md focus-within:outline-2">
-            <Input
-              className="flex-1 border-none shadow-none! outline-none autofill:rounded-none autofill:rounded-tl-md autofill:rounded-bl-md forced-colors:rounded-tr-none forced-colors:rounded-br-none"
-              type={showPassword ? "text" : "password"}
-              id="password"
-              required
-              placeholder="••••••••"
-              name="password"
-              autoComplete="current-password"
-            />
-
-            <Button
-              type="button"
-              className="rounded-none rounded-tr-md rounded-br-md p-4"
-              onClick={() => setShowPassword((prev) => !prev)}
-              aria-pressed={showPassword}
-            >
-              <span className="sr-only">Show Password</span>
-              {showPassword ? (
-                <EyeOpenIcon aria-hidden={true} />
-              ) : (
-                <EyeClosedIcon aria-hidden={true} />
-              )}
-            </Button>
-          </div>
-          <div className="sr-only" aria-live="assertive">
-            {showPassword
-              ? "Your password is shown!"
-              : "Your password is hidden!"}
-          </div>
-        </div>
-        {/* <button className="bg-primary font-medium text-white px-4 py-2 rounded-md">
-          Sign in
-        </button> */}
-        <Button
-          type="submit"
-          className="bg-cta text-background-primary hover:bg-cta-hover flex items-center justify-center"
-        >
-          {loginLoading ? (
-            <span className="flex items-center gap-2">
-              <SpinnerRotate />
-              <span>Signing In</span>
-            </span>
-          ) : (
-            "Sign In"
-          )}
-        </Button>
-        <div className="flex flex-col gap-4 self-start">
-          <Link
-            href="/new-password"
-            className="custom-underline self-start font-medium"
-          >
-            Forgot your password?
-          </Link>
-          <span className="flex gap-1">
-            <span>Don&apos;t have an account?</span>
-            <Link href="/join" className="custom-underline font-medium">
-              Join
-            </Link>
-          </span>
-        </div>
-      </form>
+      {/*<Divider text="or continue using email" />*/}
     </>
   );
 }

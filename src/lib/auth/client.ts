@@ -15,7 +15,8 @@ import { db } from "@/db/db";
 import * as schema from "@/db/schema";
 
 // export const SCOPE = "atproto account:email repo:com.example.record";
-export const SCOPE = "atproto transition:generic";
+export const SCOPE =
+  "atproto repo:com.pocket-feed.feed.subscription repo:com.pocket-feed.social.post";
 
 let client: NodeOAuthClient | null = null;
 

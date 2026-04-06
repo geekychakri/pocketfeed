@@ -13,16 +13,17 @@ export let getAllRecords = async () => {
   // "use cache";
   // cacheLife("hours");
   // cacheTag("user-did:plc:fhhygitymqyet5inny6klful");
-  // const did = await getDid();
+  const did = await getDid();
 
   // const cached = cache.get(did as string);
   // if (cached) return cached;
   // console.log("Cache not ran!");
 
   const response = await fetch(
-    "https://bsky.social/xrpc/com.atproto.repo.listRecords?repo=did:plc:fhhygitymqyet5inny6klful&collection=app.pocketfeed.feed.subscription&limit=100",
+    `https://bsky.social/xrpc/com.atproto.repo.listRecords?repo=${did}&collection=app.pocketfeed.feed.subscription&limit=100`,
     {
       cache: "force-cache",
+      next: { tags: [`user-${did}-feeds`] },
     },
   );
   // console.log({ response });

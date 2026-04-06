@@ -5,6 +5,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { getCookie, hasCookie } from "cookies-next/server";
 import dayjs from "dayjs";
 import LZString from "lz-string";
+import { ErrorBoundary } from "react-error-boundary";
 import Parser from "rss-parser";
 
 import RouteBack from "@/components/route-back";
@@ -16,7 +17,9 @@ import { ExternalLinkIcon } from "@/icons/external-link";
 import { FeedItemType, FeedListType } from "@/types";
 import { getXataClient } from "@/xata";
 
+import ErrorFallback from "./components/error-fallback";
 import FeedList from "./components/feed-list";
+import SuspenseOnSearchInner from "./components/suspense-on-search";
 import YouTubeModal from "./components/YouTubeModal";
 
 // const xata = getXataClient();
@@ -47,110 +50,67 @@ export default async function Feed(props: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   // const feedString = (await props.params).feedId[0];
-  const feedUrlSearchParamPromise = props.searchParams.then((sp) => ({
+  const feedSearchParamPromise = props.searchParams.then((sp) => ({
     feedUrl: sp.feedUrl,
+    title: sp.title,
   }));
-
-  // console.log({ ytChannelId });
-
-  // return <div>feed</div>;
-
-  // console.log({ searchParams: await props.searchParams });
-
-  // console.log({ params: params.feedId });
-
-  // console.log({ params });
-
-  // const rssUrl = LZString.decompressFromEncodedURIComponent(params);
-
-  // console.log({ rssUrl });
-  // const rssUrl = (await props.searchParams).rssUrl;
-  // await new Promise((resolve) => setTimeout(resolve, 30000));
-  // const user = await currentUser();
-
-  // const feed = await xata.db.feeds
-  //   .filter({
-  //     username: user?.username,
-  //     feedId: params.feedId[0],
-  //   })
-  //   .select(["*", "folderName.folder"])
-  //   .getFirst();
-  // console.log(feed);
-  // console.log({ favicon: feed[0].favicon });
-  // console.log({ feed });
-  // const feedUrl = feed?.rssURL;
-
-  // let feedUrl = await getCookie("feedUrl", { cookies });
-
-  // if (!feedUrl) {
-  //   console.log("RAN");
-  //   const feed = await xata.db.feeds
-  //     .filter({
-  //       username: user?.username,
-  //       feedId: params.feedId[0],
-  //     })
-  //     .select(["*", "folderName.folder"])
-  //     .getFirst();
-
-  //   feedUrl = feed?.rssURL as string;
-  // }
-
-  // let feedUrl;
-
-  // if (ytChannelId) {
-  //   feedUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${ytChannelId}`;
-  // } else {
-  //   feedUrl = `https://${transformStringToUrl(feedString)}`;
-  // }
-
-  // console.log({ feedUrl });
-
-  // return <div>feed id</div>;
-
-  // console.log({ feedItem: feedList.items.slice(0, 1) });
-
-  // console.log({ podcastChapters: feedList.items[0]["podcast:chapters"] });
-
-  // const itemsCategorized = feedList.items;
-
-  // console.log({ itemsCategorized });
-
-  // console.log(feedList?.image?.url);
-  // const categorizedFeedItemsList = categorizeFeedItems(sortFirstTenFeedsByDate);
-
-  // console.log({
-  //   categorizedFeedItemsList: categorizedFeedItemsList,
-  // });
-
-  // const olderPosts = reverseObj(categorizedFeedItemsList.older);
-
-  // console.log({ olderPosts });
-
-  // return <div>Feed</div>;
 
   return (
     <div className="flex flex-col py-14">
       {/*<YouTubeModal />*/}
-
-      <Suspense fallback={<FeedListFallback />}>
-        <FeedListWrapper
-          feedUrlSearchParamPromise={feedUrlSearchParamPromise}
-        />
+      <Suspense fallback={null}>
+        <FeedHeader feedSearchParamPromise={feedSearchParamPromise} />
+        <SuspenseOnSearchInner fallback={<FeedListFallback />}>
+          <FeedListWrapper feedSearchParamPromise={feedSearchParamPromise} />
+        </SuspenseOnSearchInner>
       </Suspense>
     </div>
   );
 }
 
 const FeedListWrapper = async ({
-  feedUrlSearchParamPromise,
+  feedSearchParamPromise,
 }: {
-  feedUrlSearchParamPromise: any;
+  feedSearchParamPromise: any;
 }) => {
-  const { feedUrl } = await feedUrlSearchParamPromise;
+  const { feedUrl } = await feedSearchParamPromise;
 
   if (!feedUrl) {
-    return <div>Feed url missing!</div>;
+    return (
+      <p className="flex flex-col gap-4 px-4">
+        <span>Invalid feed url.</span>
+        <span className="flex flex-col gap-1">
+          <span>Please provide a valid feed url:</span>
+          <code className="text-sm">
+            pocket-feed.com/feed?feedUrl=https://example.com/feed
+          </code>
+        </span>
+      </p>
+    );
   }
+  return (
+    <>
+      <FeedData feedUrl={feedUrl} />
+    </>
+  );
+};
+
+const FeedHeader = async ({
+  feedSearchParamPromise,
+}: {
+  feedSearchParamPromise: any;
+}) => {
+  const { title } = await feedSearchParamPromise;
+  return (
+    <div className="relative mb-5 flex items-center px-4">
+      <RouteBack className="absolute -left-12 border" />
+      {/* <h1 classNameName="border text-lg font-medium">{feedList.title}</h1> */}
+      <h1 className="font-medium">{title}</h1>
+    </div>
+  );
+};
+
+const FeedData = async ({ feedUrl }: { feedUrl: string }) => {
   // preload bookmarks data
   const getBookmarksPromise = getBookmarks();
 
@@ -182,28 +142,15 @@ const FeedListWrapper = async ({
   if (feedList.items.length === 0) {
     return <div>Feed is empty!</div>; //TODO:
   }
+
   return (
     <>
-      <div className="relative mb-5 flex items-center px-4">
-        <RouteBack className="absolute -left-12 border" />
-        {/* <h1 classNameName="border text-lg font-medium">{feedList.title}</h1> */}
-        <h1 className="font-medium">{feedList.title}</h1>
-      </div>
       <FeedList
         feedList={fList}
         getBookmarksPromise={getBookmarksPromise}
         // feedItems={feedList.items}
         // folderName={feed?.folderName?.folder as string} //TODO:
       />
-      {/*<a
-        target="_blank"
-        href={feedList.link}
-        rel="noreferrer noopener"
-        classNameName="hover:text-text-secondary mt-10 flex items-center gap-1 self-start rounded-md transition-[color]"
-      >
-        <span classNameName="custom-underline">Visit original page</span>
-
-      </a>*/}
       <a
         href={feedList.link}
         target="_blank"
@@ -250,6 +197,7 @@ function FeedListFallback() {
     </div>
   );
 }
+
 // function categorizeFeedItems(feedItems: FeedItemType[]) {
 //   const now = new Date();
 

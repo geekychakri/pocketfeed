@@ -57,20 +57,20 @@ export default async function Settings() {
           <Button id="main-item">Upgrade</Button>
         </div>
       </div>
-      <div>
+      {/*<div>
         <Suspense fallback={<FileUploadFallback />}>
           <FileUploadWrapper />
         </Suspense>
-      </div>
-      <div className="border-border-non-interactive h-[1px] border-t border-dashed"></div>
-      <div className="flex flex-col gap-5">
+      </div>*/}
+      {/*<div className="border-border-non-interactive h-[1px] border-t border-dashed"></div>*/}
+      {/*<div className="flex flex-col gap-5">
         <h2 className="text-text-secondary text-xl">Profile</h2>
         <Suspense fallback={<ProfileFormFallback />}>
           <ProfileFormWrapper />
         </Suspense>
-      </div>
+      </div>*/}
 
-      <div className="border-border-non-interactive h-[1px] border-t border-dashed"></div>
+      {/*<div className="border-border-non-interactive h-[1px] border-t border-dashed"></div>*/}
       {/* <div className="flex flex-col gap-5">
         <h2 className="text-xl font-medium text-text-secondary">
           Integrations

@@ -232,13 +232,13 @@
   }
 
   input:is(
-      :-webkit-autofill,
-      :autofill,
-      :-webkit-autofill:hover,
-      :autofill:hover,
-      :-webkit-autofill:focus,
-      :autofill:focus
-    ) {
+    :-webkit-autofill,
+    :autofill,
+    :-webkit-autofill:hover,
+    :autofill:hover,
+    :-webkit-autofill:focus,
+    :autofill:focus
+  ) {
     -webkit-box-shadow: 0 0 0px 40rem var(--ui-normal) inset !important;
   }
 

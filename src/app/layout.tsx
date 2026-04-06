@@ -95,7 +95,9 @@ export default function RootLayout({
           }}
         />
 
-        {/*<NavigationEvents />*/}
+        {/*<Suspense fallback={null}>
+          <NavigationEvents />
+        </Suspense>*/}
       </body>
     </html>
     //   </ClerkProvider>

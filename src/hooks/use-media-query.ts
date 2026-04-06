@@ -18,42 +18,42 @@ function getDimensions() {
   return { width: window.innerWidth, height: window.innerHeight };
 }
 
-// export function useMediaQuery() {
-//   const [device, setDevice] = useState<"mobile" | "tablet" | "desktop" | null>(
-//     getDevice(),
-//   );
-//   const [dimensions, setDimensions] = useState<{
-//     width: number;
-//     height: number;
-//   } | null>(getDimensions());
+export function useMediaQuery() {
+  const [device, setDevice] = useState<"mobile" | "tablet" | "desktop" | null>(
+    getDevice(),
+  );
+  const [dimensions, setDimensions] = useState<{
+    width: number;
+    height: number;
+  } | null>(getDimensions());
 
-//   useEffect(() => {
-//     const checkDevice = () => {
-//       setDevice(getDevice());
-//       setDimensions(getDimensions());
-//     };
+  useEffect(() => {
+    const checkDevice = () => {
+      setDevice(getDevice());
+      setDimensions(getDimensions());
+    };
 
-//     // Initial detection
-//     checkDevice();
+    // Initial detection
+    checkDevice();
 
-//     // Listener for windows resize
-//     window.addEventListener("resize", checkDevice);
+    // Listener for windows resize
+    window.addEventListener("resize", checkDevice);
 
-//     // Cleanup listener
-//     return () => {
-//       window.removeEventListener("resize", checkDevice);
-//     };
-//   }, []);
+    // Cleanup listener
+    return () => {
+      window.removeEventListener("resize", checkDevice);
+    };
+  }, []);
 
-//   return {
-//     device,
-//     width: dimensions?.width,
-//     height: dimensions?.height,
-//     isMobile: device === "mobile",
-//     isTablet: device === "tablet",
-//     isDesktop: device === "desktop",
-//   };
-// }
+  return {
+    device,
+    width: dimensions?.width,
+    height: dimensions?.height,
+    isMobile: device === "mobile",
+    isTablet: device === "tablet",
+    isDesktop: device === "desktop",
+  };
+}
 
 // import React from "react";
 
@@ -81,24 +81,24 @@ function getDimensions() {
 //   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 // }
 
-export function useMediaQuery(query: string) {
-  const subscribe = useCallback(
-    (callback: () => void) => {
-      const media = window.matchMedia(query);
-      media.addEventListener("change", callback);
-      return () => media.removeEventListener("change", callback);
-    },
-    [query],
-  );
+// export function useMediaQuery(query: string) {
+//   const subscribe = useCallback(
+//     (callback: () => void) => {
+//       const media = window.matchMedia(query);
+//       media.addEventListener("change", callback);
+//       return () => media.removeEventListener("change", callback);
+//     },
+//     [query],
+//   );
 
-  const getSnapshot = () => {
-    return window.matchMedia(query).matches;
-  };
+//   const getSnapshot = () => {
+//     return window.matchMedia(query).matches;
+//   };
 
-  const getServerSnapshot = () => {
-    // Return a consistent fallback
-    return false;
-  };
+//   const getServerSnapshot = () => {
+//     // Return a consistent fallback
+//     return false;
+//   };
 
-  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-}
+//   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+// }

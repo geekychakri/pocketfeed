@@ -44,14 +44,14 @@ export default function ImportExportOPML() {
     <div className="mx-auto flex w-full max-w-[520px] flex-col gap-12 py-20">
       <div className="relative flex items-center">
         <RouteBack className="absolute -left-8" />
-        <h1 className="text-lg font-semibold">Import & Export</h1>
+        <h1 className="text-lg font-medium">Import & Export</h1>
       </div>
       <div className="flex flex-col gap-4">
-        <h2 className="font-semibold">Import</h2>
+        <h2 className="font-medium">Import</h2>
         <UploadOPML />
       </div>
       <div className="flex flex-col gap-4">
-        <h2 className="font-semibold">Export</h2>
+        <h2 className="font-medium">Export</h2>
 
         <div className="border-shadow flex items-center justify-between rounded-lg p-6">
           <p className="flex-1">Subscriptions</p>

@@ -26,7 +26,7 @@ import { getPlatform } from "@/app/actions/get-platform";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { ActivityIcon } from "@/icons/activity";
 import { BookmarkIcon } from "@/icons/bookmark";
-import { ExploreIcon } from "@/icons/explore";
+import { DailyIcon } from "@/icons/daily";
 import { SearchIcon } from "@/icons/search";
 import { SidebarIcon } from "@/icons/sidebar";
 import { getProfile } from "@/lib/atproto/queries";
@@ -50,7 +50,7 @@ type NavItem<T extends string = string> = {
 };
 
 const links: NavItem<Route>[] = [
-  { label: "Daily", path: "/daily", segment: "daily", icon: ExploreIcon },
+  { label: "Daily", path: "/daily", segment: "daily", icon: DailyIcon },
   {
     label: "Activity",
     path: "/activity/discover",
@@ -183,7 +183,7 @@ export default function SidebarNavigation({
       <nav
         id="sidebar"
         className={cn(
-          `text-textColor bg-background-primary fixed top-0 bottom-0 left-0 isolate z-30 h-screen w-[240px]  grid grid-rows-[56px_56px_auto_1fr_56px] shadow-[1px_0_0_0_var(--border-non-interactive)] transition-[translate] duration-150 select-none max-md:-translate-x-full`,
+          `text-textColor bg-background-primary fixed top-0 bottom-0 left-0 isolate z-30 h-screen w-[256px]  grid grid-rows-[56px_56px_auto_minmax(0,1fr)_56px] shadow-[1px_0_0_0_var(--border-non-interactive)] transition-[translate] duration-150 select-none max-md:-translate-x-full`,
           isOpen && "max-md:translate-x-0",
         )}
       >
@@ -217,7 +217,7 @@ export default function SidebarNavigation({
       </nav>
       <div
         id="dummy-sidebar hidden"
-        className={cn("max-md:hidden w-[240px]")}
+        className={cn("max-md:hidden w-[256px]")}
       ></div>
     </>
   );

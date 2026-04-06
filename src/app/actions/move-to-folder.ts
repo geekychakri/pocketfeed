@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath, updateTag } from "next/cache";
+import { revalidatePath, revalidateTag, updateTag } from "next/cache";
 
 import { auth } from "@clerk/nextjs/server";
 
@@ -50,8 +50,9 @@ export async function moveToFolder(record: any, newFolder: string) {
       validate: false,
     });
     console.log({ response });
-    // revalidatePath("(dashboard)/(feed)/folder/[foldername]", "page")
-    updateTag("user-did:plc:fhhygitymqyet5inny6klful"); //TODO: make it dynamic
+    // revalidatePath("(dashboard)/(feed)/folder/[foldername]", "page");
+    // updateTag("user-did:plc:fhhygitymqyet5inny6klful"); //TODO: make it dynamic
+    updateTag(`user-${agent.assertDid}-feeds`);
     return { type: "success", message: "success" };
   } catch (err) {
     return { type: "internal-error", message: INTERNAL_ERROR_MESSAGE };
