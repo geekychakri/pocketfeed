@@ -9,7 +9,7 @@ import ProfileForm from "@/components/profile-form";
 import RouteBack from "@/components/route-back";
 import Button from "@/components/ui/custom-button";
 
-import { getCachedUser } from "@/lib/cache-functions/getUser";
+// import { getCachedUser } from "@/lib/cache-functions/getUser";
 import { getXataClient, UsersRecord } from "@/xata";
 
 import SettingsFooter from "./components/settings-footer";
@@ -92,28 +92,28 @@ export default async function Settings() {
   );
 }
 
-async function FileUploadWrapper() {
-  const { userId }: { userId: string | null } = await auth();
+// async function FileUploadWrapper() {
+//   const { userId }: { userId: string | null } = await auth();
 
-  const user = await getCachedUser(userId as string);
+//   const user = await getCachedUser(userId as string);
 
-  return (
-    <FileUpload
-      username={user?.username as string}
-      avatarUrl={user?.avatarUrl as string}
-    />
-  );
-}
+//   return (
+//     <FileUpload
+//       username={user?.username as string}
+//       avatarUrl={user?.avatarUrl as string}
+//     />
+//   );
+// }
 
-async function ProfileFormWrapper() {
-  const { userId }: { userId: string | null } = await auth();
+// async function ProfileFormWrapper() {
+//   const { userId }: { userId: string | null } = await auth();
 
-  const user = await getCachedUser(userId as string);
+//   const user = await getCachedUser(userId as string);
 
-  // const { avatarUrl, ...userInfo } = user;
+//   // const { avatarUrl, ...userInfo } = user;
 
-  return <ProfileForm userInfo={user} />;
-}
+//   return <ProfileForm userInfo={user} />;
+// }
 
 function FileUploadFallback() {
   return (

@@ -149,7 +149,7 @@ const PodcastPlayer = () => {
 
   return (
     <div
-      className={`bg-background-primary fixed -bottom-72 p-4 ${fullscreen && segment === "read" ? "left-0" : "left-[240px]"} animation-slide-up-player ease-out-player border-border-non-interactive animate-player-slide-up right-0 z-10 flex flex-col gap-1 border-t transition-[translate] duration-700 ${show === "hide" ? "translate-y-80" : ""}`}
+      className={`bg-background-primary fixed -bottom-72 p-4 left-0 min-md:left-[256px] animation-slide-up-player ease-out-player border-border-non-interactive animate-player-slide-up right-0 z-10 flex flex-col gap-1 border-t transition-[translate] duration-700 ${show === "hide" ? "translate-y-80" : ""}`}
     >
       <div className="absolute -top-[14px] flex cursor-pointer gap-2 self-end">
         {/* <button>

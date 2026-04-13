@@ -144,8 +144,8 @@ export default function FeedList({
     };
   });
 
-  console.log({ modFeedList });
-
+  // console.log({ modFeedList });
+  console.log({ modFeedListItem: modFeedList[0] });
   // const bookmarksIds = bookmarks.map(bookmark => JSON.parse(bookmark.bookmarkItem) );
 
   // console.log({ bookmarks });
@@ -400,6 +400,7 @@ function FeedItem({
 }) {
   // const { setFolderName } = useFolderName();
   // const { setArticleData } = useArticleContent();
+  const d = dayjs(item.isoDate);
   console.log({ feedUrl: feedList.feedUrl });
   if (item.enclosure?.type?.includes("audio")) {
     //TODO:
@@ -423,8 +424,8 @@ function FeedItem({
           </span>
           <span className="text-text-secondary flex gap-1 text-sm">
             <span>{dayjs(item.isoDate).format("ll")}</span>
-            <span>·</span>
-            <span>{dayjs().to(dayjs(item.isoDate))}</span>
+            {/*<span>·</span>*/}
+            {/*<span>{dayjs(item.isoDate).fromNow()}</span>*/}
           </span>
         </div>
 
@@ -533,11 +534,11 @@ const PodcastCard = ({
 
         <span className="text-text-secondary flex gap-1 text-sm">
           <span>{dayjs(item.isoDate).format("ll")}</span>
-          <span>·</span>
-          <span>{dayjs().to(dayjs(item.isoDate))}</span>
-          {item.itunes?.duration ? (
+          {/*<span>·</span>
+          <span>{dayjs().to(dayjs(item.isoDate))}</span>*/}
+          {item.itunes?.duration !== "0:00" ? (
             <>
-              <span>·</span>
+              <span className="last:hidden">·</span>
               <span>{convertTimeStringToReadable(item?.itunes?.duration)}</span>
             </>
           ) : null}

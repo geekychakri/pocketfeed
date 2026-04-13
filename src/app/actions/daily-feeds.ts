@@ -70,7 +70,7 @@ export async function dailyFeedsAction(prevState: any, formData: FormData) {
     // console.log("Success!", response);
 
     return {
-      type: "sucess",
+      type: "success",
       message: "success",
     };
   } catch (err) {

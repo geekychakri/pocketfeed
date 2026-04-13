@@ -25,8 +25,8 @@ import {
   PersonIcon,
 } from "@radix-ui/react-icons";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 import SignOutButton from "@/components/sign-out";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/user-avatar";
 
 import { LogoutIcon } from "@/icons/animated/LogoutIcon";
 import { MessageCircleMoreIcon } from "@/icons/animated/MessageCircleMoreIcon";

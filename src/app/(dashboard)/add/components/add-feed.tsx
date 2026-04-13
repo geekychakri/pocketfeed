@@ -1,19 +1,12 @@
 "use client";
 
-// import { addFeeds } from "@/app/actions";
-import { useActionState, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useActionState, useEffect, useState } from "react";
 
-import { ArrowLeftIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import * as Switch from "@radix-ui/react-switch";
-// import DOMPurify from "isomorphic-dompurify";
-import qs from "qs";
-// import { useFormState, useFormStatus } from "react-dom";
 import { toast } from "sonner";
 import useSound from "use-sound";
 
-// import FolderSelect from "@/components/folder-select";
-// import RouteBack from "@/components/route-back";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 import { SpinnerRotate } from "@/components/spinner-rotate";
 import Button from "@/components/ui/custom-button";
 import Input from "@/components/ui/custom-input";
@@ -23,15 +16,12 @@ import { EditIcon } from "@/icons/edit";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import {
   checkIfObjectIsEmpty,
-  cn,
+  getInitials,
   internalErrorToast,
   isHttpValid,
-  toastError,
 } from "@/lib/utils";
 
-import FolderSelect from "./folder-select";
-
-type RssDataType = {
+type RSSFinderType = {
   url: string;
   title: string;
   favicon: string;
@@ -47,15 +37,19 @@ const initialState = {
 };
 
 export default function AddFeed() {
-  const router = useRouter();
-
   const [urlValue, setUrlValue] = useState("");
-  const [rssData, setRssData] = useState<Partial<RssDataType>>({});
+  const [rssData, setRssData] = useState<Partial<RSSFinderType>>({});
   const [isLoading, setIsLoading] = useState(false);
 
-  const [playToggleOn] = useSound("sounds/toggle_on.wav");
-  const [playToggleOff] = useSound("sounds/toggle_off.wav");
-  const [playCaution] = useSound("sounds/caution.wav");
+  const [playToggleOn] = useSound("sounds/toggle_on.wav", {
+    volume: 0.25,
+  });
+  const [playToggleOff] = useSound("sounds/toggle_off.wav", {
+    volume: 0.25,
+  });
+  const [playCaution] = useSound("sounds/caution.wav", {
+    volume: 0.25,
+  });
 
   const [state, formAction, isPending] = useActionState(addFeeds, initialState);
 
@@ -63,7 +57,7 @@ export default function AddFeed() {
 
   const isRssDataEmpty = checkIfObjectIsEmpty(rssData);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     try {
@@ -73,7 +67,6 @@ export default function AddFeed() {
           "Content-type": "application/json",
         },
         body: JSON.stringify({
-          // url: isHttpValid(urlValue) ? urlValue : "https://" + urlValue,
           url: urlValue,
         }),
       });
@@ -82,18 +75,19 @@ export default function AddFeed() {
         console.log({ text });
         throw new Error(text);
       }
-      const data: RssDataType = await res.json();
+      const data: RSSFinderType = await res.json();
       console.log(data);
       if (checkIfObjectIsEmpty(data)) {
-        toast.message("Feed URL not found");
+        toast.warning("Feed URL not found");
+        playCaution();
         return;
       }
-      const feedUrls = data.feedUrls.map((item, i: number) => {
-        return {
-          ...item,
-          isChecked: i === 0 ? true : false,
-        };
-      });
+      // const feedUrls = data.feedUrls.map((item, i: number) => {
+      //   return {
+      //     ...item,
+      //     isChecked: i === 0 ? true : false,
+      //   };
+      // });
       setRssData(data);
     } catch (error) {
       playCaution();
@@ -103,30 +97,19 @@ export default function AddFeed() {
     }
   };
 
-  // console.log({ rssData });
-
-  const handleFormDataSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const results = qs.parse(Object.fromEntries(formData.entries()) as {});
-    console.log(results);
-  };
-
   useEffect(() => {
     if (state?.type === "internal-error") {
       internalErrorToast(state?.message);
     } else if (state?.type === "error") {
-      toast.error(state?.message);
+      toast.error(state?.message, {
+        id: "error",
+      });
       playCaution();
     }
   }, [state, playCaution]);
 
   return (
     <div className="relative mx-auto flex w-full max-w-md flex-col gap-3">
-      {/* <RouteBack className="absolute -left-9" />
-      <h1 className="flex items-center gap-3 text-xl font-medium">
-        <span>Add a feed</span>
-      </h1> */}
       <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
         <label htmlFor="url" className="flex flex-col gap-2">
           <span className="text-brand-primary text-sm font-medium">
@@ -161,18 +144,15 @@ export default function AddFeed() {
 
         {isRssDataEmpty && (
           <Button
-            // className={cn(
-            //   "flex h items-center justify-center rounded-md bg-ui-normal px-4 py-2 font-medium text-text-primary duration-100 hover:bg-ui-hover",
-            // )}
-            className="border-shadow flex items-center justify-center"
+            className="border-shadow flex gap-1 items-center justify-center"
             disabled={isLoading}
           >
-            {isLoading ? (
+            <span>Continue</span>
+
+            {isLoading && (
               <span>
-                <SpinnerRotate />
+                <SpinnerRotate className="size-5" />
               </span>
-            ) : (
-              <span>Continue</span>
             )}
           </Button>
         )}
@@ -180,14 +160,19 @@ export default function AddFeed() {
 
       {!isRssDataEmpty && (
         <div className="border-shadow flex flex-col gap-6 rounded-md p-4">
-          {/* eslint-disable @next/next/no-img-element */}
-          <img
-            src={rssData.favicon}
-            width={28}
-            height={28}
-            className="rounded-full"
-            alt="favicon"
-          />
+          <Avatar className="bg-ui-normal inline-flex h-7 w-7 flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full select-none">
+            <AvatarImage
+              className="h-full w-full rounded-[inherit] object-cover"
+              src={
+                rssData.favicon ||
+                `https://www.google.com/s2/favicons?domain=${rssData.url}&sz=28`
+              }
+              alt={rssData.title}
+            />
+            <AvatarFallback className="text-sm">
+              {getInitials(rssData.title as string)}
+            </AvatarFallback>
+          </Avatar>
           <form action={formAction} className="flex flex-col gap-6">
             <div className="flex flex-col gap-6">
               {rssData?.feedUrls?.map((item, i) => {
@@ -220,29 +205,20 @@ export default function AddFeed() {
                         </span>
                       </div>
                       {(rssData?.feedUrls?.length ?? 0) > 1 && (
-                        //   <input
-                        //     type="checkbox"
-                        //     name={`feed[${i}][isChecked]`}
-                        //     defaultChecked={i === 0 ? true : false}
-                        //     required={i === 0 ? true : false}
-                        //   />
                         <Switch.Root
                           name={`feeds[${i}][isChecked]`}
-                          className="bg-ui-normal relative h-[25px] w-[42px] cursor-default rounded-full outline-none data-[state=checked]:bg-[rgba(252,89,30,0.2)]"
+                          className="bg-ui-normal relative h-6.25 w-10.5 cursor-default rounded-full outline-none brand-primary data-[state=checked]:bg-[rgba(252,89,30,0.2)]"
                           id={`select-feed-${i}`}
                           style={{
                             WebkitTapHighlightColor: "rgba(0, 0, 0, 0)",
                           }}
-                          // checked={input.isChecked}
-                          // onCheckedChange={onCheckboxChange(index)}
                           onCheckedChange={(checked) => {
                             console.log({ checked });
                             checked ? playToggleOn() : playToggleOff();
                           }}
                           defaultChecked={i === 0 ? true : false}
-                          // required={i === 0 ? true : false}
                         >
-                          <Switch.Thumb className="bg-brand-primary shadow-blackA4 block h-[21px] w-[21px] translate-x-0.5 rounded-full shadow-[0_2px_2px] transition-transform duration-100 will-change-transform data-[state=checked]:translate-x-[19px]" />
+                          <Switch.Thumb className="bg-brand-primary block h-5.25 w-5.25 translate-x-0.5 rounded-full shadow-[0_2px_2px] transition-transform duration-100 will-change-transform data-[state=checked]:translate-x-4.75" />
                         </Switch.Root>
                       )}
                     </div>
@@ -264,9 +240,6 @@ export default function AddFeed() {
                 <input type="hidden" value={rssData?.favicon} name="favicon" />
               )}
               <input type="hidden" value={rssData?.url} name="siteUrl" />
-              {/* <input type="hidden" value={rssData?.url} name="random" /> */}
-
-              {/* <div className="flex flex-col gap-3">{children}</div> */}
               {/*<FolderSelect folders={["Home", "test"]} />*/}
             </div>
 
@@ -274,10 +247,11 @@ export default function AddFeed() {
               {state?.message}
             </p>
             <Button
-              className="border-shadow flex items-center justify-center"
+              className="border-shadow gap-1 flex items-center justify-center"
               disabled={isPending}
             >
-              {isPending ? <SpinnerRotate /> : "Add"}
+              <span>Add</span>
+              {isPending && <SpinnerRotate className="size-5" />}
             </Button>
           </form>
         </div>

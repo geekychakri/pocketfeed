@@ -750,6 +750,14 @@ pre:has(code) {
   /* cursor: not-allowed !important; */
 }
 
+/*#feed-search {
+  display: none !important;
+}
+
+#toggle-search:checked ~ div > #feed-search {
+  display: block !important;
+}*/
+
 /* ::-webkit-scrollbar {
   width: 8px;
 }

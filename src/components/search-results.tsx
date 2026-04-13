@@ -3,13 +3,17 @@ import { NextResponse } from "next/server";
 
 import { auth } from "@clerk/nextjs/server";
 import slugify from "@sindresorhus/slugify";
+import { ilike } from "drizzle-orm";
 
+import { db } from "@/db/db";
+import * as schema from "@/db/schema";
+import { getDid } from "@/lib/auth/session";
 import { getXataClient } from "@/xata";
 
 import NothingToReadSVG from "./svg/nothing-to-read";
 import SearchSVG from "./svg/search";
 
-const xata = getXataClient();
+// const xata = getXataClient();
 
 export default async function SearchResults({
   query,
@@ -19,19 +23,22 @@ export default async function SearchResults({
   category: string;
 }) {
   console.log({ typeofCategory: category });
-  const userId = (await auth()).userId || "";
-  const feedsList = query
-    ? await xata.db[category]
-        .filter({
-          ...(category === "feeds"
-            ? { title: { $iContains: query }, userId }
-            : { username: { $iContains: query } }),
-        })
-        .getMany({ pagination: { size: 100 } })
-    : [];
-  console.log(feedsList);
+  // const userId = (await auth()).userId || "";
+  const did = (await getDid()) as string;
+  console.log({ did });
+  console.log({ query });
 
-  if (feedsList.length === 0 && !query) {
+  return null;
+
+  if (!query) return null;
+
+  const data = await db
+    .select()
+    .from(schema.feeds)
+    .where(ilike(schema.feeds.title, `%${query}%`));
+  console.log({ data });
+
+  if (data.length === 0 && !query) {
     return (
       <div className="mt-12 flex flex-col items-center gap-2">
         <SearchSVG className="w-[320px]" />
@@ -43,8 +50,8 @@ export default async function SearchResults({
   if (category === "users") {
     return (
       <div className="flex flex-col gap-4 px-3">
-        {feedsList.length >= 1 ? (
-          feedsList.map((item, i) => (
+        {data.length >= 1 ? (
+          data.map((item, i) => (
             <Link
               href={`/user/${item.username}`}
               key={item.id}
@@ -66,8 +73,8 @@ export default async function SearchResults({
   }
   return (
     <div className="flex flex-col gap-4 px-6">
-      {feedsList.length >= 1 ? (
-        feedsList.map((item, i) => (
+      {data.length >= 1 ? (
+        data.map((item, i) => (
           <Link
             href={`/feed/${item.feedId}/${slugify(item.title, {
               decamelize: false,

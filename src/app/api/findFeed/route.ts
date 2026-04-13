@@ -10,7 +10,6 @@ function getUniqueListBy<T>(arr: T[], key: keyof T): T[] {
 
 export async function POST(request: Request) {
   try {
-    // throw new Error("");
     const bodyRaw = await request.json();
     console.log(bodyRaw);
     const body = getFeedUrlSchema.parse(bodyRaw);
@@ -33,12 +32,8 @@ export async function POST(request: Request) {
     // console.log(feedUrls);
     if (feedUrls.length >= 1) {
       let rssData;
-      // const data = await getMetaData(url);
-      // console.log(data);
       rssData = {
         ...site,
-        // title: site.title,
-        // favicon: url.includes("youtube.com") ? site.image : site.favicon,
         favicon: url.includes("youtube.com") ? ytAvatar : site.favicon,
         feedUrls: uniqueFeedUrls,
       };

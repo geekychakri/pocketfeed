@@ -5,11 +5,11 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
 import { ErrorBoundary } from "react-error-boundary";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 import FollowButton from "@/components/follow-button";
 import RouteBack from "@/components/route-back";
 import SegmentedControl from "@/components/segmented-control";
 import { CustomTooltip } from "@/components/ui/custom-tooltip";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/user-avatar";
 
 // import DOMPurify from "isomorphic-dompurify";
 

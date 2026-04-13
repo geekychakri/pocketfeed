@@ -1,11 +1,12 @@
 import Link from "next/link";
 
 import { decode } from "html-entities";
+import { SWRConfig } from "swr";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 import FeedDropdown from "@/components/feed-dropdown";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/user-avatar";
 
-import { getAllRecordsFromDb } from "@/db/queries";
+import { getUserFeeds } from "@/db/queries";
 import { getAllRecords } from "@/lib/atproto/queries";
 import { getSession } from "@/lib/auth/session";
 import { cn, getInitials, internalErrorToast } from "@/lib/utils";
@@ -16,7 +17,7 @@ export default async function FeedList() {
   // return null;
   const session = await getSession();
 
-  const records = await getAllRecordsFromDb(session?.sub);
+  const records = await getUserFeeds(session?.sub as string);
 
   console.log({ records });
 

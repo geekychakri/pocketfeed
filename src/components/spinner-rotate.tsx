@@ -88,7 +88,13 @@ export function SpinnerRotate(props: SVGProps<SVGSVGElement>) {
       viewBox="0 0 24 24"
       {...props}
     >
-      <g>
+      <g
+        style={{
+          animation: "spinner-steps 0.75s steps(12) infinite",
+          transformOrigin: "12px 12px",
+          willChange: "transform",
+        }}
+      >
         <rect
           width="2"
           height="5"
@@ -98,7 +104,7 @@ export function SpinnerRotate(props: SVGProps<SVGSVGElement>) {
           opacity=".14"
           rx="1"
           ry="1"
-        ></rect>
+        />
         <rect
           width="2"
           height="5"
@@ -109,7 +115,7 @@ export function SpinnerRotate(props: SVGProps<SVGSVGElement>) {
           transform="rotate(30 12 12)"
           rx="1"
           ry="1"
-        ></rect>
+        />
         <rect
           width="2"
           height="5"
@@ -120,7 +126,7 @@ export function SpinnerRotate(props: SVGProps<SVGSVGElement>) {
           transform="rotate(60 12 12)"
           rx="1"
           ry="1"
-        ></rect>
+        />
         <rect
           width="2"
           height="5"
@@ -131,7 +137,7 @@ export function SpinnerRotate(props: SVGProps<SVGSVGElement>) {
           transform="rotate(90 12 12)"
           rx="1"
           ry="1"
-        ></rect>
+        />
         <rect
           width="2"
           height="5"
@@ -142,7 +148,7 @@ export function SpinnerRotate(props: SVGProps<SVGSVGElement>) {
           transform="rotate(120 12 12)"
           rx="1"
           ry="1"
-        ></rect>
+        />
         <rect
           width="2"
           height="5"
@@ -153,7 +159,7 @@ export function SpinnerRotate(props: SVGProps<SVGSVGElement>) {
           transform="rotate(150 12 12)"
           rx="1"
           ry="1"
-        ></rect>
+        />
         <rect
           width="2"
           height="5"
@@ -163,16 +169,17 @@ export function SpinnerRotate(props: SVGProps<SVGSVGElement>) {
           transform="rotate(180 12 12)"
           rx="1"
           ry="1"
-        ></rect>
-        <animateTransform
-          attributeName="transform"
-          calcMode="discrete"
-          dur="0.75s"
-          repeatCount="indefinite"
-          type="rotate"
-          values="0 12 12;30 12 12;60 12 12;90 12 12;120 12 12;150 12 12;180 12 12;210 12 12;240 12 12;270 12 12;300 12 12;330 12 12;360 12 12"
-        ></animateTransform>
+        />
+
+        {/* Remove <animateTransform> entirely */}
       </g>
+
+      <style>{`
+        @keyframes spinner-steps {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
+        }
+      `}</style>
     </svg>
   );
 }

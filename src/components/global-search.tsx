@@ -75,7 +75,7 @@ export default function GlobalSearch({ category }: { category: string }) {
         </span>
       </div>
 
-      <div className="border-border-non-interactive border-b flex p-3">
+      <div className="border-border-non-interactive border-b flex p-1">
         <Link
           href="/search/feeds"
           className={cn(

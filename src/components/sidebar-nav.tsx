@@ -200,13 +200,13 @@ export default function SidebarNavigation({
           >
             Add feed
           </Link>
-          <Link
+          {/*<Link
             href="/search/feeds"
             className="hover:bg-ui-hover flex size-9 flex-none items-center justify-center rounded-md px-3 transition-[background-color]"
             aria-label="Search"
           >
             <SearchIcon className="flex-none" />
-          </Link>
+          </Link>*/}
         </div>
 
         <Suspense fallback={null}>

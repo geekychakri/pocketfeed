@@ -5,8 +5,8 @@ import { useSearchParams } from "next/navigation";
 
 import { decode } from "html-entities";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 import FeedDropdown from "@/components/feed-dropdown";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/user-avatar";
 
 import { getAllRecords } from "@/lib/atproto/queries";
 import { cn, getInitials, internalErrorToast } from "@/lib/utils";

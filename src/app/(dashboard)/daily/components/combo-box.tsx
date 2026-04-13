@@ -12,11 +12,12 @@ import {
 import { Combobox } from "@base-ui/react/combobox";
 import { JSONData, SelectedPick } from "@xata.io/client";
 import { toast } from "sonner";
+import useSWR, { useSWRConfig } from "swr";
 
 import Button from "@/components/ui/custom-button";
 
 import { dailyFeedsAction } from "@/app/actions/daily-feeds";
-import { internalErrorToast } from "@/lib/utils";
+import { fetcher, internalErrorToast } from "@/lib/utils";
 import { DailyRecord, FeedsRecord } from "@/xata";
 
 const initialState = {
@@ -24,20 +25,64 @@ const initialState = {
   message: "",
 };
 
-export default function MultipleFeedsCombobox({
-  initialData,
-  selectedFeeds,
-}: {
-  initialData: any;
-  selectedFeeds: any;
-}) {
-  const rssUrls = new Set(selectedFeeds.map((item: any) => item?.feedUrl));
+export default function MultipleFeedsCombobox() {
+  const { data: dailyFeeds, error: dailyFeedsError } = useSWR(
+    "/api/get-daily-feeds",
+    fetcher,
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      // suspense: true,
+    },
+  );
+  const { data: userFeeds, error: userFeedsError } = useSWR(
+    "/api/get-user-feeds",
+    fetcher,
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    },
+  );
 
-  const common = initialData.filter((item) =>
+  console.log({ dailyFeeds });
+  console.log({ userFeeds });
+
+  if (dailyFeedsError || userFeedsError) return "Something went wrong!";
+
+  // const initialData = userFeeds.map((record) => ({ ...record }));
+
+  const rssUrls = new Set(dailyFeeds.map((item: any) => item?.feedUrl));
+
+  console.log({ rssUrls });
+
+  const common = userFeeds.filter((item) =>
     rssUrls.has(item.feedUrl as string),
   );
+
+  console.log({ common });
+  return (
+    <ComboboxSelect
+      dailyFeeds={dailyFeeds}
+      initialData={userFeeds}
+      common={common}
+    />
+  );
+}
+
+function ComboboxSelect({
+  initialData,
+  common,
+  dailyFeeds,
+}: {
+  initialData: any;
+  common: any;
+  dailyFeeds: any;
+}) {
+  const { mutate } = useSWRConfig();
   const [selected, setSelected] = useState([...common]);
-  console.log({ selectedFeeds });
+  // console.log({ selectedFeeds });
 
   const [state, formAction, isPending] = useActionState(
     dailyFeedsAction,
@@ -65,12 +110,16 @@ export default function MultipleFeedsCombobox({
   useEffect(() => {
     if (state.type === "success") {
       toast.success(state.message);
+      // mutateDailyFeeds([...selected]);
+      mutate("/api/get-daily-feeds");
+      // mutate("api/get-daily-feeds"")
+      // alert("done");
     } else if (state.type === "feed-limit-reached") {
       toast.error(state.message);
     } else if (state.message === "internal-error") {
       internalErrorToast(state.message);
     }
-  }, [state]);
+  }, [state, mutate]);
 
   return (
     <form action={formAction} className="flex flex-col gap-5">

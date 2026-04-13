@@ -100,12 +100,12 @@ const FeedHeader = async ({
 }: {
   feedSearchParamPromise: any;
 }) => {
-  const { title } = await feedSearchParamPromise;
+  const { title, feedUrl } = await feedSearchParamPromise;
   return (
     <div className="relative mb-5 flex items-center px-4">
       <RouteBack className="absolute -left-12 border" />
       {/* <h1 classNameName="border text-lg font-medium">{feedList.title}</h1> */}
-      <h1 className="font-medium">{title}</h1>
+      <h1 className="font-medium">{title || new URL(feedUrl).hostname}</h1>
     </div>
   );
 };
@@ -116,14 +116,15 @@ const FeedData = async ({ feedUrl }: { feedUrl: string }) => {
 
   const feedList = (await parser.parseURL(
     feedUrl as string,
-  )) as unknown as FeedListType;
+  )) as unknown as FeedListType[];
 
-  // console.log({ feedList });
+  // console.log({ feedList: feedList[0] });
 
   // stringify and parse to counter serialization error object null prototype
-  const sortFirstTenFeedsByDate = JSON.parse(JSON.stringify(feedList))
-    .items.slice(0, 10)
-    .sort((a, b) => (dayjs(a.isoDate).isAfter(dayjs(b.isoDate)) ? -1 : 1));
+  const sortFirstTenFeedsByDate = JSON.parse(
+    JSON.stringify(feedList),
+  ).items.slice(0, 10);
+  // .sort((a, b) => (dayjs(a.isoDate).isAfter(dayjs(b.isoDate)) ? -1 : 1));
 
   const fList = {
     ...feedList,

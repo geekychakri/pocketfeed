@@ -8,9 +8,9 @@ import BoringAvatar from "boring-avatars";
 import { FileUploader } from "react-drag-drop-files";
 import { toast } from "sonner";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 import { SpinnerRotate } from "@/components/spinner-rotate";
 import Button from "@/components/ui/custom-button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/user-avatar";
 
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import { getInitials, internalErrorToast } from "@/lib/utils";

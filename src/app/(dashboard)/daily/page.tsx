@@ -1,82 +1,78 @@
 import { Suspense } from "react";
 
 import { auth } from "@clerk/nextjs/server";
+import { SWRConfig } from "swr";
 
 import RouteBack from "@/components/route-back";
+import { SpinnerRotate } from "@/components/spinner-rotate";
 
 import { db } from "@/db/db";
-import { getSelectedFeeds } from "@/db/queries";
+import { getSelectedFeeds, getUserFeeds } from "@/db/queries";
 import * as schema from "@/db/schema";
 import { getAllRecords } from "@/lib/atproto/queries";
-import { preloadDailyFeed } from "@/lib/dal/daily-feed";
+// import { preloadDailyFeed } from "@/lib/dal/daily-feed";
 import { getXataClient } from "@/xata";
 
 import MultipleFeedsCombobox from "./components/combo-box";
 import DailyFeedList from "./components/daily-feed-list";
+import DailyFeedListSuspense from "./components/daily-feed-list-suspense";
 import SelectFeedsModal from "./components/select-feeds-modal";
 
 export default function Page() {
+  const getSelectedFeedsPromise = getSelectedFeeds();
+  const getUserFeedsPromise = getUserFeeds();
   return (
     <div className="mx-auto w-full max-w-[750px] border-r border-l min-h-screen shadow-[0_0px_10px_1px_var(--border-non-interactive)]">
-      {/* <div className="h-14"></div> */}
-
       <div className="flex  justify-between gap-2 h-14 items-center border-b px-4">
         <div className="flex gap-2">
           <RouteBack />
           <h1 className="font-medium">Daily</h1>
         </div>
-
-        {/* <div>
-          <SelectFeedsModal />
-        </div> */}
-        <Suspense fallback="Loading...">
-          <MultipleFeedsComboboxWrapper />
-        </Suspense>
+        <SWRConfig
+          value={{
+            fallback: {
+              "/api/get-daily-feeds": getSelectedFeedsPromise,
+              "/api/get-user-feeds": getUserFeedsPromise,
+            },
+          }}
+        >
+          <Suspense
+            fallback={
+              <button className="flex gap-2 h-10 items-center justify-center rounded-md bg-ui-normal px-3.5 text-base font-medium  select-none hover:bg-ui-hover active:bg-ui-active focus-visible:outline 2 focus-visible:-outline-offset-1">
+                Select Feeds
+                <span>
+                  <SpinnerRotate />
+                </span>
+              </button>
+            }
+          >
+            <SelectFeedsModal>
+              <MultipleFeedsCombobox />
+            </SelectFeedsModal>
+          </Suspense>
+        </SWRConfig>
       </div>
 
-      {/* <Suspense fallback="Loading...">
-        <MultipleFeedsComboboxWrapper />
-      </Suspense> */}
       {/*<Suspense fallback={<DailyFeedListFallback />}>*/}
-      <DailyFeedList />
+      {/*<DailyFeedList />*/}
+      <Suspense
+        fallback={
+          <div className="animate-pulse flex flex-col gap-5 px-4 mt-5">
+            <p>Preparing your daily brew...</p>
+          </div>
+        }
+      >
+        <DailyFeedListSuspense />
+      </Suspense>
       {/*</Suspense>*/}
     </div>
   );
 }
 
-const MultipleFeedsComboboxWrapper = async () => {
-  // const userId = (await auth()).userId as string;
-
-  // const xata = getXataClient();
-
-  // const feeds = (
-  //   await xata.db.feeds.filter({ userId }).getAll()
-  // ).toSerializable();
-
-  // const selectedFeeds = (
-  //   await xata.db.daily.filter({ userId }).getAll()
-  // ).toSerializable();
-
-  // const records = await getAllRecords();
-
-  // const selectedFeeds =
-
-  const [records, selectedFeeds] = await Promise.all([
-    getAllRecords(),
-    getSelectedFeeds(),
-  ]); //filter feeds by did
-
-  // console.log({ selectedFeeds });
-
-  const feeds = records.map((record) => ({ ...record.value }));
-
+const MultipleFeedsComboboxWrapper = () => {
   return (
     <SelectFeedsModal>
-      <MultipleFeedsCombobox
-        initialData={feeds}
-        // selectedFeeds={selectedFeeds}
-        selectedFeeds={selectedFeeds}
-      />
+      <MultipleFeedsCombobox />
     </SelectFeedsModal>
   );
 };

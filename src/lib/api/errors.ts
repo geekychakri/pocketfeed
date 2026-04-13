@@ -76,8 +76,7 @@ export function handleApiError(error: any) {
 
   return {
     error: {
-      message:
-        "An internal server error occurred. Please contact pocketfeedapp@protonmail.com if problem persists.",
+      message: "An internal server error occurred. Please contact pocket-feed.",
     },
     status: errorCodeToHttpStatus.internal_server_error,
   };

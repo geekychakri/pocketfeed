@@ -32,21 +32,30 @@ export const users = pgTable("users", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const feeds = pgTable("feeds", {
-  id: uuid("id")
-    .primaryKey()
-    .default(sql`uuid_generate_v7()`),
-  did: text("did")
-    .references(() => users.did, {
-      onDelete: "cascade",
-    })
-    .notNull(),
-  title: text("title").notNull(),
-  feedUrl: text("feedUrl").notNull(),
-  siteUrl: text("siteUrl").notNull(),
-  favicon: text("favicon"),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-});
+export const feeds = pgTable(
+  "feeds",
+  {
+    id: uuid("id")
+      .primaryKey()
+      .default(sql`uuid_generate_v7()`),
+    did: text("did")
+      .references(() => users.did, {
+        onDelete: "cascade",
+      })
+      .notNull(),
+    title: text("title").notNull(),
+    feedUrl: text("feedUrl").notNull(),
+    siteUrl: text("siteUrl").notNull(),
+    favicon: text("favicon"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    uniqueUserFeed: uniqueIndex("unique_user_feed").on(
+      table.did,
+      table.feedUrl,
+    ),
+  }),
+);
 
 export const todayFeeds = pgTable(
   "today_feeds",

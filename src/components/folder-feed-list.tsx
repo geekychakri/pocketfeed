@@ -11,11 +11,11 @@ import LZString from "lz-string";
 import useSound from "use-sound";
 import { VList } from "virtua";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 import FeedDropdown from "@/components/feed-dropdown";
 import { SpinnerRotate } from "@/components/spinner-rotate";
 import EmptyFeedSVG from "@/components/svg/empty-feed";
 import Button from "@/components/ui/custom-button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/user-avatar";
 
 import { useFeedsAdd } from "@/hooks/useFeedsAdd";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";

@@ -16,9 +16,9 @@ import { toast } from "sonner";
 import useSound from "use-sound";
 import { WindowVirtualizer } from "virtua";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 import { SpinnerRotate } from "@/components/spinner-rotate";
 import Button from "@/components/ui/custom-button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/user-avatar";
 
 import { deleteSubscriptions } from "@/app/actions/delete-subscriptions";
 import { FeedIcon } from "@/icons/feed";

@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidateTag, updateTag } from "next/cache";
+import { refresh, revalidateTag, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { TID } from "@atproto/common";
@@ -208,6 +208,8 @@ type FeedsType = {
 // }
 
 export async function addFeeds(prevState: any, formData: FormData) {
+  let shouldRedirect = false;
+  let feeds = [];
   try {
     const session = await getSession();
 
@@ -252,8 +254,6 @@ export async function addFeeds(prevState: any, formData: FormData) {
         errors: validateFields.error.flatten().fieldErrors,
       };
     }
-
-    let feeds = [];
 
     if (results.feeds?.length > 1) {
       feeds = results?.feeds
@@ -353,16 +353,33 @@ export async function addFeeds(prevState: any, formData: FormData) {
 
     // updateTag("user-did:plc:fhhygitymqyet5inny6klful");
 
-    const res = await db.insert(schema.feeds).values(feeds);
+    console.log({ feeds });
+    // console.log({ title: decodeURIComponent(feeds[0].title) });
 
-    return {
-      type: "success",
-      message: "",
-    };
+    const res = await db
+      .insert(schema.feeds)
+      .values(feeds)
+      .onConflictDoNothing();
+
+    refresh();
+
+    shouldRedirect = true;
+
+    // return {
+    //   type: "success",
+    //   message: "",
+    // };
   } catch (err) {
     return {
       type: "internal-error",
-      message: getErrorMessage(err) || INTERNAL_ERROR_MESSAGE,
+      // message: getErrorMessage(err) || INTERNAL_ERROR_MESSAGE,
+      message: INTERNAL_ERROR_MESSAGE,
     };
+  }
+
+  if (shouldRedirect) {
+    redirect(
+      `/feed?feedUrl=${feeds[0].feedUrl}&title=${encodeURIComponent(feeds[0].title)}`,
+    );
   }
 }

@@ -12,10 +12,10 @@ import { toast } from "sonner";
 import useSWRInfinite from "swr/infinite";
 import { set } from "zod";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 import DeletePostModal from "@/components/delete-post-modal";
 import { SpinnerRotate } from "@/components/spinner-rotate";
 import Button from "@/components/ui/custom-button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/user-avatar";
 
 import PodcastPlayButton from "@/app/(dashboard)/(feed)/feed/components/PodcastPlayButton";
 import YouTubePlayButton from "@/app/(dashboard)/(feed)/feed/components/YouTubePlayButton";

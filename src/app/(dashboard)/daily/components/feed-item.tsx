@@ -32,7 +32,7 @@ export default function FeedItem({
   // const { setFolderName } = useFolderName();
   // const { setArticleData } = useArticleContent();
   // console.log({ feedUrl: feedList.feedUrl });
-  if (item.enclosure?.type?.includes("audio")) {
+  if (item?.enclosure?.type?.includes("audio")) {
     //TODO:
     return (
       <PodcastCard

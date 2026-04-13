@@ -19,7 +19,9 @@ import ReparentComponent2 from "@/components/reparent-component-2";
 import SidebarNavigation from "@/components/sidebar-nav";
 import TestNav from "@/components/test-nav";
 
+import { getUserFeeds } from "@/db/queries";
 import { getProfile } from "@/lib/atproto/queries";
+import { getDid } from "@/lib/auth/session";
 import { getDailyFeed } from "@/lib/dal/daily-feed";
 
 import YouTubeModal from "./(feed)/feed/components/YouTubeModal";
@@ -31,6 +33,7 @@ export default async function MainLayout({
 }>) {
   // preload("/api/daily-feeds", { as: "fetch", crossOrigin: "anonymous" });
   const getProfilePromise = getProfile();
+
   return (
     <div className="flex max-[768px]:flex-col w-full">
       <SidebarNavigation
@@ -44,6 +47,7 @@ export default async function MainLayout({
           <h2 className="px-3 py-2 text-text-secondary bg-background-primary">
             Subscriptions
           </h2>
+
           <Suspense fallback={<FeedListFallback />}>
             <FeedList />
           </Suspense>
@@ -60,6 +64,7 @@ export default async function MainLayout({
       {/* <ClerkProvider dynamic> */}
       <main className="flex-1" id="main">
         <MobileNav />
+
         {children}
       </main>
 

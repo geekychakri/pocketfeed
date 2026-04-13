@@ -211,7 +211,10 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
   let contentToRead: string;
 
   if (articleUrl === articleLink) {
-    contentToRead = articleContent;
+    contentToRead = convertRelativeUrlsToAbsolute(
+      articleContent,
+      articleLinkOrigin,
+    );
   } else {
     contentToRead = convertRelativeUrlsToAbsolute(
       feedItem["content:encoded"] || feedItem.content,

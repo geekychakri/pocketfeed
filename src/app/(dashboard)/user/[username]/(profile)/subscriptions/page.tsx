@@ -6,9 +6,9 @@ import * as Checkbox from "@radix-ui/react-checkbox";
 import { CheckIcon, TrashIcon } from "@radix-ui/react-icons";
 import { decode } from "html-entities";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 import LoadingUI from "@/components/loading-ui";
 import Button from "@/components/ui/custom-button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/user-avatar";
 
 import { getAllRecords } from "@/lib/atproto/queries";
 import { getInitials } from "@/lib/utils";
