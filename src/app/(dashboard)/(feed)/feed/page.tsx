@@ -1,49 +1,17 @@
 import { Suspense } from "react";
-import { cookies } from "next/headers";
+import { connection } from "next/server";
 
-import { currentUser } from "@clerk/nextjs/server";
-import { getCookie, hasCookie } from "cookies-next/server";
-import dayjs from "dayjs";
-import LZString from "lz-string";
 import { ErrorBoundary } from "react-error-boundary";
-import Parser from "rss-parser";
+import { SWRConfig, unstable_serialize } from "swr";
 
 import RouteBack from "@/components/route-back";
 
-import { db } from "@/db/db";
-import { getBookmarks } from "@/db/queries";
-import * as schema from "@/db/schema";
-import { ExternalLinkIcon } from "@/icons/external-link";
-import { FeedItemType, FeedListType } from "@/types";
-import { getXataClient } from "@/xata";
+import { getBookmarks, getFeedData } from "@/db/queries";
 
-import ErrorFallback from "./components/error-fallback";
+import FeedListClient from "./components/client-feed-list";
+import CustomErrorBoundary from "./components/custom-errror-boundary";
 import FeedList from "./components/feed-list";
 import SuspenseOnSearchInner from "./components/suspense-on-search";
-import YouTubeModal from "./components/YouTubeModal";
-
-// const xata = getXataClient();
-const parser = new Parser({
-  customFields: {
-    item: ["podcast:chapters"],
-  },
-});
-
-function transformStringToUrl(str: string) {
-  const match = str.match(/^(.*\.[a-z]{2,})-(.+)$/i);
-  if (!match) return str;
-
-  const host = match[1];
-  const rest = match[2];
-
-  // Only restore the first path separator
-  return `${host}/${rest}`;
-
-  // YouTube special case
-  // if (url.startsWith("youtube.com/")) {
-  //   url = url.replace(/^youtube\.com\/([^/]+)/, "youtube.com/@$1");
-  // }
-}
 
 export default async function Feed(props: {
   params: Promise<{ feedId: string }>;
@@ -58,15 +26,39 @@ export default async function Feed(props: {
   return (
     <div className="flex flex-col py-14">
       {/*<YouTubeModal />*/}
+      {/*<Dummy />*/}
       <Suspense fallback={null}>
         <FeedHeader feedSearchParamPromise={feedSearchParamPromise} />
-        <SuspenseOnSearchInner fallback={<FeedListFallback />}>
-          <FeedListWrapper feedSearchParamPromise={feedSearchParamPromise} />
-        </SuspenseOnSearchInner>
+        {/*<SuspenseOnSearchInner fallback={<FeedListFallback />}>*/}
+        <FeedListWrapper feedSearchParamPromise={feedSearchParamPromise} />
+        {/*</SuspenseOnSearchInner>*/}
+        {/*<FeedListClientWrapper
+          feedSearchParamPromise={feedSearchParamPromise}
+        />*/}
       </Suspense>
     </div>
   );
 }
+
+// const Dummy = () => {
+//   console.log("DUMMY RENDERED");
+//   return <div>Dummy</div>;
+// };
+
+const FeedHeader = async ({
+  feedSearchParamPromise,
+}: {
+  feedSearchParamPromise: any;
+}) => {
+  console.log("FEED HEADER RENDERED");
+  const { title, feedUrl } = await feedSearchParamPromise;
+  return (
+    <div className="relative mb-5 flex items-center px-4">
+      <RouteBack className="absolute -left-12 border" />
+      <h1 className="font-medium">{title || new URL(feedUrl).hostname}</h1>
+    </div>
+  );
+};
 
 const FeedListWrapper = async ({
   feedSearchParamPromise,
@@ -89,115 +81,10 @@ const FeedListWrapper = async ({
     );
   }
   return (
-    <>
-      <FeedData feedUrl={feedUrl} />
-    </>
+    <FeedList feedUrl={feedUrl} />
+    // </CustomErrorBoundary>
   );
 };
-
-const FeedHeader = async ({
-  feedSearchParamPromise,
-}: {
-  feedSearchParamPromise: any;
-}) => {
-  const { title, feedUrl } = await feedSearchParamPromise;
-  return (
-    <div className="relative mb-5 flex items-center px-4">
-      <RouteBack className="absolute -left-12 border" />
-      {/* <h1 classNameName="border text-lg font-medium">{feedList.title}</h1> */}
-      <h1 className="font-medium">{title || new URL(feedUrl).hostname}</h1>
-    </div>
-  );
-};
-
-const FeedData = async ({ feedUrl }: { feedUrl: string }) => {
-  // preload bookmarks data
-  const getBookmarksPromise = getBookmarks();
-
-  const feedList = (await parser.parseURL(
-    feedUrl as string,
-  )) as unknown as FeedListType[];
-
-  // console.log({ feedList: feedList[0] });
-
-  // stringify and parse to counter serialization error object null prototype
-  const sortFirstTenFeedsByDate = JSON.parse(
-    JSON.stringify(feedList),
-  ).items.slice(0, 10);
-  // .sort((a, b) => (dayjs(a.isoDate).isAfter(dayjs(b.isoDate)) ? -1 : 1));
-
-  const fList = {
-    ...feedList,
-    items: [...sortFirstTenFeedsByDate],
-    feedUrl,
-  };
-
-  // console.log({ fList });
-
-  // console.dir({ fListItems: fList.items });
-
-  // console.log(sortFirstTenFeedsByDate);
-
-  // return "Feed";
-
-  if (feedList.items.length === 0) {
-    return <div>Feed is empty!</div>; //TODO:
-  }
-
-  return (
-    <>
-      <FeedList
-        feedList={fList}
-        getBookmarksPromise={getBookmarksPromise}
-        // feedItems={feedList.items}
-        // folderName={feed?.folderName?.folder as string} //TODO:
-      />
-      <a
-        href={feedList.link}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-brand-primary flex items-center gap-1 mt-10 px-4"
-      >
-        Visit original page <ExternalLinkIcon />
-      </a>
-    </>
-  );
-};
-
-function FeedListFallback() {
-  return (
-    <div className="animate-pulse flex flex-col gap-5 px-4">
-      <div className="h-7 w-56 bg-ui-normal rounded"></div>
-      <div className="flex flex-col  space-y-3">
-        <div className="h-14 w-full flex justify-between items-center">
-          <div className="rounded bg-ui-normal h-7 w-56"></div>
-          <div className="rounded bg-ui-normal h-7 w-20"></div>
-        </div>
-        <div className="flex-1 space-y-3">
-          <div className="h-5 rounded bg-ui-normal"></div>
-          <div className="h-5 rounded bg-ui-normal"></div>
-          <div className="h-5 rounded bg-ui-normal"></div>
-        </div>
-      </div>
-
-      {Array.from({ length: 10 }).map((_, i, a) => {
-        return (
-          <div key={i} className="flex flex-col  space-y-3 ">
-            <div className="h-14 w-full flex justify-between items-center">
-              <div className="rounded bg-ui-normal h-7 w-56"></div>
-              <div className="rounded bg-ui-normal h-7 w-20"></div>
-            </div>
-            <div className="flex-1 space-y-3">
-              <div className="h-5 rounded bg-ui-normal"></div>
-              <div className="h-5 rounded bg-ui-normal"></div>
-              <div className="h-5 rounded bg-ui-normal"></div>
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
 
 // function categorizeFeedItems(feedItems: FeedItemType[]) {
 //   const now = new Date();

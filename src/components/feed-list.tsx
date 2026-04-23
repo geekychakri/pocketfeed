@@ -23,7 +23,7 @@ export default async function FeedList() {
 
   // console.log({ userFeeds: feeds });
 
-  if (records.length === 0) {
+  if (records?.length === 0) {
     return (
       <div className="px-3 text-sm flex flex-col gap-3 flex-1 justify-center items-center">
         <svg

@@ -1,0 +1,1 @@
+ALTER TABLE "bookmarks" ADD COLUMN "did" text NOT NULL;

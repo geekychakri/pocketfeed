@@ -19,8 +19,8 @@ import DailyFeedListSuspense from "./components/daily-feed-list-suspense";
 import SelectFeedsModal from "./components/select-feeds-modal";
 
 export default function Page() {
-  const getSelectedFeedsPromise = getSelectedFeeds();
-  const getUserFeedsPromise = getUserFeeds();
+  // const getSelectedFeedsPromise = getSelectedFeeds();
+  // const getUserFeedsPromise = getUserFeeds();
   return (
     <div className="mx-auto w-full max-w-[750px] border-r border-l min-h-screen shadow-[0_0px_10px_1px_var(--border-non-interactive)]">
       <div className="flex  justify-between gap-2 h-14 items-center border-b px-4">
@@ -28,29 +28,21 @@ export default function Page() {
           <RouteBack />
           <h1 className="font-medium">Daily</h1>
         </div>
-        <SWRConfig
-          value={{
-            fallback: {
-              "/api/get-daily-feeds": getSelectedFeedsPromise,
-              "/api/get-user-feeds": getUserFeedsPromise,
-            },
-          }}
+
+        <Suspense
+          fallback={
+            <button className="flex gap-2 h-10 items-center justify-center rounded-md bg-ui-normal px-3.5 text-base font-medium  select-none hover:bg-ui-hover active:bg-ui-active focus-visible:outline 2 focus-visible:-outline-offset-1">
+              Select Feeds
+              <span>
+                <SpinnerRotate />
+              </span>
+            </button>
+          }
         >
-          <Suspense
-            fallback={
-              <button className="flex gap-2 h-10 items-center justify-center rounded-md bg-ui-normal px-3.5 text-base font-medium  select-none hover:bg-ui-hover active:bg-ui-active focus-visible:outline 2 focus-visible:-outline-offset-1">
-                Select Feeds
-                <span>
-                  <SpinnerRotate />
-                </span>
-              </button>
-            }
-          >
-            <SelectFeedsModal>
-              <MultipleFeedsCombobox />
-            </SelectFeedsModal>
-          </Suspense>
-        </SWRConfig>
+          <SelectFeedsModal>
+            <MultipleFeedsCombobox />
+          </SelectFeedsModal>
+        </Suspense>
       </div>
 
       {/*<Suspense fallback={<DailyFeedListFallback />}>*/}

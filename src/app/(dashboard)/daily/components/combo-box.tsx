@@ -33,6 +33,7 @@ export default function MultipleFeedsCombobox() {
       revalidateIfStale: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
+      revalidateOnMount: false,
       // suspense: true,
     },
   );
@@ -43,6 +44,7 @@ export default function MultipleFeedsCombobox() {
       revalidateIfStale: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
+      revalidateOnMount: false,
     },
   );
 

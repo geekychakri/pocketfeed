@@ -53,6 +53,7 @@
     "@types/jsdom": "^21.1.7",
     "@types/qs": "^6.9.15",
     "@types/xml2js": "^0.4.14",
+    "@upstash/redis": "^1.37.0",
     "@vercel/functions": "^3.3.5",
     "@vidstack/react": "^1.12.13",
     "@xata.io/client": "^0.29.5",

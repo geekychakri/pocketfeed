@@ -80,6 +80,8 @@ function ErrorFallback({ feedUrl }: { feedUrl: string }) {
   let message;
   const { error, resetBoundary } = useErrorBoundary();
 
+  console.log({ error });
+
   const searchParams = useSearchParams();
   const currentFeedUrl = searchParams.get("feedUrl");
 
@@ -96,7 +98,7 @@ function ErrorFallback({ feedUrl }: { feedUrl: string }) {
   if (feedUrl.includes("youtube.com")) {
     message =
       "Looks like YouTube feeds are temporarily unavailable. Please check back shortly.";
-  } else if (error.message === "unable to verify the first certificate") {
+  } else if (error?.info?.message.includes("unable")) {
     message = "Unable to access this feed.";
   } else {
     message = "Something went wrong but don't fret — it's not your fault.";

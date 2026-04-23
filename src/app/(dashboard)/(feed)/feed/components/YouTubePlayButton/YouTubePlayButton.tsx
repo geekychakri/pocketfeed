@@ -28,7 +28,7 @@ export default function YouTubePlayButton({
   bookmarkId?: string;
 }) {
   console.log({ youtubeId });
-  console.log({ feedItem: feedItem });
+  console.log({ feedYTItem: feedItem });
   const { openYoutubePlayer, setYoutubeId, isOpen, setYtVideoTitle } =
     useShowYTPlayer();
   const { setFeedItem } = useFeedItem();

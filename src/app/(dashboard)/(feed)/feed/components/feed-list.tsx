@@ -2,6 +2,7 @@
 
 import { use, useEffect } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 import { setCookie } from "cookies-next/client";
 import dayjs from "dayjs";
@@ -9,15 +10,17 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { decode } from "html-entities";
 import localforage from "localforage";
-import LZString from "lz-string";
+import useSWR from "swr";
 
-import { convertTimeStringToReadable, getYoutubeVideoId } from "@/lib/utils";
-import { useArticleContent } from "@/store/article-content";
-import { useFolderName } from "@/store/folder-name";
+import { ERROR_MESSAGE } from "@/lib/constants";
+import {
+  convertTimeStringToReadable,
+  fetcher,
+  getYoutubeVideoId,
+} from "@/lib/utils";
 import { FeedItemType, FeedListType } from "@/types";
 
 import PodcastPlayButton from "./PodcastPlayButton";
-import SaveArticles from "./save-articles";
 import YouTubePlayButton from "./YouTubePlayButton";
 
 dayjs.extend(relativeTime);
@@ -94,33 +97,127 @@ function categorizeFeedItems(feedItems: FeedItemType[]) {
   return categorized;
 }
 
+function getLabel(date: string) {
+  const now = dayjs();
+  const d = dayjs(date);
+
+  if (d.isSame(now, "day")) return "Today";
+  if (d.isSame(now.subtract(1, "day"), "day")) return "Yesterday";
+
+  if (d.isSame(now, "week")) return "This Week";
+  if (d.isSame(now, "month")) return "This Month";
+
+  if (d.isSame(now.subtract(1, "month"), "month")) return "Last Month";
+
+  if (d.isSame(now, "year")) return "This Year";
+
+  return d.format("YYYY"); // older → year
+}
+
 export default function FeedList({
-  feedList,
-  getBookmarksPromise,
+  feedUrl,
+  // feedList,
+  // getBookmarksPromise,
   // folderName,
 }: {
-  feedList: any;
-  getBookmarksPromise: any;
+  feedUrl: string;
+  // feedList: any;
+  // getBookmarksPromise: any;
   // folderName: string;
 }) {
   //  const sortFirstTenFeedsByDate = feedList.items
   //   .slice(0, 10)
   //   .sort((a, b) => (dayjs(a.isoDate).isAfter(dayjs(b.isoDate)) ? -1 : 1));
-  const bookmarks = use(getBookmarksPromise) as [];
+
+  // const sp = useSearchParams();
+
+  // const feedUrl = sp.get("feedUrl") as string;
+
+  const {
+    data: feedList,
+    isLoading,
+    error: feedListError,
+  } = useSWR(
+    `/api/get-feed-data?feedUrl=${encodeURIComponent(feedUrl)}`,
+
+    fetcher,
+    {
+      shouldRetryOnError: false,
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      // throwOnError: false,
+      // suspense: true,
+      // revalidateOnMount: false,
+    },
+  );
+  const { data: bookmarks, error: bookmarksError } = useSWR(
+    "/api/get-bookmarks",
+    fetcher,
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      revalidateOnMount: false,
+    },
+  );
 
   useEffect(() => {
-    localforage
-      .setItem("browse-feed", feedList)
-      .then(function (value) {
-        // Do other things once the value has been saved.
-        console.log(value);
-      })
-      .catch(function (err) {
-        // This code runs if there were any errors
-        console.log(err);
-      });
+    if (feedList) {
+      localforage
+        .setItem("browse-feed", feedList)
+        .then(function (value) {
+          // Do other things once the value has been saved.
+          console.log(value);
+        })
+        .catch(function (err) {
+          // This code runs if there were any errors
+          console.log(err);
+        });
+    }
   }, [feedList]);
 
+  console.log({ feedListError });
+
+  if (isLoading) {
+    return <FeedListFallback />;
+  }
+
+  if (feedListError?.status === 502) {
+    return <div className="px-4 text-danger">Unable to access this feed!</div>;
+  }
+
+  if (feedListError?.status === 500 && feedUrl.includes("youtube.com")) {
+    return (
+      <div className="px-4 text-danger">
+        Looks like YouTube feeds are temporarily unavailable. Please check back
+        shortly.
+      </div>
+    );
+  }
+
+  if (feedListError?.status === 500) {
+    return <div>{ERROR_MESSAGE}</div>;
+  }
+
+  // if (feedUrlError?.status === 500) {
+  //   return "FEED URL ERROR";
+  // }
+
+  // if (bookmarksError?.status === 500 || feedUrlError?.status === 500) {
+  //   return bookmarksError?.info.msg || feedUrlError.info.msg;
+  // }
+
+  return <FeedListItems bookmarks={bookmarks} feedList={feedList} />;
+}
+
+function FeedListItems({
+  bookmarks,
+  feedList,
+}: {
+  bookmarks: any;
+  feedList: any;
+}) {
   const modBookmarks = bookmarks.map((item: any) => {
     return {
       bookmarkId: item.id,
@@ -145,7 +242,7 @@ export default function FeedList({
   });
 
   // console.log({ modFeedList });
-  console.log({ modFeedListItem: modFeedList[0] });
+  // console.log({ modFeedListItem: modFeedList[0] });
   // const bookmarksIds = bookmarks.map(bookmark => JSON.parse(bookmark.bookmarkItem) );
 
   // console.log({ bookmarks });
@@ -154,11 +251,46 @@ export default function FeedList({
 
   // })
 
-  const categorizedFeedItemsList = categorizeFeedItems(modFeedList);
+  // const categorizedFeedItemsList = categorizeFeedItems(modFeedList);
 
   // console.log({
   //   categorizedFeedItemsList: categorizedFeedItemsList,
   // });
+  const groupedList = Object.groupBy(modFeedList, ({ isoDate }) => {
+    const now = dayjs();
+    const d = dayjs(isoDate);
+
+    if (d.isSame(now, "day")) return "Today";
+    if (d.isSame(now.subtract(1, "day"), "day")) return "Yesterday";
+
+    if (d.isSame(now, "week")) return "This Week";
+    if (d.isSame(now, "month")) return "This Month";
+
+    if (d.isSame(now.subtract(1, "month"), "month")) return "Last Month";
+
+    if (d.isSame(now, "year")) return "This Year";
+
+    return "Older";
+  });
+  // const groupedList = modFeedList.reduce((map, item) => {
+  //   const { isoDate } = item;
+  //   const now = dayjs();
+  //   const d = dayjs(isoDate);
+
+  //   let key;
+  //   if (d.isSame(now, "day")) key = "Today";
+  //   else if (d.isSame(now.subtract(1, "day"), "day")) key = "Yesterday";
+  //   else if (d.isSame(now, "week")) key = "This Week";
+  //   else if (d.isSame(now, "month")) key = "This Month";
+  //   else if (d.isSame(now.subtract(1, "month"), "month")) key = "Last Month";
+  //   else if (d.isSame(now, "year")) key = "This Year";
+  //   else key = d.format("YYYY");
+
+  //   if (!map.has(key)) map.set(key, []);
+  //   map.get(key).push(item);
+  //   return map;
+  // }, new Map());
+  console.log({ groupFeedList: groupedList });
   return (
     <>
       {/* <SaveArticles feedList={feedList} /> */}
@@ -171,219 +303,29 @@ export default function FeedList({
       console.log({ enclosure: item.enclosure });
       return <FeedItem feedList={feedList} item={item} i={i} key={i} />;
     })} */}
-        {categorizedFeedItemsList.today.length > 0 && (
-          // <div>
-          //   <h1 className="mb-[10px] font-medium text-brand-primary">Today</h1>
-          //   {categorizedFeedItemsList.today.map((item, i) => (
-          //     <FeedItem feedList={feedList} item={item} key={i} />
-          //   ))}
-          // </div>
-          <div className="group/today">
-            <h1 className="text-brand-primary group-hover/today:text-text-primary mb-[5px] px-4 font-medium transition-[color]">
-              Today
-            </h1>
+        {feedList.isStale ? (
+          <p className="px-4 text-brand-primary">
+            Showing last updated content
+          </p>
+        ) : null}
 
-            {categorizedFeedItemsList.today.map((item, i) => (
-              <FeedItem
-                feedList={feedList}
-                item={item}
-                key={i}
-                // folderName={folderName}
-              />
-            ))}
-          </div>
-        )}
-        {categorizedFeedItemsList.yesterday.length > 0 && (
-          // <>
-          //   <h1 className="mb-[10px] font-medium text-brand-primary">
-          //     Yesterday
-          //   </h1>
-          //   {categorizedFeedItemsList.yesterday.map((item, i) => (
-          //     <FeedItem feedList={feedList} item={item} key={i} />
-          //   ))}
-          // </>
-          <div className="group/yesterday">
-            <h1 className="text-brand-primary group-hover/yesterday:text-text-primary mb-[5px] px-4 font-medium transition-[color]">
-              Yesterday
-            </h1>
-
-            {categorizedFeedItemsList.yesterday.map((item, i) => (
-              <FeedItem
-                feedList={feedList}
-                item={item}
-                key={i}
-                // folderName={folderName}
-              />
-            ))}
-          </div>
-        )}
-        {categorizedFeedItemsList.thisWeek.length > 0 && (
-          // <div>
-          //   <h1 className="mb-[10px] font-medium text-brand-primary">
-          //     This Week
-          //   </h1>
-          //   {categorizedFeedItemsList.thisWeek.map((item, i) => (
-          //     <FeedItem feedList={feedList} item={item} key={i} />
-          //   ))}
-          // </div>
-          <div className="group/thisWeek">
-            <h1 className="text-brand-primary group-hover/thisWeek:text-text-primary mb-[5px] px-4 font-medium transition-[color]">
-              This Week
-            </h1>
-
-            {categorizedFeedItemsList.thisWeek.map((item, i) => (
-              <FeedItem
-                feedList={feedList}
-                item={item}
-                key={i}
-                // folderName={folderName}
-              />
-            ))}
-          </div>
-        )}
-        {categorizedFeedItemsList.lastWeek.length > 0 && (
-          // <>
-          //   <h1 className="mb-[10px] font-medium text-brand-primary">
-          //     Last Week
-          //   </h1>
-          //   {categorizedFeedItemsList.lastWeek.map((item, i) => (
-          //     <FeedItem feedList={feedList} item={item} key={i} />
-          //   ))}
-          // </>
-          <div className="group/lastWeek">
-            <h1 className="text-brand-primary group-hover/lastWeek:text-text-primary mb-[5px] px-4 font-medium transition-[color]">
-              Last Week
-            </h1>
-
-            {categorizedFeedItemsList.lastWeek.map((item, i) => (
-              <FeedItem
-                feedList={feedList}
-                item={item}
-                key={i}
-                // folderName={folderName}
-              />
-            ))}
-          </div>
-        )}
-        {categorizedFeedItemsList.thisMonth.length > 0 && (
-          <div className="group/thisMonth">
-            <h1 className="text-brand-primary group-hover/thisMonth:text-text-primary mb-[5px] px-4 font-medium transition-[color]">
-              This Month
-            </h1>
-
-            {categorizedFeedItemsList.thisMonth.map((item, i) => (
-              <FeedItem
-                feedList={feedList}
-                item={item}
-                key={i}
-                // folderName={folderName}
-              />
-            ))}
-          </div>
-        )}
-        {categorizedFeedItemsList.lastMonth.length > 0 && (
-          // <>
-          //   <h1 className="mb-[10px] font-medium text-brand-primary">
-          //     Last Month
-          //   </h1>
-          //   {categorizedFeedItemsList.lastMonth.map((item, i) => (
-          //     <FeedItem feedList={feedList} item={item} key={i} />
-          //   ))}
-          // </>
-          <div className="group/lastMonth">
-            <h1 className="text-brand-primary group-hover/lastMonth:text-text-primary mb-[5px] px-4 font-medium transition-[color]">
-              Last Month
-            </h1>
-
-            {categorizedFeedItemsList.lastMonth.map((item, i) => (
-              <FeedItem
-                feedList={feedList}
-                item={item}
-                key={i}
-                // folderName={folderName}
-              />
-            ))}
-          </div>
-        )}
-        {categorizedFeedItemsList.thisYear.length > 0 && (
-          // <>
-          //   <h1 className="mb-[10px] font-medium text-brand-primary">
-          //     This Year
-          //   </h1>
-          //   {categorizedFeedItemsList.thisYear.map((item, i) => (
-          //     <FeedItem feedList={feedList} item={item} key={i} />
-          //   ))}
-          // </>
-          <div className="group/thisYear">
-            <h1 className="text-brand-primary group-hover/thisYear:text-text-primary mb-[5px] px-4 font-medium transition-[color]">
-              This Year
-            </h1>
-
-            {categorizedFeedItemsList.thisYear.map((item, i) => (
-              <FeedItem
-                feedList={feedList}
-                item={item}
-                key={i}
-                // folderName={folderName}
-              />
-            ))}
-          </div>
-        )}
-        {categorizedFeedItemsList.lastYear.length > 0 && (
-          // <>
-          //   <h1 className="mb-[10px] font-medium text-brand-primary">
-          //     Last Year
-          //   </h1>
-          //   {categorizedFeedItemsList.lastYear.map((item, i) => (
-          //     <FeedItem feedList={feedList} item={item} key={i} />
-          //   ))}
-          // </>
-          <div className="group/lastYear">
-            <h1 className="text-brand-primary group-hover/lastYear:text-text-primary mb-[5px] px-4 font-medium transition-[color]">
-              Last Year
-            </h1>
-
-            {categorizedFeedItemsList.lastYear.map((item, i) => (
-              <FeedItem
-                feedList={feedList}
-                item={item}
-                key={i}
-                // folderName={folderName}
-              />
-            ))}
-          </div>
-        )}
-
-        {Object.keys(categorizedFeedItemsList.older).length !== 0 && (
-          <>
-            {Object.keys(categorizedFeedItemsList.older)
-              .sort((a, b) => Number(b) - Number(a))
-              .map((item, i) => (
-                // <>
-                //   <h1 className="mb-[10px] font-medium text-brand-primary">
-                //     {item}
-                //   </h1>
-                //   {categorizedFeedItemsList.older[item].map((item, i) => (
-                //     <FeedItem feedList={feedList} item={item} key={i} />
-                //   ))}
-                // </>
-                <div key={i} className="group/older">
-                  <h1 className="text-brand-primary group-hover/older:text-text-primary mb-[5px] px-4 font-medium transition-[color]">
-                    {item}
-                  </h1>
-
-                  {categorizedFeedItemsList.older[item].map((item, i) => (
-                    <FeedItem
-                      feedList={feedList}
-                      item={item}
-                      key={i}
-                      // folderName={folderName}
-                    />
-                  ))}
-                </div>
+        {Object.entries(groupedList).map(([title, items]) => (
+          <div key={title} className="group">
+            <h2 className="text-brand-primary font-medium px-4 group-hover:text-text-primary">
+              {title}
+            </h2>
+            <div className="flex flex-col gap-4">
+              {items.map((item, i) => (
+                <FeedItem
+                  feedList={feedList}
+                  item={item}
+                  key={i}
+                  // folderName={folderName}
+                />
               ))}
-          </>
-        )}
+            </div>
+          </div>
+        ))}
       </div>
     </>
   );
@@ -577,3 +519,38 @@ const PodcastCard = ({
     </div>
   );
 };
+
+function FeedListFallback() {
+  return (
+    <div className="animate-pulse flex flex-col gap-5 px-4">
+      <div className="h-7 w-56 bg-ui-normal rounded"></div>
+      <div className="flex flex-col  space-y-3">
+        <div className="h-14 w-full flex justify-between items-center">
+          <div className="rounded bg-ui-normal h-7 w-56"></div>
+          <div className="rounded bg-ui-normal h-7 w-20"></div>
+        </div>
+        <div className="flex-1 space-y-3">
+          <div className="h-5 rounded bg-ui-normal"></div>
+          <div className="h-5 rounded bg-ui-normal"></div>
+          <div className="h-5 rounded bg-ui-normal"></div>
+        </div>
+      </div>
+
+      {Array.from({ length: 10 }).map((_, i, a) => {
+        return (
+          <div key={i} className="flex flex-col  space-y-3 ">
+            <div className="h-14 w-full flex justify-between items-center">
+              <div className="rounded bg-ui-normal h-7 w-56"></div>
+              <div className="rounded bg-ui-normal h-7 w-20"></div>
+            </div>
+            <div className="flex-1 space-y-3">
+              <div className="h-5 rounded bg-ui-normal"></div>
+              <div className="h-5 rounded bg-ui-normal"></div>
+              <div className="h-5 rounded bg-ui-normal"></div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}

@@ -48,6 +48,7 @@ function CustomYouTubeModal({
   onOpenChange: () => void;
   bookmarkId?: string;
 }) {
+  console.log({ feedItem });
   // useHotkeys("f11", () => {
   //   const ytPlayer = document.querySelector("iframe");
 

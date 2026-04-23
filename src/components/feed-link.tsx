@@ -15,6 +15,8 @@ export default function FeedLinks({ records }: { records: any }) {
   const sp = useSearchParams();
   const feedUrl = sp.get("feedUrl");
 
+  if (records.length === 0) return null;
+
   return (
     <>
       {records.map((record, i) => (

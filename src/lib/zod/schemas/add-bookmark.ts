@@ -13,6 +13,7 @@ const sanitizedString = z.preprocess(sanitizeInputString, z.string());
 const sanitizedUrl = z.preprocess(sanitizeInputString, z.string().url());
 
 export const addBookmarkSchema = z.object({
+  did: z.string(),
   bookmarkLink: z.union([sanitizedString, sanitizedUrl]),
   bookmarkType: sanitizedString,
   bookmarkTitle: sanitizedString,

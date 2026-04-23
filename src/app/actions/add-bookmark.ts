@@ -1,45 +1,48 @@
 "use server";
 
-import { revalidateTag, updateTag } from "next/cache";
+import { refresh, revalidateTag, updateTag } from "next/cache";
 
 import { auth } from "@clerk/nextjs/server";
-
-import { db } from "@/db/db";
-import * as schema from "@/db/schema";
 // import { getXataClient } from "@/xata";
 
 // const xata = getXataClient();
 
-import { getSession } from "@/lib/auth/session";
+import { count, eq } from "drizzle-orm";
+
+import { db } from "@/db/db";
+import { getBookmarks } from "@/db/queries";
+import * as schema from "@/db/schema";
+import { getDid, getSession } from "@/lib/auth/session";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import { getErrorMessage } from "@/lib/utils";
 import { addBookmarkSchema } from "@/lib/zod/schemas/add-bookmark";
 
-export async function addBookmarkAction(formData: FormData) {
-  console.log("Server action");
+class BookmarkLimitError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "BookmarkLimitError";
+  }
+}
 
+export async function addBookmarkAction(formData: FormData) {
   try {
-    // throw new Error("");
-    // const userId = (await auth()).userId as string;
-    // const session = await getSession();
-    // if (!session) {
-    //   throw new Error("You must be signed in to add a bookmark");
-    // }
+    const session = await getSession();
+
+    if (!session) {
+      return {
+        type: "error",
+        message: "Authentication required.",
+      };
+    }
+
+    const did = session?.sub as string;
 
     const bookmarkLink = formData.get("bookmarkLink") as string;
     const bookmarkType = formData.get("bookmarkType") as string;
     const bookmarkTitle = formData.get("bookmarkTitle") as string;
-    const bookmarkItem = formData.get("bookmarkFeedItem") as string;
+    const bookmarkItem = formData.get("bookmarkItem") as string;
 
     console.log({ bookmarkItem: JSON.parse(bookmarkItem) });
-
-    // return {
-    //   type: "success",
-    //   message: "success",
-    //   // bookmarkId: data[0].bookmarkId,
-    //   // isBookmarkExists: true,
-    // };
-    //
 
     const modBookmarkItem = {
       ...JSON.parse(bookmarkItem),
@@ -47,6 +50,7 @@ export async function addBookmarkAction(formData: FormData) {
     };
 
     const rawFormData = {
+      did,
       bookmarkLink,
       bookmarkType,
       bookmarkTitle,
@@ -60,7 +64,7 @@ export async function addBookmarkAction(formData: FormData) {
     if (!validateData.success) {
       console.log(validateData.error.flatten().fieldErrors);
       return {
-        type: "user-error",
+        type: "error",
         message: "Something went wrong from your end!",
         // errors: data.error.flatten().fieldErrors,
         // inputs: rawFormData,
@@ -69,33 +73,44 @@ export async function addBookmarkAction(formData: FormData) {
 
     console.log("SUCCESS");
 
-    // return;
+    const bookmark = await db.transaction(async (tx) => {
+      const [{ bookmarksCount }] = await tx
+        .select({ bookmarksCount: count() })
+        .from(schema.bookmarks)
+        .where(eq(schema.bookmarks.did, session?.did as string));
+      console.log({ bookmarksCount });
 
-    // const data = await xata.db.bookmarks.create({
-    //   userId,
-    //   bookmarkLink,
-    //   bookmarkType,
-    //   bookmarkTitle,
-    //   bookmarkFeedItem,
-    // });
+      if (bookmarksCount > 10) {
+        throw new BookmarkLimitError("Bookmark limit (10) reached.");
+      }
 
-    const data = await db
-      .insert(schema.bookmarks)
-      .values(rawFormData)
-      .returning({ bookmarkId: schema.bookmarks.id });
+      const [newBookmark] = await tx
+        .insert(schema.bookmarks)
+        .values(rawFormData)
+        .returning({ bookmarkId: schema.bookmarks.id });
 
-    console.log({ data });
+      return newBookmark;
+    });
 
-    revalidateTag("user-did:plc:fhhygitymqyet5inny6klful-bookmarks", "max");
+    // refresh();
 
     return {
       type: "success",
       message: "success",
-      bookmarkId: data[0].bookmarkId,
-      isBookmarkExists: true,
+      bookmarkId: bookmark.bookmarkId,
+      // isBookmarkExists: true,
     };
   } catch (err) {
-    //send error to 3rd party services like sentry //TODO:
-    return { type: "internal-error", message: INTERNAL_ERROR_MESSAGE };
+    if (err instanceof BookmarkLimitError) {
+      return {
+        type: "error",
+        message: err.message,
+      };
+    }
+
+    return {
+      type: "error",
+      message: INTERNAL_ERROR_MESSAGE,
+    };
   }
 }

@@ -71,6 +71,7 @@ export const todayFeeds = pgTable(
 
 export const bookmarks = pgTable("bookmarks", {
   id: uuid("id").primaryKey().defaultRandom(),
+  did: text("did").notNull(),
   bookmarkLink: text("bookmark_link").notNull(),
   bookmarkType: text("bookmark_type").notNull(),
   bookmarkTitle: text("bookmark_title").notNull(),

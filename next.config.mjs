@@ -14,6 +14,9 @@ const nextConfig = {
   },
   experimental: {
     typedEnv: true,
+    // staleTimes: {
+    //   dynamic: 180,
+    // },
   },
   allowedDevOrigins: ["127.0.0.1"],
 };

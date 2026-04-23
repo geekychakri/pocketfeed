@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { cookies } from "next/headers";
 
 import { Agent } from "@atproto/api";
@@ -5,7 +6,7 @@ import type { OAuthSession } from "@atproto/oauth-client-node";
 
 import { getOAuthClient } from "./client";
 
-export async function getSession(): Promise<OAuthSession | null> {
+export const getSession = cache(async () => {
   const did = await getDid();
   if (!did) return null;
 
@@ -15,7 +16,19 @@ export async function getSession(): Promise<OAuthSession | null> {
   } catch {
     return null;
   }
-}
+});
+
+// export async function getSession(): Promise<OAuthSession | null> {
+//   const did = await getDid();
+//   if (!did) return null;
+
+//   try {
+//     const client = await getOAuthClient();
+//     return await client.restore(did);
+//   } catch {
+//     return null;
+//   }
+// }
 
 export async function getSessionAgent(): Promise<Agent | null> {
   const did = await getDid();

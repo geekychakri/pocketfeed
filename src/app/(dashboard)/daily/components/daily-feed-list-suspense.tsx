@@ -9,7 +9,7 @@ import { getSelectedFeeds } from "@/db/queries";
 import FeedItem from "./feed-item";
 
 const parser = new Parser({
-  timeout: 5000,
+  timeout: 8000,
 });
 
 const completeItems = [];
@@ -54,7 +54,7 @@ async function FeedSection({
   try {
     const fetchUrl = await fetch(feedUrl, {
       next: {
-        revalidate: 5000,
+        revalidate: 3600,
         tags: [`feed-${feedUrl}`],
       },
     });

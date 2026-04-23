@@ -6,13 +6,14 @@ import Link from "next/link";
 import { ChevronRightIcon, ReaderIcon } from "@radix-ui/react-icons";
 import { JSONData, RecordArray, SelectedPick } from "@xata.io/client";
 import { decode } from "html-entities";
+import useSWR from "swr";
 import { WindowVirtualizer } from "virtua";
 
 import { SpinnerRotate } from "@/components/spinner-rotate";
 import Button from "@/components/ui/custom-button";
 
 import { useAddBookmarks } from "@/hooks/useAddBookmarks";
-import { getYoutubeVideoId } from "@/lib/utils";
+import { fetcher, getYoutubeVideoId } from "@/lib/utils";
 import { useBookmarksStore } from "@/store/bookmark-store";
 import { BookmarksRecord } from "@/xata";
 
@@ -21,79 +22,55 @@ import YouTubeModal from "../../(feed)/feed/components/YouTubeModal";
 import YouTubePlayButton from "../../(feed)/feed/components/YouTubePlayButton";
 import BookmarkDelete from "./bookmark-delete";
 
-// type BookmarkListType = {
-//   // initialBookmarks: JSONData<Readonly<SelectedPick<BookmarksRecord, ["*"]>>>[];
-//   // initialPageInfo: any;
-//   bookmarks: JSONData<Readonly<SelectedPick<BookmarksRecord, ["*"]>>>[];
-// };
+export default function BookmarkList() {
+  // throw new Error("");
+  // const bookmarks = use(bookmarksPromise);
 
-export default function BookmarkList({
-  // initialBookmarks,
-  // initialPageInfo,
-  bookmarksPromise,
-}: {
-  bookmarksPromise: any;
-}) {
-  // console.log({ initialBookmarks });
-  // const [bookmarksList, setBookmarksList] = useState(bookmarks);
+  const { data: bookmarks, error: dailyFeedsError } = useSWR(
+    "/api/get-bookmarks",
+    fetcher,
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      revalidateOnMount: false,
+      // suspense: true,
+    },
+  );
 
-  // const removeBookmark = (id: string) => {
-  //   const updatedBookmarks = bookmarksList.filter(
-  //     (bookmarkItem, _) => bookmarkItem.id !== id,
-  //   );
-  //   console.log({ updatedBookmarks });
-  //   setBookmarksList(updatedBookmarks);
-  // };
-
-  // const bookmarks = useBookmarksStore((state) => state.bookmarks);
+  console.log({ bookmarks });
 
   // console.log({ bookmarks });
-
-  // const [pageInfo, setPageInfo] = useState(initialPageInfo);
-  // const [loading, setLoading] = useState(false);
-  // const [error, setError] = useState<string | null>(null);
-
-  // const addBookmarks = useAddBookmarks();
-  // const loadMore = async () => {
-  //   if (!pageInfo.hasNextPage || !pageInfo.cursor) return;
-
-  //   setLoading(true);
-  //   try {
-  //     const response = await fetch(
-  //       `/api/loadMoreBookmarks?cursor=${encodeURIComponent(pageInfo.cursor)}`,
-  //     );
-
-  //     if (!response.ok) {
-  //       throw new Error("Failed to fetch more posts");
-  //     }
-
-  //     const data = await response.json();
-
-  //     // setFeeds((prevPosts: any) => [...prevPosts, ...data.posts]);
-
-  //     console.log({ data });
-
-  //     addBookmarks(data.posts);
-  //     setPageInfo(data.pageInfo);
-  //   } catch (err) {
-  //     let message;
-  //     if (err instanceof Error) message = err.message;
-  //     else message = String(error);
-  //     // toast.error(message);
-  //     setError(message);
-  //     console.error("Error loading more posts:", err);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  const bookmarks = use(bookmarksPromise);
-
+  if (bookmarks.length === 0) {
+    return (
+      <div className="flex flex-col gap-4 items-center justify-center h-80">
+        <span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="60"
+            height="60"
+            viewBox="0 0 24 24"
+          >
+            <g fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path d="M4 8c0-2.828 0-4.243.879-5.121C5.757 2 7.172 2 10 2h4c2.828 0 4.243 0 5.121.879C20 3.757 20 5.172 20 8v8c0 2.828 0 4.243-.879 5.121C18.243 22 16.828 22 14 22h-4c-2.828 0-4.243 0-5.121-.879C4 20.243 4 18.828 4 16z" />
+              <path d="M19.898 16h-12c-.93 0-1.395 0-1.777.102A3 3 0 0 0 4 18.224" />
+              <path
+                strokeLinecap="round"
+                d="M8 7h8m-8 3.5h5m0 5.5v3.53c0 .276 0 .414-.095.47s-.224-.006-.484-.13l-1.242-.59c-.088-.04-.132-.062-.179-.062s-.091.021-.179.063l-1.242.59c-.26.123-.39.185-.484.129C9 19.944 9 19.806 9 19.53v-3.08"
+              />
+            </g>
+          </svg>
+        </span>
+        <span>No bookmarks yet!</span>
+      </div>
+    );
+  }
   return (
     <>
       <div className="flex flex-col gap-4">
         {/*<WindowVirtualizer>*/}
         {bookmarks.map((bookmark) => {
+          console.log({ bookmark });
           return (
             <div
               key={bookmark.id}

@@ -1,28 +1,16 @@
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
-import { cookies } from "next/headers";
 
-import { ClerkProvider } from "@clerk/nextjs";
-import { getCookie } from "cookies-next/server";
-import { preload } from "react-dom";
 import { SWRConfig } from "swr";
 
-import CollapsibleFolders from "@/components/collapsible-folders";
-import DrawerProfileLink from "@/components/drawer-profile-link";
 import FeedList from "@/components/feed-list";
-import FolderList from "@/components/folder-list";
 import MobileNav from "@/components/mobile-nav";
 import PodcastLoader from "@/components/podcast-loader";
 import ProfileAvatarWrapper from "@/components/profile-avatar-wrapper";
-import ReparentChild from "@/components/reparent-child";
-import ReparentComponent2 from "@/components/reparent-component-2";
 import SidebarNavigation from "@/components/sidebar-nav";
-import TestNav from "@/components/test-nav";
 
-import { getUserFeeds } from "@/db/queries";
-import { getProfile } from "@/lib/atproto/queries";
-import { getDid } from "@/lib/auth/session";
-import { getDailyFeed } from "@/lib/dal/daily-feed";
+import { getBookmarks, getSelectedFeeds, getUserFeeds } from "@/db/queries";
+
+// import { getProfile } from "@/lib/atproto/queries";
 
 import YouTubeModal from "./(feed)/feed/components/YouTubeModal";
 
@@ -32,7 +20,11 @@ export default async function MainLayout({
   children: React.ReactNode;
 }>) {
   // preload("/api/daily-feeds", { as: "fetch", crossOrigin: "anonymous" });
-  const getProfilePromise = getProfile();
+  // const getProfilePromise = getProfile();
+
+  const bookmarksPromise = getBookmarks();
+  const getSelectedFeedsPromise = getSelectedFeeds();
+  const getUserFeedsPromise = getUserFeeds();
 
   return (
     <div className="flex max-[768px]:flex-col w-full">
@@ -58,17 +50,23 @@ export default async function MainLayout({
         </Suspense>
       </SidebarNavigation>
 
-      <PodcastLoader />
-      <YouTubeModal />
-      {/* <ReparentChild /> */}
-      {/* <ClerkProvider dynamic> */}
       <main className="flex-1" id="main">
         <MobileNav />
 
-        {children}
+        <SWRConfig
+          value={{
+            fallback: {
+              "/api/get-bookmarks": bookmarksPromise,
+              "/api/get-daily-feeds": getSelectedFeedsPromise,
+              "/api/get-user-feeds": getUserFeedsPromise,
+            },
+          }}
+        >
+          {children}
+          <PodcastLoader />
+          <YouTubeModal />
+        </SWRConfig>
       </main>
-
-      {/* </ClerkProvider> */}
     </div>
   );
 }
