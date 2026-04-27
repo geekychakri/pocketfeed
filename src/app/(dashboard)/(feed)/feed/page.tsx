@@ -24,7 +24,7 @@ export default async function Feed(props: {
   }));
 
   return (
-    <div className="flex flex-col py-14">
+    <div className="flex flex-col py-18">
       {/*<YouTubeModal />*/}
       {/*<Dummy />*/}
       <Suspense fallback={null}>
@@ -53,8 +53,8 @@ const FeedHeader = async ({
   console.log("FEED HEADER RENDERED");
   const { title, feedUrl } = await feedSearchParamPromise;
   return (
-    <div className="relative mb-5 flex items-center px-4">
-      <RouteBack className="absolute -left-12 border" />
+    <div className="relative mb-8 flex items-center px-4">
+      <RouteBack className="absolute -left-12 border-dashed" />
       <h1 className="font-medium">{title || new URL(feedUrl).hostname}</h1>
     </div>
   );

@@ -15,6 +15,10 @@ import { motion } from "framer-motion";
 import { toast } from "sonner";
 import useSound from "use-sound";
 
+import { SpinnerRotate } from "@/components/spinner-rotate";
+import Button from "@/components/ui/custom-button";
+import Input from "@/components/ui/custom-input";
+
 // const SocialOauth = dynamic(() => import("@/components/social-oauth"), {
 //   ssr: false,
 //   loading: () => (
@@ -24,11 +28,7 @@ import useSound from "use-sound";
 //   ),
 // });
 
-import SocialOauth from "@/components/social-oauth";
-import { SpinnerRotate } from "@/components/spinner-rotate";
-import Button from "@/components/ui/custom-button";
-import Input from "@/components/ui/custom-input";
-
+import SocialOauth from "@/app/(auth)/signin/[[...signin]]/components/social-oauth";
 import { createUser } from "@/app/actions";
 import { useNavigatorOnline } from "@/hooks/useNavigatorOnline";
 

@@ -183,7 +183,7 @@ export default function SidebarNavigation({
       <nav
         id="sidebar"
         className={cn(
-          `text-textColor bg-background-primary fixed top-0 bottom-0 left-0 isolate z-30 h-screen w-[256px]  grid grid-rows-[56px_56px_auto_minmax(0,1fr)_56px] shadow-[1px_0_0_0_var(--border-non-interactive)] transition-[translate] duration-150 select-none max-md:-translate-x-full`,
+          `text-textColor bg-background-primary fixed top-0 bottom-0 left-0 isolate z-30 h-screen w-[256px]  grid grid-rows-[56px_56px_auto_minmax(0,1fr)_56px] border-r border-dashed border-border-primary transition-[translate] duration-150 select-none max-md:-translate-x-full`,
           isOpen && "max-md:translate-x-0",
         )}
       >
@@ -193,7 +193,7 @@ export default function SidebarNavigation({
           </h1>
         </div>
 
-        <div className="flex items-center justify-between gap-3 px-3 shadow-[0_-1px_0_0_var(--border-non-interactive)]">
+        <div className="flex items-center justify-between gap-3 px-3 border-dashed-y">
           <Link
             href="/add"
             className="bg-ui-normal border-shadow hover:bg-ui-hover flex h-9 flex-1 items-center justify-center rounded-md font-medium transition-[background-color]"

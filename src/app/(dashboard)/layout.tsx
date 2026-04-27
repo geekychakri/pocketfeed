@@ -35,7 +35,7 @@ export default async function MainLayout({
       //   </Suspense>
       // }
       >
-        <div className="min-h-0 flex flex-col shadow-[0_-1px_0_0_var(--border-non-interactive)]">
+        <div className="min-h-0 flex flex-col border-dashed-b">
           <h2 className="px-3 py-2 text-text-secondary bg-background-primary">
             Subscriptions
           </h2>

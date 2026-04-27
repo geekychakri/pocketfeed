@@ -62,7 +62,7 @@ export default function SideNavClient() {
   const layoutSegment = useSelectedLayoutSegment();
   const { setIsOpen } = useToggleSidenav();
   return (
-    <div className="flex flex-col gap-1 py-[10px] shadow-[0_-1px_0_0_var(--border-non-interactive)]">
+    <div className="flex flex-col gap-1 py-[10px]  border-dashed-b">
       {links.map(({ label, path, segment, icon: Icon }, i) => {
         const isActive = layoutSegment === segment;
 

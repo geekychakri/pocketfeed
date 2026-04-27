@@ -1,8 +1,5 @@
 import { Suspense } from "react";
 
-import { auth } from "@clerk/nextjs/server";
-import { SWRConfig } from "swr";
-
 import RouteBack from "@/components/route-back";
 import { SpinnerRotate } from "@/components/spinner-rotate";
 
@@ -22,8 +19,8 @@ export default function Page() {
   // const getSelectedFeedsPromise = getSelectedFeeds();
   // const getUserFeedsPromise = getUserFeeds();
   return (
-    <div className="mx-auto w-full max-w-[750px] border-r border-l min-h-screen shadow-[0_0px_10px_1px_var(--border-non-interactive)]">
-      <div className="flex  justify-between gap-2 h-14 items-center border-b px-4">
+    <div className="mx-auto w-full max-w-[750px] min-h-screen border-x border-dashed border-border-primary">
+      <div className="flex  justify-between gap-2 h-14 items-center border-b border-dashed border-border-primary px-4">
         <div className="flex gap-2">
           <RouteBack />
           <h1 className="font-medium">Daily</h1>

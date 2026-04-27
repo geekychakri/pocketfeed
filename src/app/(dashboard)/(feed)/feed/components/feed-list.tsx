@@ -197,7 +197,7 @@ export default function FeedList({
   }
 
   if (feedListError?.status === 500) {
-    return <div>{ERROR_MESSAGE}</div>;
+    return <div className="px-4 text-danger">{ERROR_MESSAGE}</div>;
   }
 
   // if (feedUrlError?.status === 500) {
@@ -256,7 +256,12 @@ function FeedListItems({
   // console.log({
   //   categorizedFeedItemsList: categorizedFeedItemsList,
   // });
-  const groupedList = Object.groupBy(modFeedList, ({ isoDate }) => {
+
+  const sortedFeedList = [...modFeedList].sort(
+    (a, b) => new Date(b.isoDate).getTime() - new Date(a.isoDate).getTime(),
+  );
+
+  const groupedList = Object.groupBy(sortedFeedList, ({ isoDate }) => {
     const now = dayjs();
     const d = dayjs(isoDate);
 
@@ -272,6 +277,8 @@ function FeedListItems({
 
     return "Older";
   });
+
+  console.log({ groupedList });
   // const groupedList = modFeedList.reduce((map, item) => {
   //   const { isoDate } = item;
   //   const now = dayjs();
@@ -311,21 +318,33 @@ function FeedListItems({
 
         {Object.entries(groupedList).map(([title, items]) => (
           <div key={title} className="group">
-            <h2 className="text-brand-primary font-medium px-4 group-hover:text-text-primary">
+            <h2 className="text-brand-primary font-medium px-4 mb-2 group-hover:text-text-primary">
               {title}
             </h2>
-            <div className="flex flex-col gap-4">
-              {items.map((item, i) => (
-                <FeedItem
-                  feedList={feedList}
-                  item={item}
-                  key={i}
-                  // folderName={folderName}
-                />
-              ))}
+            <div className="flex flex-col">
+              {items
+                .sort((a, b) => new Date(b.isoDate) - new Date(a.isoDate))
+                .map((item, i) => (
+                  <FeedItem
+                    feedList={feedList}
+                    item={item}
+                    key={i}
+                    // folderName={folderName}
+                  />
+                ))}
             </div>
           </div>
         ))}
+
+        <div className="px-4">
+          <a
+            className="custom-underline cursor-pointer self-start"
+            target="_blank"
+            href={feedList.link}
+          >
+            Visit original page
+          </a>
+        </div>
       </div>
     </>
   );
@@ -359,7 +378,7 @@ function FeedItem({
     );
   } else if (item.link?.includes("youtube.com")) {
     return (
-      <div className="hover:text-brand-primary flex items-center justify-between gap-5 px-4 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]">
+      <div className="hover:text-brand-primary flex items-center justify-between gap-5 p-4 border-dashed-b transition-[color]">
         <div className="flex-1">
           <span className="tracking-tight text-pretty">
             {decode(item.title)}
@@ -391,7 +410,7 @@ function FeedItem({
   }
   return (
     <div
-      className="hover:text-brand-primary relative isolate flex flex-col  gap-4 px-4 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]"
+      className="hover:text-brand-primary relative isolate flex flex-col  gap-4 p-4 border-dashed-b transition-[color]"
       // prefetch={false}
     >
       <div className="flex-1 flex items-center">
@@ -470,7 +489,7 @@ const PodcastCard = ({
 
   console.log({ duration: item?.itunes?.duration });
   return (
-    <div className="hover:text-brand-primary relative flex items-center justify-between gap-5 px-4 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]">
+    <div className="hover:text-brand-primary relative flex items-center justify-between gap-5 p-4 border-dashed-b transition-[color]">
       <span className="flex flex-1 flex-col gap-1">
         <span className="tracking-tight text-pretty">{decode(item.title)}</span>
 

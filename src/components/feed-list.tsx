@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { ScrollArea } from "@base-ui/react/scroll-area";
 import { decode } from "html-entities";
 import { SWRConfig } from "swr";
 
@@ -28,45 +29,34 @@ export default async function FeedList() {
       <div className="px-3 text-sm flex flex-col gap-3 flex-1 justify-center items-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="40"
-          height="40"
+          width="32"
+          height="32"
           viewBox="0 0 24 24"
         >
           <g fill="none" stroke="currentColor" strokeWidth="1.5" opacity={0.5}>
-            <path strokeLinecap="round" d="M22 22H2" />
-            <path d="M17 22V6c0-1.886 0-2.828-.586-3.414S14.886 2 13 2h-2c-1.886 0-2.828 0-3.414.586S7 4.114 7 6v16m14 0V11.5c0-1.405 0-2.107-.337-2.611a2 2 0 0 0-.552-.552C19.607 8 18.904 8 17.5 8M3 22V11.5c0-1.405 0-2.107.337-2.611a2 2 0 0 1 .552-.552C4.393 8 5.096 8 6.5 8" />
-            <path
-              strokeLinecap="round"
-              d="M12 22v-3M10 5h4m-4 3h4m-4 3h4m-4 3h4"
-            />
+            <path d="M3 10c0-3.771 0-5.657 1.172-6.828S7.229 2 11 2h2c3.771 0 5.657 0 6.828 1.172S21 6.229 21 10v4c0 3.771 0 5.657-1.172 6.828S16.771 22 13 22h-2c-3.771 0-5.657 0-6.828-1.172S3 17.771 3 14z" />
+            <path strokeLinecap="round" d="M8 10h8m-8 4h5" />
           </g>
         </svg>
-
-        <h2 className="text-sm text-text-secondary">Build your feed!</h2>
-        <Link href="/add" className="custom-underline">
-          Add feed
-        </Link>
-        <Link href="/settings/import_export" className="custom-underline">
-          Import OPML
-        </Link>
+        No subscriptions yet!
       </div>
     );
   }
 
   return (
-    <div className="min-h-0 flex-1 overflow-auto px-3 py-2 flex flex-col gap-4 scrollbar-gutter-stable scrollbar-width-thin">
-      <FeedLinks records={records} />
-      {/*{LONG_LIST.map((item) => (
-          <li key={item.label} className="flex">
-            <a
-              className="w-full rounded-xl bg-gray-100 px-4 py-3 text-gray-900 no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-800 focus-visible:-outline-offset-1"
-              href={item.href}
-            >
-              {item.label}
-            </a>
-          </li>
-        ))}*/}
-    </div>
+    // <div className="min-h-0 flex-1 overflow-auto px-3 py-2 flex flex-col gap-4 scrollbar-gutter-stable scrollbar-width-thin">
+    //   <FeedLinks records={records} />
+
+    // </div>
+
+    <ScrollArea.Root className="min-h-0 flex-1">
+      <ScrollArea.Viewport className="h-full flex px-3 py-2 flex-col gap-4 focus-visible:outline-2 focus-visible:outline-brand-primary">
+        <FeedLinks records={records} />
+      </ScrollArea.Viewport>
+      <ScrollArea.Scrollbar className="m-2 flex w-1 justify-center rounded-sm  opacity-0 transition-opacity pointer-events-none data-[hovering]:opacity-100 data-[hovering]:delay-0 data-[hovering]:pointer-events-auto data-[scrolling]:opacity-100 data-[scrolling]:duration-0 data-[scrolling]:pointer-events-auto">
+        <ScrollArea.Thumb className="w-full rounded-sm bg-brand-primary" />
+      </ScrollArea.Scrollbar>
+    </ScrollArea.Root>
   );
 }
 

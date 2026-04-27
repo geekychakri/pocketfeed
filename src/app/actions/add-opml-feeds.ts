@@ -1,31 +1,38 @@
 "use server";
 
-import qs from "qs";
+import { refresh } from "next/cache";
 
-export async function addOPMLFeeds(prevState: any, formData: FormData) {
-  const results = qs.parse(Object.fromEntries(formData.entries()) as {}, {
-    arrayLimit: 200,
-  });
+import { db } from "@/db/db";
+import * as schema from "@/db/schema";
+import { getDid, getSession } from "@/lib/auth/session";
 
-  // console.log({ results });
+export async function addOPMLFeeds(data: string) {
+  const did = (await getDid()) as string;
 
-  console.log(results);
+  console.log({ did });
 
-  // const feeds = results?.feeds
-  //   .filter((item) => Boolean(item.isChecked))
-  //   .map((item) => {
-  //     return {
-  //       feedUrl: item?.rssUrl,
-  //       title: item?.title,
-  //       folder: results.folder,
-  //       favicon: results.favicon,
-  //       siteUrl: results.siteUrl,
-  //     };
-  //   });
+  const session = await getSession();
 
-  // console.log({ feeds });
+  if (!session?.sub) {
+    return;
+    {
+      message: "Authentication required.";
+    }
+  }
 
-  return {
-    message: "",
-  };
+  const feedList = data.map((item) => ({ ...item, did }));
+  console.log({ feedList });
+
+  // console.log({ session: session });
+  // console.log({ did: session.did });
+
+  const res = await db
+    .insert(schema.feeds)
+    .values(feedList)
+    .onConflictDoNothing();
+
+  console.log({ res });
+
+  refresh();
+  return { message: "success" };
 }

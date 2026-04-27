@@ -21,7 +21,7 @@ export default function RouteBack({
         router.back();
       }}
       className={cn(
-        "relative flex size-6 items-center justify-center gap-3",
+        "relative flex size-6 items-center justify-center gap-3 cursor-pointer",
         className,
       )}
     >

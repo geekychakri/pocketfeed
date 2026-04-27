@@ -1,0 +1,76 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+import { SpinnerRotate } from "@/components/spinner-rotate";
+
+import AutocompleteHandle from "./autocomplete-handle";
+
+export default function SocialOauth() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  //atproto signin
+  async function handleAtProtoSignIn(e: React.SubmitEvent<HTMLFormElement>) {
+    console.log("SUBMIT LOGIN BSKY");
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+
+    const formData = new FormData(e.currentTarget);
+
+    const handle = formData.get("handle");
+
+    try {
+      const res = await fetch("/oauth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ handle }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Login failed");
+      }
+
+      // Redirect to authorization server
+      window.location.href = data.redirectUrl;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Login failed");
+      setIsLoading(false);
+    }
+  }
+  return (
+    <div>
+      <form onSubmit={handleAtProtoSignIn} className="space-y-4">
+        <AutocompleteHandle />
+
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+
+        <button className="w-full flex gap-1 items-center justify-center rounded-md bg-brand-primary/90 h-11 text-center cursor-pointer font-medium text-white select-none hover:bg-brand-primary duration-100">
+          Continue {isLoading && <SpinnerRotate />}
+        </button>
+      </form>
+    </div>
+  );
+}
+
+export function LogoutButton() {
+  const router = useRouter();
+
+  async function handleLogout() {
+    await fetch("/oauth/logout", { method: "POST" });
+    router.refresh();
+  }
+
+  return (
+    <button
+      onClick={handleLogout}
+      className="text-sm cursor-pointer border px-4 py-2 text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+    >
+      Sign out
+    </button>
+  );
+}

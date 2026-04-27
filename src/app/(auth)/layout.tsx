@@ -1,7 +1,3 @@
-import { Toaster } from "sonner";
-
-import AuthNavigation from "@/components/auth-navigation";
-
 export default function RootLayout({
   children,
 }: {
@@ -9,10 +5,11 @@ export default function RootLayout({
 }) {
   return (
     <>
-      <AuthNavigation />
+      <nav className="flex h-14 items-center px-6 border-dashed-b">Logo</nav>
+
       <main
         id="main"
-        className="mx-auto flex w-full max-w-96 flex-col gap-8 px-4 py-10"
+        className="mx-auto flex h-[calc(100vh-56px)] w-full max-w-95 border-dashed-x flex-col gap-8 px-4 py-10"
       >
         {children}
       </main>

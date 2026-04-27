@@ -1,106 +1,118 @@
-// "use client";
-
+import type { Route } from "next";
 import { Instrument_Serif } from "next/font/google";
 import Link from "next/link";
 
+import type { Variants } from "motion/react";
+import * as motion from "motion/react-client";
+
 const InstrumentSerif = Instrument_Serif({ weight: "400", subsets: ["latin"] });
 
+const fadeInUp: Variants = {
+  initial: {
+    y: 60,
+    filter: "blur(5px)",
+    opacity: 0,
+  },
+  animate: {
+    y: 0,
+    filter: "blur(0px)",
+    opacity: 1,
+    transition: {
+      duration: 0.4,
+      ease: "easeOut",
+    },
+  },
+};
+
+const fadeInDown: Variants = {
+  initial: {
+    y: -60,
+    opacity: 0,
+  },
+  animate: {
+    y: 0,
+    opacity: 1,
+
+    transition: {
+      duration: 0.4,
+      ease: "easeOut",
+    },
+  },
+};
+
+const stagger = {
+  animate: {
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
 export default async function Home() {
-  // const { isSignedIn, user, isLoaded } = useUser();
-  // console.log(user?.username);
-  "use cache";
+  // "use cache";
 
   return (
-    <div className="mx-auto max-w-[900px] py-24">
-      <nav className="flex items-center justify-between px-4 py-2">
-        Pocket Feed
-        <div className="flex items-center gap-6">
-          <p>Login</p>
-          <p>Signup</p>
-        </div>
-      </nav>
-      <div className="px-4 py-8">
-        <header className="flex flex-col gap-12">
-          <div className="flex flex-col gap-4">
-            <h1
-              className={`flex gap-4 text-center text-8xl leading-none tracking-tight ${InstrumentSerif.className}`}
-            >
-              {/* <span>
-              Less <span>Chaos</span>.
-            </span> */}
-              {/* <span className={`text-[#f84f39] ${InstrumentSerif.className}`}>
-            content
-          </span> */}
-              <span>
-                Be your own{" "}
-                <span className="text-brand-primary">algorithm</span>.
-              </span>
-            </h1>
-            <h2 className="text-2xl text-[#969696]">
-              All of your favorite content in one place.
-            </h2>
-          </div>
+    <motion.header
+      initial="initial"
+      animate="animate"
+      className="overflow-hidden"
+    >
+      <motion.div
+        className="h-screen grid grid-rows-[auto_1fr_auto]"
+        variants={stagger}
+      >
+        <motion.nav className="border-dashed-b px-8  overflow-hidden">
+          <motion.div
+            className="flex items-center justify-between h-14"
+            variants={fadeInDown}
+          >
+            Pocket Feed
+            <div className="flex items-center gap-6 text-text-secondary">
+              <p>Log in</p>
+            </div>
+          </motion.div>
+        </motion.nav>
 
-          <div className="flex gap-7">
-            <Link
-              href="/join"
-              className="w-48 rounded-md bg-[#313236] px-6 py-3 text-center text-lg font-medium text-white select-none"
-            >
-              Join for free
-            </Link>
-            {/* <button className="text-xl">Watch Demo</button> */}
+        <motion.div className="max-w-[900px] mx-auto px-4 py-8 border-dashed-x flex justify-center ">
+          <div className="flex flex-col gap-11 justify-center ">
+            <div className="flex flex-col gap-4">
+              <motion.h1
+                className={`flex gap-4 text-center text-8xl leading-none tracking-tight ${InstrumentSerif.className}`}
+                variants={fadeInUp}
+              >
+                <span>
+                  Be your own{" "}
+                  <span className="text-brand-primary">algorithm</span>.
+                </span>
+              </motion.h1>
+              <motion.h2
+                className="text-2xl text-[#969696]"
+                variants={fadeInUp}
+              >
+                All of your favorite content in one place.
+              </motion.h2>
+            </div>
+
+            <motion.div variants={fadeInUp}>
+              <Link
+                href={`/signin` as Route}
+                className="w-48 rounded-md bg-brand-primary/90 px-6 py-3 text-center text-lg font-medium text-white select-none hover:bg-brand-primary duration-100"
+              >
+                Get started
+              </Link>
+            </motion.div>
           </div>
-        </header>
-        <div className="mt-14 flex max-w-[65ch] flex-col gap-5">
-          <h2 className="text-xl font-medium">About</h2>
-          <div className="flex flex-col gap-3">
-            <p>
-              Are.na is a place to save content, create collections over time
-              and connect ideas. Privately or with other people.
-            </p>
-            <p>
-              Students (highly curious and open to new information), hobbyists
-              (deeply into a topic or topics, narrowly focused) or what we call
-              connected knowledge collectors (those more experienced but highly
-              curious information gatherers who can make disparate connections
-              between disciplines) have been the core of our community for 13
-              years and 361 days.
-            </p>
-            <p>
-              Are.na is a mindful space where you can work through any project
-              over time. It&apos;s a place to structure your ideas and build new
-              forms of knowledge together.
-            </p>
-          </div>
-        </div>
-        {/* <main className="flex flex-col gap-36">
-        <section className="grid grid-cols-5 grid-rows-5 gap-5">
-          <div className="col-span-2 row-span-3 rounded-lg border p-4">
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>
-          </div>
-          <div className="col-span-3 col-start-3 row-span-6 rounded-lg border p-4">
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur,
-              cupiditate.
-            </p>
-          </div>
-          <div className="col-span-2 row-span-3 row-start-4 rounded-lg border p-4">
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit</p>
-          </div>
-        </section>
-        <section className="flex flex-col gap-8">
-          <h2 className="flex flex-col text-center text-2xl">
-            <span>Priced to make an impact on your time and attention,</span>
-            <span>not on your wallet.</span>
-          </h2>
-          <div className="flex gap-4">
-            <div className="flex-1 rounded-lg border p-3">Monthly</div>
-            <div className="flex-1 rounded-lg border p-3">Annually</div>
-          </div>
-        </section>
-      </main>
-      <footer className="">Made with love by GeekyChakri</footer> */}
-      </div>
-    </div>
+        </motion.div>
+        <motion.div className="border-dashed-t">
+          <motion.div
+            className="px-8 h-14 text-sm text-text-secondary flex items-center justify-between"
+            variants={fadeInUp}
+          >
+            <p>Pocket Feed </p>
+            <p>Bluesky @pocket-feed.com</p>
+          </motion.div>
+        </motion.div>
+      </motion.div>
+    </motion.header>
   );
 }

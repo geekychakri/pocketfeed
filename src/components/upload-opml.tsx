@@ -86,7 +86,7 @@ function FileUpload() {
     formData.append("opmlFile", file as File);
 
     try {
-      const res = await fetch("/api/createBulkSubscriptions", {
+      const res = await fetch("/api/parse-opml", {
         method: "POST",
         body: formData,
       });
@@ -108,70 +108,8 @@ function FileUpload() {
     }
   };
 
-  // useEffect(() => {
-  //   setHasMounted(true);
-  // }, []);
-
-  // if (!hasMounted) {
-  //   return (
-  //     <div className="border-shadow flex h-[120px] animate-pulse justify-between rounded-md p-6">
-  //       <div className="flex flex-col gap-3">
-  //         <div className="flex items-center gap-3">
-  //           <div className="bg-skeleton-highlight h-[38px] w-[100px] rounded-md"></div>
-  //           <div className="bg-skeleton-highlight h-[22px] w-[112px] rounded-md"></div>
-  //         </div>
-
-  //         <div className="bg-skeleton-highlight h-[22px] w-[228px] rounded-md"></div>
-  //       </div>
-
-  //       <div className="bg-skeleton-highlight h-11 w-[80px] rounded-md px-4 py-2"></div>
-  //     </div>
-  //   );
-  // }
-
   return (
     <>
-      {/* <form onSubmit={handleImport}>
-        <FileUploader
-          handleChange={handleChange}
-          name="opmlFile"
-          types={fileTypes}
-          required={true}
-        >
-          <div className="border-shadow flex h-[120px] items-center justify-between rounded-lg p-6">
-            {loading ? (
-              <div className="flex gap-2">
-                <p>Import in progress</p>
-                <SpinnerRotate />
-              </div>
-            ) : (
-              <>
-                <div className="flex flex-col gap-3">
-                  <div className="flex items-center gap-4">
-                    <button className="border-shadow rounded-md px-4 py-2 font-medium">
-                      Browse...
-                    </button>
-                    <span>{file ? file?.name : "No file selected"}</span>
-                  </div>
-                  <p className="text-text-secondary">
-                    You can import OPML files.
-                  </p>
-                </div>
-                <div>
-                  <Button
-                    type="submit"
-                    className={`grid place-items-center ${file && file?.name ? "text-brand-primary" : "text-text-secondary"}`}
-                    onClickCapture={(e) => e.stopPropagation()}
-                  >
-                    <span>Import</span>
-                  </Button>
-                </div>
-              </>
-            )}
-          </div>
-        </FileUploader>
-      </form> */}
-
       <DropZone
         className="data-drop-target:border-brand-primary data-drop-target:bg-brand-primary/5 border border-border-interactive border-dashed flex justify-between gap-3 rounded-md p-6"
         getDropOperation={(types) => {
@@ -243,42 +181,9 @@ function FileUpload() {
         isFeedsDialogOpen={isFeedsDialogOpen}
         onIsFeedsDialogOpen={() => setIsFeedDialogOpen(!isFeedsDialogOpen)}
       />
-      {/*<ImportAlertModal
-        open={openImportAlertModal}
-        onOpenChange={() => setOpenImportAlertModal((prevState) => !prevState)}
-      />*/}
     </>
   );
 }
-
-// function ImportAlertModal({
-//   open,
-//   onOpenChange,
-// }: {
-//   open: boolean;
-//   onOpenChange: () => void;
-// }) {
-//   return (
-//     <Modal open={open} onOpenChange={onOpenChange}>
-//       <Modal.Content
-//         title="Importing subscriptions"
-//         className="bg-background-primary border-shadow"
-//       >
-//         <div className="flex flex-col gap-5 px-[25px] text-pretty">
-//           This could take a few minutes. You will receive a toast notification
-//           when your import is complete.
-//           <Button
-//             type="button"
-//             className="border-shadow w-full"
-//             onClick={onOpenChange}
-//           >
-//             Got it
-//           </Button>
-//         </div>
-//       </Modal.Content>
-//     </Modal>
-//   );
-// }
 
 function OPMLFeeds({
   opmlFeeds,
@@ -322,47 +227,7 @@ function OPMLFeeds({
   });
 
   console.log({ selectedIds });
-  // const toggleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   if (formRef.current) {
-  //     const isChecked = e.target.checked;
-  //     const checkboxes = formRef.current.querySelectorAll<HTMLInputElement>(
-  //       'input[type="checkbox"]',
-  //     );
-  //     checkboxes.forEach((cb) => (cb.checked = isChecked));
-  //   }
-  //   updateCount();
-  // };
 
-  // const updateCount = () => {
-  //   if (!formRef.current || !countDisplayRef.current) return;
-  //   // Query all checked checkboxes inside the form
-  //   const checkedBoxes = formRef.current.querySelectorAll<HTMLInputElement>(
-  //     'input[type="checkbox"]:checked',
-  //   );
-
-  //   selectedCountRef.current = checkedBoxes.length;
-  //   countDisplayRef.current.textContent = selectedCountRef.current.toString();
-  // };
-
-  // const handleSelectAll = (e) => {
-  //   setIsCheckAll(!isCheckAll);
-  //   setIsCheck(list.map((li) => li.id));
-  //   if (isCheckAll) {
-  //     setIsCheck([]);
-  //   }
-  // };
-
-  // const handleClick = (e) => {
-  //   const { id, checked } = e.target;
-  //   setIsCheck([...isCheck, id]);
-  //   if (!checked) {
-  //     setIsCheck(isCheck.filter((item) => item !== id));
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   setList(opmlFeeds.feeds);
-  // }, [opmlFeeds]);
   //
   useEffect(() => {
     if (selectAllCheckboxRef.current) {
@@ -412,13 +277,15 @@ function OPMLFeeds({
 
     console.log({ selectedFeeds });
 
-    const res = await fetch("/api/add-opml-feeds", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(selectedFeeds),
-    });
+    // const res = await fetch("/api/add-opml-feeds", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-type": "application/json",
+    //   },
+    //   body: JSON.stringify(selectedFeeds),
+    // });
+    const res = await addOPMLFeeds(selectedFeeds);
+    console.log({ res });
   };
 
   if (opmlFeeds.length === 0) return null;

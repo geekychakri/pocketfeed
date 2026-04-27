@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Link from "next/link";
 
 import dayjs from "dayjs";
 import { ErrorBoundary } from "react-error-boundary";
@@ -16,6 +17,35 @@ const completeItems = [];
 
 export default async function DailyFeedListSuspense() {
   const selectedFeeds = await getSelectedFeeds();
+  if (selectedFeeds?.length === 0) {
+    return (
+      <div className="px-3 text-base flex flex-col gap-3 flex-1 justify-center items-center py-10">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="80"
+          height="80"
+          viewBox="0 0 24 24"
+        >
+          <g fill="none" stroke="currentColor" strokeWidth="1" opacity={0.5}>
+            <path strokeLinecap="round" d="M22 22H2" />
+            <path d="M17 22V6c0-1.886 0-2.828-.586-3.414S14.886 2 13 2h-2c-1.886 0-2.828 0-3.414.586S7 4.114 7 6v16m14 0V11.5c0-1.405 0-2.107-.337-2.611a2 2 0 0 0-.552-.552C19.607 8 18.904 8 17.5 8M3 22V11.5c0-1.405 0-2.107.337-2.611a2 2 0 0 1 .552-.552C4.393 8 5.096 8 6.5 8" />
+            <path
+              strokeLinecap="round"
+              d="M12 22v-3M10 5h4m-4 3h4m-4 3h4m-4 3h4"
+            />
+          </g>
+        </svg>
+        <p className="">Build your feed to see your daily updates here.</p>
+        {/*<h2 className="text-sm text-text-secondary">Build your feed!</h2>*/}
+        <Link href="/add" className="custom-underline">
+          Add feed
+        </Link>
+        <Link href="/settings/import_export" className="custom-underline">
+          Import OPML
+        </Link>
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col gap-4">
       {selectedFeeds.map((feed) => (
