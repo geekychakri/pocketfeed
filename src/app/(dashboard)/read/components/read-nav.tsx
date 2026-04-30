@@ -11,7 +11,7 @@ import { setCookie } from "cookies-next/client";
 import localforage from "localforage";
 import { useHotkeys } from "react-hotkeys-hook";
 
-import BookmarkPodcast from "@/components/PodcastPlayer/bookmark-podcast";
+import BookmarkPodcast from "@/components/bookmark";
 // import PostModal from "@/components/post-modal";
 import RouteBack from "@/components/route-back";
 import { CustomTooltip } from "@/components/ui/custom-tooltip";

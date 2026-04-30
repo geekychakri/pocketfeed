@@ -22,9 +22,9 @@ export default async function MainLayout({
   // preload("/api/daily-feeds", { as: "fetch", crossOrigin: "anonymous" });
   // const getProfilePromise = getProfile();
 
-  const bookmarksPromise = getBookmarks();
+  // const bookmarksPromise = getBookmarks();
   const getSelectedFeedsPromise = getSelectedFeeds();
-  const getUserFeedsPromise = getUserFeeds();
+  // const getUserFeedsPromise = getUserFeeds();
 
   return (
     <div className="flex max-[768px]:flex-col w-full">
@@ -56,9 +56,9 @@ export default async function MainLayout({
         <SWRConfig
           value={{
             fallback: {
-              "/api/get-bookmarks": bookmarksPromise,
+              // "/api/get-bookmarks": bookmarksPromise,
               "/api/get-daily-feeds": getSelectedFeedsPromise,
-              "/api/get-user-feeds": getUserFeedsPromise,
+              // "/api/get-user-feeds": getUserFeedsPromise,
             },
           }}
         >

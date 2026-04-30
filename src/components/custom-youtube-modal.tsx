@@ -12,7 +12,7 @@ import LiteYouTubeEmbed from "react-lite-youtube-embed";
 import Bookmark from "@/app/(dashboard)/read/components/bookmark";
 import { cn } from "@/lib/utils";
 
-import BookmarkPodcast from "./PodcastPlayer/bookmark-podcast";
+import BookmarkPodcast from "./bookmark";
 
 import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
 
@@ -20,13 +20,14 @@ import dynamic from "next/dynamic";
 
 import { PostIcon } from "@/icons/post";
 
+import CopyLink from "./copy-link";
 import IconOnlyAction from "./ui/icon-only-action";
 
 const PostModal = dynamic(() => import("@/components/post-modal"), {
   ssr: false,
   loading: () => (
     <IconOnlyAction>
-      <PostIcon className="size-[18px] shrink-0" />
+      <PostIcon className="size-[20px] shrink-0" />
     </IconOnlyAction>
   ),
 });
@@ -73,7 +74,7 @@ function CustomYouTubeModal({
       <Dialog.Portal>
         <Dialog.Backdrop className="fixed inset-0 min-h-dvh bg-black opacity-20 transition-all duration-150 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0 dark:opacity-70 supports-[-webkit-touch-callout:none]:absolute" />
         <Dialog.Popup
-          className="fixed top-1/2 left-1/2 w-full max-w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-md bg-background-primary  focus-visible:outline focus-visible:outline-brand-primary text-gray-900  transition-all duration-150 data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[starting-style]:scale-90 data-[starting-style]:opacity-0"
+          className="fixed top-1/2 left-1/2 w-full max-w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-md bg-background-primary  focus-visible:outline focus-visible:outline-brand-primary transition-all duration-150 data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[starting-style]:scale-90 data-[starting-style]:opacity-0"
           onFocusCapture={(e) => {
             e.stopPropagation(); //TODO:
           }}
@@ -82,21 +83,51 @@ function CustomYouTubeModal({
             <h1 className="line-clamp-1 flex-1">{title}</h1>
 
             <TooltipPrimitive.Provider delayDuration={700}>
-              <div className="flex gap-1 items-center">
+              <div className="flex items-center">
                 <PostModal />
-                <BookmarkPodcast
+                {/*<BookmarkPodcast
                   // bookmarked={bookmarkExists}
                   bookmarkFeedItem={feedItem}
                   bookmarkLink={videoId}
                   bookmarkType="youtube"
                   // bookmarkId={bookmarkId}
                   bookmarkTitle={title}
+                  // key={title}
                   btnClassName="relative flex size-6 items-center justify-center rounded-full p-4"
-                />
-                <Dialog.Close className="flex cursor-pointer hover:bg-ui-hover transition-[background-color] duration-150 size-8 rounded-full items-center justify-center">
-                  <Cross2Icon className="size-[18px] flex-none stroke-2" />
-                  <span className="sr-only">Close</span>
-                </Dialog.Close>
+                />*/}
+                <CopyLink link={feedItem?.link} />
+
+                <TooltipPrimitive.Root>
+                  <TooltipPrimitive.Trigger asChild>
+                    <Dialog.Close className="flex cursor-pointer hover:bg-ui-hover transition-[background-color] duration-150 size-9 rounded-full items-center justify-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fill="none"
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M18 6L6 18m12 0L6 6"
+                        />
+                      </svg>
+
+                      <span className="sr-only">Close</span>
+                    </Dialog.Close>
+                  </TooltipPrimitive.Trigger>
+                  <TooltipPrimitive.Content
+                    side="top"
+                    align="center"
+                    sideOffset={8}
+                    className="bg-background-secondary border-shadow data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade z-[100] rounded px-[10px] py-[5px] text-[13px] leading-none font-medium select-none"
+                  >
+                    <span>Close</span>
+                  </TooltipPrimitive.Content>
+                </TooltipPrimitive.Root>
               </div>
             </TooltipPrimitive.Provider>
           </div>

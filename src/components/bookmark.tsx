@@ -49,6 +49,7 @@ export default function BookmarkPodcast({
 
   const bookmarkDataFormRef = useRef<HTMLFormElement | null>(null);
 
+  console.log({ bookmarkFeedItem });
   const { cache } = useSWRConfig();
 
   const { data } = useSWR("/api/get-bookmarks", fetcher, {
@@ -58,16 +59,6 @@ export default function BookmarkPodcast({
     revalidateOnReconnect: false,
   });
 
-  // const data = cache.get(unstable_serialize("/api/get-bookmarks"));
-
-  // console.log({ cachedData: data._k });
-
-  // const { data } = useSWR("/api/get-bookmarks", fetcher, {
-  //   revalidateOnMount: false,
-  // });
-
-  console.log({ data });
-
   const [playBookmarked] = useSound("/sounds/success.wav", {
     volume: 0.25,
   });
@@ -76,23 +67,14 @@ export default function BookmarkPodcast({
     volume: 0.25,
   });
 
-  useHotkeys("B", () => {
-    const bookmarkForm = document.forms.namedItem(
-      "bookmarkForm",
-    ) as HTMLFormElement;
-    bookmarkForm.requestSubmit();
-  });
+  // useHotkeys("B", () => {
+  //   const bookmarkForm = document.forms.namedItem(
+  //     "bookmarkForm",
+  //   ) as HTMLFormElement;
+  //   bookmarkForm.requestSubmit();
+  // });
 
   console.log({ bookmark });
-
-  console.log({ podcastBookmarkItem: bookmarkFeedItem });
-
-  console.log({ testBookmarkItem: bookmarkFeedItem });
-
-  // const getBookmarks = async () => {
-  //   const res = await fetch("/api/get-bookmarks");
-  //   return res.json();
-  // };
 
   const getCurrentBookmark = (bookmarkId: string) => {
     if (bookmarkDataFormRef && bookmarkDataFormRef.current) {
@@ -117,11 +99,12 @@ export default function BookmarkPodcast({
   return (
     <>
       <form
-        name="bookmarkForm"
-        id="bookmarkForm"
-        ref={bookmarkDataFormRef}
+        // name={`bookmarkForm-${bookmarkFeedItem.title}`}
+        // id={`bookmarkForm-${bookmarkFeedItem.title}`}
+        // ref={bookmarkDataFormRef}
         action={async (formData: FormData) => {
           if (!bookmark) {
+            console.log("NO BOOKMARK");
             setOptimisticBookmark(true);
             playBookmarked();
 
@@ -143,17 +126,18 @@ export default function BookmarkPodcast({
             //   },
             //   revalidate: false,
             // });
-            mutate(
-              "/api/get-bookmarks",
-              () => {
-                return getCurrentBookmark(bookmarkId as string);
-              },
-              {
-                revalidate: false,
-              },
-            );
+            // mutate(
+            //   "/api/get-bookmarks",
+            //   () => {
+            //     return getCurrentBookmark(bookmarkId as string);
+            //   },
+            //   {
+            //     revalidate: false,
+            //   },
+            // );
           } else {
             // DELETE BOOKMARK
+            console.log("YES BOOKMARK");
             setOptimisticBookmark(false);
             console.log({ bookmarkId: bookmarkFeedItem.bookmarkId });
             return;
@@ -181,10 +165,6 @@ export default function BookmarkPodcast({
             );
           }
         }}
-        // onSubmit={(e) => {
-        //   e.preventDefault();
-        //   getCurrentBookmark();
-        // }}
       >
         <input
           type="text"
@@ -210,22 +190,19 @@ export default function BookmarkPodcast({
           name="bookmarkItem"
           hidden
         />
+        <IconOnlyAction type="submit" className={btnClassName}>
+          {optimisticBookmark ? (
+            <BookmarkBoldIcon
+              className={cn("size-[18px] shrink-0", iconClassName)}
+            />
+          ) : (
+            <BookmarkIcon
+              className={cn("size-[18px] shrink-0", iconClassName)}
+            />
+          )}
+          <span className="sr-only">Add to bookmarks</span>
+        </IconOnlyAction>
       </form>
-
-      <IconOnlyAction
-        type="submit"
-        form="bookmarkForm"
-        className={btnClassName}
-      >
-        {optimisticBookmark ? (
-          <BookmarkBoldIcon
-            className={cn("size-[18px] shrink-0", iconClassName)}
-          />
-        ) : (
-          <BookmarkIcon className={cn("size-[18px] shrink-0", iconClassName)} />
-        )}
-        <span className="sr-only">Add to bookmarks</span>
-      </IconOnlyAction>
     </>
   );
 }

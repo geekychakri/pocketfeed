@@ -127,7 +127,7 @@ function CustomMediaPlayer({
           >
             <slot name="media" slot="media"></slot>
 
-          
+
 
             <style>
               .controls {
@@ -175,7 +175,7 @@ function CustomMediaPlayer({
 
               .info h1,
               .info h2 {
-              
+
                 line-height: 1.2;
                 margin: 0;
                 font-weight: 400;
@@ -597,7 +597,7 @@ function CustomMediaPlayer({
         <MediaTheme
           template={templateRef.current}
           mediatitle={title}
-          mediabyline={albumName}
+          // mediabyline={albumName}
           // style={{
           //   "--media-primary-color": "",
           // }}

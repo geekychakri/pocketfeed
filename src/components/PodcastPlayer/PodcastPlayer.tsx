@@ -16,8 +16,9 @@ import { useShowPodcastPlayer } from "@/store/podcastplayer";
 import { useFullscreen } from "@/store/read-fullscreen";
 import useStore from "@/store/useStore";
 
+import BookmarkPodcast from "../bookmark";
+import CopyLink from "../copy-link";
 import IconOnlyAction from "./../ui/icon-only-action";
-import BookmarkPodcast from "./bookmark-podcast";
 import CustomMediaPlayer from "./custom-media-player";
 
 const PostModal = dynamic(() => import("@/components/post-modal"), {
@@ -149,51 +150,75 @@ const PodcastPlayer = () => {
 
   return (
     <div
-      className={`bg-background-primary fixed -bottom-72 p-4 left-0 min-md:left-[256px] animation-slide-up-player ease-out-player border-border-non-interactive animate-player-slide-up right-0 z-10 flex flex-col gap-1 border-t transition-[translate] duration-700 ${show === "hide" ? "translate-y-80" : ""}`}
+      className={`bg-background-primary pb-3 fixed -bottom-72 left-0 min-md:left-[256px] animation-slide-up-player ease-out-player animate-player-slide-up right-0 z-10 flex flex-col gap-1 transition-[translate] duration-700 ${show === "hide" ? "translate-y-80" : ""}`}
     >
-      <div className="absolute -top-[14px] flex cursor-pointer gap-2 self-end">
-        {/* <button>
-          <Share2Icon className="size-5" />
-        </button> */}
-        <TooltipPrimitive.Provider>
-          <PostModal />
-          <BookmarkPodcast
-            // bookmarked={bookmarkExists}
-            bookmarkFeedItem={feedItem} //TODO:
-            bookmarkLink={audioUrl}
-            bookmarkType="podcast"
-            // bookmarkId={bookmarkId}
-            bookmarkTitle={title}
-            btnClassName="border-border-interactive bg-background-secondary flex size-7 items-center justify-center rounded-full border"
-            iconClassName="size-4"
-          />
-
-          <VaulDrawer audioRef={audioPlayerRef} />
-          {/* <BookmarkPodcast
-          bookmarkFeedItem={JSON.stringify(feedItem)}
-          bookmarkLink={audioUrl}
-          bookmarkTitle={title}
-          bookmarkType="podcast"
-        /> */}
-
-          <button
-            onClick={() => {
-              hidePodcastPlayer();
-              // setIsPlaying(false);
-              audioPlayerRef.current?.pause();
-            }}
-            className="border-border-interactive bg-background-secondary flex size-7 items-center justify-center rounded-full border"
-          >
-            <Cross2Icon className="size-4" />
-          </button>
-        </TooltipPrimitive.Provider>
-      </div>
-
-      {/* <div>
-        <div className="size-32 bg-yellow-300 max-sm:hidden">
-          <img src={albumCover} alt="" className="max-w-full object-contain" />
+      <div className="flex justify-between pr-3 border-dashed-y bg-background-secondary">
+        <div className="flex gap-1 items-center">
+          {albumCover && (
+            <img src={albumCover} alt={albumName} className="size-10" />
+          )}
+          <p className="text-sm text-text-secondary">{albumName}</p>
         </div>
-      </div> */}
+
+        <div className="flex gap-1 items-center">
+          <TooltipPrimitive.Provider>
+            <PostModal
+              iconClassName="size-4"
+              customClassName="p-0 flex size-8 items-center justify-center"
+              feedItemType="podcast"
+            />
+            {/*<BookmarkPodcast
+              // bookmarked={bookmarkExists}
+              bookmarkFeedItem={feedItem} //TODO:
+              bookmarkLink={audioUrl}
+              bookmarkType="podcast"
+              // bookmarkId={bookmarkId}
+              bookmarkTitle={title}
+              btnClassName="p-0 flex size-8 items-center justify-center rounded-md"
+              iconClassName="size-4"
+
+            />*/}
+
+            <VaulDrawer audioRef={audioPlayerRef} />
+
+            <CopyLink
+              link={feedItem.link}
+              className="size-8"
+              iconClassName="size-[18px]"
+            />
+
+            <TooltipPrimitive.Root>
+              <TooltipPrimitive.Trigger
+                onFocus={(e) => {
+                  const isFocusVisible =
+                    e.currentTarget.matches(":focus-visible");
+                  if (!isFocusVisible) e.preventDefault();
+                }}
+                asChild
+              >
+                <button
+                  onClick={() => {
+                    hidePodcastPlayer();
+                    // setIsPlaying(false);
+                    audioPlayerRef.current?.pause();
+                  }}
+                  className="flex size-8 items-center justify-center hover:bg-ui-hover rounded-full"
+                >
+                  <Cross2Icon className="size-4" />
+                </button>
+              </TooltipPrimitive.Trigger>
+              <TooltipPrimitive.Content
+                side="top"
+                align="center"
+                sideOffset={8}
+                className="bg-background-secondary border-shadow data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade z-[100] rounded px-[10px] py-[5px] text-[13px] leading-none font-medium select-none"
+              >
+                <span>Close</span>
+              </TooltipPrimitive.Content>
+            </TooltipPrimitive.Root>
+          </TooltipPrimitive.Provider>
+        </div>
+      </div>
 
       <CustomMediaPlayer title={title} albumName={albumName}>
         <audio

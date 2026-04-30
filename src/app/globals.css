@@ -174,7 +174,7 @@
     font-family: var(--font-geist);
     caret-color: rgb(var(--brand-primary));
     accent-color: rgb(var(--brand-primary));
-
+    scrollbar-gutter: stable;
     scrollbar-width: thin;
     scrollbar-color: #fc591e transparent;
   }
@@ -186,11 +186,11 @@
   }
 
   /*Fix for radix select when using scrollbar gutter to prevent layout shift*/
-  @supports (scrollbar-gutter: stable) {
+  /*@supports (scrollbar-gutter: stable) {
     html body[data-scroll-locked] {
       margin: 0 !important;
     }
-  }
+  }*/
 
   /* html {
     animation: smoothscroll1 1s;
@@ -208,7 +208,7 @@
 
   body {
     position: relative; /* iOS 26+ Safari base ui */
-    overflow-x: hidden;
+    /*overflow-x: hidden;*/
     /* background-color: #fafafa;
     background-color: #fcfcfc; */
     /* background-color: #fcfaf0; */
@@ -238,16 +238,12 @@
     font-size: 16px;
   }
 
-  input:focus-visible,
+  /*input:focus-visible,
   a:focus-visible,
   button:focus-visible,
   textarea:focus-visible {
-    /* outline: none !important;
-    box-shadow: 0 0 0 1px rgb(var(--brand-primary)) !important; */
     outline: 2px solid rgb(var(--brand-primary));
-    /* box-shadow: 0 0 0 0.25rem rgb(var(--brand-primary)); */
-    border-radius: 0.125rem;
-  }
+  }*/
 
   input:is(
     :-webkit-autofill,
@@ -783,6 +779,55 @@ pre:has(code) {
   to {
     caret-color: rgba(252, 89, 30);
   }
+}
+
+:focus-visible {
+  outline: 2px solid rgba(252 89 30);
+  outline-offset: 2px;
+}
+
+@property --left-fade {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --right-fade {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@keyframes scrollfade {
+  0% {
+    --left-fade: 0;
+  }
+  10%,
+  100% {
+    --left-fade: 3rem;
+  }
+  0%,
+  90% {
+    --right-fade: 3rem;
+  }
+  100% {
+    --right-fade: 0;
+  }
+}
+
+.scrollable {
+  /*height: 300px;*/
+  /*background: yellow;*/
+  /*overflow-y: scroll;*/
+  mask: linear-gradient(
+    to bottom,
+    #0000,
+    #ffff var(--left-fade) calc(100% - var(--right-fade)),
+    #0000
+  );
+  animation: scrollfade;
+  animation-timeline: --scrollfade;
+  scroll-timeline: --scrollfade y;
 }
 
 /*#feed-search {

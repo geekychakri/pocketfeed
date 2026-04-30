@@ -26,7 +26,7 @@ export default function Page() {
           <h1 className="font-medium">Daily</h1>
         </div>
 
-        <Suspense
+        {/*<Suspense
           fallback={
             <button className="flex gap-2 h-10 items-center justify-center rounded-md bg-ui-normal px-3.5 text-base font-medium  select-none hover:bg-ui-hover active:bg-ui-active focus-visible:outline 2 focus-visible:-outline-offset-1">
               Select Feeds
@@ -39,7 +39,7 @@ export default function Page() {
           <SelectFeedsModal>
             <MultipleFeedsCombobox />
           </SelectFeedsModal>
-        </Suspense>
+        </Suspense>*/}
       </div>
 
       {/*<Suspense fallback={<DailyFeedListFallback />}>*/}

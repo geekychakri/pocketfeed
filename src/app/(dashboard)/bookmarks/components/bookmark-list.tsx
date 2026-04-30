@@ -26,6 +26,8 @@ export default function BookmarkList() {
   // throw new Error("");
   // const bookmarks = use(bookmarksPromise);
 
+  return null;
+
   const { data: bookmarks, error: dailyFeedsError } = useSWR(
     "/api/get-bookmarks",
     fetcher,

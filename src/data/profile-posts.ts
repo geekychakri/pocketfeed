@@ -32,7 +32,7 @@ export async function getProfilePosts(
     )
     .orderBy(desc(schema.posts.id))
     .limit(pageSize + 1);
-
+  console.log({ data });
   const hasNextPage = data.length > limit;
   if (hasNextPage) data.pop();
 

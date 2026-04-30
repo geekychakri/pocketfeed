@@ -36,13 +36,13 @@ export default function FeedItem({
     //TODO:
     return (
       <PodcastCard
-        feedUrl={feedList?.feedUrl}
+        feedUrl={feedList?.feedListMetadata.feedUrl}
         item={item}
-        albumCover={feedList?.image?.url as string}
+        albumCover={feedList?.feedListMetadata.image?.url as string}
         episodeNumber={item?.guid}
-        author={feedList?.itunes?.author}
-        albumName={feedList.title}
-        webLink={feedList.link}
+        author={feedList?.feedListMetadata?.itunes?.author}
+        albumName={feedList?.feedListMetadata.title}
+        webLink={feedList?.feedListMetadata.link}
       />
     );
   } else if (item.link?.includes("youtube.com")) {

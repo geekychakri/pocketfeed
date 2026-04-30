@@ -143,18 +143,25 @@ const loadingSkeleton = (
   </svg>
 );
 
-export default function PostModal({}: {
+export default function PostModal({
+  customClassName,
+  iconClassName,
+  feedItemType,
+}: {
   // feedItem?: any;
   // feedTitle?: string;
   // feedAlbumCover?: string;
   // websiteLink?: string;
-  // className?: string;
+  iconClassName?: string;
+  customClassName?: string;
+  feedItemType?: string;
 }) {
   // const [feedItem] = useState(() => {
   //   const localFeedItem = localStorage.getItem("feedItem");
   //   return localFeedItem !== null ? JSON.parse(localFeedItem) : {};
   // });
 
+  let feedItem;
   const [loading, setLoading] = useState(false);
   const [newItemData, setNewItemData] = useState({});
   const { link } = useParams<{ link: string }>();
@@ -169,12 +176,21 @@ export default function PostModal({}: {
   const MAX_TEXT_LENGTH = 160;
   const [text, setText] = useState("");
 
-  const feedItem = localStorage.getItem("feedItem")
-    ? JSON.parse(localStorage.getItem("feedItem") as string)
-    : null;
-  const parsedFeedItem = parseJSON(feedItem);
-  console.log({ parsedFeedItem });
+  if (feedItemType === "podcast") {
+    feedItem = localStorage.getItem("podcast-feedItem")
+      ? JSON.parse(localStorage.getItem("podcast-feedItem") as string)
+      : null;
+  } else {
+    feedItem = localStorage.getItem("feedItem")
+      ? JSON.parse(localStorage.getItem("feedItem") as string)
+      : null;
+  }
+
+  // const parsedFeedItem = parseJSON(feedItem);
+  // console.log({ parsedFeedItem });
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  console.log({ feedItem });
 
   const postRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -184,10 +200,12 @@ export default function PostModal({}: {
 
   const [state, formAction, isPending] = useActionState(addPost, initialState);
 
-  useHotkeys("P", (e) => {
-    setIsModalOpen(true);
-    e.preventDefault();
-  });
+  // useHotkeys("P", (e) => {
+  //   if (!isModalOpen) {
+  //     setIsModalOpen(true);
+  //   }
+  //   e.preventDefault();
+  // });
 
   useEffect(() => {
     if (state?.type === "success") {
@@ -254,26 +272,29 @@ export default function PostModal({}: {
   return (
     <>
       <TooltipPrimitive.Root>
-        <TooltipPrimitive.Trigger onClick={() => setIsModalOpen(true)} asChild>
-          {/* <span className="absolute top-1/2 left-1/2 size-12 -translate-x-1/2 -translate-y-1/2 pointer-fine:hidden"></span>
-          <PostIcon className="size-[18px] shrink-0" /> */}
-          <IconOnlyAction className="rounded-md">
-            <PostIcon className="size-[18px] shrink-0" />
+        <TooltipPrimitive.Trigger
+          onClick={() => setIsModalOpen(true)}
+          onFocus={(e) => {
+            const isFocusVisible = e.currentTarget.matches(":focus-visible");
+            if (!isFocusVisible) e.preventDefault();
+          }}
+          asChild
+        >
+          <IconOnlyAction className={cn("rounded-md", customClassName)}>
+            <PostIcon className={cn("size-[20px] shrink-0", iconClassName)} />
           </IconOnlyAction>
         </TooltipPrimitive.Trigger>
         <TooltipPrimitive.Content
           side="top"
           align="center"
-          sideOffset={5}
+          sideOffset={8}
           className="bg-background-secondary border-shadow data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade z-[100] rounded px-[10px] py-[5px] text-[13px] leading-none font-medium select-none"
         >
-          <span>
-            Share with note <kbd>[P]</kbd>
-          </span>
+          <span>Share with note</span>
         </TooltipPrimitive.Content>
       </TooltipPrimitive.Root>
 
-      <Dialog.Root open={isModalOpen} onOpenChange={setIsModalOpen} dis>
+      <Dialog.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
         <Dialog.Portal>
           <Dialog.Backdrop className="fixed inset-0 min-h-dvh bg-black opacity-20 transition-all duration-150 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0 dark:opacity-70 supports-[-webkit-touch-callout:none]:absolute" />
           <Dialog.Popup className="fixed top-1/2 left-1/2 -mt-8 w-[90vw] max-w-[450px] border-shadow focus-visible:outline focus-visible:outline-brand-primary -translate-x-1/2 -translate-y-1/2 rounded-lg bg-background-primary p-6 transition-all duration-150 data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[starting-style]:scale-90 data-[starting-style]:opacity-0">
@@ -323,7 +344,7 @@ export default function PostModal({}: {
                 />
                 <div className="border-shadow flex flex-col gap-3 rounded-md p-4">
                   <div className="flex flex-col gap-1">
-                    <p className="text-primary">{feedItem.title}</p>
+                    <p className="text-primary">{feedItem?.title}</p>
                     {/*{feedItem.content && (
                       <p
                         className="text-text-secondary line-clamp-2 text-sm"
@@ -337,10 +358,10 @@ export default function PostModal({}: {
                     </p>*/}
                     <p className="text-text-secondary/70 text-sm flex flex-col gap-1">
                       <span className="line-clamp-2">
-                        {feedItem.contentSnippet}
+                        {feedItem?.contentSnippet}
                       </span>
 
-                      <span>{feedItem.author || feedItem.creator}</span>
+                      <span>{feedItem?.author || feedItem?.creator}</span>
                     </p>
                   </div>
                   {/* {parsedFeedItem.contentSnippet || parsedFeedItem.content ? (

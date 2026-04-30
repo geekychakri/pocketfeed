@@ -70,7 +70,7 @@ export default function PodcastPlayButton({
     <button
       className={cn(
         // "bg-ui-normal z-2 flex size-11 flex-none items-center justify-center gap-1 rounded-full px-4 py-2 text-base font-medium transition-transform will-change-transform active:scale-95",
-        "bg-ui-normal hover:border-brand-shadow hover:bg-ui-hover flex size-10 cursor-pointer items-center justify-center gap-1 rounded-full px-4 py-2 text-base font-medium duration-150 active:scale-95",
+        "bg-ui-normal hover:border-brand-shadow hover:bg-ui-hover flex size-10 cursor-pointer items-center justify-center gap-1 rounded-full px-4 py-2 text-base font-medium active:scale-95",
         activeEpisode == episodeNumber && "border-brand-shadow",
         className,
       )}
@@ -116,7 +116,7 @@ export default function PodcastPlayButton({
         }); //TODO:
         setPodcastBookmarkId(bookmarkId as string); //TODO:: for handling bookmarks in bookmarks page to delete
 
-        localStorage.setItem("feedItem", JSON.stringify(feedItem)); // save item in a localStorage for a post share
+        localStorage.setItem("podcast-feedItem", JSON.stringify(feedItem)); // save item in a localStorage for a post share
       }}
     >
       {activeEpisode == episodeNumber && isPlaying ? (

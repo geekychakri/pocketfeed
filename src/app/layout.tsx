@@ -69,7 +69,7 @@ export default function RootLayout({
           type="text/css"
         />
       </head>
-      <body className="bg-background-primary text-text-primary overflow-x-hidden leading-snug tracking-tight antialiased selection:bg-[#ff5a1f] selection:text-[#fff]">
+      <body className="bg-background-primary text-text-primary leading-snug tracking-tight antialiased selection:bg-[#ff5a1f] selection:text-[#fff]">
         <a href="#main-item" id="skip-link">
           Skip to content
         </a>

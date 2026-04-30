@@ -5,19 +5,22 @@ import dayjs from "dayjs";
 import { ErrorBoundary } from "react-error-boundary";
 import Parser from "rss-parser";
 
-import { getSelectedFeeds } from "@/db/queries";
+import { getSelectedFeeds, getUserFeeds } from "@/db/queries";
 
 import FeedItem from "./feed-item";
 
 const parser = new Parser({
   timeout: 8000,
+  customFields: {
+    item: ["podcast:chapters"],
+  },
 });
 
 const completeItems = [];
 
 export default async function DailyFeedListSuspense() {
-  const selectedFeeds = await getSelectedFeeds();
-  if (selectedFeeds?.length === 0) {
+  const userFeeds = await getUserFeeds();
+  if (userFeeds?.length === 0) {
     return (
       <div className="px-3 text-base flex flex-col gap-3 flex-1 justify-center items-center py-10">
         <svg
@@ -48,7 +51,7 @@ export default async function DailyFeedListSuspense() {
   }
   return (
     <div className="flex flex-col gap-4">
-      {selectedFeeds.map((feed) => (
+      {userFeeds.map((feed) => (
         <ErrorBoundary key={feed.feedUrl} fallback={null}>
           <Suspense key={feed.feedUrl} fallback={<DailyFeedListFallback />}>
             <FeedSection feedUrl={feed.feedUrl} title={feed.title} />
@@ -96,20 +99,21 @@ async function FeedSection({
       .slice(0, 10) // use slice instead of splice (non-mutating)
       .flatMap((item) => {
         if (item.pubDate && dayjs(item.pubDate).isSame(dayjs(), "day")) {
+          const parsedItem = JSON.parse(JSON.stringify(item));
           return {
             // feed: feed.title,
             // title: item.title,
             // link: item.link,
             // date,
-            ...item,
+            ...parsedItem,
             date: item.pubDate ? new Date(item.pubDate) : undefined,
             // ...(item.feedUrl === source.rssUrl && {
             //   feedTitle: source.title,
             // }),
             feedUrl: feedUrl,
             feedTitle: title,
-            ...(item.enclosure?.url && {
-              feedListMetaData: {
+            ...(parsedItem.enclosure?.url && {
+              feedListMetadata: {
                 itunes: {
                   ...feed.tunes,
                 },

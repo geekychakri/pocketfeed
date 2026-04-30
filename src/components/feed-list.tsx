@@ -15,6 +15,7 @@ import { cn, getInitials, internalErrorToast } from "@/lib/utils";
 import FeedLinks from "./feed-link";
 
 export default async function FeedList() {
+  //TODO: handle connection errors
   // return null;
   const session = await getSession();
 
@@ -50,7 +51,7 @@ export default async function FeedList() {
     // </div>
 
     <ScrollArea.Root className="min-h-0 flex-1">
-      <ScrollArea.Viewport className="h-full flex px-3 py-2 flex-col gap-4 focus-visible:outline-2 focus-visible:outline-brand-primary">
+      <ScrollArea.Viewport className="scrollable overscroll-contain h-full flex scroll-p-4 px-3 py-2 flex-col gap-4 focus-visible:border-brand-shadow">
         <FeedLinks records={records} />
       </ScrollArea.Viewport>
       <ScrollArea.Scrollbar className="m-2 flex w-1 justify-center rounded-sm  opacity-0 transition-opacity pointer-events-none data-[hovering]:opacity-100 data-[hovering]:delay-0 data-[hovering]:pointer-events-auto data-[scrolling]:opacity-100 data-[scrolling]:duration-0 data-[scrolling]:pointer-events-auto">

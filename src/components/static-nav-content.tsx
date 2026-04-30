@@ -50,12 +50,12 @@ const links: NavItem<Route>[] = [
     segment: "activity",
     icon: ActivityIcon,
   },
-  {
-    label: "Bookmarks",
-    path: "/bookmarks",
-    segment: "bookmarks",
-    icon: BookmarkIcon,
-  },
+  // {
+  //   label: "Bookmarks",
+  //   path: "/bookmarks",
+  //   segment: "bookmarks",
+  //   icon: BookmarkIcon,
+  // },
 ];
 
 export default function SideNavClient() {

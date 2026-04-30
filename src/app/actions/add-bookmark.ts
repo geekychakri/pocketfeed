@@ -92,7 +92,7 @@ export async function addBookmarkAction(formData: FormData) {
       return newBookmark;
     });
 
-    // refresh();
+    refresh();
 
     return {
       type: "success",

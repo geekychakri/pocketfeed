@@ -208,38 +208,39 @@ export default function FeedList({
   //   return bookmarksError?.info.msg || feedUrlError.info.msg;
   // }
 
-  return <FeedListItems bookmarks={bookmarks} feedList={feedList} />;
+  return <FeedListItems feedList={feedList} />;
 }
 
 function FeedListItems({
-  bookmarks,
+  // bookmarks,
   feedList,
 }: {
-  bookmarks: any;
+  // bookmarks: any;
   feedList: any;
 }) {
-  const modBookmarks = bookmarks.map((item: any) => {
-    return {
-      bookmarkId: item.id,
-      bookmarkFeedItemId:
-        JSON.parse(item.bookmarkItem).id || JSON.parse(item.bookmarkItem).guid,
-    };
-  });
+  console.log({ feedList });
+  // const modBookmarks = bookmarks.map((item: any) => {
+  //   return {
+  //     bookmarkId: item.id,
+  //     bookmarkFeedItemId:
+  //       JSON.parse(item.bookmarkItem).id || JSON.parse(item.bookmarkItem).guid,
+  //   };
+  // });
 
   // const bookmarkIds = bookmarks.map((item: any) => item.id);
 
-  const modFeedList = feedList.items.map((item: any) => {
-    const feedItemId = item.id || item.guid;
-    // const isBookmarked = modBookmarks.includes(feedItemId);
-    const bookmark = modBookmarks.find(
-      (b) => b.bookmarkFeedItemId === feedItemId,
-    );
-    return {
-      ...item,
-      isBookmarked: !!bookmark,
-      ...(bookmark && { bookmarkId: bookmark?.bookmarkId }),
-    };
-  });
+  // const modFeedList = feedList.items.map((item: any) => {
+  //   const feedItemId = item.id || item.guid;
+  //   // const isBookmarked = modBookmarks.includes(feedItemId);
+  //   const bookmark = modBookmarks.find(
+  //     (b) => b.bookmarkFeedItemId === feedItemId,
+  //   );
+  //   return {
+  //     ...item,
+  //     isBookmarked: !!bookmark,
+  //     ...(bookmark && { bookmarkId: bookmark?.bookmarkId }),
+  //   };
+  // });
 
   // console.log({ modFeedList });
   // console.log({ modFeedListItem: modFeedList[0] });
@@ -257,7 +258,7 @@ function FeedListItems({
   //   categorizedFeedItemsList: categorizedFeedItemsList,
   // });
 
-  const sortedFeedList = [...modFeedList].sort(
+  const sortedFeedList = [...feedList.items].sort(
     (a, b) => new Date(b.isoDate).getTime() - new Date(a.isoDate).getTime(),
   );
 

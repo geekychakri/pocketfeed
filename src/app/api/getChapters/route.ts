@@ -6,13 +6,13 @@ import { LinkChecker } from "linkinator";
 
 export async function GET(request: NextRequest) {
   try {
-    const userId = (await auth()).userId;
-    if (!userId) {
-      return Response.json(
-        { msg: "You must be signed in to get chapters." },
-        { status: 401 },
-      );
-    }
+    // const userId = (await auth()).userId;
+    // if (!userId) {
+    //   return Response.json(
+    //     { msg: "You must be signed in to get chapters." },
+    //     { status: 401 },
+    //   );
+    // }
     const searchParams = request.nextUrl.searchParams;
 
     // const feedUrl = decodeURIComponent(searchParams.get("feedUrl") as string);
