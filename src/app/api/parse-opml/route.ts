@@ -91,9 +91,10 @@ export async function POST(request: NextRequest, response: NextResponse) {
     const feedUrls = new Set();
 
     // filter duplicate feeds
-    const uniqueFeeds = feeds
-      .filter(({ feedUrl }) => !feedUrls.has(feedUrl) && feedUrls.add(feedUrl))
-      .slice(0, 100);
+    const uniqueFeeds = feeds.filter(
+      ({ feedUrl }) => !feedUrls.has(feedUrl) && feedUrls.add(feedUrl),
+    );
+    // .slice(0, 100);
 
     console.log({ uniqueFeeds });
 

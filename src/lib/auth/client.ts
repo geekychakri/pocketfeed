@@ -60,9 +60,10 @@ const globalForOAuth = globalThis as typeof globalThis & {
 
 export function getOAuthClient(): Promise<NodeOAuthClient> {
   if (!globalForOAuth.oauthClientPromise) {
+    console.log("NOT reused");
     globalForOAuth.oauthClientPromise = createOAuthClient();
-    console.log("globalForOauth reused");
   }
+  console.log("globalForOauth reused");
   return globalForOAuth.oauthClientPromise;
 }
 

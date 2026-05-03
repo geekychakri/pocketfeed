@@ -7,7 +7,7 @@ import { upstashRedis } from "@/lib/upstash-redis";
 
 const parser = new Parser({
   customFields: {
-    item: ["podcast:chapters"],
+    item: ["podcast:chapters", "podcast:transcript"],
   },
 });
 
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
 
     const res = await fetch(feedUrl, {
       headers,
-      signal: AbortSignal.timeout(7000),
+      signal: AbortSignal.timeout(5000),
     });
 
     console.log({ res });

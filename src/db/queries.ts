@@ -43,15 +43,15 @@ export const getBookmarks = cache(async () => {
     .where(eq(schema.bookmarks.did, session?.did as string));
 });
 
-export const getUserFeeds = cache(async () => {
-  const session = await getSession();
-  if (!session) {
-    return null;
+export const getUserFeeds = cache(async (did?: string) => {
+  // const session = await getSession();
+  if (!did) {
+    return [];
   }
   return db
     .select()
     .from(schema.feeds)
-    .where(eq(schema.feeds.did, session?.did as string));
+    .where(eq(schema.feeds.did, did as string));
 });
 
 export const getFeedData = async (feedUrl: string) => {

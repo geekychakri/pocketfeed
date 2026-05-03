@@ -34,6 +34,8 @@ type ShowPodcastPlayer = {
   setFeedUrl: (val: string | undefined) => void;
   chaptersUrl: string;
   setChaptersUrl: (val: string | undefined) => void;
+  transcriptUrl: string;
+  setTranscriptUrl: (val: string | undefined) => void;
 };
 
 export const useShowPodcastPlayer = createWithEqualityFn<ShowPodcastPlayer>()(
@@ -73,6 +75,9 @@ export const useShowPodcastPlayer = createWithEqualityFn<ShowPodcastPlayer>()(
     chaptersUrl: "",
     setChaptersUrl: (chaptersUrl: string | undefined) =>
       set((state) => ({ chaptersUrl })),
+    transcriptUrl: "",
+    setTranscriptUrl: (transcriptUrl: string | undefined) =>
+      set((state) => ({ transcriptUrl })),
     // podcastTitle: "",
     // setPodcastTitle: (podcastTitle: string | undefined) =>
     //   set((state) => ({ podcastTitle })),

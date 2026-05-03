@@ -24,6 +24,7 @@ export default function PodcastPlayButton({
   albumName,
   feedUrl,
   chaptersUrl,
+  transcriptUrl,
   showText,
   bookmarkId,
 }: {
@@ -38,6 +39,7 @@ export default function PodcastPlayButton({
   albumName?: string;
   feedUrl?: string;
   chaptersUrl?: string;
+  transcriptUrl?: string;
   showText?: boolean;
   bookmarkId?: string;
 }) {
@@ -60,6 +62,7 @@ export default function PodcastPlayButton({
     setAuthor,
     setFeedUrl,
     setChaptersUrl,
+    setTranscriptUrl,
   } = useShowPodcastPlayer();
 
   const { setFeedItem } = useFeedItem();
@@ -109,6 +112,7 @@ export default function PodcastPlayButton({
         setAuthor(author);
         setFeedUrl(feedUrl);
         setChaptersUrl(chaptersUrl);
+        setTranscriptUrl(transcriptUrl);
         setFeedItem({
           ...feedItem,
           albumName,

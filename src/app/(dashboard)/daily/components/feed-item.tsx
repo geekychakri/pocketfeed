@@ -9,7 +9,11 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { decode } from "html-entities";
 
-import { convertTimeStringToReadable, getYoutubeVideoId } from "@/lib/utils";
+import {
+  cn,
+  convertTimeStringToReadable,
+  getYoutubeVideoId,
+} from "@/lib/utils";
 import { FeedItemType, FeedListType } from "@/types";
 
 import PodcastPlayButton from "../../(feed)/feed/components/PodcastPlayButton";
@@ -21,34 +25,38 @@ dayjs.extend(isToday);
 dayjs.extend(isYesterday);
 
 export default function FeedItem({
-  feedList,
+  // feedList,
   item,
   // folderName,
 }: {
-  feedList: FeedListType;
+  // feedList: FeedListType;
   item: FeedItemType;
   // folderName: string;
 }) {
   // const { setFolderName } = useFolderName();
   // const { setArticleData } = useArticleContent();
   // console.log({ feedUrl: feedList.feedUrl });
+
   if (item?.enclosure?.type?.includes("audio")) {
+    const feedItemMetadata = item.feedListMetadata;
+    if (!feedItemMetadata) return null;
+
     //TODO:
     return (
       <PodcastCard
-        feedUrl={feedList?.feedListMetadata.feedUrl}
+        feedUrl={feedItemMetadata.feedUrl}
         item={item}
-        albumCover={feedList?.feedListMetadata.image?.url as string}
+        albumCover={feedItemMetadata.image.url}
         episodeNumber={item?.guid}
-        author={feedList?.feedListMetadata?.itunes?.author}
-        albumName={feedList?.feedListMetadata.title}
-        webLink={feedList?.feedListMetadata.link}
+        author={feedItemMetadata?.itunes.author}
+        albumName={feedItemMetadata.title}
+        webLink={feedItemMetadata.link}
       />
     );
   } else if (item.link?.includes("youtube.com")) {
     return (
       <div className="hover:text-brand-primary px-4 flex items-center justify-between gap-5 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]">
-        <div className="flex-1">
+        <div className="flex-1 flex flex-col gap-1">
           <span className="tracking-tight text-pretty">
             {decode(item.title)}
           </span>
@@ -79,30 +87,60 @@ export default function FeedItem({
   }
   return (
     <div
-      className="hover:text-brand-primary relative isolate px-4 flex flex-col gap-1 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]"
+      className="hover:text-brand-primary  relative isolate px-4 flex items-center justify-between gap-1 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]"
       // prefetch={false}
     >
-      <div className="flex items-center">
-        <h2 className="flex w-4/5 flex-col text-pretty">
-          {decode(item.title) || feedList.title}
+      <div className="flex flex-col gap-1 min-w-0">
+        <h2 className="flex  flex-col text-pretty">
+          {decode(item.title) || feedList?.title}
         </h2>
 
-        <span className="text-text-secondary flex w-1/5 justify-end text-sm">
+        <span className="text-text-secondary flex gap-1 text-sm">
           <span>{dayjs(item.isoDate).format("ll")}</span>
-          {/* <span>·</span>
-            <span>{dayjs().to(dayjs(item.isoDate))}</span> */}
+          <span>·</span>
+          <span>{dayjs().to(dayjs(item.isoDate))}</span>
         </span>
+
+        {/*<span className="text-text-secondary flex w-1/5 justify-end text-sm">
+          <span>{dayjs(item.isoDate).format("ll")}</span>
+        </span>*/}
+
+        {item.contentSnippet.length > 20 && (
+          <span className="line-clamp-2 text-text-secondary">
+            {item.contentSnippet}
+          </span>
+        )}
       </div>
 
-      <span className="line-clamp-2 text-text-secondary">
-        {item.contentSnippet}
-      </span>
       {/* <PostModal
         feedItem={JSON.stringify(item)}
         className="z-2"
         feedTitle={feedList.title}
         websiteLink={feedList.link}
       /> */}
+
+      <div
+        className={cn(
+          "flex size-10 cursor-pointer items-center justify-center gap-1 rounded-full px-4 py-2 text-base font-medium",
+        )}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          className="shrink-0"
+        >
+          <path
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="1.5"
+            d="m9 5l6 7l-6 7"
+          />
+        </svg>
+      </div>
 
       <Link
         // href={
@@ -146,7 +184,7 @@ const PodcastCard = ({
   const audioUrl = item.enclosure.url;
   const content = item["content:encoded"] || item.content; //TODO:: content or contentSnippet
   // const coverImage = item.itunes.image;
-  const coverImage = albumCover || item.itunes.image;
+  const coverImage = albumCover || item?.itunes?.image;
 
   const authorInfo = author || item.author;
 

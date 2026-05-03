@@ -25,7 +25,18 @@ export type FeedListType = {
     summary: string;
     explicit: string;
   };
+
 };
+
+type FeedItemMetadataType = {
+
+    itunes: FeedListType["itunes"];
+    feedUrl: string;
+    link: string;
+    title: string;
+    image: FeedListType["image"];
+  }
+}
 
 export type FeedItemType = {
   id: string;
@@ -61,6 +72,7 @@ export type FeedItemType = {
     episodeType: string;
     image: string;
   };
+  feedListMetadata?: FeedItemMetadataType
 };
 
 export type UserProfileFormData = {

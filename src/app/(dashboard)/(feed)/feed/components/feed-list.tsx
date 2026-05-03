@@ -416,7 +416,7 @@ function FeedItem({
     >
       <div className="flex-1 flex items-center">
         <span className="flex-1 w-4/5 flex-col text-pretty">
-          {decode(item.title) || feedList.title}
+          {decode(item.title) || feedList?.title}
           {/* <span className="line-clamp-2 text-text-secondary">
               {item.contentSnippet}
             </span> */}
@@ -482,11 +482,13 @@ const PodcastCard = ({
   const audioUrl = item.enclosure.url;
   const content = item["content:encoded"] || item.content; //TODO:: content or contentSnippet
   // const coverImage = item.itunes.image;
-  const coverImage = albumCover || item.itunes.image;
+  const coverImage = albumCover || item?.itunes?.image;
 
   const authorInfo = author || item.author;
 
   const chaptersUrl = item["podcast:chapters"]?.["$"]?.url ?? null;
+
+  const transcriptUrl = item["podcast:transcript"]?.["$"]?.url ?? null;
 
   console.log({ duration: item?.itunes?.duration });
   return (
@@ -520,6 +522,7 @@ const PodcastCard = ({
             albumName={albumName}
             feedUrl={feedUrl}
             chaptersUrl={chaptersUrl}
+            transcriptUrl={transcriptUrl}
           />
           {/* <PostModal
               feedItem={JSON.stringify(item)}

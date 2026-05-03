@@ -24,6 +24,7 @@ import { extractTimestampTags } from "@/lib/utils";
 import { useShowPodcastPlayer } from "@/store/podcastplayer";
 
 import BookmarkPodcast from "./bookmark";
+import PodcastTranscipt from "./podcast-transcript";
 
 // DOMPurify.addHook("beforeSanitizeAttributes", function (node) {
 //   // Check if the node is an anchor tag
@@ -160,6 +161,12 @@ function VaulDrawer({ audioRef }: { audioRef: any }) {
                     >
                       Chapters
                     </Tabs.Trigger>
+                    <Tabs.Trigger
+                      value="tab3"
+                      className="border-border-non-interactive bg-background-primary text-text-secondary data-[state=active]:bg-ui-normal data-[state=active]:text-text-primary rounded-md border border-dashed px-4 py-2 font-semibold data-[state=active]:border-transparent"
+                    >
+                      Transcript
+                    </Tabs.Trigger>
                   </Tabs.List>
                   <Tabs.Content
                     value="tab1"
@@ -184,6 +191,12 @@ function VaulDrawer({ audioRef }: { audioRef: any }) {
                     className="focus-visible:outline-brand-primary min-h-0 flex-1 flex"
                   >
                     <PodcastChapters audioRef={audioRef} guid={episodeNumber} />
+                  </Tabs.Content>
+                  <Tabs.Content
+                    value="tab3"
+                    className="focus-visible:outline-brand-primary min-h-0 flex-1 flex"
+                  >
+                    <PodcastTranscipt />
                   </Tabs.Content>
                 </Tabs.Root>
                 {/*<ScrollArea.Root className="min-h-0 flex-1">

@@ -85,12 +85,7 @@ async function FeedSection({
   title: string;
 }) {
   try {
-    const fetchUrl = await fetch(feedUrl, {
-      next: {
-        revalidate: 3600,
-        tags: [`feed-${feedUrl}`],
-      },
-    });
+    const fetchUrl = await fetch(feedUrl);
 
     const fetchData = await fetchUrl.text();
     // const feed = await parser.parseURL(feedUrl);
@@ -115,7 +110,7 @@ async function FeedSection({
             ...(parsedItem.enclosure?.url && {
               feedListMetadata: {
                 itunes: {
-                  ...feed.tunes,
+                  ...feed.itunes,
                 },
                 link: feed.link,
                 title: title,
