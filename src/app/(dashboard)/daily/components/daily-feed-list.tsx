@@ -43,7 +43,8 @@ export default function DailyFeedList() {
       // fallbackData: { dailyFeedItems: [] },
       revalidateIfStale: false,
       revalidateOnFocus: false,
-      revalidateOnMount: true,
+      // revalidateOnReconnect: false,
+      // revalidateOnMount: true,
     },
   );
 

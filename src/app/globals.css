@@ -830,6 +830,43 @@ pre:has(code) {
   scroll-timeline: --scrollfade y;
 }
 
+/*bluesky flutter animation*/
+
+.bluesky-flutter {
+  width: 120px;
+  height: 120px;
+  transition: 200ms;
+}
+
+.bluesky-flutter .left {
+  transform-origin: center;
+}
+.bluesky-flutter .right {
+  transform-origin: center;
+  transform: scale(-1, 1);
+}
+
+@keyframes flutter {
+  10% {
+    transform: scale(calc(var(--flip) * 1), 0.9);
+  }
+  20% {
+    transform: scale(calc(var(--flip) * 0.5), 1);
+  }
+  40% {
+    transform: scale(calc(var(--flip) * 0.9), 0.95);
+  }
+  60% {
+    transform: scale(calc(var(--flip) * 0.3), 1);
+  }
+  80% {
+    transform: scale(calc(var(--flip) * 0.9), 0.95);
+  }
+  100% {
+    transform: scale(calc(var(--flip) * 1), 1);
+  }
+}
+
 /*#feed-search {
   display: none !important;
 }

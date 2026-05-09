@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -45,9 +45,8 @@ export default function FeedLinks({ records }: { records: any }) {
               <AvatarImage
                 className="h-full w-full rounded-[inherit] object-cover"
                 src={
-                  record.siteUrl.includes("youtube.com")
-                    ? record?.favicon
-                    : `https://www.google.com/s2/favicons?domain=${record.siteUrl}&sz=64`
+                  record?.favicon ||
+                  `https://www.google.com/s2/favicons?domain=${record.siteUrl}&sz=64`
                 }
                 // src={record.value?.favicon} //TODO:
                 alt={record.title}

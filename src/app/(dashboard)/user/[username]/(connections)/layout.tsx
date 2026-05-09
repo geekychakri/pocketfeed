@@ -6,7 +6,7 @@ export default async function UserConnectionsLayout({
   params: any;
 }>) {
   return (
-    <main className="mx-auto flex w-full max-w-[720px] flex-col gap-5 py-20">
+    <main className="mx-auto flex w-full max-w-[720px] flex-col min-h-screen border-dashed-x">
       {children}
     </main>
   );

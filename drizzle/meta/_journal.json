@@ -92,6 +92,20 @@
       "when": 1776073833954,
       "tag": "0012_next_master_chief",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1778074435148,
+      "tag": "0013_amused_thaddeus_ross",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1778078106050,
+      "tag": "0014_slow_paper_doll",
+      "breakpoints": true
     }
   ]
 }

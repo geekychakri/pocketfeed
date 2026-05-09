@@ -29,6 +29,8 @@ export const authSession = pgTable("auth_session", {
 export const users = pgTable("users", {
   did: text("did").primaryKey(),
   handle: text("handle").unique().notNull(),
+  displayName: text("displayName").notNull(),
+  avatar: text("avatar").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
@@ -99,11 +101,17 @@ export const posts = pgTable(
 export const follows = pgTable(
   "follows",
   {
-    followerDid: text("follower_did").notNull(),
-    followingDid: text("following_did").notNull(),
+    followerDid: text("follower_did")
+      .notNull()
+      .references(() => users.did, { onDelete: "cascade" }),
+    followingDid: text("following_did")
+      .notNull()
+      .references(() => users.did, { onDelete: "cascade" }),
+
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },
   (table) => [
+    primaryKey({ columns: [table.followerDid, table.followingDid] }),
     index("follows_following_idx").on(table.followingDid),
     index("follows_follower_idx").on(table.followerDid),
   ],

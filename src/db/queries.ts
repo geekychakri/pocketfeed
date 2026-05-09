@@ -1,7 +1,7 @@
 import { cache } from "react";
 import { after } from "next/server";
 
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import Parser from "rss-parser";
 
 import { getSession } from "@/lib/auth/session";
@@ -43,7 +43,7 @@ export const getBookmarks = cache(async () => {
     .where(eq(schema.bookmarks.did, session?.did as string));
 });
 
-export const getUserFeeds = cache(async (did?: string) => {
+export const getUserFeeds = cache(async (did: string) => {
   // const session = await getSession();
   if (!did) {
     return [];
@@ -51,7 +51,8 @@ export const getUserFeeds = cache(async (did?: string) => {
   return db
     .select()
     .from(schema.feeds)
-    .where(eq(schema.feeds.did, did as string));
+    .where(eq(schema.feeds.did, did as string))
+    .orderBy(desc(schema.feeds.createdAt));
 });
 
 export const getFeedData = async (feedUrl: string) => {

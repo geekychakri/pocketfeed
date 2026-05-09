@@ -1,31 +1,196 @@
+import { Suspense } from "react";
 import Link from "next/link";
 
-import { getXataClient } from "@/xata";
+import { eq } from "drizzle-orm";
+import { alias } from "drizzle-orm/pg-core";
 
-export default async function Followers(props: { params: Promise<any> }) {
-  const params = await props.params;
-  console.log({ params });
-  const username = params.username;
-  const xata = await getXataClient();
-  const followers = await xata.db.follows
-    .filter({ followeeName: username })
-    .getAll();
-  console.log({ followee: followers });
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
+import RouteBack from "@/components/route-back";
+
+import { db } from "@/db/db";
+import * as schema from "@/db/schema";
+import { getDid } from "@/lib/auth/session";
+import { getInitials } from "@/lib/utils";
+
+export default async function Followers({
+  params,
+}: {
+  params: Promise<{ username: string }>;
+}) {
   return (
-    <div className="flex flex-col gap-2">
+    <>
+      <Suspense fallback={null}>
+        <FollowersHeader params={params} />
+      </Suspense>
+
+      <Suspense fallback={<FollowersListFallback />}>
+        <FollowersList params={params} />
+      </Suspense>
+    </>
+  );
+}
+
+async function FollowersHeader({
+  params,
+}: {
+  params: Promise<{ username: string }>;
+}) {
+  const { username } = await params;
+  return (
+    <div className="flex items-center h-14 border-dashed-b sticky top-0">
+      <RouteBack className="absolute -left-9" />
+      <p className="text-brand-primary px-4">{username}</p>
+    </div>
+  );
+}
+
+const FollowersList = async ({
+  params,
+}: {
+  params: Promise<{ username: string }>;
+}) => {
+  const { username: handle } = await params;
+  // const did = (await getDid()) as string;
+
+  const targetUser = alias(schema.users, "target_user");
+
+  const followers = await db
+    .select({
+      did: schema.users.did,
+      handle: schema.users.handle,
+      displayName: schema.users.displayName,
+      avatar: schema.users.avatar,
+      createdAt: schema.follows.createdAt,
+    })
+    .from(schema.follows)
+    .innerJoin(targetUser, eq(schema.follows.followingDid, targetUser.did))
+    .innerJoin(schema.users, eq(schema.follows.followerDid, schema.users.did))
+    .where(eq(targetUser.handle, handle));
+  console.log({ followers });
+
+  if (followers.length === 0) {
+    return (
+      <>
+        <div className="flex flex-col items-center justify-center gap-3 py-20">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="56"
+            height="56"
+            viewBox="0 0 24 24"
+          >
+            <g
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="1"
+            >
+              <path
+                strokeDasharray="20"
+                strokeDashoffset="20"
+                d="M3 21v-1c0 -2.21 1.79 -4 4 -4h4c2.21 0 4 1.79 4 4v1"
+              >
+                <animate
+                  fill="freeze"
+                  attributeName="stroke-dashoffset"
+                  dur="0.2s"
+                  values="20;0"
+                />
+              </path>
+              <path
+                strokeDasharray="20"
+                strokeDashoffset="20"
+                d="M9 13c-1.66 0 -3 -1.34 -3 -3c0 -1.66 1.34 -3 3 -3c1.66 0 3 1.34 3 3c0 1.66 -1.34 3 -3 3Z"
+              >
+                <animate
+                  fill="freeze"
+                  attributeName="stroke-dashoffset"
+                  begin="0.2s"
+                  dur="0.2s"
+                  values="20;0"
+                />
+              </path>
+              <path strokeDasharray="10" strokeDashoffset="10" d="M15 3l6 6">
+                <animate
+                  fill="freeze"
+                  attributeName="stroke-dashoffset"
+                  begin="0.5s"
+                  dur="0.2s"
+                  values="10;0"
+                />
+              </path>
+              <path strokeDasharray="10" strokeDashoffset="10" d="M21 3l-6 6">
+                <animate
+                  fill="freeze"
+                  attributeName="stroke-dashoffset"
+                  begin="0.7s"
+                  dur="0.2s"
+                  values="10;0"
+                />
+              </path>
+            </g>
+          </svg>
+
+          <p className="text-text-secondary">No followers yet!</p>
+          <RouteBack text="Go back" />
+        </div>
+      </>
+    );
+  }
+  return (
+    <>
       {/* <div>
         <p>{username}</p>
         <p className="text-text-secondary">{followers.length} followers</p>
       </div> */}
-      {followers.map((item, i) => {
+      {followers.map((profile, i) => {
         return (
           <Link
-            href={`/user/${item.followerName}`}
-            key={item.id}
-            className="rounded-md border bg-gray-300 p-2"
+            href={`/user/${profile.handle}`}
+            key={profile.did}
+            className="border-dashed-b p-4"
           >
-            {item.followerName}
+            <div className="flex items-center gap-3">
+              <Avatar className="hover:ring-ui-normal bg-ui-normal ring-ui-normal inline-flex size-10 flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full align-middle ring-1 transition-shadow select-none group-hover:ring-2">
+                <AvatarImage
+                  className="h-full w-full rounded-[inherit] object-cover"
+                  src={profile.avatar}
+                  alt={profile.displayName || profile.handle}
+                />
+                <AvatarFallback
+                  // className="bg-ui-normal flex h-full w-full items-center justify-center text-[15px] leading-1 font-medium"
+                  delayMs={600}
+                >
+                  {getInitials(profile.displayName || profile.handle)}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <p className="font-medium">{profile.displayName}</p>
+                <p className="text-sm text-text-secondary">{profile.handle}</p>
+              </div>
+            </div>
           </Link>
+        );
+      })}
+    </>
+  );
+};
+
+function FollowersListFallback() {
+  return (
+    <div className="animate-pulse min-h-screen">
+      {Array.from({ length: 20 }, (_, i) => {
+        return (
+          <div key={i} className="h-[75px] w-full border-dashed-b p-4">
+            <div className="flex items-center gap-3">
+              <div className="bg-skeleton-highlight size-10 rounded-full"></div>
+
+              <div className="flex flex-col gap-1">
+                <p className="bg-skeleton-highlight  h-4 w-[150px]"></p>
+                <p className="bg-skeleton-highlight  h-4 w-[150px]"></p>
+              </div>
+            </div>
+          </div>
         );
       })}
     </div>

@@ -1,0 +1,2 @@
+ALTER TABLE "follows" ADD CONSTRAINT "follows_follower_did_users_did_fk" FOREIGN KEY ("follower_did") REFERENCES "public"."users"("did") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "follows" ADD CONSTRAINT "follows_following_did_users_did_fk" FOREIGN KEY ("following_did") REFERENCES "public"."users"("did") ON DELETE cascade ON UPDATE no action;

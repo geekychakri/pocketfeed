@@ -62,7 +62,7 @@ const AvatarDropdownItem = ({
   return (
     <DropdownMenu.Item
       // className="text-text-primary data-highlighted:bg-ui-normal data-disabled:text-mauve8 relative flex h-[25px] items-center justify-between gap-2 rounded-[3px] px-2 py-5 text-sm leading-none duration-150 select-none data-disabled:pointer-events-none data-highlighted:shadow-none"
-      className="text-text-primary data-highlighted:bg-ui-normal data-disabled:text-mauve8 relative flex h-[25px] cursor-pointer items-center justify-between gap-2 rounded-[3px] px-2 py-5 text-sm leading-none duration-150 outline-none select-none data-disabled:pointer-events-none"
+      className="text-text-primary data-highlighted:bg-ui-normal data-disabled:text-mauve8 relative flex h-[25px] cursor-pointer items-center justify-between gap-2 rounded-[3px] px-2 py-5 text-sm leading-none focus-visible:outline-none! select-none data-disabled:pointer-events-none"
       asChild
       // onMouseEnter={() => iconRef.current?.startAnimation()}
       // onMouseLeave={() => iconRef.current?.stopAnimation()}
@@ -117,7 +117,7 @@ export default function ProfileAvatar({
       <DropdownMenu.Portal>
         <DropdownMenu.Content
           className="border-shadow bg-background-primary text-text-primary data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-40 min-w-[220px] rounded-md p-[5px]"
-          sideOffset={5}
+          sideOffset={14}
           align="start"
         >
           <AvatarDropdownItem href={`/user/${handle}` as Route} Icon={UserIcon}>

@@ -42,6 +42,10 @@ export default function Posts() {
 
   const posts = data.flatMap((data) => data.data);
 
+  if (posts.length === 0) {
+    return <div className="px-4">No posts yet!</div>;
+  }
+
   return (
     <div className="flex min-h-[300px] flex-col gap-4">
       {/*<PostIcon className="size-20" />

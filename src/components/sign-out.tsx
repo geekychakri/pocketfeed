@@ -23,7 +23,7 @@ const SignOutButton = () => {
 
   return (
     <DropdownMenu.Item
-      className="text-text-primary data-highlighted:bg-ui-normal data-disabled:text-mauve8 relative flex h-[25px] cursor-pointer items-center justify-between gap-2 rounded-[3px] px-2 py-5 text-sm leading-none duration-150 outline-none select-none data-disabled:pointer-events-none"
+      className="text-text-primary data-highlighted:bg-ui-normal data-disabled:text-mauve8 relative flex h-[25px] cursor-pointer items-center justify-between gap-2 rounded-[3px] px-2 py-5 text-sm leading-none focus-visible:outline-none! select-none data-disabled:pointer-events-none"
       // onClick={() => signOut({ redirectUrl: "/" })}
       onSelect={(e) => {
         e.preventDefault();

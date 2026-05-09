@@ -73,7 +73,7 @@ export default function SideNavClient() {
             <Link
               href={path}
               className={cn(
-                "hover:bg-ui-hover flex h-11 items-center gap-3 px-3 rounded-md py-[10px] transition-[background-color]",
+                "hover:bg-ui-hover flex h-11 items-center gap-3 px-3 rounded-md py-[10px] transition-[background-color] duration-100",
                 isActive && "bg-ui-hover font-medium",
               )}
               onNavigate={setIsOpen}

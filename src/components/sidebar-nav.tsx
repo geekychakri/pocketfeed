@@ -183,7 +183,7 @@ export default function SidebarNavigation({
       <nav
         id="sidebar"
         className={cn(
-          `text-textColor bg-background-primary fixed top-0 bottom-0 left-0 isolate z-30 h-screen w-[256px]  grid grid-rows-[56px_56px_auto_minmax(0,1fr)_56px] border-r border-dashed border-border-primary transition-[translate] duration-150 select-none max-md:-translate-x-full`,
+          `text-textColor bg-background-primary fixed top-0 bottom-0 left-0 isolate z-30 h-screen w-[256px]  grid grid-rows-[56px_56px_auto_minmax(0,1fr)_56px] border-dashed-r transition-[translate] duration-150 select-none max-md:-translate-x-full`,
           isOpen && "max-md:translate-x-0",
         )}
       >

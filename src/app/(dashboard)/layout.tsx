@@ -9,6 +9,7 @@ import ProfileAvatarWrapper from "@/components/profile-avatar-wrapper";
 import SidebarNavigation from "@/components/sidebar-nav";
 
 import { getBookmarks, getSelectedFeeds, getUserFeeds } from "@/db/queries";
+import { getDid } from "@/lib/auth/session";
 
 // import { getProfile } from "@/lib/atproto/queries";
 
@@ -40,8 +41,8 @@ export default async function MainLayout({
             Subscriptions
           </h2>
 
-          <Suspense fallback={<FeedListFallback />}>
-            <FeedList />
+          <Suspense fallback={null}>
+            <FeedListWrapper />
           </Suspense>
         </div>
 
@@ -70,6 +71,11 @@ export default async function MainLayout({
     </div>
   );
 }
+
+const FeedListWrapper = async () => {
+  const did = (await getDid()) as string;
+  return <FeedList did={did} />;
+};
 
 function ProfileAvatarFallback() {
   return (

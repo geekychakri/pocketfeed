@@ -18,7 +18,7 @@ export default forwardRef<
     <button
       ref={ref}
       className={cn(
-        "h-11 cursor-pointer rounded-md px-4 py-2 font-medium transition-[background-color,opacity]",
+        "h-9 cursor-pointer rounded-md px-4 py-2 font-medium transition-[background-color,opacity]",
         variant === "delete" ? "hover:opacity-90" : "hover:bg-ui-hover",
         variant === "cta"
           ? "bg-cta text-background-primary hover:bg-cta-hover"

@@ -207,7 +207,16 @@ type FeedsType = {
 //   }
 // }
 
-export async function addFeeds(prevState: any, formData: FormData) {
+const initialState = {
+  type: "",
+  message: "",
+  payload: [],
+};
+
+export async function addFeeds(prevState: any, formData: FormData | null) {
+  if (formData === null) {
+    return initialState;
+  }
   let shouldRedirect = false;
   let feeds = [];
   try {
@@ -237,6 +246,7 @@ export async function addFeeds(prevState: any, formData: FormData) {
         return {
           type: "error",
           message: "Select at least one feed.",
+          payload: [],
         };
       }
     }
@@ -251,6 +261,7 @@ export async function addFeeds(prevState: any, formData: FormData) {
       return {
         type: "error",
         message: "Please fix the errors in the form.",
+        payload: [],
         errors: validateFields.error.flatten().fieldErrors,
       };
     }
@@ -356,30 +367,35 @@ export async function addFeeds(prevState: any, formData: FormData) {
     console.log({ feeds });
     // console.log({ title: decodeURIComponent(feeds[0].title) });
 
-    const res = await db
+    const insertedFeedItems = await db
       .insert(schema.feeds)
       .values(feeds)
-      .onConflictDoNothing();
+      .onConflictDoNothing()
+      .returning();
 
-    refresh();
+    // refresh();
+
+    console.log({ insertedFeedItems });
 
     shouldRedirect = true;
 
-    // return {
-    //   type: "success",
-    //   message: "",
-    // };
+    return {
+      type: "success",
+      message: "",
+      payload: insertedFeedItems,
+    };
   } catch (err) {
     return {
       type: "internal-error",
       // message: getErrorMessage(err) || INTERNAL_ERROR_MESSAGE,
       message: INTERNAL_ERROR_MESSAGE,
+      payload: [],
     };
   }
 
-  if (shouldRedirect) {
-    redirect(
-      `/feed?feedUrl=${feeds[0].feedUrl}&title=${encodeURIComponent(feeds[0].title)}`,
-    );
-  }
+  // if (shouldRedirect) {
+  //   redirect(
+  //     `/feed?feedUrl=${feeds[0].feedUrl}&title=${encodeURIComponent(feeds[0].title)}`,
+  //   );
+  // }
 }

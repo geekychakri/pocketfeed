@@ -1,4 +1,8 @@
+import { Suspense } from "react";
+
 import RouteBack from "@/components/route-back";
+
+import { getDid } from "@/lib/auth/session";
 
 import AddFeed from "./components/add-feed";
 
@@ -11,7 +15,15 @@ export default async function Page() {
           <span>Add feed</span>
         </h1>
       </div>
-      <AddFeed />
+      <Suspense fallback={null}>
+        <AddFeedWrapper />
+      </Suspense>
     </div>
   );
 }
+
+const AddFeedWrapper = async () => {
+  const did = (await getDid()) as string;
+
+  return <AddFeed did={did} />;
+};

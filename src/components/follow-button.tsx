@@ -131,7 +131,7 @@ export default function FollowButton({
   // }
   return (
     <Button
-      className="w-[200px]"
+      className="w-[200px] shrink-0"
       onClick={follow ? handleUnFollow : handleFollow}
       {...(!isOptimisticFollowingUser && { variant: "cta" })}
       // disabled={!isLoaded}

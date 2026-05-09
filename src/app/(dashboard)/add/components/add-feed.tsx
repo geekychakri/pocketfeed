@@ -1,9 +1,18 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import {
+  startTransition,
+  useActionState,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
+import { useRouter } from "next/navigation";
 
 import * as Switch from "@radix-ui/react-switch";
 import { toast } from "sonner";
+import { mutate } from "swr";
 import useSound from "use-sound";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
@@ -34,12 +43,20 @@ type RSSFinderType = {
 const initialState = {
   type: "",
   message: "",
+  payload: [],
 };
 
-export default function AddFeed() {
+type Action = { type: "SUBMIT"; data: FormData } | { type: "RESET" };
+type State = { type: string; message: string | null; payload: [] };
+
+export default function AddFeed({ did }: { did: string }) {
   const [urlValue, setUrlValue] = useState("");
   const [rssData, setRssData] = useState<Partial<RSSFinderType>>({});
   const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter();
+
+  const shouldReset = useRef(false);
 
   const [playToggleOn] = useSound("sounds/toggle_on.wav", {
     volume: 0.25,
@@ -51,7 +68,9 @@ export default function AddFeed() {
     volume: 0.25,
   });
 
-  const [state, formAction, isPending] = useActionState(addFeeds, initialState);
+  const [state, dispatch, isPending] = useActionState(addFeeds, initialState);
+
+  // const submitAction = (data: FormData) => dispatch({ type: "SUBMIT", data });
 
   console.log({ state });
 
@@ -99,14 +118,46 @@ export default function AddFeed() {
 
   useEffect(() => {
     if (state?.type === "internal-error") {
+      shouldReset.current = true;
       internalErrorToast(state?.message);
     } else if (state?.type === "error") {
+      shouldReset.current = true;
       toast.error(state?.message, {
         id: "error",
       });
       playCaution();
+      return;
+    }
+    if (state?.payload.length >= 1) {
+      shouldReset.current = true;
+      console.log({ payload: [...state.payload] });
+      mutate(
+        `/api/get-user-feeds?did=${did}`,
+        (prevFeeds) => {
+          console.log({ prevFeeds });
+          return [...state?.payload, ...prevFeeds];
+        },
+        {
+          revalidate: false,
+        },
+      );
+
+      router.push(
+        `/feed?feedUrl=${state?.payload[0].feedUrl}&title=${encodeURIComponent(state?.payload[0].title)}`,
+      );
     }
   }, [state, playCaution]);
+
+  useLayoutEffect(() => {
+    return () => {
+      if (shouldReset.current) {
+        shouldReset.current = false;
+        startTransition(() => {
+          dispatch(null);
+        });
+      }
+    };
+  }, [dispatch]);
 
   return (
     <div className="relative mx-auto flex w-full max-w-md flex-col gap-3">
@@ -173,7 +224,10 @@ export default function AddFeed() {
               {getInitials(rssData.title as string)}
             </AvatarFallback>
           </Avatar>
-          <form action={formAction} className="flex flex-col gap-6">
+          <form
+            action={(formData) => dispatch(formData)}
+            className="flex flex-col gap-6"
+          >
             <div className="flex flex-col gap-6">
               {rssData?.feedUrls?.map((item, i) => {
                 return (
