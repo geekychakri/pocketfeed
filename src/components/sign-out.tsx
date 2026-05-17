@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { useClerk } from "@clerk/nextjs";
 import { User } from "@clerk/nextjs/server";
@@ -18,6 +19,13 @@ interface UserIconHandle {
 const SignOutButton = () => {
   // const [hovered, setHovered] = useState(false);
   // const { signOut } = useClerk();
+  //
+  const router = useRouter();
+
+  async function handleLogout() {
+    await fetch("/oauth/logout", { method: "POST" });
+    router.push("/");
+  }
 
   const iconRef = useRef<UserIconHandle>(null);
 
@@ -28,6 +36,7 @@ const SignOutButton = () => {
       onSelect={(e) => {
         e.preventDefault();
         // signOut({ redirectUrl: "/" });
+        handleLogout();
       }}
       onMouseEnter={() => iconRef.current?.startAnimation()}
       onMouseLeave={() => iconRef.current?.stopAnimation()}

@@ -152,6 +152,8 @@ export default function AddFeed({ did }: { did: string }) {
     return () => {
       if (shouldReset.current) {
         shouldReset.current = false;
+        setRssData({});
+        setUrlValue("");
         startTransition(() => {
           dispatch(null);
         });

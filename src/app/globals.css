@@ -83,6 +83,23 @@
   background-repeat: no-repeat;
 }
 
+@utility marquee {
+  --gap: 1rem;
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  gap: var(--gap);
+}
+
+@utility marquee__content {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-around;
+  min-width: 100%;
+  gap: var(--gap);
+  animation: scroll 10s linear infinite;
+}
+
 @layer base {
   *,
   ::after,
@@ -866,6 +883,22 @@ pre:has(code) {
     transform: scale(calc(var(--flip) * 1), 1);
   }
 }
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+  }
+}
+/*
+.active-word > span:nth-child(2) {
+  background-color: rgb(var(--brand-primary));
+  color: #fff;
+  border-radius: 6px;
+
+}*/
 
 /*#feed-search {
   display: none !important;

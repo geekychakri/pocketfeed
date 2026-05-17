@@ -88,9 +88,9 @@ export default function ReadNav({
   // const toggleFullScreen = () => {
   //   localStorage.setItem("fullscreen", "on");
   // };
-  useHotkeys("W", () =>
-    window.open(decodeURIComponent(articleUrl), "_blank", "noreferrer"),
-  );
+  // useHotkeys("W", () =>
+  //   window.open(decodeURIComponent(articleUrl), "_blank", "noreferrer"),
+  // );
   // useHotkeys("F", () => {
   //   toggleFullscreen();
   // });
@@ -151,7 +151,7 @@ export default function ReadNav({
           {/* <button>
             <PostIcon />
           </button> */}
-          <PostModal />
+          <PostModal iconClassName="size-4.5" />
 
           {/* <Bookmark
           bookmarked={bookmarkExists}
@@ -161,13 +161,7 @@ export default function ReadNav({
           bookmarkTitle={articleTitle}
         /> */}
 
-          <CustomTooltip
-            content={
-              <span>
-                View original <kbd>[W]</kbd>
-              </span>
-            }
-          >
+          <CustomTooltip content={<span>View original</span>}>
             <IconOnlyAction
               as="a"
               href={decodeURIComponent(articleUrl)}
@@ -175,7 +169,7 @@ export default function ReadNav({
               rel="noopener noreferrer"
               className="rounded-full"
             >
-              <GlobalIcon className="size-[18px] shrink-0" />
+              <GlobalIcon className="size-4.5 shrink-0" />
             </IconOnlyAction>
           </CustomTooltip>
 

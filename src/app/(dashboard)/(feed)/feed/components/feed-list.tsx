@@ -488,7 +488,28 @@ const PodcastCard = ({
 
   const chaptersUrl = item["podcast:chapters"]?.["$"]?.url ?? null;
 
-  const transcriptUrl = item["podcast:transcript"]?.["$"]?.url ?? null;
+  let transcriptUrl = "";
+
+  if (item["podcast:transcript"] && item["podcast:transcript"].length >= 1) {
+    const podcastTranscriptUrls = item["podcast:transcript"]?.map((t) => ({
+      ...t.$,
+    }));
+
+    console.log({ podcastTranscript: item["podcast:transcript"] });
+
+    transcriptUrl =
+      podcastTranscriptUrls.find((t) => t.type === "application/json")?.url ??
+      podcastTranscriptUrls.find((t) => t.type === "application/x-subrip")
+        ?.url ??
+      podcastTranscriptUrls.find((t) => t.type === "text/vtt")?.url ??
+      podcastTranscriptUrls.find((t) => t.type === "text/plain")?.url ??
+      podcastTranscriptUrls.find((t) => t.type === "text/html")?.url ??
+      "";
+  }
+
+  console.log({ transcriptUrl });
+
+  // const transcriptUrl = item["podcast:transcript"]?.["$"]?.url ?? null;
 
   console.log({ duration: item?.itunes?.duration });
   return (

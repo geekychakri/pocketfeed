@@ -169,8 +169,13 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
   const articleRef = useRef(null);
   const effectRan = useRef(false);
 
-  const { articleContent, articleTitle, articleLink, isExtracted } =
-    useArticleContent();
+  const {
+    articleContent,
+    articleTitle,
+    articleLink,
+    isExtracted,
+    setIsArticleExtracted,
+  } = useArticleContent();
 
   // const { onError } = useSWRConfig();
 
@@ -225,7 +230,11 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
 
   console.log({ contentToRead });
 
+  console.log({ isExtracted });
+
   useEffect(() => {
+    // alert("hello");
+    console.log("EXTRACTED");
     document.querySelectorAll("pre").forEach((pre) => {
       if (pre.dataset.processed === "true") return;
       pre.dataset.processed = "true";
@@ -262,6 +271,12 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
       });
     });
   }, [copySound, isExtracted]);
+
+  useLayoutEffect(() => {
+    return () => {
+      setIsArticleExtracted(false);
+    };
+  }, [setIsArticleExtracted]);
 
   if (isExtracted) {
     console.log("IS EXTRACTED!");

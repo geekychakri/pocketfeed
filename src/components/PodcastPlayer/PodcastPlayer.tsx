@@ -120,7 +120,21 @@ const PodcastPlayer = () => {
     //
     // console.log({ show });
     // }
-    if (show !== "hide") audioPlayerRef.current?.play();
+    // if (show !== "hide") audioPlayerRef.current?.play();
+    // if (show !== "hide") {
+    //   var playPromise = audioPlayerRef.current?.play();
+    //   if (playPromise !== undefined) {
+    //     playPromise
+    //       .then((_) => {
+    //         // Automatic playback started!
+    //         // Show playing UI.
+    //       })
+    //       .catch((error) => {
+    //         // Auto-play was prevented
+    //         // Show paused UI.
+    //       });
+    //   }
+    // }
   }, [show]);
 
   useEffect(() => {
@@ -140,9 +154,14 @@ const PodcastPlayer = () => {
     }
   }, [currentTime]);
 
-  useEffect(() => {
-    // console.log("AUDIO CHANGED");
-  }, [audioUrl]);
+  // useEffect(() => {
+  //   // console.log("AUDIO CHANGED");
+  //   const audio = audioPlayerRef.current;
+  //   console.log({ audio });
+  //   if (!audio) return;
+
+  //   audio.play().catch(() => {});
+  // }, [audioUrl, audioPlayerRef]);
 
   if (!show) {
     return null;
@@ -153,14 +172,22 @@ const PodcastPlayer = () => {
       className={`bg-background-primary pb-3 fixed -bottom-72 left-0 min-md:left-[256px] animation-slide-up-player ease-out-player animate-player-slide-up right-0 z-10 flex flex-col gap-1 transition-[translate] duration-700 ${show === "hide" ? "translate-y-80" : ""}`}
     >
       <div className="flex justify-between pr-3 border-dashed-y bg-background-secondary">
-        <div className="flex gap-1 items-center">
+        <div className="flex gap-1 items-center select-none">
           {albumCover && (
             <img src={albumCover} alt={albumName} className="size-10" />
           )}
-          <p className="text-sm text-text-secondary">{albumName}</p>
+          <div className="max-md:marquee text-sm text-text-secondary">
+            <p className="max-md:marquee__content">{albumName}</p>
+            <p
+              className="max-md:marquee__content max-md:block hidden"
+              aria-hidden={true}
+            >
+              {albumName}
+            </p>
+          </div>
         </div>
 
-        <div className="flex gap-1 items-center">
+        <div className="flex gap-1 items-center shrink-0">
           <TooltipPrimitive.Provider>
             <PostModal
               iconClassName="size-4"
@@ -227,6 +254,7 @@ const PodcastPlayer = () => {
           playsInline
           autoPlay
           ref={audioPlayerRef}
+          // onCanPlay={(e) => e.currentTarget.play().catch(() => {})}
           onPlay={() => setIsPlayingTrue()}
           onPause={() => setIsPlayingFalse()}
         ></audio>

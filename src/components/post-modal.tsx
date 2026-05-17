@@ -281,7 +281,7 @@ export default function PostModal({
           asChild
         >
           <IconOnlyAction className={cn("rounded-md", customClassName)}>
-            <PostIcon className={cn("size-[20px] shrink-0", iconClassName)} />
+            <PostIcon className={cn("size-5 shrink-0", iconClassName)} />
           </IconOnlyAction>
         </TooltipPrimitive.Trigger>
         <TooltipPrimitive.Content

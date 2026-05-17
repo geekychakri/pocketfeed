@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import useSWR, { useSWRConfig } from "swr";
@@ -67,20 +67,8 @@ export default function PodcastChapters({
 }) {
   const { setCurrentTime, setIsPlayingTrue, isPlaying, feedUrl, chaptersUrl } =
     useShowPodcastPlayer();
-  const [activeIndex, setActiveIndex] = useState(0);
 
-  const [audioCurrentTime, setAudioCurrentTime] = useState(0);
-
-  // const chaptersWithTimeStartandEnd = chapters.map((chapter, i) => {
-  //   const nextChapter = chapters[i + 1];
-  //   return {
-  //     ...chapter,
-  //     timestampStart: chapter.timestamp,
-  //     timestampEnd: nextChapter?.timestamp,
-  //   };
-  // });
-
-  // console.log(chaptersWithTimeStartandEnd);
+  const chapterRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const { onError } = useSWRConfig();
 
@@ -108,18 +96,57 @@ export default function PodcastChapters({
     },
   );
 
+  // useEffect(() => {
+  //   if (data) {
+  //     const onTimeUpdate = () => {
+  //       setAudioCurrentTime(audioRef.current?.currentTime);
+  //     };
+  //     const audioElement = audioRef.current;
+  //     audioElement.addEventListener("timeupdate", onTimeUpdate);
+  //     return () => {
+  //       audioElement.removeEventListener("timeupdate", onTimeUpdate);
+  //     };
+  //   }
+  // }, [data]);
+
   useEffect(() => {
-    if (data) {
-      const onTimeUpdate = () => {
-        setAudioCurrentTime(audioRef.current?.currentTime);
-      };
-      const audioElement = audioRef.current;
-      audioElement.addEventListener("timeupdate", onTimeUpdate);
-      return () => {
-        audioElement.removeEventListener("timeupdate", onTimeUpdate);
-      };
-    }
-  }, [data]);
+    const audio = audioRef.current;
+
+    if (!audio || !data?.chapters) return;
+
+    let lastActiveIndex = -1;
+
+    const onTimeUpdate = () => {
+      const t = audio.currentTime;
+
+      const activeIndex = data.chapters.findIndex(
+        (chapter) =>
+          t >= chapter.startTime && t < (chapter.endTime ?? audio.duration),
+      );
+
+      if (activeIndex === lastActiveIndex) {
+        return;
+      }
+
+      // remove previous
+      if (lastActiveIndex !== -1) {
+        chapterRefs.current[lastActiveIndex]?.classList.remove("bg-ui-normal");
+      }
+
+      // add current
+      if (activeIndex !== -1) {
+        chapterRefs.current[activeIndex]?.classList.add("bg-ui-normal");
+      }
+
+      lastActiveIndex = activeIndex;
+    };
+
+    audio.addEventListener("timeupdate", onTimeUpdate);
+
+    return () => {
+      audio.removeEventListener("timeupdate", onTimeUpdate);
+    };
+  }, [audioRef, data]);
 
   if (error) {
     return (
@@ -156,101 +183,48 @@ export default function PodcastChapters({
   return (
     <ScrollArea.Root className="min-h-0 flex-1">
       <ScrollArea.Viewport className="scrollable scroll-pb-6 overscroll-contain h-full flex pl-1 pr-6 py-2 flex-col gap-4 focus-visible:border-brand-shadow">
-        <div className="flex flex-col justify-center gap-4">
-          {data?.chapters?.map((chapter, i) => {
-            const isActive =
-              audioRef.current?.currentTime >= chapter.startTime &&
-              audioRef.current?.currentTime <
-                (chapter.endTime ? chapter.endTime : audioRef.current.duration);
-
-            return (
-              <button
-                className={`h-14 w-full rounded-md px-4 py-2 cursor-pointer text-left ${isActive ? "bg-background-secondary" : "bg-ui-normal"} hover:bg-background-secondary`}
-                key={i}
-                onClick={() => {
-                  // console.log(chapter);
-                  // const ms = convertTimestampToSeconds(chapter.timeStart);
-                  // console.log({ ms });
-                  // setCurrentTime(ms);
-                  // if (!isPlaying) {
-                  //   setIsPlayingTrue();
-                  // }
-                  setCurrentTime(chapter.startTime);
-                  if (!isPlaying) {
-                    setIsPlayingTrue();
-                  }
-                }}
-              >
-                <span className="flex justify-between gap-4">
-                  <span className="flex items-center gap-2">
-                    {isActive ? (
+        {/*<div className="flex flex-col justify-center gap-4">*/}
+        {data?.chapters?.map((chapter, i) => {
+          return (
+            <button
+              ref={(el) => {
+                chapterRefs.current[i] = el;
+              }}
+              className={`h-14 w-full rounded-md px-4 py-2 cursor-pointer border-dashed text-left hover:bg-ui-hover`}
+              key={i}
+              onClick={() => {
+                // setCurrentTime(chapter.startTime);
+                audioRef.current.currentTime = chapter.startTime;
+                if (!isPlaying) {
+                  setIsPlayingTrue();
+                }
+              }}
+            >
+              <span className="flex justify-between gap-4">
+                <span className="flex items-center gap-2">
+                  {/*{isActive ? (
                       <AnimatedMusicBars isPlaying={isPlaying} />
-                    ) : null}
-                    <span className="line-clamp-1">
-                      {chapter.title}
-                      {/* {chapter?.text} */}
-                    </span>
-                  </span>
-                  <span className="text-text-secondary flex-none">
-                    {toHHMMSS(chapter.startTime)}
+                    ) : null}*/}
+                  <span className="line-clamp-1">
+                    {chapter.title}
+                    {/* {chapter?.text} */}
                   </span>
                 </span>
-                {/* {isActive ? <AnimatedMusicBars isPlaying={isPlaying} /> : ""} */}
-                {/* <span>{activeIndex === i ? "Logo" : ""}</span> */}
-              </button>
-            );
-          })}
-        </div>
+                <span className="text-text-secondary flex-none">
+                  {toHHMMSS(chapter.startTime)}
+                </span>
+              </span>
+              {/* {isActive ? <AnimatedMusicBars isPlaying={isPlaying} /> : ""} */}
+              {/* <span>{activeIndex === i ? "Logo" : ""}</span> */}
+            </button>
+          );
+        })}
+        {/*</div>*/}
       </ScrollArea.Viewport>
       <ScrollArea.Scrollbar className="m-2 flex w-1 justify-center rounded-sm  opacity-0 transition-opacity pointer-events-none data-[hovering]:opacity-100 data-[hovering]:delay-0 data-[hovering]:pointer-events-auto data-[scrolling]:opacity-100 data-[scrolling]:duration-0 data-[scrolling]:pointer-events-auto">
         <ScrollArea.Thumb className="w-full rounded-sm bg-brand-primary" />
       </ScrollArea.Scrollbar>
     </ScrollArea.Root>
-
-    // <div className="flex flex-col gap-4">
-    //   {chaptersWithTimeStartandEnd.map((chapter, i) => {
-    //     const isActive =
-    //       audioRef.current.currentTime >=
-    //         convertTimestampToSeconds(chapter.timestampStart) &&
-    //       audioRef.current.currentTime <
-    //         (chapter.timestampEnd
-    //           ? convertTimestampToSeconds(chapter.timestampEnd)
-    //           : audioRef.current.duration);
-
-    //     return (
-    //       <button
-    //         className={`w-full max-w-[320px] rounded-md px-4 py-2 text-left duration-100 ${isActive ? "bg-neutral-100" : "bg-neutral-50"} hover:bg-neutral-100`}
-    //         key={i}
-    //         onClick={() => {
-    //           console.log(chapter);
-    //           const ms = convertTimestampToSeconds(chapter.timestamp);
-    //           console.log({ ms });
-    //           setCurrentTime(ms);
-    //           if (!isPlaying) {
-    //             setIsPlayingTrue();
-    //           }
-    //         }}
-    //       >
-    //         <span className="flex flex-col gap-1">
-    //           <span className="flex items-center gap-2">
-    //             {isActive ? <AnimatedMusicBars isPlaying={isPlaying} /> : ""}
-    //             <span className="line-clamp-1">
-    //               {extractText(chapter?.text)
-    //                 ? extractText(chapter?.text)
-    //                 : "Syntax"}
-    //               {/* {chapter?.text} */}
-    //             </span>
-    //           </span>
-    //           <span className="text-neutral-500">
-    //             {chapter.timestamp.replace(/\(|\)/g, "").trim()}
-    //           </span>
-    //         </span>
-    //         {/* {isActive ? <AnimatedMusicBars isPlaying={isPlaying} /> : ""} */}
-    //         {/* <span>{activeIndex === i ? "Logo" : ""}</span> */}
-    //       </button>
-    //     );
-    //   })}
-    // </div>
   );
 }
 

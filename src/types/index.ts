@@ -25,18 +25,15 @@ export type FeedListType = {
     summary: string;
     explicit: string;
   };
-
 };
 
 type FeedItemMetadataType = {
-
-    itunes: FeedListType["itunes"];
-    feedUrl: string;
-    link: string;
-    title: string;
-    image: FeedListType["image"];
-  }
-}
+  itunes: FeedListType["itunes"];
+  feedUrl: string;
+  link: string;
+  title: string;
+  image: FeedListType["image"];
+};
 
 export type FeedItemType = {
   id: string;
@@ -57,6 +54,13 @@ export type FeedItemType = {
       url: string;
     };
   };
+  "podcast:transcript": {
+    $: {
+      type: string;
+      url: string;
+      rel?: string;
+    };
+  }[];
   enclosure: {
     length: string;
     type: string;
@@ -72,7 +76,7 @@ export type FeedItemType = {
     episodeType: string;
     image: string;
   };
-  feedListMetadata?: FeedItemMetadataType
+  feedListMetadata?: FeedItemMetadataType;
 };
 
 export type UserProfileFormData = {

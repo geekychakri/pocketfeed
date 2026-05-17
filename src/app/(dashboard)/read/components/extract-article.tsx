@@ -24,15 +24,20 @@ export default function ExtractArticle() {
 
   const searchParams = useSearchParams();
 
-  const { setArticleData } = useArticleContent();
+  const {
+    setArticleContent,
+    setArticleLink,
+    setArticleTitle,
+    setIsArticleExtracted,
+  } = useArticleContent();
 
   console.log({ shouldFetch });
 
   const { cache } = useSWRConfig();
 
-  useHotkeys("E", () => {
-    handleClick();
-  });
+  // useHotkeys("E", () => {
+  //   handleClick();
+  // });
 
   const { data, error, isValidating, mutate } = useSWR<{
     content: string;
@@ -51,7 +56,11 @@ export default function ExtractArticle() {
       // revalidateOnMount: false, //TODO: doesn't fetch on initial render
       onSuccess(data, key, config) {
         console.log({ data });
-        setArticleData(data?.content, data?.title, data.link, true);
+        setArticleContent(data?.content);
+        setArticleTitle(data?.title);
+        setArticleLink(data.link);
+        setIsArticleExtracted(true);
+        // setArticleData(data?.content, data?.title, data.link, true);
         extractArticleIconRef.current?.stopAnimation();
       },
     },
@@ -93,13 +102,7 @@ export default function ExtractArticle() {
   // }, [shouldFetch, data, mutate]);
 
   return (
-    <CustomTooltip
-      content={
-        <span>
-          Extract full article <kbd>[E]</kbd>
-        </span>
-      }
-    >
+    <CustomTooltip content={<span>Extract full article</span>}>
       <IconOnlyAction
         onClick={handleClick}
         className={`rounded-md ${isValidating ? "cursor-progress" : "cursor-pointer"}`}

@@ -75,13 +75,11 @@ export let getProfile = cache(async () => {
   const did = await getDid();
   const res = await fetch(
     `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${did}`,
-    {
-      cache: "force-cache",
-      next: {
-        revalidate: 60 * 60 * 24, // 1 day
-      },
-    },
-  ); //TODO: actor pass dynamic did
+  );
+
+  if (!res.ok) {
+    throw new Error("Something went wrong!");
+  }
 
   const profile = await res.json();
 

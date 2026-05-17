@@ -6,8 +6,9 @@ import { memo, useActionState, useEffect, useState } from "react";
 
 import { Drawer } from "@base-ui/react/drawer";
 import { ScrollArea } from "@base-ui/react/scroll-area";
+// import * as Tabs from "@radix-ui/react-tabs";
+import { Tabs } from "@base-ui/react/tabs";
 import { Cross2Icon, ReaderIcon } from "@radix-ui/react-icons";
-import * as Tabs from "@radix-ui/react-tabs";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import DOMPurify from "isomorphic-dompurify";
 import { useFormState } from "react-dom";
@@ -63,14 +64,23 @@ function VaulDrawer({ audioRef }: { audioRef: any }) {
   // const [chapters, setChapters] = useState<
   //   { timestamp: string; text: string }[]
   // >([]);
-  const { title, content, episodeNumber, audioUrl, feedUrl } =
-    useShowPodcastPlayer((state) => ({
-      title: state.title,
-      content: state.content,
-      episodeNumber: state.episodeNumber,
-      audioUrl: state.audioUrl,
-      feedUrl: state.feedUrl,
-    }));
+  const {
+    title,
+    content,
+    episodeNumber,
+    chaptersUrl,
+    transcriptUrl,
+    audioUrl,
+    feedUrl,
+  } = useShowPodcastPlayer((state) => ({
+    title: state.title,
+    content: state.content,
+    episodeNumber: state.episodeNumber,
+    audioUrl: state.audioUrl,
+    feedUrl: state.feedUrl,
+    chaptersUrl: state.chaptersUrl,
+    transcriptUrl: state.transcriptUrl,
+  }));
 
   // const [state, formAction] = useActionState(addPost, initialState);
 
@@ -128,76 +138,85 @@ function VaulDrawer({ audioRef }: { audioRef: any }) {
         </TooltipPrimitive.Content>
       </TooltipPrimitive.Root>
 
-      <Drawer.Portal>
+      <Drawer.Portal keepMounted={true}>
         <Drawer.Backdrop className="[--backdrop-opacity:0.2] [--bleed:3rem] dark:[--backdrop-opacity:0.7] fixed inset-0 min-h-dvh bg-black opacity-[calc(var(--backdrop-opacity)*(1-var(--drawer-swipe-progress)))] transition-opacity duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)] data-[swiping]:duration-0 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0 data-[ending-style]:duration-[calc(var(--drawer-swipe-strength)*400ms)] supports-[-webkit-touch-callout:none]:absolute" />
         <Drawer.Viewport className="[--viewport-padding:0px] supports-[-webkit-touch-callout:none]:[--viewport-padding:0.625rem] fixed inset-0 flex items-stretch justify-end p-[var(--viewport-padding)] pointer-events-none">
-          <Drawer.Popup className="[--bleed:3rem]  supports-[-webkit-touch-callout:none]:[--bleed:0px] pointer-events-auto h-full w-[calc(30rem+3rem)] max-w-[calc(100vw-3rem+3rem)] -mr-[3rem] bg-background-primary p-6 pr-[calc(1.5rem+3rem)]   overflow-y-auto overscroll-contain touch-auto shadow-[0_-16px_48px_rgb(0_0_0/0.12),0_6px_18px_rgb(0_0_0/0.06)] data-[starting-style]:shadow-[0_-16px_48px_rgb(0_0_0/0),0_6px_18px_rgb(0_0_0/0)] data-[ending-style]:shadow-[0_-16px_48px_rgb(0_0_0/0),0_6px_18px_rgb(0_0_0/0)] [transform:translateX(var(--drawer-swipe-movement-x))] transition-[transform,box-shadow] duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)] data-[swiping]:select-none data-[ending-style]:[transform:translateX(calc(100%-var(--bleed)+var(--viewport-padding)+2px))] data-[starting-style]:[transform:translateX(calc(100%-var(--bleed)+var(--viewport-padding)+2px))] data-[ending-style]:duration-[calc(var(--drawer-swipe-strength)*400ms)] supports-[-webkit-touch-callout:none]:mr-0 supports-[-webkit-touch-callout:none]:w-[20rem] supports-[-webkit-touch-callout:none]:max-w-[calc(100vw-20px)] supports-[-webkit-touch-callout:none]:rounded-[10px] supports-[-webkit-touch-callout:none]:pr-6">
+          <Drawer.Popup className="[--bleed:3rem]  supports-[-webkit-touch-callout:none]:[--bleed:0px] pointer-events-auto h-full  w-[calc(25rem+3rem)] max-w-[calc(100vw-3rem+3rem)]  -mr-[3rem] bg-background-primary py-6 pr-[calc(1.5rem+3rem)]   overflow-y-auto overscroll-contain touch-auto shadow-[0_-16px_48px_rgb(0_0_0/0.12),0_6px_18px_rgb(0_0_0/0.06)] data-[starting-style]:shadow-[0_-16px_48px_rgb(0_0_0/0),0_6px_18px_rgb(0_0_0/0)] data-[ending-style]:shadow-[0_-16px_48px_rgb(0_0_0/0),0_6px_18px_rgb(0_0_0/0)] [transform:translateX(var(--drawer-swipe-movement-x))] transition-[transform,box-shadow] duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)] data-[swiping]:select-none data-[ending-style]:[transform:translateX(calc(100%-var(--bleed)+var(--viewport-padding)+2px))] data-[starting-style]:[transform:translateX(calc(100%-var(--bleed)+var(--viewport-padding)+2px))] data-[ending-style]:duration-[calc(var(--drawer-swipe-strength)*400ms)] supports-[-webkit-touch-callout:none]:mr-0 supports-[-webkit-touch-callout:none]:w-[20rem] supports-[-webkit-touch-callout:none]:max-w-[calc(100vw-20px)] supports-[-webkit-touch-callout:none]:rounded-[10px] supports-[-webkit-touch-callout:none]:pr-6">
             <Drawer.Content className="mx-auto w-full max-w-[32rem] relative h-full flex flex-col">
-              <Drawer.Title className="pt-10 mb-1 text-lg font-medium text-pretty">
-                {title}
-                {/*<PodcastPlayButton episodeNumber={episodeNumber} />*/}
-              </Drawer.Title>
+              <div className="pt-10 px-4 mb-1 flex justify-between items-center gap-5 text-lg font-medium text-pretty">
+                <Drawer.Title className="min-w-0 wrap-break-word line-clamp-2">
+                  {title}
+                </Drawer.Title>
+                <PodcastPlayButton
+                  episodeNumber={episodeNumber}
+                  className="shrink-0"
+                />
+              </div>
+
               <Drawer.Description
                 render={<div />}
                 className="flex-1 min-h-0 flex"
               >
                 <Tabs.Root
                   defaultValue="tab1"
-                  className="flex-1 min-h-0 flex flex-col"
+                  className="flex-1 min-h-0 flex flex-col px-4"
                 >
                   <Tabs.List
                     aria-label="Podcast info"
-                    className="border-border-interactive bg-background-primary mb-5 flex gap-4 border-dashed-b py-4"
+                    className="border-border-interactive bg-background-primary mb-5 flex gap-4 max-md:flex-wrap border-dashed-b py-4"
                   >
-                    <Tabs.Trigger
+                    <Tabs.Tab
                       value="tab1"
-                      className="border-border-non-interactive bg-background-primary text-text-secondary data-[state=active]:bg-ui-normal data-[state=active]:text-text-primary rounded-md border border-dashed px-4 py-2 font-semibold data-[state=active]:border-transparent"
+                      className="border-border-non-interactive cursor-pointer bg-background-primary text-text-secondary data-active:bg-ui-normal data-active:text-text-primary rounded-md border border-dashed px-4 py-2 font-semibold data-[state=active]:border-transparent"
                     >
                       Description
-                    </Tabs.Trigger>
-                    <Tabs.Trigger
+                    </Tabs.Tab>
+                    <Tabs.Tab
                       value="tab2"
-                      className="border-border-non-interactive bg-background-primary text-text-secondary data-[state=active]:bg-ui-normal data-[state=active]:text-text-primary rounded-md border border-dashed px-4 py-2 font-semibold data-[state=active]:border-transparent"
+                      className="border-border-non-interactive cursor-pointer bg-background-primary text-text-secondary data-active:bg-ui-normal data-active:text-text-primary rounded-md border border-dashed px-4 py-2 font-semibold data-[state=active]:border-transparent"
                     >
                       Chapters
-                    </Tabs.Trigger>
-                    <Tabs.Trigger
+                    </Tabs.Tab>
+                    <Tabs.Tab
                       value="tab3"
-                      className="border-border-non-interactive bg-background-primary text-text-secondary data-[state=active]:bg-ui-normal data-[state=active]:text-text-primary rounded-md border border-dashed px-4 py-2 font-semibold data-[state=active]:border-transparent"
+                      className="border-border-non-interactive cursor-pointer bg-background-primary text-text-secondary data-active:bg-ui-normal data-active:text-text-primary rounded-md border border-dashed px-4 py-2 font-semibold data-[state=active]:border-transparent"
                     >
                       Transcript
-                    </Tabs.Trigger>
+                    </Tabs.Tab>
                   </Tabs.List>
-                  <Tabs.Content
+                  <Tabs.Panel
                     value="tab1"
                     className="focus-visible:outline-brand-primary min-h-0 flex-1 flex"
+                    keepMounted
                   >
-                    <ScrollArea.Root className="min-h-0 flex-1">
-                      <ScrollArea.Viewport className="scrollable overscroll-contain h-full flex pl-1 pr-6 py-2 flex-col gap-4 focus-visible:border-brand-shadow">
+                    <ScrollArea.Root className="min-h-0 flex-1 max-w-[360px] max-md:max-w-[300px]">
+                      <ScrollArea.Viewport className="scrollable min-w-0 wrap-break-word overscroll-contain h-full flex flex-col gap-4 pr-4 pb-10 focus-visible:border-brand-shadow">
                         <div
                           dangerouslySetInnerHTML={{
                             __html: DOMPurify.sanitize(content),
                           }}
-                          className="prose p-0 prose-a:no-underline prose-a:custom-underline dark:prose-invert wrap-break-word"
+                          className="prose p-0 prose-a:no-underline [&_a_u]:no-underline prose-a:custom-underline dark:prose-invert min-w-0 wrap-break-word"
                         ></div>
                       </ScrollArea.Viewport>
-                      <ScrollArea.Scrollbar className="m-2 flex w-1 justify-center rounded-sm  opacity-0 transition-opacity pointer-events-none data-[hovering]:opacity-100 data-[hovering]:delay-0 data-[hovering]:pointer-events-auto data-[scrolling]:opacity-100 data-[scrolling]:duration-0 data-[scrolling]:pointer-events-auto">
+                      <ScrollArea.Scrollbar className=" flex w-1 justify-center rounded-sm  opacity-0 transition-opacity pointer-events-none data-[hovering]:opacity-100 data-[hovering]:delay-0 data-[hovering]:pointer-events-auto data-[scrolling]:opacity-100 data-[scrolling]:duration-0 data-[scrolling]:pointer-events-auto">
                         <ScrollArea.Thumb className="w-full rounded-sm bg-brand-primary" />
                       </ScrollArea.Scrollbar>
                     </ScrollArea.Root>
-                  </Tabs.Content>
-                  <Tabs.Content
+                  </Tabs.Panel>
+                  <Tabs.Panel
                     value="tab2"
                     className="focus-visible:outline-brand-primary min-h-0 flex-1 flex"
+                    keepMounted
                   >
                     <PodcastChapters audioRef={audioRef} guid={episodeNumber} />
-                  </Tabs.Content>
-                  <Tabs.Content
+                  </Tabs.Panel>
+                  <Tabs.Panel
                     value="tab3"
                     className="focus-visible:outline-brand-primary min-h-0 flex-1 flex"
+                    keepMounted
                   >
-                    <PodcastTranscipt />
-                  </Tabs.Content>
+                    <PodcastTranscipt audioRef={audioRef} />
+                  </Tabs.Panel>
                 </Tabs.Root>
                 {/*<ScrollArea.Root className="min-h-0 flex-1">
                   <ScrollArea.Viewport className="scrollable overscroll-contain h-full flex scroll-p-4 px-3 py-2 flex-col gap-4 focus-visible:border-brand-shadow">
@@ -214,7 +233,7 @@ function VaulDrawer({ audioRef }: { audioRef: any }) {
                 </ScrollArea.Root>*/}
               </Drawer.Description>
 
-              <Drawer.Close className="focus-visible:outline-2 absolute text-text-secondary top-0 left-0 cursor-pointer focus-visible:-outline-offset-1 focus-visible:outline-brand-primary">
+              <Drawer.Close className="focus-visible:outline-2 px-4 absolute text-text-secondary top-0 -left-2 cursor-pointer focus-visible:-outline-offset-1 focus-visible:outline-brand-primary">
                 <span className="sr-only">Close</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

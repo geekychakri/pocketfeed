@@ -7,7 +7,10 @@ import { upstashRedis } from "@/lib/upstash-redis";
 
 const parser = new Parser({
   customFields: {
-    item: ["podcast:chapters", "podcast:transcript"],
+    item: [
+      ["podcast:chapters", "podcast:chapters"],
+      ["podcast:transcript", "podcast:transcript", { keepArray: true }],
+    ],
   },
 });
 
@@ -80,7 +83,7 @@ export async function GET(request: NextRequest) {
     // stringify and parse to counter serialization error object null prototype
     const sortFirstTenFeedsByDate = JSON.parse(
       JSON.stringify(feedList),
-    ).items.slice(0, 10);
+    ).items.slice(0, 50);
     // .sort((a, b) => (dayjs(a.isoDate).isAfter(dayjs(b.isoDate)) ? -1 : 1));
 
     const newFeedData = {

@@ -32,9 +32,9 @@ type ShowPodcastPlayer = {
   setAlbumName: (val: string | undefined) => void;
   feedUrl: string;
   setFeedUrl: (val: string | undefined) => void;
-  chaptersUrl: string;
+  chaptersUrl: string | null;
   setChaptersUrl: (val: string | undefined) => void;
-  transcriptUrl: string;
+  transcriptUrl: string | null;
   setTranscriptUrl: (val: string | undefined) => void;
 };
 

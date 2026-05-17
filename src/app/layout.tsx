@@ -2,43 +2,19 @@ import type { Metadata } from "next";
 
 import "./globals.css";
 
-import { Suspense } from "react";
-import { Geist, Inter } from "next/font/google";
+import { Geist } from "next/font/google";
 
-import {
-  ClerkProvider,
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-} from "@clerk/nextjs";
-import { GeistSans } from "geist/font/sans";
 import { ThemeProvider } from "next-themes";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "sonner";
 
-import { NavigationEvents } from "@/components/navigation-events";
-import RootHead from "@/components/root-head";
-
 import { mediaStyles } from "@/media";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
 
 const geist = Geist({
   subsets: ["latin"],
   variable: "--font-geist",
   display: "swap",
 });
-
-// const openSans = Open_Sans({
-//   subsets: ["latin"],
-//   variable: "--font-inter",
-//   display: "swap",
-// });
 
 export const metadata: Metadata = {
   title: "Pocket Feed",
@@ -51,25 +27,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // <Suspense fallback={null}>
-    //   <ClerkProvider>
     <html lang="en" className={geist.variable} suppressHydrationWarning>
       <head>
         <meta
           name="format-detection"
           content="telephone=no, date=no, email=no, address=no"
         />
-        {/* <script
-            src="https://unpkg.com/react-scan/dist/auto.global.js"
-            async
-          /> */}
+
         <style
           key="fresnel-css"
           dangerouslySetInnerHTML={{ __html: mediaStyles }}
           type="text/css"
         />
       </head>
-      <body className="bg-background-primary text-text-primary leading-snug tracking-tight antialiased selection:bg-[#ff5a1f] selection:text-[#fff]">
+      <body className="bg-background-primary text-text-primary leading-snug tracking-tight antialiased selection:bg-[#ff5a1f] selection:text-white">
         <a href="#main-item" id="skip-link">
           Skip to content
         </a>
@@ -94,13 +65,7 @@ export default function RootLayout({
             },
           }}
         />
-
-        {/*<Suspense fallback={null}>
-          <NavigationEvents />
-        </Suspense>*/}
       </body>
     </html>
-    //   </ClerkProvider>
-    // </Suspense>
   );
 }

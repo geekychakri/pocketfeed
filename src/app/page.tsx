@@ -49,8 +49,7 @@ const stagger = {
 };
 
 export default async function Home() {
-  // "use cache";
-
+  "use cache";
   return (
     <motion.header
       initial="initial"
@@ -73,7 +72,7 @@ export default async function Home() {
           </motion.div>
         </motion.nav>
 
-        <motion.div className="max-w-[900px] mx-auto px-4 py-8 border-dashed-x flex justify-center ">
+        <motion.div className="max-w-225 mx-auto px-4 py-8 border-dashed-x flex justify-center ">
           <div className="flex flex-col gap-11 justify-center ">
             <div className="flex flex-col gap-4">
               <motion.h1
