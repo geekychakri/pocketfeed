@@ -169,7 +169,7 @@ const PodcastPlayer = () => {
 
   return (
     <div
-      className={`bg-background-primary pb-3 fixed -bottom-72 left-0 min-md:left-[256px] animation-slide-up-player ease-out-player animate-player-slide-up right-0 z-10 flex flex-col gap-1 transition-[translate] duration-700 ${show === "hide" ? "translate-y-80" : ""}`}
+      className={`bg-background-primary pb-3 fixed -bottom-72 left-0 md:left-[256px] animation-slide-up-player ease-out-player animate-player-slide-up right-0 z-10 flex flex-col gap-1 transition-[translate] duration-700 ${show === "hide" ? "translate-y-80" : ""}`}
     >
       <div className="flex justify-between pr-3 border-dashed-y bg-background-secondary">
         <div className="flex gap-1 items-center select-none">
@@ -238,7 +238,7 @@ const PodcastPlayer = () => {
                 side="top"
                 align="center"
                 sideOffset={8}
-                className="bg-background-secondary border-shadow data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade z-[100] rounded px-[10px] py-[5px] text-[13px] leading-none font-medium select-none"
+                className="bg-background-secondary border-shadow data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade z-100 rounded px-[10px] py-[5px] text-[13px] leading-none font-medium select-none"
               >
                 <span>Close</span>
               </TooltipPrimitive.Content>

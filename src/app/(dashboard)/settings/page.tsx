@@ -61,7 +61,7 @@ export default async function Settings() {
           <FileUploadWrapper />
         </Suspense>
       </div>*/}
-      {/*<div className="border-border-non-interactive h-[1px] border-t border-dashed"></div>*/}
+      {/*<div className="border-border-non-interactive h-px border-t border-dashed"></div>*/}
       {/*<div className="flex flex-col gap-5">
         <h2 className="text-text-secondary text-xl">Profile</h2>
         <Suspense fallback={<ProfileFormFallback />}>
@@ -69,7 +69,7 @@ export default async function Settings() {
         </Suspense>
       </div>*/}
 
-      {/*<div className="border-border-non-interactive h-[1px] border-t border-dashed"></div>*/}
+      {/*<div className="border-border-non-interactive h-px border-t border-dashed"></div>*/}
       {/* <div className="flex flex-col gap-5">
         <h2 className="text-xl font-medium text-text-secondary">
           Integrations

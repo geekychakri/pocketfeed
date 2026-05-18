@@ -79,7 +79,7 @@ export default function PodcastTranscipt({ audioRef }: { audioRef: any }) {
             className="prose p-0 prose-a:no-underline [&_a_u]:no-underline prose-a:custom-underline dark:prose-invert min-w-0 wrap-break-word"
           ></div>
         </ScrollArea.Viewport>
-        <ScrollArea.Scrollbar className="m-2 flex w-1 justify-center rounded-sm  opacity-0 transition-opacity pointer-events-none data-[hovering]:opacity-100 data-[hovering]:delay-0 data-[hovering]:pointer-events-auto data-[scrolling]:opacity-100 data-[scrolling]:duration-0 data-[scrolling]:pointer-events-auto">
+        <ScrollArea.Scrollbar className="m-2 flex w-1 justify-center rounded-sm  opacity-0 transition-opacity pointer-events-none data-hovering:opacity-100 data-hovering:delay-0 data-hovering:pointer-events-auto data-scrolling:opacity-100 data-scrolling:duration-0 data-scrolling:pointer-events-auto">
           <ScrollArea.Thumb className="w-full rounded-sm bg-brand-primary" />
         </ScrollArea.Scrollbar>
       </ScrollArea.Root>
@@ -264,7 +264,7 @@ function AudioHighlighter({ audioRef, words }: { audioRef: any; words: any }) {
           ))}
         </Virtualizer>
       </ScrollArea.Viewport>
-      <ScrollArea.Scrollbar className="m-2 flex w-1 justify-center rounded-sm opacity-0 transition-opacity pointer-events-none data-[hovering]:opacity-100 data-[hovering]:delay-0 data-[hovering]:pointer-events-auto data-[scrolling]:opacity-100 data-[scrolling]:duration-0 data-[scrolling]:pointer-events-auto">
+      <ScrollArea.Scrollbar className="m-2 flex w-1 justify-center rounded-sm opacity-0 transition-opacity pointer-events-none data-hovering:opacity-100 data-hovering:delay-0 data-hovering:pointer-events-auto data-scrolling:opacity-100 data-scrolling:duration-0 data-scrolling:pointer-events-auto">
         <ScrollArea.Thumb className="w-full rounded-sm bg-brand-primary" />
       </ScrollArea.Scrollbar>
     </ScrollArea.Root>

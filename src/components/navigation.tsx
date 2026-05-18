@@ -110,7 +110,7 @@ export default function Navigation({
       //   },
       // }}
       // transition={{ duration: 0.2 }}
-      className="nav sticky top-0 z-10 flex h-[70px] items-center justify-between bg-[#fff] px-4 shadow-[inset_0_-1px_rgba(0,0,0,.08)]"
+      className="nav sticky top-0 z-10 flex h-[70px] items-center justify-between bg-white px-4 shadow-[inset_0_-1px_rgba(0,0,0,.08)]"
     >
       <div className="flex items-center gap-5">
         <div>
@@ -121,7 +121,7 @@ export default function Navigation({
         {pathname.startsWith("/folder/") ? (
           <>
             <div className="flex items-center gap-5">
-              <hr className="h-4 w-[1px] rotate-[16deg] border-0 bg-[#343434]" />
+              <hr className="h-4 w-px rotate-16 border-0 bg-[#343434]" />
               <Dropdown foldersList={foldersList} />
             </div>
             <Link href="/explore/discover">Explore</Link>

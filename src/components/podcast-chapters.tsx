@@ -221,7 +221,7 @@ export default function PodcastChapters({
         })}
         {/*</div>*/}
       </ScrollArea.Viewport>
-      <ScrollArea.Scrollbar className="m-2 flex w-1 justify-center rounded-sm  opacity-0 transition-opacity pointer-events-none data-[hovering]:opacity-100 data-[hovering]:delay-0 data-[hovering]:pointer-events-auto data-[scrolling]:opacity-100 data-[scrolling]:duration-0 data-[scrolling]:pointer-events-auto">
+      <ScrollArea.Scrollbar className="m-2 flex w-1 justify-center rounded-sm  opacity-0 transition-opacity pointer-events-none data-hovering:opacity-100 data-hovering:delay-0 data-hovering:pointer-events-auto data-scrolling:opacity-100 data-scrolling:duration-0 data-scrolling:pointer-events-auto">
         <ScrollArea.Thumb className="w-full rounded-sm bg-brand-primary" />
       </ScrollArea.Scrollbar>
     </ScrollArea.Root>

@@ -160,7 +160,7 @@ export default function SidebarNavigation({
 
   // if (isMobile) {
   //   return (
-  //     <div className="sticky bg-background-primary top-0 z-[200] px-4 py-2 flex items-center justify-between shadow-[0_1px_0_0_var(--border-non-interactive)]">
+  //     <div className="sticky bg-background-primary top-0 z-200 px-4 py-2 flex items-center justify-between shadow-[0_1px_0_0_var(--border-non-interactive)]">
   //       <h1>Pocket Feed</h1>
   //       <MobileNav>
   //         {/*<Suspense fallback="Loading...">
@@ -224,7 +224,7 @@ export default function SidebarNavigation({
 
   // if (platform.isTouch) {
   //   return (
-  //     <div className="sticky bg-background-primary top-0 z-[200] px-4 py-2 flex items-center justify-between shadow-[0_1px_0_0_var(--border-non-interactive)]">
+  //     <div className="sticky bg-background-primary top-0 z-200 px-4 py-2 flex items-center justify-between shadow-[0_1px_0_0_var(--border-non-interactive)]">
   //       <h1>Pocket Feed</h1>
   //       <MobileNav>
   //         <Suspense fallback="Loading...">

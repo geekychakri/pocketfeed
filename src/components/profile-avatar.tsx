@@ -126,7 +126,7 @@ export default function ProfileAvatar({
           <AvatarDropdownItem href="/settings" Icon={SettingsGearIcon}>
             <span>Settings</span>
           </AvatarDropdownItem>
-          <DropdownMenu.Separator className="bg-border-non-interactive my-[5px] h-[1px]" />
+          <DropdownMenu.Separator className="bg-border-non-interactive my-[5px] h-px" />
           <AvatarDropdownItem href="/feedback" Icon={MessageCircleMoreIcon}>
             <span>Feedback</span>
           </AvatarDropdownItem>

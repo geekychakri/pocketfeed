@@ -19,7 +19,7 @@ export default function ToggleMenu() {
   return (
     // <div
     //   className={`transition-all duration-300 ${
-    //     isNoteBookOpen ? "grow-0" : "grow-1"
+    //     isNoteBookOpen ? "grow-0" : "grow"
     //   }`}
     // ></div>
 

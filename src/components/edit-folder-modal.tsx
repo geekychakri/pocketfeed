@@ -155,8 +155,8 @@ export default function EditFolderModal({
     // </Modal>
     <Dialog.Root open={isEditFolderOpen} onOpenChange={setIsEditFolderOpen}>
       <Dialog.Portal>
-        <Dialog.Backdrop className="fixed inset-0 min-h-dvh bg-black opacity-20 transition-all duration-150 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0 dark:opacity-70 supports-[-webkit-touch-callout:none]:absolute" />
-        <Dialog.Popup className="fixed top-1/2 left-1/2 -mt-8 w-[90vw] max-w-[450px] border-shadow focus-visible:outline focus-visible:outline-brand-primary -translate-x-1/2 -translate-y-1/2 rounded-lg bg-background-primary p-6 transition-all duration-150 data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[starting-style]:scale-90 data-[starting-style]:opacity-0">
+        <Dialog.Backdrop className="fixed inset-0 min-h-dvh bg-black opacity-20 transition-all duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0 dark:opacity-70 supports-[-webkit-touch-callout:none]:absolute" />
+        <Dialog.Popup className="fixed top-1/2 left-1/2 -mt-8 w-[90vw] max-w-[450px] border-shadow focus-visible:outline focus-visible:outline-brand-primary -translate-x-1/2 -translate-y-1/2 rounded-lg bg-background-primary p-6 transition-all duration-150 data-ending-style:scale-90 data-ending-style:opacity-0 data-starting-style:scale-90 data-starting-style:opacity-0">
           <Dialog.Title className="-mt-1.5 mb-1 text-lg font-medium">
             <label htmlFor="edit-folder-name">Edit Folder</label>
           </Dialog.Title>

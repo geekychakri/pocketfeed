@@ -17,7 +17,7 @@ export default function HighlightToolbar({
   const [showSocialShare, setShowSocialShare] = useState(false);
   return (
     <div
-      className="absolute flex gap-1 border-brand-shadow p-1 isolate z-[1] -top-2 left-0 w-[220px] h-[44px] bg-background-secondary rounded-md m-0"
+      className="absolute flex gap-1 border-brand-shadow p-1 isolate z-1 -top-2 left-0 w-[220px] h-[44px] bg-background-secondary rounded-md m-0"
       style={{
         transform: `translate3d(${position?.x}px, ${position?.y}px, 0)`,
       }}

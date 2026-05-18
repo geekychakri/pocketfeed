@@ -97,7 +97,7 @@ export default function AutocompleteHandle() {
           align="start"
         >
           <Autocomplete.Popup
-            className={`w-[var(--anchor-width)] invisible ${profiles && profiles.length >= 1 && "visible"}  scrollbar-width-thin max-h-[min(var(--available-height),23rem)] max-w-[var(--available-width)] overflow-y-auto scroll-pt-2 scroll-pb-2 overscroll-contain rounded-md bg-background-primary py-2 shadow-lg shadow-gray-200 outline-1 outline-border-interactive dark:shadow-none`}
+            className={`w-(--anchor-width) invisible ${profiles && profiles.length >= 1 && "visible"}  scrollbar-width-thin max-h-[min(var(--available-height),23rem)] max-w-(--available-width) overflow-y-auto scroll-pt-2 scroll-pb-2 overscroll-contain rounded-md bg-background-primary py-2 shadow-lg shadow-gray-200 outline-1 outline-border-interactive dark:shadow-none`}
             aria-busy={isLoading || undefined}
           >
             <Autocomplete.Status>

@@ -29,7 +29,7 @@ export default function FeedList({ did }: { did: string }) {
 
   if (isLoading) {
     return (
-      <div className="animate-pulse p-2 flex flex-col gap-4 flex-1 min-h-0 overflow-y-scroll [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="animate-pulse p-2 flex flex-col gap-4 flex-1 min-h-0 overflow-y-scroll scrollbar-none [&::-webkit-scrollbar]:hidden">
         {Array.from({ length: 20 }, (_, i) => {
           return (
             <div

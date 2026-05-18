@@ -78,13 +78,13 @@ export default function CollapsibleFolderContent({
           </div>
         </ScrollArea.Viewport>
         <ScrollArea.Scrollbar
-          className="flex touch-none select-none bg-black p-0.5 transition-colors duration-[160ms] ease-out hover:bg-black data-[orientation=horizontal]:h-2.5 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col"
+          className="flex touch-none select-none bg-black p-0.5 transition-colors duration-160 ease-out hover:bg-black data-[orientation=horizontal]:h-2.5 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col"
           orientation="vertical"
         >
           <ScrollArea.Thumb className="relative flex-1 rounded-[10px] bg-black before:absolute before:left-1/2 before:top-1/2 before:size-full before:min-h-11 before:min-w-11 before:-translate-x-1/2 before:-translate-y-1/2" />
         </ScrollArea.Scrollbar>
         <ScrollArea.Scrollbar
-          className="flex touch-none select-none bg-black p-0.5 transition-colors duration-[160ms] ease-out hover:bg-black data-[orientation=horizontal]:h-2.5 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col"
+          className="flex touch-none select-none bg-black p-0.5 transition-colors duration-160 ease-out hover:bg-black data-[orientation=horizontal]:h-2.5 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col"
           orientation="horizontal"
         >
           <ScrollArea.Thumb className="relative flex-1 rounded-[10px] bg-black before:absolute before:left-1/2 before:top-1/2 before:size-full before:min-h-[44px] before:min-w-[44px] before:-translate-x-1/2 before:-translate-y-1/2" />
@@ -179,7 +179,7 @@ const FolderItem = ({
                 className="group/folder-item hover:bg-ui-hover data-[state=open]:bg-ui-hover z-2 inline-flex size-[35px] flex-none items-center justify-center rounded-md [&[data-state=open]>*]:opacity-100"
               >
                 <button aria-label="Folder options">
-                  <DotsHorizontalIcon className="size-4 opacity-50 transition-[opacity] group-hover/folder-item:opacity-100" />
+                  <DotsHorizontalIcon className="size-4 opacity-50 transition-opacity group-hover/folder-item:opacity-100" />
                 </button>
               </DropdownMenu.Trigger>
 

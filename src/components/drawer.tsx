@@ -132,17 +132,17 @@ function VaulDrawer({ audioRef }: { audioRef: any }) {
           side="top"
           align="center"
           sideOffset={8}
-          className="bg-background-secondary border-shadow data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade z-[100] rounded px-[10px] py-[5px] text-[13px] leading-none font-medium select-none"
+          className="bg-background-secondary border-shadow data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade z-100 rounded px-[10px] py-[5px] text-[13px] leading-none font-medium select-none"
         >
           <span>Show Description</span>
         </TooltipPrimitive.Content>
       </TooltipPrimitive.Root>
 
       <Drawer.Portal keepMounted={true}>
-        <Drawer.Backdrop className="[--backdrop-opacity:0.2] [--bleed:3rem] dark:[--backdrop-opacity:0.7] fixed inset-0 min-h-dvh bg-black opacity-[calc(var(--backdrop-opacity)*(1-var(--drawer-swipe-progress)))] transition-opacity duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)] data-[swiping]:duration-0 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0 data-[ending-style]:duration-[calc(var(--drawer-swipe-strength)*400ms)] supports-[-webkit-touch-callout:none]:absolute" />
-        <Drawer.Viewport className="[--viewport-padding:0px] supports-[-webkit-touch-callout:none]:[--viewport-padding:0.625rem] fixed inset-0 flex items-stretch justify-end p-[var(--viewport-padding)] pointer-events-none">
-          <Drawer.Popup className="[--bleed:3rem]  supports-[-webkit-touch-callout:none]:[--bleed:0px] pointer-events-auto h-full  w-[calc(25rem+3rem)] max-w-[calc(100vw-3rem+3rem)]  -mr-[3rem] bg-background-primary py-6 pr-[calc(1.5rem+3rem)]   overflow-y-auto overscroll-contain touch-auto shadow-[0_-16px_48px_rgb(0_0_0/0.12),0_6px_18px_rgb(0_0_0/0.06)] data-[starting-style]:shadow-[0_-16px_48px_rgb(0_0_0/0),0_6px_18px_rgb(0_0_0/0)] data-[ending-style]:shadow-[0_-16px_48px_rgb(0_0_0/0),0_6px_18px_rgb(0_0_0/0)] [transform:translateX(var(--drawer-swipe-movement-x))] transition-[transform,box-shadow] duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)] data-[swiping]:select-none data-[ending-style]:[transform:translateX(calc(100%-var(--bleed)+var(--viewport-padding)+2px))] data-[starting-style]:[transform:translateX(calc(100%-var(--bleed)+var(--viewport-padding)+2px))] data-[ending-style]:duration-[calc(var(--drawer-swipe-strength)*400ms)] supports-[-webkit-touch-callout:none]:mr-0 supports-[-webkit-touch-callout:none]:w-[20rem] supports-[-webkit-touch-callout:none]:max-w-[calc(100vw-20px)] supports-[-webkit-touch-callout:none]:rounded-[10px] supports-[-webkit-touch-callout:none]:pr-6">
-            <Drawer.Content className="mx-auto w-full max-w-[32rem] relative h-full flex flex-col">
+        <Drawer.Backdrop className="[--backdrop-opacity:0.2] [--bleed:3rem] dark:[--backdrop-opacity:0.7] fixed inset-0 min-h-dvh bg-black opacity-[calc(var(--backdrop-opacity)*(1-var(--drawer-swipe-progress)))] transition-opacity duration-450 ease-[cubic-bezier(0.32,0.72,0,1)] data-swiping:duration-0 data-ending-style:opacity-0 data-starting-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] supports-[-webkit-touch-callout:none]:absolute" />
+        <Drawer.Viewport className="[--viewport-padding:0px] supports-[-webkit-touch-callout:none]:[--viewport-padding:0.625rem] fixed inset-0 flex items-stretch justify-end p-(--viewport-padding) pointer-events-none">
+          <Drawer.Popup className="[--bleed:3rem]  supports-[-webkit-touch-callout:none]:[--bleed:0px] pointer-events-auto h-full  w-md max-w-[calc(100vw-3rem+3rem)]  -mr-12 bg-background-primary py-6 pr-18   overflow-y-auto overscroll-contain touch-auto shadow-[0_-16px_48px_rgb(0_0_0/0.12),0_6px_18px_rgb(0_0_0/0.06)] data-starting-style:shadow-[0_-16px_48px_rgb(0_0_0/0),0_6px_18px_rgb(0_0_0/0)] data-ending-style:shadow-[0_-16px_48px_rgb(0_0_0/0),0_6px_18px_rgb(0_0_0/0)] transform-[translateX(var(--drawer-swipe-movement-x))] transition-[transform,box-shadow] duration-450 ease-[cubic-bezier(0.32,0.72,0,1)] data-swiping:select-none data-ending-style:transform-[translateX(calc(100%-var(--bleed)+var(--viewport-padding)+2px))] data-starting-style:transform-[translateX(calc(100%-var(--bleed)+var(--viewport-padding)+2px))] data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] supports-[-webkit-touch-callout:none]:mr-0 supports-[-webkit-touch-callout:none]:w-[20rem] supports-[-webkit-touch-callout:none]:max-w-[calc(100vw-20px)] supports-[-webkit-touch-callout:none]:rounded-[10px] supports-[-webkit-touch-callout:none]:pr-6">
+            <Drawer.Content className="mx-auto w-full max-w-lg relative h-full flex flex-col">
               <div className="pt-10 px-4 mb-1 flex justify-between items-center gap-5 text-lg font-medium text-pretty">
                 <Drawer.Title className="min-w-0 wrap-break-word line-clamp-2">
                   {title}
@@ -198,7 +198,7 @@ function VaulDrawer({ audioRef }: { audioRef: any }) {
                           className="prose p-0 prose-a:no-underline [&_a_u]:no-underline prose-a:custom-underline dark:prose-invert min-w-0 wrap-break-word"
                         ></div>
                       </ScrollArea.Viewport>
-                      <ScrollArea.Scrollbar className=" flex w-1 justify-center rounded-sm  opacity-0 transition-opacity pointer-events-none data-[hovering]:opacity-100 data-[hovering]:delay-0 data-[hovering]:pointer-events-auto data-[scrolling]:opacity-100 data-[scrolling]:duration-0 data-[scrolling]:pointer-events-auto">
+                      <ScrollArea.Scrollbar className=" flex w-1 justify-center rounded-sm  opacity-0 transition-opacity pointer-events-none data-hovering:opacity-100 data-hovering:delay-0 data-hovering:pointer-events-auto data-scrolling:opacity-100 data-scrolling:duration-0 data-scrolling:pointer-events-auto">
                         <ScrollArea.Thumb className="w-full rounded-sm bg-brand-primary" />
                       </ScrollArea.Scrollbar>
                     </ScrollArea.Root>
@@ -227,7 +227,7 @@ function VaulDrawer({ audioRef }: { audioRef: any }) {
                       className="prose p-0 prose-a:no-underline prose-a:custom-underline dark:prose-invert wrap-break-word"
                     ></div>
                   </ScrollArea.Viewport>
-                  <ScrollArea.Scrollbar className="m-2 flex w-1 justify-center rounded-sm  opacity-0 transition-opacity pointer-events-none data-[hovering]:opacity-100 data-[hovering]:delay-0 data-[hovering]:pointer-events-auto data-[scrolling]:opacity-100 data-[scrolling]:duration-0 data-[scrolling]:pointer-events-auto">
+                  <ScrollArea.Scrollbar className="m-2 flex w-1 justify-center rounded-sm  opacity-0 transition-opacity pointer-events-none data-hovering:opacity-100 data-hovering:delay-0 data-hovering:pointer-events-auto data-scrolling:opacity-100 data-scrolling:duration-0 data-scrolling:pointer-events-auto">
                     <ScrollArea.Thumb className="w-full rounded-sm bg-brand-primary" />
                   </ScrollArea.Scrollbar>
                 </ScrollArea.Root>*/}

@@ -152,7 +152,7 @@ const CollapsibleFolders = ({ children }: { children: React.ReactNode }) => {
 //                 className="group/folder-item hover:bg-ui-hover data-[state=open]:bg-ui-hover z-2 inline-flex size-[35px] flex-none items-center justify-center rounded-md [&[data-state=open]>*]:opacity-100"
 //               >
 //                 <button aria-label="Folder options">
-//                   <DotsHorizontalIcon className="size-4 opacity-50 transition-[opacity] group-hover/folder-item:opacity-100" />
+//                   <DotsHorizontalIcon className="size-4 opacity-50 transition-opacity group-hover/folder-item:opacity-100" />
 //                 </button>
 //               </DropdownMenu.Trigger>
 

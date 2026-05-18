@@ -303,11 +303,11 @@ function OPMLFeeds({
         Next
       </Dialog.Trigger>*/}
       <Dialog.Portal>
-        <Dialog.Backdrop className="fixed inset-0 bg-black opacity-20 transition-opacity duration-[250ms] ease-[cubic-bezier(0.45,1.005,0,1.005)] data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 dark:opacity-70 supports-[-webkit-touch-callout:none]:absolute" />
+        <Dialog.Backdrop className="fixed inset-0 bg-black opacity-20 transition-opacity duration-250 ease-[cubic-bezier(0.45,1.005,0,1.005)] data-starting-style:opacity-0 data-ending-style:opacity-0 dark:opacity-70 supports-[-webkit-touch-callout:none]:absolute" />
         <Dialog.Viewport className="fixed inset-0 flex items-center justify-center overflow-hidden py-6 [@media(min-height:600px)]:pb-12 [@media(min-height:600px)]:pt-8">
-          <Dialog.Popup className="relative flex w-[min(40rem,calc(100vw-2rem))] max-h-full max-w-full min-h-0 flex-col overflow-hidden rounded-lg bg-background-primary p-8 text-text-primary shadow-[0_24px_45px_rgba(15,23,42,0.18)] outline-brand-primary transition-all duration-[300ms] ease-[cubic-bezier(0.45,1.005,0,1.005)] data-[starting-style]:scale-[0.98] data-[starting-style]:opacity-0 data-[ending-style]:scale-[0.98] data-[ending-style]:opacity-0">
+          <Dialog.Popup className="relative flex w-[min(40rem,calc(100vw-2rem))] max-h-full max-w-full min-h-0 flex-col overflow-hidden rounded-lg bg-background-primary p-8 text-text-primary shadow-[0_24px_45px_rgba(15,23,42,0.18)] outline-brand-primary transition-all duration-300 ease-[cubic-bezier(0.45,1.005,0,1.005)] data-starting-style:scale-[0.98] data-starting-style:opacity-0 data-ending-style:scale-[0.98] data-ending-style:opacity-0">
             <div className="mb-2 flex items-start justify-between gap-3">
-              <Dialog.Title className="m-0 text-xl font-semibold leading-[1.875rem]">
+              <Dialog.Title className="m-0 text-xl font-semibold leading-7.5">
                 OPML Feed List
               </Dialog.Title>
             </div>
@@ -373,7 +373,7 @@ function OPMLFeeds({
                   </Virtualizer>
                 </form>
               </ScrollArea.Viewport>
-              <ScrollArea.Scrollbar className="pointer-events-none absolute m-1 flex w-[0.25rem] justify-center rounded-[1rem] opacity-0 transition-opacity duration-[250ms] data-[hovering]:pointer-events-auto data-[hovering]:opacity-100 data-[hovering]:duration-[75ms] data-[scrolling]:pointer-events-auto data-[scrolling]:opacity-100 data-[scrolling]:duration-[75ms] md:w-[0.325rem]">
+              <ScrollArea.Scrollbar className="pointer-events-none absolute m-1 flex w-1 justify-center rounded-2xl opacity-0 transition-opacity duration-250 data-hovering:pointer-events-auto data-hovering:opacity-100 data-hovering:duration-75 data-scrolling:pointer-events-auto data-scrolling:opacity-100 data-scrolling:duration-75 md:w-[0.325rem]">
                 <ScrollArea.Thumb className="w-full rounded-[inherit] bg-ui-active before:absolute before:left-1/2 before:top-1/2 before:h-[calc(100%+1rem)] before:w-[calc(100%+1rem)] before:-translate-x-1/2 before:-translate-y-1/2 before:content-['']" />
               </ScrollArea.Scrollbar>
             </ScrollArea.Root>
@@ -580,7 +580,7 @@ function BookCard({ book }) {
     <div className="flex-1 min-w-0 flex items-stretch bg-stone-50 rounded-xl border border-stone-200 overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 cursor-default group">
       {/* spine */}
       <div
-        className={`w-2 flex-shrink-0 ${spine} opacity-80 group-hover:opacity-100 transition-opacity`}
+        className={`w-2 shrink-0 ${spine} opacity-80 group-hover:opacity-100 transition-opacity`}
       />
 
       {/* content */}

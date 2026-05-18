@@ -21,7 +21,9 @@ export default async function Page() {
 
   return (
     <div>
-      <h1>Atmosphere</h1>
+      <h1 className="scale-125 opacity-50 hover:scale-150 hover:opacity-75">
+        Atmosphere
+      </h1>
       {session ? session?.did : null}
       {JSON.stringify(session)}
 

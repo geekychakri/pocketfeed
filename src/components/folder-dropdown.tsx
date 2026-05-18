@@ -186,7 +186,7 @@ const DropdownMenuDemo = ({
                 );
               },
             )}
-            <DropdownMenu.Separator className="m-[5px] h-[1px] bg-orange-300" />
+            <DropdownMenu.Separator className="m-[5px] h-px bg-orange-300" />
             <DropdownMenu.Group>
               <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
                 <Modal.Button asChild>

@@ -288,7 +288,7 @@ export default function PostModal({
           side="top"
           align="center"
           sideOffset={8}
-          className="bg-background-secondary border-shadow data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade z-[100] rounded px-[10px] py-[5px] text-[13px] leading-none font-medium select-none"
+          className="bg-background-secondary border-shadow data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade z-100 rounded px-[10px] py-[5px] text-[13px] leading-none font-medium select-none"
         >
           <span>Share with note</span>
         </TooltipPrimitive.Content>
@@ -296,8 +296,8 @@ export default function PostModal({
 
       <Dialog.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
         <Dialog.Portal>
-          <Dialog.Backdrop className="fixed inset-0 min-h-dvh bg-black opacity-20 transition-all duration-150 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0 dark:opacity-70 supports-[-webkit-touch-callout:none]:absolute" />
-          <Dialog.Popup className="fixed top-1/2 left-1/2 -mt-8 w-[90vw] max-w-[450px] border-shadow focus-visible:outline focus-visible:outline-brand-primary -translate-x-1/2 -translate-y-1/2 rounded-lg bg-background-primary p-6 transition-all duration-150 data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[starting-style]:scale-90 data-[starting-style]:opacity-0">
+          <Dialog.Backdrop className="fixed inset-0 min-h-dvh bg-black opacity-20 transition-all duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0 dark:opacity-70 supports-[-webkit-touch-callout:none]:absolute" />
+          <Dialog.Popup className="fixed top-1/2 left-1/2 -mt-8 w-[90vw] max-w-[450px] border-shadow focus-visible:outline focus-visible:outline-brand-primary -translate-x-1/2 -translate-y-1/2 rounded-lg bg-background-primary p-6 transition-all duration-150 data-ending-style:scale-90 data-ending-style:opacity-0 data-starting-style:scale-90 data-starting-style:opacity-0">
             <Dialog.Title className="-mt-1.5 mb-1 text-lg font-medium">
               <label htmlFor="post">What&apos;s on your mind?</label>
             </Dialog.Title>
