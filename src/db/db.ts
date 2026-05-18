@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server";
+// import { auth } from "@clerk/nextjs/server";
 // import { Pool } from "pg";
 import { neon, NeonQueryFunction } from "@neondatabase/serverless";
 // import { drizzle, NeonHttpDatabase } from "drizzle-orm/neon-http";
@@ -40,19 +40,19 @@ attachDatabasePool(globalForPool.pool);
 
 export const db = drizzle(globalForPool.pool);
 
-export const verifyAuth = async (): Promise<any> => {
-  try {
-    const { getToken, userId } = await auth();
-    const token = await getToken();
-    if (!token || !userId) {
-      throw new Error("Authentication is required.");
-    }
+// export const verifyAuth = async (): Promise<any> => {
+//   try {
+//     const { getToken, userId } = await auth();
+//     const token = await getToken();
+//     if (!token || !userId) {
+//       throw new Error("Authentication is required.");
+//     }
 
-    const { payload } = await jwtVerify(token, createRemoteJWKSet(jwksURL));
-    const claims = JSON.stringify(payload);
-    return { userId, claims };
-  } catch (error) {
-    console.error("JWT Verification failed:", error);
-    throw new Error("Invalid authentication token.");
-  }
-};
+//     const { payload } = await jwtVerify(token, createRemoteJWKSet(jwksURL));
+//     const claims = JSON.stringify(payload);
+//     return { userId, claims };
+//   } catch (error) {
+//     console.error("JWT Verification failed:", error);
+//     throw new Error("Invalid authentication token.");
+//   }
+// };

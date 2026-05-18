@@ -11,7 +11,6 @@ import {
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
-import { useUser } from "@clerk/nextjs";
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { CheckIcon, TrashIcon } from "@radix-ui/react-icons";
 import { PageRecordArray, SelectedPick } from "@xata.io/client";

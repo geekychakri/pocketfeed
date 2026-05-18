@@ -58,7 +58,7 @@ export async function GET(request: Request) {
     console.log({ cursor });
 
     const result = await getProfilePosts(userDid, cursor);
-    console.log({ result: result.data });
+    console.log({ result: result.posts });
     return NextResponse.json(result);
   } catch (error) {
     return NextResponse.json("", { status: 500 });

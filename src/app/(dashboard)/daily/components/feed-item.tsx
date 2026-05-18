@@ -24,24 +24,11 @@ dayjs.extend(localizedFormat);
 dayjs.extend(isToday);
 dayjs.extend(isYesterday);
 
-export default function FeedItem({
-  // feedList,
-  item,
-  // folderName,
-}: {
-  // feedList: FeedListType;
-  item: FeedItemType;
-  // folderName: string;
-}) {
-  // const { setFolderName } = useFolderName();
-  // const { setArticleData } = useArticleContent();
-  // console.log({ feedUrl: feedList.feedUrl });
-
+export default function FeedItem({ item }: { item: FeedItemType }) {
   if (item?.enclosure?.type?.includes("audio")) {
     const feedItemMetadata = item.feedListMetadata;
     if (!feedItemMetadata) return null;
 
-    //TODO:
     return (
       <PodcastCard
         feedUrl={feedItemMetadata.feedUrl}
@@ -76,11 +63,6 @@ export default function FeedItem({
               (getYoutubeVideoId(item.link) as string)
             }
           />
-          {/* <PostModal
-              feedItem={JSON.stringify(item)}
-              feedTitle={feedList.title}
-              websiteLink={feedList.link}
-            /> */}
         </div>
       </div>
     );
@@ -91,9 +73,7 @@ export default function FeedItem({
       // prefetch={false}
     >
       <div className="flex flex-col gap-1 min-w-0">
-        <h2 className="flex  flex-col text-pretty">
-          {decode(item.title) || feedList?.title}
-        </h2>
+        <h2 className="flex  flex-col text-pretty">{decode(item.title)}</h2>
 
         <span className="text-text-secondary flex gap-1 text-sm">
           <span>{dayjs(item.isoDate).format("ll")}</span>
@@ -101,23 +81,12 @@ export default function FeedItem({
           <span>{dayjs().to(dayjs(item.isoDate))}</span>
         </span>
 
-        {/*<span className="text-text-secondary flex w-1/5 justify-end text-sm">
-          <span>{dayjs(item.isoDate).format("ll")}</span>
-        </span>*/}
-
         {item.contentSnippet.length > 20 && (
           <span className="line-clamp-2 text-text-secondary">
             {item.contentSnippet}
           </span>
         )}
       </div>
-
-      {/* <PostModal
-        feedItem={JSON.stringify(item)}
-        className="z-2"
-        feedTitle={feedList.title}
-        websiteLink={feedList.link}
-      /> */}
 
       <div
         className={cn(
@@ -143,17 +112,9 @@ export default function FeedItem({
       </div>
 
       <Link
-        // href={
-        //   item.link?.includes(new URL(feedList.link as string).hostname)
-        //     ? `/read/${encodeURIComponent(item.link as string)}`
-        //     : `/read/${encodeURIComponent(`${feedList.link}/${item.link}` as string)}`
-        // }
-        // href={`/read/${encodeURIComponent("https://www.alanwsmith.com/en/2v/mq/vc/om/")}`} //TODO:
         href={`/read?link=${item.link}&source=daily`}
         onNavigate={(e) => {
-          // setArticleData(item.content, item.title);
           localStorage.setItem("feedItem", JSON.stringify(item));
-          // setFolderName(folderName);
         }}
         className="absolute inset-0 z-1"
       />
@@ -223,21 +184,8 @@ const PodcastCard = ({
             feedUrl={feedUrl}
             chaptersUrl={chaptersUrl}
           />
-          {/* <PostModal
-              feedItem={JSON.stringify(item)}
-              feedTitle={albumName}
-              websiteLink={webLink}
-              feedAlbumCover={albumCover || item.itunes.image}
-            /> */}
         </div>
       )}
-      {/* <Link
-          href={`/podcast/${title
-            .trim()
-            .replace(/[^a-zA-Z0-9\s]/g, "")
-            .replace(/\s+/g, "-")}`}
-          className="absolute inset-0 z-1"
-        /> */}
     </div>
   );
 };

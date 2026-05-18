@@ -2,8 +2,6 @@
 
 import { revalidatePath, revalidateTag, updateTag } from "next/cache";
 
-import { auth } from "@clerk/nextjs/server";
-
 import { getSessionAgent } from "@/lib/auth/session";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import { getXataClient } from "@/xata";

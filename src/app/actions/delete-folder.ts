@@ -1,51 +1,51 @@
-"use server";
+// "use server";
 
-import { permanentRedirect } from "next/navigation";
+// import { permanentRedirect } from "next/navigation";
 
-import { auth } from "@clerk/nextjs/server";
+// import { auth } from "@clerk/nextjs/server";
 
-import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
-import type { PFServerActionResponseType } from "@/types";
-import { getXataClient } from "@/xata";
+// import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
+// import type { PFServerActionResponseType } from "@/types";
+// import { getXataClient } from "@/xata";
 
-const xata = getXataClient();
+// const xata = getXataClient();
 
-export async function deleteFolder(
-  prevState: any,
-  formData: FormData,
-): Promise<PFServerActionResponseType | undefined> {
-  let shouldRedirect: boolean;
-  try {
-    const { userId }: { userId: string | null } = await auth();
+// export async function deleteFolder(
+//   prevState: any,
+//   formData: FormData,
+// ): Promise<PFServerActionResponseType | undefined> {
+//   let shouldRedirect: boolean;
+//   try {
+//     const { userId }: { userId: string | null } = await auth();
 
-    if (!userId) {
-      return {
-        type: "user-error",
-        message: "You must be signed in to delete folder.",
-      };
-    }
+//     if (!userId) {
+//       return {
+//         type: "user-error",
+//         message: "You must be signed in to delete folder.",
+//       };
+//     }
 
-    const folderId = formData.get("folderId") as string;
-    console.log({ folderId });
-    const getFeeds = await xata.db.feeds
-      .filter({
-        "folderName.id": folderId,
-      })
-      .select(["folderName.id"])
-      .getAll();
+//     const folderId = formData.get("folderId") as string;
+//     console.log({ folderId });
+//     const getFeeds = await xata.db.feeds
+//       .filter({
+//         "folderName.id": folderId,
+//       })
+//       .select(["folderName.id"])
+//       .getAll();
 
-    console.log({ getFeeds });
+//     console.log({ getFeeds });
 
-    const feedIds = getFeeds.map((feed) => feed.id);
+//     const feedIds = getFeeds.map((feed) => feed.id);
 
-    // const feedIds = getFeeds.map()
-    const deletedFolder = await xata.db.folders.delete(folderId); //Filter Delete TODO: check once if folderId is unique
-    const deleteFeeds = await xata.db.feeds.delete([...feedIds]);
-    shouldRedirect = true;
-  } catch (err) {
-    return { type: "internal-error", message: INTERNAL_ERROR_MESSAGE };
-  }
-  if (shouldRedirect) {
-    permanentRedirect("/folder/Home");
-  }
-}
+//     // const feedIds = getFeeds.map()
+//     const deletedFolder = await xata.db.folders.delete(folderId); //Filter Delete TODO: check once if folderId is unique
+//     const deleteFeeds = await xata.db.feeds.delete([...feedIds]);
+//     shouldRedirect = true;
+//   } catch (err) {
+//     return { type: "internal-error", message: INTERNAL_ERROR_MESSAGE };
+//   }
+//   if (shouldRedirect) {
+//     permanentRedirect("/folder/Home");
+//   }
+// }

@@ -1,7 +1,5 @@
 "use client";
 
-import { useClerk } from "@clerk/nextjs";
-
 import Button from "@/components/ui/custom-button";
 
 export default function SettingsFooter() {

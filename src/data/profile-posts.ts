@@ -21,7 +21,7 @@ export async function getProfilePosts(
   limit = 1,
 ) {
   const pageSize = Math.min(limit, 1);
-  const data = await db
+  const posts = await db
     .select()
     .from(schema.posts)
     .where(
@@ -32,11 +32,11 @@ export async function getProfilePosts(
     )
     .orderBy(desc(schema.posts.id))
     .limit(pageSize + 1);
-  console.log({ data });
-  const hasNextPage = data.length > limit;
-  if (hasNextPage) data.pop();
+  console.log({ posts });
+  const hasNextPage = posts.length > limit;
+  if (hasNextPage) posts.pop();
 
-  const nextCursor = hasNextPage ? data.at(-1)?.id : null;
+  const nextCursor = hasNextPage ? posts.at(-1)?.id : null;
 
-  return { data, nextCursor, hasNextPage };
+  return { posts, nextCursor, hasNextPage };
 }

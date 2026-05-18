@@ -3,8 +3,6 @@
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { useClerk } from "@clerk/nextjs";
-import { User } from "@clerk/nextjs/server";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { ExitIcon } from "@radix-ui/react-icons";
 

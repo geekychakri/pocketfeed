@@ -1,37 +1,27 @@
 "use client";
 
+import type { Route } from "next";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { motion } from "motion/react";
-
-import { cn } from "@/lib/utils";
-
-type SegmentedControlProps = {
-  items: { href: string; title: string }[];
-};
 
 const items = [
   { href: `/activity/discover`, title: "Discover" },
   { href: `/activity/following`, title: "Following" },
 ];
 
-const ActivitySegmentedControl = (): JSX.Element => {
+const ActivitySegmentedControl = (): React.ReactElement => {
   const pathname = usePathname();
 
   return (
     <ul className="flex h-full">
       {items.map((item, index) => {
-        // const isActive = index === activeIndex;
         const isActive = item.href === pathname;
         return (
           <motion.li
             initial={false}
             key={index}
-            // layout
-            // layoutRoot
-
-            // onClick={() => setActiveIndex(index)}
             className="hover:bg-background-secondary relative flex flex-1 justify-center"
           >
             <span className="relative">
@@ -49,7 +39,7 @@ const ActivitySegmentedControl = (): JSX.Element => {
             </span>
             <Link
               key={item.href}
-              href={item.href}
+              href={item.href as Route}
               draggable={false}
               className="absolute inset-0 z-2"
               //   replace

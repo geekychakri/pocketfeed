@@ -70,8 +70,6 @@ export default function AddFeed({ did }: { did: string }) {
 
   const [state, dispatch, isPending] = useActionState(addFeeds, initialState);
 
-  // const submitAction = (data: FormData) => dispatch({ type: "SUBMIT", data });
-
   console.log({ state });
 
   const isRssDataEmpty = checkIfObjectIsEmpty(rssData);
@@ -146,7 +144,7 @@ export default function AddFeed({ did }: { did: string }) {
         `/feed?feedUrl=${state?.payload[0].feedUrl}&title=${encodeURIComponent(state?.payload[0].title)}`,
       );
     }
-  }, [state, playCaution]);
+  }, [state, playCaution, did, router]);
 
   useLayoutEffect(() => {
     return () => {

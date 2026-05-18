@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { asc, desc, gt, lte } from "drizzle-orm";
+import { desc, lte } from "drizzle-orm";
 
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
@@ -15,23 +15,23 @@ export async function GET(request: Request) {
     let hasNextPage = false;
     let nextCursor = null;
 
-    const data = await db
+    const posts = await db
       .select()
       .from(schema.posts)
       .where(cursor ? lte(schema.posts.id, cursor) : undefined) // if cursor is provided, get rows after it
       .orderBy(desc(schema.posts.id)) // ordering
       .limit(limit + 1); // the number of rows to return
 
-    console.log({ data });
+    console.log({ posts });
 
-    if (data.length > limit) {
+    if (posts.length > limit) {
       hasNextPage = true;
-      nextCursor = data.at(-1)?.id; // remove the extra fetched item
-      data.pop();
+      nextCursor = posts.at(-1)?.id; // remove the extra fetched item
+      posts.pop();
     }
 
     return NextResponse.json({
-      data,
+      posts,
       hasNextPage,
       nextCursor: nextCursor, // Corrected path to cursor
     });

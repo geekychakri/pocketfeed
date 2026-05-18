@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import Link from "next/link";
 
-import { auth, currentUser } from "@clerk/nextjs/server";
 import { and, count, eq } from "drizzle-orm";
 import { ErrorBoundary } from "react-error-boundary";
 

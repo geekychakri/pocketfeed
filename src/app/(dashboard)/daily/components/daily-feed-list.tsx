@@ -7,10 +7,7 @@ import isToday from "dayjs/plugin/isToday";
 import isYesterday from "dayjs/plugin/isYesterday";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { toast } from "sonner";
 import useSWR from "swr";
-
-import { SpinnerRotate } from "@/components/spinner-rotate";
 
 import { ERROR_MESSAGE } from "@/lib/constants";
 import { fetcher } from "@/lib/utils";
@@ -18,9 +15,6 @@ import type { FeedItemType, FeedListType } from "@/types";
 
 import YouTubeModal from "../../(feed)/feed/components/YouTubeModal";
 import FeedItem from "./feed-item";
-
-const promise = () =>
-  new Promise((resolve) => setTimeout(() => resolve({ name: "Sonner" }), 2000));
 
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
@@ -35,16 +29,13 @@ type SWRDataType = {
 type GroupedFeedsType = Record<string, FeedItemType[]>;
 
 export default function DailyFeedList() {
-  const { data, isLoading, error, isValidating, mutate } = useSWR<SWRDataType>(
+  const { data, isLoading, error } = useSWR<SWRDataType>(
     "/api/daily-feeds",
     fetcher,
     {
-      // suspense: true,
-      // fallbackData: { dailyFeedItems: [] },
       revalidateIfStale: false,
       revalidateOnFocus: false,
-      // revalidateOnReconnect: false,
-      // revalidateOnMount: true,
+      revalidateOnReconnect: false,
     },
   );
 
@@ -99,14 +90,6 @@ export default function DailyFeedList() {
 
   console.log({ groupByFeedTitle });
 
-  // console.log({ firstList: groupByFeedTitle["BWF TV - YouTube"] });
-
-  // const sortedFeedItems = feedItems.sort(
-  //   (a, b) =>
-  //     (b.date ?? new Date()).getTime() - (a.date ?? new Date()).getTime(),
-  // );
-
-  // console.log({ sortedFeedItems });
   return (
     <div className="flex flex-col gap-4">
       {Object.entries(groupByFeedTitle).map(([feedTitle, items]) => (
@@ -116,11 +99,7 @@ export default function DailyFeedList() {
           </h2>
           <div className="flex flex-col gap-4">
             {items.map((item, index: number) => (
-              <FeedItem
-                key={index}
-                item={item}
-                // feedList={item.feedListMetadata ?? {}}
-              />
+              <FeedItem key={index} item={item} />
             ))}
           </div>
         </div>

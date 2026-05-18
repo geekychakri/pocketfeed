@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { auth, currentUser } from "@clerk/nextjs/server";
+// import { auth, currentUser } from "@clerk/nextjs/server";
 
 // import { getXataClient } from "@/xata";
 

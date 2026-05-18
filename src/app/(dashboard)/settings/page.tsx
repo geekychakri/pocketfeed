@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import Link from "next/link";
 
-import { auth } from "@clerk/nextjs/server";
 import { JSONData } from "@xata.io/client";
 
 import FileUpload from "@/components/file-upload";

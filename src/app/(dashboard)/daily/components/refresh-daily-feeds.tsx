@@ -1,12 +1,7 @@
 "use client";
 
 import { toast } from "sonner";
-// import { fetcher } from "@/lib/utils";
-
-import useSWR, { mutate } from "swr";
-import useSWRMutation from "swr/mutation";
-
-import { SpinnerRotate } from "@/components/spinner-rotate";
+import useSWR from "swr";
 
 export default function RefreshDailyFeeds() {
   const { isValidating, mutate } = useSWR("/api/daily-feeds");

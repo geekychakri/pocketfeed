@@ -1,6 +1,5 @@
 "use server";
 
-import { auth, currentUser } from "@clerk/nextjs/server";
 import { desc, eq, sql } from "drizzle-orm";
 
 // import { getXataClient } from "@/xata";
@@ -24,7 +23,7 @@ export async function addPost(
 
     const did = (await getDid()) as string;
 
-    const profile = await getProfile(did as string);
+    const profile = await getProfile();
 
     const { handle, avatar, displayName } = profile;
 

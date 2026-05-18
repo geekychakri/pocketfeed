@@ -1,4 +1,3 @@
-import { auth } from "@clerk/nextjs/server";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { getProfile } from "@/lib/atproto/queries";

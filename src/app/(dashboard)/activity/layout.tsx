@@ -15,7 +15,7 @@ export default function ExploreLayout({
         <RouteBack />
         <h1 className="font-medium">Activity</h1>
       </div>
-      <div className="bg-background-primary sticky top-0 h-14 border-y">
+      <div className="bg-background-primary sticky top-0 h-14 border-y z-[1000]">
         {/* <Link href="/activity/discover">Discover</Link>
         <Link href="/activity/following">Following</Link> */}
         <ActivitySegmentedControl />

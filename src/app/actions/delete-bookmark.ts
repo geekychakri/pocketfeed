@@ -2,7 +2,6 @@
 
 import { refresh, revalidatePath, updateTag } from "next/cache";
 
-import { auth } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
 
 import { db } from "@/db/db";

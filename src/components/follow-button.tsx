@@ -11,8 +11,6 @@ import {
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
-import { useUser } from "@clerk/clerk-react";
-import { useAuth } from "@clerk/nextjs";
 import { getCookie } from "cookies-next/client";
 import { toast } from "sonner";
 

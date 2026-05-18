@@ -4,7 +4,6 @@ import { refresh, revalidateTag, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { TID } from "@atproto/common";
-import { auth, currentUser } from "@clerk/nextjs/server";
 import LZString from "lz-string";
 import { nanoid } from "nanoid";
 import qs from "qs";

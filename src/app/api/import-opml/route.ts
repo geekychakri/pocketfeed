@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
 
-import { auth, currentUser } from "@clerk/nextjs/server";
-
 import { inngest } from "@/inngest/client";
 import { getSessionAgent } from "@/lib/auth/session";
 import { checkOPMLFileFormat } from "@/lib/zod/schemas/check-opml-file-format";

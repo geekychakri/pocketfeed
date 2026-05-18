@@ -5,7 +5,6 @@ import "./globals.css";
 import { Geist } from "next/font/google";
 
 import { ThemeProvider } from "next-themes";
-import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "sonner";
 
 import { mediaStyles } from "@/media";
@@ -44,15 +43,15 @@ export default function RootLayout({
         <a href="#main-item" id="skip-link">
           Skip to content
         </a>
-        <NuqsAdapter>
-          <ThemeProvider
-            disableTransitionOnChange={true}
-            defaultTheme="system"
-            enableSystem
-          >
-            <div className="isolate">{children}</div>
-          </ThemeProvider>
-        </NuqsAdapter>
+
+        <ThemeProvider
+          disableTransitionOnChange={true}
+          defaultTheme="system"
+          enableSystem
+        >
+          <div className="isolate">{children}</div>
+        </ThemeProvider>
+
         <Toaster
           theme="system"
           duration={3000}

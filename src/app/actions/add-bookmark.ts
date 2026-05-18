@@ -2,7 +2,6 @@
 
 import { refresh, revalidateTag, updateTag } from "next/cache";
 
-import { auth } from "@clerk/nextjs/server";
 // import { getXataClient } from "@/xata";
 
 // const xata = getXataClient();

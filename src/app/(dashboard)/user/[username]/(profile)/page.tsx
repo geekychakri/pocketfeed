@@ -3,12 +3,15 @@
 import useSWRInfinite from "swr/infinite";
 
 import TimelineFeed from "@/components/timeline-feed";
+import TimelineFeedSkeleton from "@/components/timeline-feed-skeleton";
 
 import { PostIcon } from "@/icons/post";
+import { fetcher } from "@/lib/utils";
 
-const fetcher = (url) => fetch(url).then((res) => res.json());
-
-const getKey = (pageIndex, previousPageData) => {
+const getKey = (
+  pageIndex: number,
+  previousPageData: { posts: []; hasNextPage: boolean; nextCursor: string },
+) => {
   console.log({ previousPageData });
   // reached the end
   if (previousPageData && !previousPageData.hasNextPage) return null;
@@ -30,17 +33,17 @@ export default function Posts() {
   });
 
   // return "Loading...";
-  if (!data) return "loading";
+  if (!data) return <TimelineFeedSkeleton />;
 
   const isLoadingMore =
     isLoading || (size > 0 && data && typeof data[size - 1] === "undefined");
 
-  console.log(data.flatMap((data) => data.data));
+  console.log(data.flatMap((data) => data.posts));
 
   const lastPage = data?.at(-1);
   const hasNextPage = lastPage?.hasNextPage ?? true;
 
-  const posts = data.flatMap((data) => data.data);
+  const posts = data.flatMap((data) => data.posts);
 
   if (posts.length === 0) {
     return <div className="px-4">No posts yet!</div>;
