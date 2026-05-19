@@ -2,12 +2,9 @@ import { Suspense } from "react";
 
 import { and, eq, inArray, notExists } from "drizzle-orm";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
-
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
 import { getDid } from "@/lib/auth/session";
-import { getInitials } from "@/lib/utils";
 
 import FollowBskyUsers from "./components/follow-bsky-users";
 
@@ -58,11 +55,11 @@ const DiscoverBlueskyTribe = async () => {
       "Let's connect on @pocketfeed! It's a simple social rss app. Join now: twitter.com";
     return (
       <div>
-        <h1 className="h-14 px-4 flex items-center">Your Bluesky Tribe</h1>
-        <p className="h-100 px-4 flex flex-col gap-4 items-center justify-center border-dashed-t group">
+        <h1 className="flex h-14 items-center px-4">Your Bluesky Tribe</h1>
+        <p className="border-dashed-t group flex h-100 flex-col items-center justify-center gap-4 px-4">
           <svg
             id="flutterby"
-            className="bluesky-flutter group-has-[a:hover]:rotate-6 transition-[rotate]"
+            className="bluesky-flutter transition-[rotate] group-has-[a:hover]:rotate-6"
             viewBox="0 0 566 500"
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -75,11 +72,11 @@ const DiscoverBlueskyTribe = async () => {
             </defs>
             <use
               xlinkHref="#wing"
-              className="left group-has-[a:hover]:animate-[flutter_500ms_ease-in-out] motion-reduce:group-has-[a:hover]:animate-none group-has-[a:hover]:[--flip:1]"
+              className="left group-has-[a:hover]:animate-[flutter_500ms_ease-in-out] group-has-[a:hover]:[--flip:1] motion-reduce:group-has-[a:hover]:animate-none"
             />
             <use
               xlinkHref="#wing"
-              className="right group-has-[a:hover]:animate-[flutter_500ms_ease-in-out] motion-reduce:group-has-[a:hover]:animate-none group-has-[a:hover]:[--flip:-1]"
+              className="right group-has-[a:hover]:animate-[flutter_500ms_ease-in-out] group-has-[a:hover]:[--flip:-1] motion-reduce:group-has-[a:hover]:animate-none"
             />
           </svg>
           <span className="text-text-secondary">
@@ -102,7 +99,7 @@ const DiscoverBlueskyTribe = async () => {
 
   return (
     <div className="pb-36">
-      <h1 className="h-14 px-4 flex items-center sticky top-0 max-md:top-14 bg-background-primary">
+      <h1 className="bg-background-primary sticky top-0 flex h-14 items-center px-4 max-md:top-14">
         Your Bluesky Tribe
       </h1>
       {/*<div className="grid grid-cols-5 gap-5">

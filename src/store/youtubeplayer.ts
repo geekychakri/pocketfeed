@@ -11,7 +11,7 @@ type YoutubePlayer = {
   closeYoutubePlayer: () => void;
 };
 
-export const useShowPodcastPlayer = create<YoutubePlayer>((set) => ({
+export const useYTPlayer = create<YoutubePlayer>((set) => ({
   isOpen: false,
   youtubeId: "",
   ytVideoTitle: "",

@@ -29,7 +29,7 @@ const ActivitySegmentedControl = (): React.ReactElement => {
                 <motion.span
                   layoutId="activity-highlight"
                   initial={false}
-                  className="bg-brand-primary absolute right-0 bottom-0 left-0 h-[4px]"
+                  className="bg-brand-primary absolute right-0 bottom-0 left-0 h-1"
                   style={{ originY: "0px" }}
                 ></motion.span>
               )}

@@ -9,8 +9,8 @@ import { toast } from "sonner";
 import RouteBack from "@/components/route-back";
 import { SpinnerRotate } from "@/components/spinner-rotate";
 import Button from "@/components/ui/custom-button";
-import UploadOPML from "@/components/upload-opml";
 
+import UploadOPML from "@/app/(dashboard)/components/upload-opml";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import { internalErrorToast } from "@/lib/utils";
 
@@ -41,7 +41,7 @@ export default function ImportExportOPML() {
     }
   };
   return (
-    <div className="mx-auto flex w-full max-w-[520px] flex-col gap-12 py-20">
+    <div className="mx-auto flex w-full max-w-130 flex-col gap-12 py-20">
       <div className="relative flex items-center">
         <RouteBack className="absolute -left-8" />
         <h1 className="text-lg font-medium">Import & Export</h1>
@@ -72,12 +72,6 @@ export default function ImportExportOPML() {
           </Button>
         </div>
       </div>
-      <Link
-        href="/settings/import_history"
-        className="custom-underline self-start"
-      >
-        Check Import History
-      </Link>
     </div>
   );
 }

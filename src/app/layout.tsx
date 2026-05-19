@@ -7,8 +7,6 @@ import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "sonner";
 
-import { mediaStyles } from "@/media";
-
 const geist = Geist({
   subsets: ["latin"],
   variable: "--font-geist",
@@ -31,12 +29,6 @@ export default function RootLayout({
         <meta
           name="format-detection"
           content="telephone=no, date=no, email=no, address=no"
-        />
-
-        <style
-          key="fresnel-css"
-          dangerouslySetInnerHTML={{ __html: mediaStyles }}
-          type="text/css"
         />
       </head>
       <body className="bg-background-primary text-text-primary leading-snug tracking-tight antialiased selection:bg-[#ff5a1f] selection:text-white">

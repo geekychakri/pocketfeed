@@ -1,28 +1,17 @@
 "use client";
 
-import {
-  useActionState,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 import { decode } from "html-entities";
-import parse from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import localforage from "localforage";
-import useSWR, { useSWRConfig } from "swr";
 import useSound from "use-sound";
 
-import { SpinnerRotate } from "@/components/spinner-rotate";
 import NothingToReadSVG from "@/components/svg/nothing-to-read";
 
 import { ExternalLinkIcon } from "@/icons/external-link";
-// import { addPostAction } from "@/app/actions/add-post";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import { fetcher, internalErrorToast } from "@/lib/utils";
 import { useArticleContent } from "@/store/article-content";
@@ -311,7 +300,7 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
 
   return (
     <>
-      <div className="relative mb-12 flex flex-col gap-2 pt-[10px] px-4">
+      <div className="relative mb-12 flex flex-col gap-2 px-4 pt-[10px]">
         {/* <RouteBack className="absolute -left-9 p-2" /> */}
         <h1 className="flex min-h-14 items-center gap-2 text-[48px] leading-[52px] font-[575] tracking-tighter text-balance">
           {decode(feedItem?.title)}
@@ -379,7 +368,7 @@ function ReadNextList() {
 
   if (source === "daily") {
     return (
-      <div className="p-4 flex flex-col gap-5">
+      <div className="flex flex-col gap-5 p-4">
         <Link
           href={`/feed?feedUrl=${getFeedItem.feedUrl}`}
           className="text-brand-primary custom-underline flex items-center gap-1 self-start"
@@ -393,8 +382,8 @@ function ReadNextList() {
   if (!feedData) return null;
 
   return (
-    <div className="p-4 flex flex-col gap-5">
-      <h2 className="font-medium text-lg">More from this blog</h2>
+    <div className="flex flex-col gap-5 p-4">
+      <h2 className="text-lg font-medium">More from this blog</h2>
       <div className="flex flex-col gap-4">
         {/*{feedData.items.map((item, index) => {
           return (

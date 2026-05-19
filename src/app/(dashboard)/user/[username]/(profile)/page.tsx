@@ -2,10 +2,8 @@
 
 import useSWRInfinite from "swr/infinite";
 
-import TimelineFeed from "@/components/timeline-feed";
-import TimelineFeedSkeleton from "@/components/timeline-feed-skeleton";
-
-import { PostIcon } from "@/icons/post";
+import TimelineFeed from "@/app/(dashboard)/components/timeline-feed";
+import TimelineFeedSkeleton from "@/app/(dashboard)/components/timeline-feed-skeleton";
 import { fetcher } from "@/lib/utils";
 
 const getKey = (
@@ -50,7 +48,7 @@ export default function Posts() {
   }
 
   return (
-    <div className="flex min-h-[300px] flex-col gap-4">
+    <div className="flex min-h-75 flex-col gap-4">
       {/*<PostIcon className="size-20" />
       <span>No posts yet!</span>*/}
       <TimelineFeed

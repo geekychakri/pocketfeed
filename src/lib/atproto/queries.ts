@@ -48,15 +48,15 @@ export let getAllRecords = async () => {
   return data?.records;
 };
 
-export let getFeedsByFolder = async (folder: string) => {
-  const records = await getAllRecords();
+// export let getFeedsByFolder = async (folder: string) => {
+//   const records = await getAllRecords();
 
-  const feedsByFolder = records.filter(
-    (record) => record.value.folder === folder,
-  );
+//   const feedsByFolder = records.filter(
+//     (record) => record.value.folder === folder,
+//   );
 
-  return feedsByFolder;
-};
+//   return feedsByFolder;
+// };
 
 export let getFolderList = async () => {
   const records = await getAllRecords();
@@ -73,9 +73,12 @@ export let getFolderList = async () => {
 
 export let getProfile = cache(async () => {
   const did = await getDid();
+  console.log({ did });
   const res = await fetch(
     `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${did}`,
   );
+
+  console.log({ res });
 
   if (!res.ok) {
     throw new Error("Something went wrong!");

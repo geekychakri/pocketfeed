@@ -6,7 +6,7 @@ export default async function UserConnectionsLayout({
   params: any;
 }>) {
   return (
-    <main className="mx-auto flex w-full max-w-[720px] flex-col min-h-screen border-dashed-x">
+    <main className="border-dashed-x mx-auto flex min-h-screen w-full max-w-180 flex-col">
       {children}
     </main>
   );

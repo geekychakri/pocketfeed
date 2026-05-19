@@ -3,12 +3,12 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { SWRConfig } from "swr";
 
-import FeedList from "@/components/feed-list";
 import MobileNav from "@/components/mobile-nav";
-import PodcastLoader from "@/components/podcast-loader";
-import ProfileAvatarWrapper from "@/components/profile-avatar-wrapper";
 import SidebarNavigation from "@/components/sidebar-nav";
 
+import FeedList from "@/app/(dashboard)/components/feed-list";
+import PodcastLoader from "@/app/(dashboard)/components/podcast-loader";
+import ProfileAvatarWrapper from "@/app/(dashboard)/components/profile-avatar-wrapper";
 import { getSelectedFeeds } from "@/db/queries";
 import { getDid } from "@/lib/auth/session";
 
@@ -22,10 +22,10 @@ export default async function MainLayout({
   const getSelectedFeedsPromise = getSelectedFeeds();
 
   return (
-    <div className="flex max-[768px]:flex-col w-full">
+    <div className="flex w-full max-[768px]:flex-col">
       <SidebarNavigation>
-        <div className="min-h-0 flex flex-col border-dashed-b">
-          <h2 className="px-3 py-2 text-text-secondary bg-background-primary">
+        <div className="border-dashed-b flex min-h-0 flex-col">
+          <h2 className="text-text-secondary bg-background-primary px-3 py-2">
             Subscriptions
           </h2>
 
@@ -36,7 +36,7 @@ export default async function MainLayout({
 
         <ErrorBoundary
           fallback={
-            <div className="flex items-center px-4 text-sm text-danger">
+            <div className="text-danger flex items-center px-4 text-sm">
               Something went wrong!
             </div>
           }
@@ -57,8 +57,9 @@ export default async function MainLayout({
             },
           }}
         >
-          {children}
           <PodcastLoader />
+          {children}
+
           <YouTubeModal />
         </SWRConfig>
       </main>
@@ -73,9 +74,9 @@ const FeedListWrapper = async () => {
 
 function ProfileAvatarFallback() {
   return (
-    <div className="flex items-center px-4 animate-pulse space-x-4">
-      <div className="size-10 flex-none rounded-full bg-ui-normal"></div>
-      <div className="w-full h-6 rounded bg-ui-normal"></div>
+    <div className="flex animate-pulse items-center space-x-2 px-2">
+      <div className="bg-ui-normal size-10 flex-none rounded-full"></div>
+      <div className="bg-ui-normal h-6 w-full rounded"></div>
     </div>
   );
 }

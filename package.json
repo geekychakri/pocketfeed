@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_OPTIONS='--network-family-autoselection-attempt-timeout=300000' next dev",
+    "dev": "NODE_OPTIONS='--network-family-autoselection-attempt-timeout=3000000' next dev",
     "dev-tunnel": "next dev -p 3001",
     "build": "next build",
     "start": "next start",

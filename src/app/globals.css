@@ -803,6 +803,19 @@ pre:has(code) {
   outline-offset: 2px;
 }
 
+audio::-webkit-media-controls-panel {
+  background: #fafafb;
+
+  @media (prefers-color-scheme: dark) {
+    background: #222222;
+    border-width: 0px;
+  }
+}
+
+audio::-webkit-media-controls-enclosure {
+  border-radius: 0px;
+}
+
 @property --left-fade {
   syntax: "<length>";
   inherits: false;

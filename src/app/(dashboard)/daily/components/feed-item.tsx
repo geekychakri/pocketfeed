@@ -16,8 +16,8 @@ import {
 } from "@/lib/utils";
 import { FeedItemType, FeedListType } from "@/types";
 
-import PodcastPlayButton from "../../(feed)/feed/components/PodcastPlayButton";
-import YouTubePlayButton from "../../(feed)/feed/components/YouTubePlayButton";
+import PodcastPlayButton from "../../components/PodcastPlayButton";
+import YouTubePlayButton from "../../components/YouTubePlayButton";
 
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
@@ -42,8 +42,8 @@ export default function FeedItem({ item }: { item: FeedItemType }) {
     );
   } else if (item.link?.includes("youtube.com")) {
     return (
-      <div className="hover:text-brand-primary px-4 flex items-center justify-between gap-5 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]">
-        <div className="flex-1 flex flex-col gap-1">
+      <div className="hover:text-brand-primary flex items-center justify-between gap-5 px-4 py-2.5 shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]">
+        <div className="flex flex-1 flex-col gap-1">
           <span className="tracking-tight text-pretty">
             {decode(item.title)}
           </span>
@@ -69,11 +69,11 @@ export default function FeedItem({ item }: { item: FeedItemType }) {
   }
   return (
     <div
-      className="hover:text-brand-primary  relative isolate px-4 flex items-center justify-between gap-1 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]"
+      className="hover:text-brand-primary relative isolate flex items-center justify-between gap-1 px-4 py-2.5 shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]"
       // prefetch={false}
     >
-      <div className="flex flex-col gap-1 min-w-0">
-        <h2 className="flex  flex-col text-pretty">{decode(item.title)}</h2>
+      <div className="flex min-w-0 flex-col gap-1">
+        <h2 className="flex flex-col text-pretty">{decode(item.title)}</h2>
 
         <span className="text-text-secondary flex gap-1 text-sm">
           <span>{dayjs(item.isoDate).format("ll")}</span>
@@ -82,7 +82,7 @@ export default function FeedItem({ item }: { item: FeedItemType }) {
         </span>
 
         {item.contentSnippet.length > 20 && (
-          <span className="line-clamp-2 text-text-secondary">
+          <span className="text-text-secondary line-clamp-2">
             {item.contentSnippet}
           </span>
         )}
@@ -153,7 +153,7 @@ const PodcastCard = ({
 
   console.log({ duration: item?.itunes?.duration });
   return (
-    <div className="hover:text-brand-primary px-4 relative flex items-center justify-between gap-5 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]">
+    <div className="hover:text-brand-primary relative flex items-center justify-between gap-5 px-4 py-2.5 shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]">
       <span className="flex flex-1 flex-col gap-1">
         <span className="tracking-tight text-pretty">{decode(item.title)}</span>
 

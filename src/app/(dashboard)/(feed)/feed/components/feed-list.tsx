@@ -20,8 +20,8 @@ import {
 } from "@/lib/utils";
 import { FeedItemType, FeedListType } from "@/types";
 
-import PodcastPlayButton from "./PodcastPlayButton";
-import YouTubePlayButton from "./YouTubePlayButton";
+import PodcastPlayButton from "../../../components/PodcastPlayButton";
+import YouTubePlayButton from "../../../components/YouTubePlayButton";
 
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
@@ -184,12 +184,12 @@ export default function FeedList({
   }
 
   if (feedListError?.status === 502) {
-    return <div className="px-4 text-danger">Unable to access this feed!</div>;
+    return <div className="text-danger px-4">Unable to access this feed!</div>;
   }
 
   if (feedListError?.status === 500 && feedUrl.includes("youtube.com")) {
     return (
-      <div className="px-4 text-danger">
+      <div className="text-danger px-4">
         Looks like YouTube feeds are temporarily unavailable. Please check back
         shortly.
       </div>
@@ -197,7 +197,7 @@ export default function FeedList({
   }
 
   if (feedListError?.status === 500) {
-    return <div className="px-4 text-danger">{ERROR_MESSAGE}</div>;
+    return <div className="text-danger px-4">{ERROR_MESSAGE}</div>;
   }
 
   // if (feedUrlError?.status === 500) {
@@ -312,14 +312,14 @@ function FeedListItems({
       return <FeedItem feedList={feedList} item={item} i={i} key={i} />;
     })} */}
         {feedList.isStale ? (
-          <p className="px-4 text-brand-primary">
+          <p className="text-brand-primary px-4">
             Showing last updated content
           </p>
         ) : null}
 
         {Object.entries(groupedList).map(([title, items]) => (
           <div key={title} className="group">
-            <h2 className="text-brand-primary font-medium px-4 mb-2 group-hover:text-text-primary">
+            <h2 className="text-brand-primary group-hover:text-text-primary mb-2 px-4 font-medium">
               {title}
             </h2>
             <div className="flex flex-col">
@@ -379,7 +379,7 @@ function FeedItem({
     );
   } else if (item.link?.includes("youtube.com")) {
     return (
-      <div className="hover:text-brand-primary flex items-center justify-between gap-5 p-4 border-dashed-b transition-[color]">
+      <div className="hover:text-brand-primary border-dashed-b flex items-center justify-between gap-5 p-4 transition-[color]">
         <div className="flex-1">
           <span className="tracking-tight text-pretty">
             {decode(item.title)}
@@ -411,11 +411,11 @@ function FeedItem({
   }
   return (
     <div
-      className="hover:text-brand-primary relative isolate flex flex-col  gap-4 p-4 border-dashed-b transition-[color]"
+      className="hover:text-brand-primary border-dashed-b relative isolate flex flex-col gap-4 p-4 transition-[color]"
       // prefetch={false}
     >
-      <div className="flex-1 flex items-center">
-        <span className="flex-1 w-4/5 flex-col text-pretty">
+      <div className="flex flex-1 items-center">
+        <span className="w-4/5 flex-1 flex-col text-pretty">
           {decode(item.title) || feedList?.title}
           {/* <span className="line-clamp-2 text-text-secondary">
               {item.contentSnippet}
@@ -513,7 +513,7 @@ const PodcastCard = ({
 
   console.log({ duration: item?.itunes?.duration });
   return (
-    <div className="hover:text-brand-primary relative flex items-center justify-between gap-5 p-4 border-dashed-b transition-[color]">
+    <div className="hover:text-brand-primary border-dashed-b relative flex items-center justify-between gap-5 p-4 transition-[color]">
       <span className="flex flex-1 flex-col gap-1">
         <span className="tracking-tight text-pretty">{decode(item.title)}</span>
 
@@ -566,31 +566,31 @@ const PodcastCard = ({
 
 function FeedListFallback() {
   return (
-    <div className="animate-pulse flex flex-col gap-5 px-4">
-      <div className="h-7 w-56 bg-ui-normal rounded"></div>
-      <div className="flex flex-col  space-y-3">
-        <div className="h-14 w-full flex justify-between items-center">
-          <div className="rounded bg-ui-normal h-7 w-56"></div>
-          <div className="rounded bg-ui-normal h-7 w-20"></div>
+    <div className="flex animate-pulse flex-col gap-5 px-4">
+      <div className="bg-ui-normal h-7 w-56 rounded"></div>
+      <div className="flex flex-col space-y-3">
+        <div className="flex h-14 w-full items-center justify-between">
+          <div className="bg-ui-normal h-7 w-56 rounded"></div>
+          <div className="bg-ui-normal h-7 w-20 rounded"></div>
         </div>
         <div className="flex-1 space-y-3">
-          <div className="h-5 rounded bg-ui-normal"></div>
-          <div className="h-5 rounded bg-ui-normal"></div>
-          <div className="h-5 rounded bg-ui-normal"></div>
+          <div className="bg-ui-normal h-5 rounded"></div>
+          <div className="bg-ui-normal h-5 rounded"></div>
+          <div className="bg-ui-normal h-5 rounded"></div>
         </div>
       </div>
 
       {Array.from({ length: 10 }).map((_, i, a) => {
         return (
-          <div key={i} className="flex flex-col  space-y-3 ">
-            <div className="h-14 w-full flex justify-between items-center">
-              <div className="rounded bg-ui-normal h-7 w-56"></div>
-              <div className="rounded bg-ui-normal h-7 w-20"></div>
+          <div key={i} className="flex flex-col space-y-3">
+            <div className="flex h-14 w-full items-center justify-between">
+              <div className="bg-ui-normal h-7 w-56 rounded"></div>
+              <div className="bg-ui-normal h-7 w-20 rounded"></div>
             </div>
             <div className="flex-1 space-y-3">
-              <div className="h-5 rounded bg-ui-normal"></div>
-              <div className="h-5 rounded bg-ui-normal"></div>
-              <div className="h-5 rounded bg-ui-normal"></div>
+              <div className="bg-ui-normal h-5 rounded"></div>
+              <div className="bg-ui-normal h-5 rounded"></div>
+              <div className="bg-ui-normal h-5 rounded"></div>
             </div>
           </div>
         );

@@ -1,8 +1,5 @@
 import { SVGProps, useState } from "react";
 
-import { useToggleNotebook } from "@/store/toggle-notebook";
-import useStore from "@/store/useStore";
-
 export default function HighlightToolbar({
   position,
   handleCopy,
@@ -10,28 +7,24 @@ export default function HighlightToolbar({
   position?: Record<string, number>;
   handleCopy: () => void;
 }) {
-  const toggleNotebook = useStore(
-    useToggleNotebook,
-    (state) => state.toggleNotebook,
-  );
   const [showSocialShare, setShowSocialShare] = useState(false);
   return (
     <div
-      className="absolute flex gap-1 border-brand-shadow p-1 isolate z-1 -top-2 left-0 w-[220px] h-[44px] bg-background-secondary rounded-md m-0"
+      className="border-brand-shadow bg-background-secondary absolute -top-2 left-0 isolate z-1 m-0 flex h-11 w-55 gap-1 rounded-md p-1"
       style={{
-        transform: `translate3d(${position?.x}px, ${position?.y}px, 0)`,
+        transform: `translate3d(${position?.x}px, ${position?.y}px/article-text, 0)`,
       }}
     >
       <button
         // className="flex w-full h-full justify-between items-center px-2"
-        className="text-sm flex-1 px-2 cursor-pointer rounded hover:bg-ui-hover"
+        className="hover:bg-ui-hover flex-1 cursor-pointer rounded px-2 text-sm"
         onClick={handleCopy}
       >
         Copy
       </button>
 
       <a
-        className="text-[13px] no-underline bg-none flex items-center justify-center gap-2 flex-1 px-2 cursor-pointer rounded  hover:bg-ui-hover"
+        className="hover:bg-ui-hover flex flex-1 cursor-pointer items-center justify-center gap-2 rounded bg-none px-2 text-[13px] no-underline"
         href={`https://bsky.app/intent/compose?text=${encodeURIComponent("hello https://github.com/")}`}
         target="__blank"
       >

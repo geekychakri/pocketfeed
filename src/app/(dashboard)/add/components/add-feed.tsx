@@ -21,7 +21,7 @@ import Button from "@/components/ui/custom-button";
 import Input from "@/components/ui/custom-input";
 
 import { addFeeds } from "@/app/actions/add-feeds";
-import { EditIcon } from "@/icons/edit";
+// import { EditIcon } from "@/icons/edit";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import {
   checkIfObjectIsEmpty,
@@ -195,7 +195,7 @@ export default function AddFeed({ did }: { did: string }) {
 
         {isRssDataEmpty && (
           <Button
-            className="border-shadow flex gap-1 items-center justify-center"
+            className="border-shadow flex items-center justify-center gap-1"
             disabled={isLoading}
           >
             <span>Continue</span>
@@ -247,7 +247,7 @@ export default function AddFeed({ did }: { did: string }) {
                           placeholder={new URL(urlValue).hostname}
                         />
                         <span
-                          className="flex items-center justify-center px-4"
+                          className="flex items-center justify-center px-4 text-sm"
                           onClick={(e) =>
                             (
                               e.currentTarget
@@ -255,13 +255,13 @@ export default function AddFeed({ did }: { did: string }) {
                             ).focus()
                           }
                         >
-                          <EditIcon />
+                          Edit
                         </span>
                       </div>
                       {(rssData?.feedUrls?.length ?? 0) > 1 && (
                         <Switch.Root
                           name={`feeds[${i}][isChecked]`}
-                          className="bg-ui-normal relative h-6.25 w-10.5 cursor-default rounded-full outline-none brand-primary data-[state=checked]:bg-[rgba(252,89,30,0.2)]"
+                          className="bg-ui-normal brand-primary relative h-6.25 w-10.5 cursor-default rounded-full outline-none data-[state=checked]:bg-[rgba(252,89,30,0.2)]"
                           id={`select-feed-${i}`}
                           style={{
                             WebkitTapHighlightColor: "rgba(0, 0, 0, 0)",
@@ -301,7 +301,7 @@ export default function AddFeed({ did }: { did: string }) {
               {state?.message}
             </p>
             <Button
-              className="border-shadow gap-1 flex items-center justify-center"
+              className="border-shadow flex items-center justify-center gap-1"
               disabled={isPending}
             >
               <span>Add</span>

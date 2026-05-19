@@ -2,9 +2,8 @@
 
 import useSWRInfinite from "swr/infinite";
 
-import TimelineFeed from "@/components/timeline-feed";
-import TimelineFeedSkeleton from "@/components/timeline-feed-skeleton";
-
+import TimelineFeed from "@/app/(dashboard)/components/timeline-feed";
+import TimelineFeedSkeleton from "@/app/(dashboard)/components/timeline-feed-skeleton";
 import { fetcher } from "@/lib/utils";
 
 const getKey = (

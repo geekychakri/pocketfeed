@@ -5,9 +5,9 @@ import RefreshDailyFeeds from "./components/refresh-daily-feeds";
 
 export default function Page() {
   return (
-    <div className="mx-auto w-full max-w-[750px] min-h-screen  border-dashed-x relative">
-      <div className="flex  justify-between gap-2 h-14 items-center border-dashed-b  px-4">
-        <div className="flex gap-2 relative">
+    <div className="border-dashed-x relative mx-auto min-h-screen w-full max-w-187.5">
+      <div className="border-dashed-b flex h-14 items-center justify-between gap-2 px-4">
+        <div className="relative flex gap-2">
           <RouteBack className="absolute -left-12" />
           <h1 className="font-medium">Daily</h1>
         </div>

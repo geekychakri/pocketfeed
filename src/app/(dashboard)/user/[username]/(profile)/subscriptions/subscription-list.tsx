@@ -21,24 +21,18 @@ import { InView, useInView } from "react-intersection-observer";
 import { toast } from "sonner";
 import useSWR, { mutate } from "swr";
 import useSound from "use-sound";
-import { WindowVirtualizer } from "virtua";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 import { SpinnerRotate } from "@/components/spinner-rotate";
-import Button from "@/components/ui/custom-button";
 
 import { deleteSubscriptions } from "@/app/actions/delete-subscriptions";
-import { FeedIcon } from "@/icons/feed";
 import { ERROR_MESSAGE } from "@/lib/constants";
 import { fetcher, getInitials, internalErrorToast } from "@/lib/utils";
-import type { FeedsRecord } from "@/xata";
 
 const initialState = {
   type: "",
   message: "",
 };
-
-type FeedsType = PageRecordArray<Readonly<SelectedPick<FeedsRecord, ["*"]>>>;
 
 export default function SubscriptionList({ did }: { did: string }) {
   const [isFeedItemChecked, setIsFeedItemChecked] = useState(false);
@@ -178,7 +172,7 @@ export default function SubscriptionList({ did }: { did: string }) {
           {isFeedItemChecked && (
             <button
               disabled={isPending}
-              className="px-4 bg-ui-normal h-9 w-[120px] flex gap-2 rounded-md font-medium hover:bg-ui-hover cursor-pointer justify-center items-center opacity-100 transition-opacity starting:opacity-0"
+              className="bg-ui-normal hover:bg-ui-hover flex h-9 w-[120px] cursor-pointer items-center justify-center gap-2 rounded-md px-4 font-medium opacity-100 transition-opacity starting:opacity-0"
             >
               Delete
               {isPending && <SpinnerRotate />}
@@ -193,7 +187,7 @@ export default function SubscriptionList({ did }: { did: string }) {
               // href={`/feed/${item.title?.trim().replace(/\s+/g, "-").toLowerCase()}`}
               // href={`/feed/${item.feedId}`}
               key={record.id}
-              className="group/folder-feed px-4 relative isolate flex w-full items-center justify-between py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]"
+              className="group/folder-feed relative isolate flex w-full items-center justify-between px-4 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]"
             >
               <span className="flex items-center gap-3">
                 <Avatar className="bg-ui-normal inline-flex h-[30px] w-[30px] flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full select-none">
@@ -220,11 +214,11 @@ export default function SubscriptionList({ did }: { did: string }) {
               </span>
               <label
                 htmlFor={record.id}
-                className="hover:bg-ui-hover z-2 flex size-[50px] items-center justify-center rounded-full duration-150 cursor-pointer"
+                className="hover:bg-ui-hover z-2 flex size-[50px] cursor-pointer items-center justify-center rounded-full duration-150"
               >
                 {/* <input id="test" type="checkbox" className="size-4" /> */}
                 <Checkbox.Root
-                  className="bg-ui-normal flex size-[20px] appearance-none items-center justify-center rounded outline-none cursor-pointer"
+                  className="bg-ui-normal flex size-[20px] cursor-pointer appearance-none items-center justify-center rounded outline-none"
                   // defaultChecked
                   name={`feedIdList[${record.id}]`}
                   value={record.id}
@@ -277,7 +271,7 @@ function SubscriptionListStatusBar({
           setIsSticky(false);
         }
       }}
-      className={`bg-background-primary px-4 sticky -top-px z-10 flex h-[56px] items-center justify-between transition-shadow ${isSticky && "shadow-[0_1px_0_0_var(--border-non-interactive)]"}`}
+      className={`bg-background-primary sticky -top-px z-10 flex h-[56px] items-center justify-between px-4 transition-shadow ${isSticky && "shadow-[0_1px_0_0_var(--border-non-interactive)]"}`}
     >
       <h2>
         {recordsCount}{" "}
@@ -287,27 +281,3 @@ function SubscriptionListStatusBar({
     </InView>
   );
 }
-
-// function SubmitButton() {
-//   const { pending } = useFormStatus();
-//   return (
-//     // <button
-//     //   className="flex h-11 w-full items-center justify-center rounded-md bg-ui-normal px-4 py-2 font-medium text-white"
-//     //   disabled={pending}
-//     // >
-//     //   {pending ? <SpinnerRotate /> : "Add"}
-//     // </button>
-//     <button
-//       //   form="subscriptionForm"
-//       className="hover:bg-ui-hover flex size-[50px] items-center justify-center rounded-full duration-150"
-//       type="submit"
-//       disabled={pending}
-//     >
-//       {pending ? (
-//         <SpinnerRotate className="size-5" />
-//       ) : (
-//         <TrashIcon className="size-5" />
-//       )}
-//     </button>
-//   );
-// }

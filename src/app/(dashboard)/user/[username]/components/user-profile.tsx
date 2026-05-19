@@ -5,21 +5,10 @@ import { and, count, eq } from "drizzle-orm";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
-import FollowButton from "@/components/follow-button";
-import RouteBack from "@/components/route-back";
-import SegmentedControl from "@/components/segmented-control";
-import { CustomTooltip } from "@/components/ui/custom-tooltip";
 
-// import DOMPurify from "isomorphic-dompurify";
-
-// import { getXataClient, UsersRecord } from "@/xata";
-// const xata = getXataClient();
-
+import FollowButton from "@/app/(dashboard)/components/follow-button";
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
-import { DotsLoaderIcon } from "@/icons/dots-loader";
-import { GlobeErrorIcon } from "@/icons/globe-error";
-import { UserErrorIcon } from "@/icons/user-error";
 import { getDid, getSessionAgent } from "@/lib/auth/session";
 import { compactNumber, convertTextToLinks, getInitials } from "@/lib/utils";
 
@@ -28,15 +17,6 @@ export default async function UserProfile({
 }: {
   params: Promise<{ username: string }>;
 }) {
-  // const { userId }: { userId: string | null } = await auth();
-  // const loggedInUserId = userId as string;
-  // const loggedInUserInfo = await currentUser();
-
-  // const user = (await xata.db.users
-  //   .filter({ username: username })
-  //   .getFirst()) as UsersRecord;
-
-  // console.log({ user });
   const { username: handle } = await params;
   console.log({ handle });
 
@@ -77,29 +57,6 @@ export default async function UserProfile({
       </div>
     );
   }
-
-  // if (profile.did !== loggedInUserDid) {
-  //   checkIsFollowingPromise = db
-  //     .select()
-  //     .from(schema.follows)
-  //     .where(
-  //       and(
-  //         eq(schema.follows.followerDid, loggedInUserDid),
-  //         eq(schema.follows.followingDid, profile.did),
-  //       ),
-  //     );
-  //   // console.log({ checkIsFollowing });
-
-  //   // if (checkIsFollowing.length > 0) {
-  //   //   isFollowing = true;
-  //   // }
-  // }
-
-  // const followingRecord = await xata.db.follows
-  //   .filter({ followerId: loggedInUserId, followeeId: user.userId as string })
-  //   .getFirst(); //TODO:
-
-  // console.log({ followingRecord });
 
   return (
     <div className="pt-10">
@@ -146,7 +103,7 @@ async function FollowButtonWrapper({
     <Suspense
       fallback={
         <div className="animate-pulse">
-          <div className="w-[100px] h-9 bg-skeleton-highlight rounded-md"></div>
+          <div className="bg-skeleton-highlight h-9 w-25 rounded-md"></div>
         </div>
       }
     >
@@ -165,28 +122,17 @@ async function ProfileInfo({ children }: { children: React.ReactNode }) {
   return <div className="flex flex-col gap-4 px-4">{children}</div>;
 }
 
-// function ProfileTitle({ username }: { username: string }) {
-//   return (
-//     <div className="relative flex items-center gap-3">
-//       <RouteBack className="absolute -left-9" />
-//       <p>{username}</p>
-//     </div>
-//   );
-// }
-
 function ProfileHeader({
-  // children,
   profile,
   loggedInUserDid,
 }: {
-  // children: React.ReactNode;
   profile: any;
   loggedInUserDid: string;
 }) {
   return (
     <div className="flex flex-1 flex-col gap-4">
       <div className="flex flex-1 items-center justify-between gap-4">
-        <Avatar className="bg-background-secondary ring-ui-normal inline-flex h-[92px] w-[92px] flex-none items-center justify-center overflow-hidden rounded-full align-middle ring-1 select-none">
+        <Avatar className="bg-background-secondary ring-ui-normal inline-flex size-23 flex-none items-center justify-center overflow-hidden rounded-full align-middle ring-1 select-none">
           <AvatarImage
             className="h-full w-full rounded-[inherit] object-cover"
             src={profile?.avatar as string}
@@ -217,8 +163,8 @@ function ProfileHeader({
       </div>
 
       <div className="flex flex-col gap-2">
-        <p className="flex items-center gap-2 text-xl ">
-          <span className="font-medium min-w-0 wrap-break-word">
+        <p className="flex items-center gap-2 text-xl">
+          <span className="min-w-0 font-medium wrap-break-word">
             {profile.displayName}
           </span>
           <span>
@@ -267,7 +213,7 @@ function ProfileBody({
         <a
           href={`https://bsky.app/profile/${profile.handle}`}
           target="_blank"
-          className="custom-underline wrap-break-word text-text-secondary hover:text-text-primary duration-150"
+          className="custom-underline text-text-secondary hover:text-text-primary wrap-break-word duration-150"
         >
           Say hi with a short bio!
         </a>
@@ -313,7 +259,7 @@ function ProfileFooter({
         </Suspense>
       </ErrorBoundary>
 
-      <Link href="/discover" className="text-sm custom-underline">
+      <Link href="/discover" className="custom-underline text-sm">
         Discover your Bluesky tribe
       </Link>
     </div>

@@ -3,8 +3,8 @@ import { Suspense } from "react";
 import { eq } from "drizzle-orm";
 
 import RouteBack from "@/components/route-back";
-import SegmentedControl from "@/components/segmented-control";
 
+import SegmentedControl from "@/app/(dashboard)/components/segmented-control";
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
 
@@ -19,7 +19,7 @@ export default async function UserLayout({
   params: Promise<{ username: string }>;
 }) {
   return (
-    <main className="mx-auto flex w-full max-w-[720px] min-h-screen flex-col gap-5 border-dashed-x">
+    <main className="border-dashed-x mx-auto flex min-h-screen w-full max-w-180 flex-col gap-5">
       <Suspense fallback={null}>
         <ProfileHeader params={params} />
       </Suspense>
@@ -87,20 +87,20 @@ async function ProfileHeader({
 }) {
   const { username } = await params;
   return (
-    <div className="relative flex items-center gap-3 h-14 border-dashed-b">
+    <div className="border-dashed-b relative flex h-14 items-center gap-3">
       <RouteBack className="absolute -left-9" />
-      <p className="px-4 text-brand-primary">{username}</p>
+      <p className="text-brand-primary px-4">{username}</p>
     </div>
   );
 }
 
 export function UserProfileFallback() {
   return (
-    <div className="animate-pulse py-10 px-4">
+    <div className="animate-pulse px-4 py-10">
       <div className="flex items-center justify-between">
-        <div className="bg-skeleton-highlight size-[92px] rounded-full"></div>
+        <div className="bg-skeleton-highlight size-23 rounded-full"></div>
 
-        <div className="w-[100px] h-9 bg-skeleton-highlight rounded-md"></div>
+        <div className="bg-skeleton-highlight h-9 w-25 rounded-md"></div>
       </div>
     </div>
   );

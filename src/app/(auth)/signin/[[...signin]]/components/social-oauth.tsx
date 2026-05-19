@@ -47,9 +47,9 @@ export default function SocialOauth() {
       <form onSubmit={handleAtProtoSignIn} className="space-y-4">
         <AutocompleteHandle />
 
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+        {error && <p className="text-sm text-red-500">{error}</p>}
 
-        <button className="w-full flex gap-1 items-center justify-center rounded-md bg-brand-primary/90 h-11 text-center cursor-pointer font-medium text-white select-none hover:bg-brand-primary duration-100">
+        <button className="bg-brand-primary/90 hover:bg-brand-primary flex h-11 w-full cursor-pointer items-center justify-center gap-1 rounded-md text-center font-medium text-white duration-100 select-none">
           Continue {isLoading && <SpinnerRotate />}
         </button>
       </form>
