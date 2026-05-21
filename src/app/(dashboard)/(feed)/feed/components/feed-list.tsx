@@ -151,16 +151,16 @@ export default function FeedList({
       // revalidateOnMount: false,
     },
   );
-  const { data: bookmarks, error: bookmarksError } = useSWR(
-    "/api/get-bookmarks",
-    fetcher,
-    {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      revalidateOnMount: false,
-    },
-  );
+  // const { data: bookmarks, error: bookmarksError } = useSWR(
+  //   "/api/get-bookmarks",
+  //   fetcher,
+  //   {
+  //     revalidateIfStale: false,
+  //     revalidateOnFocus: false,
+  //     revalidateOnReconnect: false,
+  //     revalidateOnMount: false,
+  //   },
+  // );
 
   useEffect(() => {
     if (feedList) {

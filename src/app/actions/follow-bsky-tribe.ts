@@ -4,7 +4,8 @@ import { refresh } from "next/cache";
 
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
-import { getDid, getSession } from "@/lib/auth/session";
+import { getDid } from "@/lib/auth/session";
+import getSession from "@/lib/iron-session/get-iron-session";
 
 export async function followBskyTribe(prevState: any, formData: FormData) {
   const followerDid = (await getDid()) as string;
@@ -15,7 +16,7 @@ export async function followBskyTribe(prevState: any, formData: FormData) {
 
   const session = await getSession();
 
-  if (!session?.sub) {
+  if (!session.user?.did) {
     return {
       message: "Authentication required.",
     };

@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { nanoid } from "nanoid";
 import xml2js from "xml2js";
 
-import { getSession, getSessionAgent } from "@/lib/auth/session";
+import getSession from "@/lib/iron-session/get-iron-session";
 import { transformFeedUrltoRkey } from "@/lib/utils";
 
 function chunkArray(array: [], size: number) {
@@ -16,16 +16,16 @@ function chunkArray(array: [], size: number) {
 
 export async function POST(request: NextRequest, response: NextResponse) {
   try {
-    // const agent = await getSessionAgent();
-    // if (!agent?.assertDid) {
-    //   return Response.json(
-    //     {
-    //       message: "You must be signed in to add feeds.",
-    //     },
-    //     { status: 401 },
-    //   );
-    // }
-    // console.log({ agent });
+    const session = await getSession();
+
+    if (!session.user?.did) {
+      return Response.json(
+        {
+          message: "You must be signed in to download subscriptions list.",
+        },
+        { status: 401 },
+      );
+    }
     const formData = await request.formData();
     const file = formData.get("opmlFile") as File;
 

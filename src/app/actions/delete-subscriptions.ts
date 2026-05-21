@@ -1,18 +1,12 @@
 "use server";
 
-import { refresh, revalidatePath } from "next/cache";
-
-// import { getXataClient } from "@/xata";
-
-// const xata = getXataClient();
-
-import { inArray } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import qs from "qs";
 
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
-import { getSession } from "@/lib/auth/session";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
+import getSession from "@/lib/iron-session/get-iron-session";
 
 const initialState = {
   type: "",
@@ -24,18 +18,12 @@ export async function deleteSubscriptions(
   formData: FormData | null,
 ) {
   try {
-    // const { userId }: { userId: string | null } = await auth();
-    // if (!userId) {
-    //   return {
-    //     type: "user-error",
-    //     message: "You must be signed in to delete your subscriptions!",
-    //   };
-    // }
     if (formData === null) {
       return initialState;
     }
+
     const session = await getSession();
-    if (!session) {
+    if (!session.user?.did) {
       return {
         type: "error",
         message: "You must be signed in to delete a feed.",
@@ -60,7 +48,12 @@ export async function deleteSubscriptions(
 
     const res = await db
       .delete(schema.feeds)
-      .where(inArray(schema.feeds.id, idList))
+      .where(
+        and(
+          eq(schema.feeds.did, session.user.did),
+          inArray(schema.feeds.id, idList),
+        ),
+      )
       .returning({ deletedId: schema.feeds.id });
 
     console.log({ res });

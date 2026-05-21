@@ -16,6 +16,7 @@ import {
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
 import { getDid } from "@/lib/auth/session";
+import getSession from "@/lib/iron-session/get-iron-session";
 
 type Post = typeof schema.posts.$inferSelect;
 
@@ -48,28 +49,6 @@ const cursorCondition = (parsed: ParsedCursor) =>
       lt(schema.userFeed.postId, parsed.postId),
     ),
   );
-
-async function getProfilePosts(profileDid: string, cursor?: string, limit = 1) {
-  const pageSize = Math.min(limit, 1);
-  const data = await db
-    .select()
-    .from(schema.posts)
-    .where(
-      and(
-        eq(schema.posts.did, profileDid),
-        cursor ? lt(schema.posts.id, cursor) : undefined,
-      ),
-    )
-    .orderBy(desc(schema.posts.id))
-    .limit(pageSize + 1);
-
-  const hasNextPage = data.length > limit;
-  if (hasNextPage) data.pop();
-
-  const nextCursor = hasNextPage ? data.at(-1)?.id : null;
-
-  return { data, nextCursor, hasNextPage };
-}
 
 export async function getFollowingFeed(
   userDid: string,
@@ -110,12 +89,22 @@ export async function getFollowingFeed(
 
 export async function GET(request: Request) {
   try {
-    const userDid = (await getDid()) as string;
+    const session = await getSession();
+
+    if (!session.user?.did) {
+      return Response.json(
+        {
+          message: "You must be signed in to view posts.",
+        },
+        { status: 401 },
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const cursor = searchParams.get("cursor") as string;
     console.log({ cursor });
 
-    const result = await getFollowingFeed(userDid, cursor);
+    const result = await getFollowingFeed(session.user.did, cursor);
 
     console.log({ result: result.posts });
     return NextResponse.json(result);

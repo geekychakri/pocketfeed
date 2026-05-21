@@ -1,5 +1,6 @@
 import { handleAndReturnErrorResponse } from "@/lib/api/errors";
 import { findRSS as rssFinder } from "@/lib/find-rss";
+import getSession from "@/lib/iron-session/get-iron-session";
 import { getYTChannelAvatar } from "@/lib/utils";
 import { getFeedUrlSchema } from "@/lib/zod/schemas";
 
@@ -15,6 +16,17 @@ export async function POST(request: Request) {
     const body = getFeedUrlSchema.parse(bodyRaw);
     console.log({ body });
     const { url } = body;
+
+    const session = await getSession();
+
+    if (!session.user?.did) {
+      return Response.json(
+        {
+          message: "You must be signed in to find rss url",
+        },
+        { status: 401 },
+      );
+    }
 
     const rssRes = await rssFinder(url);
     console.log(rssRes);

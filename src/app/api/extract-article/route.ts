@@ -3,21 +3,7 @@ import { isProbablyReaderable, Readability } from "@mozilla/readability";
 import { JSDOM, VirtualConsole } from "jsdom";
 import { DOMParser } from "linkedom";
 
-// const modifyImgUrlAndReturnHTML = (html, url) => {
-//   const doc = new DOMParser().parseFromString(html, "text/html");
-
-//   Array.from(doc.getElementsByTagName("img")).forEach((element) => {
-//     const src = element.getAttribute("data-src") ?? element.getAttribute("src");
-//     const imgUrl = src.replace(/^.*?blog\/?/, "");
-//     if (src) {
-//       element.setAttribute("src", `${url}/${imgUrl}`);
-//     }
-//   });
-
-//   return Array.from(doc.childNodes)
-//     .map((element) => element.outerHTML)
-//     .join("");
-// };
+import getSession from "@/lib/iron-session/get-iron-session";
 
 export async function GET(request: Request) {
   try {
@@ -25,6 +11,17 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const articleLink = searchParams.get("articleLink") as string;
     console.log({ articleLink });
+
+    const session = await getSession();
+
+    if (!session.user?.did) {
+      return Response.json(
+        {
+          message: "You must be signed in to extract article.",
+        },
+        { status: 401 },
+      );
+    }
 
     const virtualConsole = new VirtualConsole();
 

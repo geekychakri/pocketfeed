@@ -78,7 +78,7 @@ export default function AddFeed({ did }: { did: string }) {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const res = await fetch("/api/findFeed", {
+      const res = await fetch("/api/find-feed", {
         method: "POST",
         headers: {
           "Content-type": "application/json",

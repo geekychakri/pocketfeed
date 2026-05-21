@@ -4,12 +4,26 @@ import { desc, lte } from "drizzle-orm";
 
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
+import getSession from "@/lib/iron-session/get-iron-session";
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const cursor = searchParams.get("cursor");
     console.log({ cursor });
+
+    const session = await getSession();
+
+    if (!session.user?.did) {
+      return Response.json(
+        {
+          message: "You must be signed in to see posts.",
+        },
+        {
+          status: 401,
+        },
+      );
+    }
 
     let limit = 50; //TODO:
     let hasNextPage = false;

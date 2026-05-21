@@ -1,9 +1,14 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
+import type { AppBskyActorDefs } from "@atproto/api";
+
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
 import { getOAuthClient } from "@/lib/auth/client";
+import { createUserSession } from "@/lib/iron-session/create-user-session";
+import type { User } from "@/lib/iron-session/create-user-session";
+import getSession from "@/lib/iron-session/get-iron-session";
 
 const PUBLIC_URL = process.env.PUBLIC_URL || "http://127.0.0.1:3000";
 
@@ -19,15 +24,26 @@ export async function GET(request: NextRequest) {
     // Exchange code for session
     const { session } = await client.callback(params);
 
-    // if (session) {
-    //   const data = await db
-    //     .insert(schema.users)
-    //     .values({
-    //       did: session.did,
-    //       handle,
-    //     })
-    //     .onConflictDoNothing({ target: schema.users.did });
-    // }
+    const res = await fetch(
+      `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${session.did}`,
+    );
+    const data: AppBskyActorDefs.ProfileViewDetailed = await res.json();
+
+    const { did, handle, displayName, avatar } = data;
+
+    // Create a user from the Bluesky profile
+    const ironSession = await getSession();
+
+    // Save the user to the session
+    ironSession.user = createUserSession({
+      did,
+      handle,
+      displayName,
+      avatar,
+    });
+
+    // Save the session
+    await ironSession.save();
 
     const response = NextResponse.redirect(new URL("/daily", PUBLIC_URL)); //redirect after login
 

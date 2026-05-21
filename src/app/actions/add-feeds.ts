@@ -11,10 +11,10 @@ import qs from "qs";
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
 import { validateRecord } from "@/lexicon/types/app/pocketfeed/feed/subscription";
+import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 // import { getXataClient } from "@/xata";
 
-import { getSession, getSessionAgent } from "@/lib/auth/session";
-import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
+import getSession from "@/lib/iron-session/get-iron-session";
 import { getErrorMessage, transformFeedUrltoRkey } from "@/lib/utils";
 import { addFeedSchema } from "@/lib/zod/schemas/add-feed";
 
@@ -221,11 +221,11 @@ export async function addFeeds(prevState: any, formData: FormData | null) {
   try {
     const session = await getSession();
 
-    if (!session) {
+    if (!session.user?.did) {
       throw new Error("You must be signed in to add a feed.");
     }
 
-    const did = session.sub;
+    const did = session.user.did;
 
     const results = qs.parse(
       Object.fromEntries(formData.entries()) as {},

@@ -18,8 +18,6 @@ import * as schema from "@/db/schema";
 export const SCOPE =
   "atproto repo:com.pocket-feed.feed.subscription repo:com.pocket-feed.social.post";
 
-let client: NodeOAuthClient | null = null;
-
 const PUBLIC_URL = process.env.PUBLIC_URL; //TODO: set public url in prod
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
@@ -60,10 +58,12 @@ const globalForOAuth = globalThis as typeof globalThis & {
 
 export function getOAuthClient(): Promise<NodeOAuthClient> {
   if (!globalForOAuth.oauthClientPromise) {
-    console.log("NOT reused");
+    console.log("creating oauth client!");
     globalForOAuth.oauthClientPromise = createOAuthClient();
+  } else {
+    console.log("Reusing oauth client!");
   }
-  console.log("globalForOauth reused");
+
   return globalForOAuth.oauthClientPromise;
 }
 

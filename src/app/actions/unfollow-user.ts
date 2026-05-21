@@ -1,29 +1,22 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-
 import { and, eq } from "drizzle-orm";
-
-// import { getXataClient } from "@/xata";
-
-// const xata = getXataClient();
 
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
+import getSession from "@/lib/iron-session/get-iron-session";
 
 export async function unFollowUser(followerDid: string, followingDid: string) {
   // console.log({ recordId });
   try {
-    // const followerId = (await auth()).userId as string;
-    // if (!followerId) {
-    //   return {
-    //     type: "user-error",
-    //     message: "You must be signed in to un-follow others.",
-    //   };
-    // }
+    const session = await getSession();
 
-    // const result = await xata.db.follows.delete(recordId as string);
+    if (!session.user?.did) {
+      return {
+        message: "Authentication required.",
+      };
+    }
 
     const data = await db
       .delete(schema.follows)

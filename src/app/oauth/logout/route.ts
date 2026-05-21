@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 import { getOAuthClient } from "@/lib/auth/client";
+import getSession from "@/lib/iron-session/get-iron-session";
 
 export async function POST() {
   try {
@@ -10,7 +11,10 @@ export async function POST() {
 
     if (did) {
       const client = await getOAuthClient();
+      const session = await getSession();
       await client.revoke(did);
+
+      session.destroy();
     }
 
     cookieStore.delete("did");

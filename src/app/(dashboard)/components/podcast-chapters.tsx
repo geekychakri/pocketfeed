@@ -74,7 +74,7 @@ export default function PodcastChapters({
 
   const { data, error, isLoading, mutate } = useSWR(
     chaptersUrl
-      ? `/api/getChapters?chaptersUrl=${encodeURIComponent(chaptersUrl)}`
+      ? `/api/get-chapters?chaptersUrl=${encodeURIComponent(chaptersUrl)}`
       : null,
     fetcher,
     {
@@ -161,12 +161,12 @@ export default function PodcastChapters({
 
   if (isLoading) {
     return (
-      <div className="flex flex-col animate-pulse gap-5 w-full">
+      <div className="flex w-full animate-pulse flex-col gap-5">
         {Array.from({ length: 7 }, (_, i) => {
           return (
             <div
               key={i}
-              className="h-12 w-full rounded-md flex bg-ui-normal"
+              className="bg-ui-normal flex h-12 w-full rounded-md"
             ></div>
           );
         })}
@@ -182,7 +182,7 @@ export default function PodcastChapters({
 
   return (
     <ScrollArea.Root className="min-h-0 flex-1">
-      <ScrollArea.Viewport className="scrollable scroll-pb-6 overscroll-contain h-full flex pl-1 pr-6 py-2 flex-col gap-4 focus-visible:border-brand-shadow">
+      <ScrollArea.Viewport className="scrollable focus-visible:border-brand-shadow flex h-full scroll-pb-6 flex-col gap-4 overscroll-contain py-2 pr-6 pl-1">
         {/*<div className="flex flex-col justify-center gap-4">*/}
         {data?.chapters?.map((chapter, i) => {
           return (
@@ -190,7 +190,7 @@ export default function PodcastChapters({
               ref={(el) => {
                 chapterRefs.current[i] = el;
               }}
-              className={`h-14 w-full rounded-md px-4 py-2 cursor-pointer border-dashed text-left hover:bg-ui-hover`}
+              className={`hover:bg-ui-hover h-14 w-full cursor-pointer rounded-md border-dashed px-4 py-2 text-left`}
               key={i}
               onClick={() => {
                 // setCurrentTime(chapter.startTime);
@@ -221,8 +221,8 @@ export default function PodcastChapters({
         })}
         {/*</div>*/}
       </ScrollArea.Viewport>
-      <ScrollArea.Scrollbar className="m-2 flex w-1 justify-center rounded-sm  opacity-0 transition-opacity pointer-events-none data-hovering:opacity-100 data-hovering:delay-0 data-hovering:pointer-events-auto data-scrolling:opacity-100 data-scrolling:duration-0 data-scrolling:pointer-events-auto">
-        <ScrollArea.Thumb className="w-full rounded-sm bg-brand-primary" />
+      <ScrollArea.Scrollbar className="pointer-events-none m-2 flex w-1 justify-center rounded-sm opacity-0 transition-opacity data-hovering:pointer-events-auto data-hovering:opacity-100 data-hovering:delay-0 data-scrolling:pointer-events-auto data-scrolling:opacity-100 data-scrolling:duration-0">
+        <ScrollArea.Thumb className="bg-brand-primary w-full rounded-sm" />
       </ScrollArea.Scrollbar>
     </ScrollArea.Root>
   );

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import getSession from "@/lib/iron-session/get-iron-session";
 import { parse } from "@/lib/vtt-srt-parser";
 
 export async function GET(request: NextRequest) {
@@ -7,6 +8,17 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
 
     const transcriptUrl = searchParams.get("transcriptUrl") as string;
+
+    const session = await getSession();
+
+    if (!session.user?.did) {
+      return Response.json(
+        {
+          message: "You must be signed in to download podcast transcript.",
+        },
+        { status: 401 },
+      );
+    }
     if (transcriptUrl.includes(".json")) {
       const res = await fetch(transcriptUrl);
 

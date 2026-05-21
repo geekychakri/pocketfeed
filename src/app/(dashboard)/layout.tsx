@@ -29,9 +29,9 @@ export default async function MainLayout({
             Subscriptions
           </h2>
 
-          {/*<Suspense fallback={null}>
+          <Suspense fallback={null}>
             <FeedListWrapper />
-          </Suspense>*/}
+          </Suspense>
         </div>
 
         <ErrorBoundary

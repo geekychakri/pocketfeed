@@ -45,7 +45,7 @@ export default function ExtractArticle() {
     link: string;
   }>(
     shouldFetch
-      ? `/api/extractArticle?articleLink=${searchParams.get("link")}`
+      ? `/api/extract-article?articleLink=${searchParams.get("link")}`
       : null,
     fetcher,
     {

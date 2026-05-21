@@ -13,10 +13,10 @@ import {
   or,
 } from "drizzle-orm";
 
-import { getProfilePosts } from "@/data/profile-posts";
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
 import { getDid } from "@/lib/auth/session";
+import getSession from "@/lib/iron-session/get-iron-session";
 
 type Post = typeof schema.posts.$inferSelect;
 
@@ -31,33 +31,46 @@ type ParsedCursor = {
   postId: string;
 };
 
-const encodeCursor = (createdAt: Date, postId: string) =>
-  Buffer.from(`${createdAt.toISOString()}__${postId}`).toString("base64");
+async function getProfilePosts(profileDid: string, cursor?: string, limit = 1) {
+  const pageSize = Math.min(limit, 1);
+  const posts = await db
+    .select()
+    .from(schema.posts)
+    .where(
+      and(
+        eq(schema.posts.did, profileDid),
+        cursor ? lt(schema.posts.id, cursor) : undefined,
+      ),
+    )
+    .orderBy(desc(schema.posts.id))
+    .limit(pageSize + 1);
+  console.log({ posts });
+  const hasNextPage = posts.length > limit;
+  if (hasNextPage) posts.pop();
 
-const decodeCursor = (cursor: string): ParsedCursor => {
-  const [createdAt, postId] = Buffer.from(cursor, "base64")
-    .toString()
-    .split("__");
-  return { createdAt: new Date(createdAt), postId };
-};
+  const nextCursor = hasNextPage ? posts.at(-1)?.id : null;
 
-const cursorCondition = (parsed: ParsedCursor) =>
-  or(
-    lt(schema.userFeed.createdAt, parsed.createdAt),
-    and(
-      eq(schema.userFeed.createdAt, parsed.createdAt),
-      lt(schema.userFeed.postId, parsed.postId),
-    ),
-  );
+  return { posts, nextCursor, hasNextPage };
+}
 
 export async function GET(request: Request) {
   try {
-    const userDid = (await getDid()) as string;
+    const session = await getSession();
+
+    if (!session.user?.did) {
+      return Response.json(
+        {
+          message: "You must be signed in to view posts.",
+        },
+        { status: 401 },
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const cursor = searchParams.get("cursor") as string;
     console.log({ cursor });
 
-    const result = await getProfilePosts(userDid, cursor);
+    const result = await getProfilePosts(session.user.did, cursor);
     console.log({ result: result.posts });
     return NextResponse.json(result);
   } catch (error) {

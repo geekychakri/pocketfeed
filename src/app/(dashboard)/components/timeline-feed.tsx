@@ -96,7 +96,7 @@ const PodcastPost = ({ post, feedItem }: { post: any; feedItem: any }) => {
   return (
     <div
       key={post.id}
-      className="text-text-primary flex flex-col gap-6 px-4 py-6 not-last:border-b"
+      className="text-text-primary not-last:border-dashed-b flex flex-col gap-6 px-4 py-6"
     >
       <div className="flex gap-4">
         <Link
@@ -186,7 +186,7 @@ const YouTubePost = ({ post, feedItem }: { post: any; feedItem: any }) => {
   return (
     <div
       key={post.id}
-      className="text-text-primary flex flex-col gap-6 px-4 py-6 not-last:border-b"
+      className="text-text-primary not-last:border-dashed-b flex flex-col gap-6 px-4 py-6"
     >
       <div className="flex gap-4">
         <Link
@@ -277,7 +277,7 @@ const ArticlePost = ({ post, feedItem }: { post: any; feedItem: any }) => {
   return (
     <div
       key={post.id}
-      className="text-text-primary flex flex-col gap-6 px-4 py-6 not-last:border-b"
+      className="text-text-primary not-last:border-dashed-b flex flex-col gap-6 px-4 py-6"
     >
       <div className="flex gap-4">
         <Link href={`/user/${post.username}`} className="flex gap-1 self-start">

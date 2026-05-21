@@ -20,7 +20,7 @@ export default function ImportExportOPML() {
   const handleTest = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/downloadOPML");
+      const res = await fetch("/api/download-opml");
       console.log({ res });
 
       if (res.status === 401) {

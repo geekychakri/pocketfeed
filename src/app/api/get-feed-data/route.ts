@@ -3,6 +3,7 @@ import { after, NextResponse, type NextRequest } from "next/server";
 import Parser from "rss-parser";
 
 import { getKVItem, setKVItem } from "@/lib/cloudflare-kv";
+import getSession from "@/lib/iron-session/get-iron-session";
 import { upstashRedis } from "@/lib/upstash-redis";
 
 const parser = new Parser({
@@ -22,6 +23,16 @@ export async function GET(request: NextRequest) {
   // let feedList;
 
   try {
+    const session = await getSession();
+
+    if (!session.user?.did) {
+      return Response.json(
+        {
+          message: "You must be signed in to view the feed.",
+        },
+        { status: 401 },
+      );
+    }
     // const cachedFeed = await getKVItem(feedUrl);
     const cachedFeed: any = await upstashRedis.get(feedUrl);
 

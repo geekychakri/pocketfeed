@@ -4,7 +4,7 @@ import pLimit from "p-limit";
 import Parser from "rss-parser";
 
 import { getUserFeeds } from "@/db/queries";
-import { getSession } from "@/lib/auth/session";
+import getSession from "@/lib/iron-session/get-iron-session";
 import { upstashRedis } from "@/lib/upstash-redis";
 import type { FeedItemType } from "@/types";
 
@@ -23,7 +23,7 @@ export async function GET(request: Request) {
   try {
     const session = await getSession();
 
-    if (!session) {
+    if (!session.user?.did) {
       return Response.json(
         {
           message: "You must be signed in to view your daily feed list.",
@@ -34,7 +34,7 @@ export async function GET(request: Request) {
       );
     }
 
-    const userFeeds = await getUserFeeds(session.sub);
+    const userFeeds = await getUserFeeds(session.user?.did as string);
 
     console.log({ userFeeds });
 
@@ -43,7 +43,7 @@ export async function GET(request: Request) {
     }
 
     const getUserDailyFeed = await upstashRedis.get(
-      `daily-${session.did}-feed`,
+      `daily-${session.user?.did}-feed`,
     );
 
     if (getUserDailyFeed) {
@@ -234,7 +234,7 @@ export async function GET(request: Request) {
 
     after(async () => {
       await upstashRedis.set(
-        `daily-${session.did}-feed`,
+        `daily-${session.user?.did}-feed`,
         JSON.stringify(resultsArr),
         {
           ex: 3600,
