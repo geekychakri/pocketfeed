@@ -27,13 +27,13 @@ export default function SidebarNavigation({
           isOpen && "max-md:translate-x-0",
         )}
       >
-        <div className="flex items-center justify-between px-3">
+        <div className="border-dashed-b flex items-center justify-between px-3">
           <h1 className="font-medium">
             <span className="text-primary">my</span>Pocket<span>Feed.</span>
           </h1>
         </div>
 
-        <div className="border-dashed-y flex items-center justify-between gap-3 px-3">
+        <div className="border-dashed-b flex items-center justify-between gap-3 px-3">
           <Link
             href="/add"
             className="bg-ui-normal border-shadow hover:bg-ui-hover flex h-9 flex-1 items-center justify-center rounded-md font-medium transition-[background-color]"

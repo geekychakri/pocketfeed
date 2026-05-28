@@ -22,7 +22,7 @@ export default function Modal({
   );
 }
 
-export const ModalContent = React.forwardRef<
+const ModalContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ title, children, className, ...props }, forwardedRef) => (

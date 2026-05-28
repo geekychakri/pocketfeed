@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 
 import { eq } from "drizzle-orm";
+import { ErrorBoundary } from "react-error-boundary";
 
 import RouteBack from "@/components/route-back";
 
@@ -23,9 +24,13 @@ export default async function UserLayout({
       <Suspense fallback={null}>
         <ProfileHeader params={params} />
       </Suspense>
-      <Suspense fallback={<UserProfileFallback />}>
-        <ProfileWrapper params={params}>{children}</ProfileWrapper>
-      </Suspense>
+      <ErrorBoundary
+        fallback={<div className="text-danger p-4">Something went wrong!</div>}
+      >
+        <Suspense fallback={<UserProfileFallback />}>
+          <ProfileWrapper params={params}>{children}</ProfileWrapper>
+        </Suspense>
+      </ErrorBoundary>
     </main>
   );
 }

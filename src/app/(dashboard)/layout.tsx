@@ -13,13 +13,14 @@ import { getSelectedFeeds } from "@/db/queries";
 import { getDid } from "@/lib/auth/session";
 
 import YouTubeModal from "./(feed)/feed/components/YouTubeModal";
+import CheckIsOnline from "./components/check-is-online";
 
 export default async function MainLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const getSelectedFeedsPromise = getSelectedFeeds();
+  // const getSelectedFeedsPromise = getSelectedFeeds();
 
   return (
     <div className="flex w-full max-[768px]:flex-col">
@@ -51,16 +52,17 @@ export default async function MainLayout({
         <MobileNav />
 
         <SWRConfig
-          value={{
-            fallback: {
-              "/api/get-daily-feeds": getSelectedFeedsPromise,
-            },
-          }}
+        // value={{
+        //   fallback: {
+        //     "/api/get-daily-feeds": getSelectedFeedsPromise,
+        //   },
+        // }}
         >
           <PodcastLoader />
           {children}
 
           <YouTubeModal />
+          <CheckIsOnline />
         </SWRConfig>
       </main>
     </div>

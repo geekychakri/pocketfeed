@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 import { SpinnerRotate } from "@/components/spinner-rotate";
 
@@ -13,7 +12,6 @@ export default function SocialOauth() {
 
   //atproto signin
   async function handleAtProtoSignIn(e: React.SubmitEvent<HTMLFormElement>) {
-    console.log("SUBMIT LOGIN BSKY");
     e.preventDefault();
     setIsLoading(true);
     setError(null);
@@ -38,7 +36,8 @@ export default function SocialOauth() {
       // Redirect to authorization server
       window.location.href = data.redirectUrl;
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Login failed");
+      // setError(err instanceof Error ? err.message : "Login failed");
+      setError("Unable to login! Please try again.");
       setIsLoading(false);
     }
   }

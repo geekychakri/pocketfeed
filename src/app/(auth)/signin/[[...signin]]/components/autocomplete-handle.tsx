@@ -77,13 +77,13 @@ export default function AutocompleteHandle() {
     >
       <label className="flex flex-col gap-1 text-sm leading-5 font-medium">
         Handle
-        <div className="flex items-center border-shadow rounded-md focus-within:outline-2 focus-within:outline-brand-primary">
-          <span className="px-2 h-11 content-center text-text-secondary border-dashed-r">
+        <div className="border-shadow focus-within:outline-brand-primary flex items-center rounded-md focus-within:outline-2">
+          <span className="text-text-secondary border-dashed-r h-11 content-center px-2">
             @
           </span>
           <Autocomplete.Input
             placeholder="alice.bsky.social"
-            className="h-11 flex-1 px-1 outline-none custom-caret"
+            className="h-11 flex-1 px-1 outline-none!"
             required
             name="handle"
           />
@@ -97,12 +97,12 @@ export default function AutocompleteHandle() {
           align="start"
         >
           <Autocomplete.Popup
-            className={`w-(--anchor-width) invisible ${profiles && profiles.length >= 1 && "visible"}  scrollbar-width-thin max-h-[min(var(--available-height),23rem)] max-w-(--available-width) overflow-y-auto scroll-pt-2 scroll-pb-2 overscroll-contain rounded-md bg-background-primary py-2 shadow-lg shadow-gray-200 outline-1 outline-border-interactive dark:shadow-none`}
+            className={`invisible w-(--anchor-width) ${profiles && profiles.length >= 1 && "visible"} scrollbar-width-thin bg-background-primary outline-border-interactive max-h-[min(var(--available-height),23rem)] max-w-(--available-width) scroll-pt-2 scroll-pb-2 overflow-y-auto overscroll-contain rounded-md py-2 shadow-lg shadow-gray-200 outline-1 dark:shadow-none`}
             aria-busy={isLoading || undefined}
           >
             <Autocomplete.Status>
               {status && (
-                <div className="flex items-center gap-2 py-1 pl-4 pr-8 text-sm text-secondary">
+                <div className="text-secondary flex items-center gap-2 py-1 pr-8 pl-4 text-sm">
                   {status}
                 </div>
               )}
@@ -111,10 +111,10 @@ export default function AutocompleteHandle() {
               {(profile: Profile) => (
                 <Autocomplete.Item
                   key={profile.did}
-                  className="flex cursor-default py-2 pr-8 pl-4 text-base leading-4 outline-hidden select-none group data-highlighted:text-white data-highlighted:relative data-highlighted:z-0  data-highlighted:before:absolute data-highlighted:before:inset-x-2 data-highlighted:before:inset-y-0 data-highlighted:before:z-[-1] data-highlighted:before:rounded-sm data-highlighted:before:bg-brand-primary"
+                  className="group data-highlighted:before:bg-brand-primary flex cursor-default py-2 pr-8 pl-4 text-base leading-4 outline-hidden select-none data-highlighted:relative data-highlighted:z-0 data-highlighted:text-white data-highlighted:before:absolute data-highlighted:before:inset-x-2 data-highlighted:before:inset-y-0 data-highlighted:before:z-[-1] data-highlighted:before:rounded-sm"
                   value={profile}
                 >
-                  <span className="flex items-center w-full gap-2">
+                  <span className="flex w-full items-center gap-2">
                     <Avatar className="hover:ring-ui-normal bg-ui-normal ring-ui-normal inline-flex size-8 flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full align-middle ring-1 transition-shadow select-none group-hover:ring-2">
                       <AvatarImage
                         className="h-full w-full rounded-[inherit] object-cover"

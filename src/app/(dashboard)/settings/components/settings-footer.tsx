@@ -16,9 +16,9 @@ export default function SettingsFooter() {
       >
         Logout
       </Button>
-      <Button className="bg-danger/10 text-danger border-0">
+      {/*<Button className="bg-danger/10 text-danger border-0">
         Delete account
-      </Button>
+      </Button>*/}
     </div>
   );
 }

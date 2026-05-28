@@ -142,7 +142,7 @@ function ProfileHeader({
             className="bg-background-secondary flex h-full w-full items-center justify-center text-3xl leading-1 font-medium"
             delayMs={600}
           >
-            {getInitials(profile.displayName as string)}
+            {getInitials((profile.displayName as string) || profile.handle)}
           </AvatarFallback>
         </Avatar>
 
@@ -165,7 +165,7 @@ function ProfileHeader({
       <div className="flex flex-col gap-2">
         <p className="flex items-center gap-2 text-xl">
           <span className="min-w-0 font-medium wrap-break-word">
-            {profile.displayName}
+            {profile.displayName || profile.handle}
           </span>
           <span>
             <svg

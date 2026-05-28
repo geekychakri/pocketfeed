@@ -11,9 +11,9 @@ const ErrorSchema = z.object({
   }),
 });
 
-export type ErrorResponse = z.infer<typeof ErrorSchema>;
+type ErrorResponse = z.infer<typeof ErrorSchema>;
 
-export const ErrorCode = z.enum([
+const ErrorCode = z.enum([
   "bad_request",
   "not_found",
   "internal_server_error",
@@ -41,7 +41,7 @@ const errorCodeToHttpStatus: Record<z.infer<typeof ErrorCode>, number> = {
   internal_server_error: 500,
 };
 
-export function fromZodError(error: ZodError): ErrorResponse {
+function fromZodError(error: ZodError): ErrorResponse {
   return {
     error: {
       // code: "unprocessable_entity",
@@ -65,7 +65,7 @@ export function fromZodError(error: ZodError): ErrorResponse {
   };
 }
 
-export function handleApiError(error: any) {
+function handleApiError(error: any) {
   if (error instanceof ZodError) {
     console.log(fromZodError(error));
     return {

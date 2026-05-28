@@ -79,14 +79,14 @@ export type FeedItemType = {
   feedListMetadata?: FeedItemMetadataType;
 };
 
-export type UserProfileFormData = {
+type UserProfileFormData = {
   fullname: string;
   website: string;
   bio: string;
   birthday: string;
 };
 
-export type updateProfileActionResponse = {
+type updateProfileActionResponse = {
   type: string;
   message: string;
   errors?: {
@@ -95,12 +95,12 @@ export type updateProfileActionResponse = {
   inputs?: UserProfileFormData;
 };
 
-export type PFServerActionResponseType = {
+type PFServerActionResponseType = {
   type: "success" | "user-error" | "internal-error";
   message: string;
 };
 
-export type BookmarkType = {
+type BookmarkType = {
   type: string;
   bookmarkId: string;
   isBookmarkExists: boolean;

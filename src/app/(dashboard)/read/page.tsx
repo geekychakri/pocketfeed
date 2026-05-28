@@ -1,5 +1,7 @@
 import { Suspense } from "react";
 
+import { ErrorBoundary } from "react-error-boundary";
+
 import ArticleContent from "./components/article-content";
 
 export default function Read({
@@ -11,9 +13,13 @@ export default function Read({
 
   return (
     <div className="mx-auto min-h-screen w-full max-w-[65ch] pb-14 shadow-[0px_0px_10px_1px_var(--border-non-interactive)]">
-      <Suspense fallback={<ArticleFallback />}>
-        <ArticleContentWrapper linkParamsPromise={linkParamsPromise} />
-      </Suspense>
+      <ErrorBoundary
+        fallback={<div className="text-danger p-4">Something went wrong!</div>}
+      >
+        <Suspense fallback={<ArticleFallback />}>
+          <ArticleContentWrapper linkParamsPromise={linkParamsPromise} />
+        </Suspense>
+      </ErrorBoundary>
       {/*<Notebook />*/}
     </div>
   );

@@ -1,8 +1,7 @@
 "use client";
 
-import { use, useEffect } from "react";
+import { useEffect } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 
 import { setCookie } from "cookies-next/client";
 import dayjs from "dayjs";
@@ -20,119 +19,13 @@ import {
 } from "@/lib/utils";
 import { FeedItemType, FeedListType } from "@/types";
 
-import PodcastPlayButton from "../../../components/PodcastPlayButton";
-import YouTubePlayButton from "../../../components/YouTubePlayButton";
+import PodcastPlayButton from "../../../components/podcast-play-button";
+import YouTubePlayButton from "../../../components/youtube-play-button";
 
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
 
-function categorizeFeedItems(feedItems: FeedItemType[]) {
-  // Pre-calculate all date boundaries once
-  const now = new Date();
-  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const yesterdayStart = new Date(todayStart);
-  yesterdayStart.setDate(todayStart.getDate() - 1);
-
-  const thisWeekStart = new Date(todayStart);
-  thisWeekStart.setDate(todayStart.getDate() - todayStart.getDay());
-
-  const lastWeekStart = new Date(thisWeekStart);
-  lastWeekStart.setDate(thisWeekStart.getDate() - 7);
-
-  const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-
-  const lastMonthStart = new Date(thisMonthStart);
-  lastMonthStart.setMonth(thisMonthStart.getMonth() - 1);
-
-  const thisYearStart = new Date(now.getFullYear(), 0, 1);
-
-  const lastYearStart = new Date(thisYearStart);
-  lastYearStart.setFullYear(thisYearStart.getFullYear() - 1);
-
-  // Initialize result object
-  const categorized = {
-    today: [] as FeedItemType[],
-    yesterday: [] as FeedItemType[],
-    thisWeek: [] as FeedItemType[],
-    lastWeek: [] as FeedItemType[],
-    thisMonth: [] as FeedItemType[],
-    lastMonth: [] as FeedItemType[],
-    thisYear: [] as FeedItemType[],
-    lastYear: [] as FeedItemType[],
-    older: {} as { [year: string]: FeedItemType[] },
-  };
-
-  // Process all items in a single pass with timestamp comparisons
-  feedItems.forEach((item: FeedItemType) => {
-    const date = new Date(item.isoDate);
-    const timestamp = date.getTime();
-
-    // Using timestamp comparison for speed
-    if (timestamp >= todayStart.getTime()) {
-      categorized.today.push(item);
-    } else if (timestamp >= yesterdayStart.getTime()) {
-      categorized.yesterday.push(item);
-    } else if (timestamp >= thisWeekStart.getTime()) {
-      categorized.thisWeek.push(item);
-    } else if (timestamp >= lastWeekStart.getTime()) {
-      categorized.lastWeek.push(item);
-    } else if (timestamp >= thisMonthStart.getTime()) {
-      categorized.thisMonth.push(item);
-    } else if (timestamp >= lastMonthStart.getTime()) {
-      categorized.lastMonth.push(item);
-    } else if (timestamp >= thisYearStart.getTime()) {
-      categorized.thisYear.push(item);
-    } else if (timestamp >= lastYearStart.getTime()) {
-      categorized.lastYear.push(item);
-    } else {
-      // If it's older than last year, group by year
-      const year = date.getFullYear().toString();
-      if (!categorized.older[year]) {
-        categorized.older[year] = [];
-      }
-      categorized.older[year].push(item);
-    }
-  });
-
-  return categorized;
-}
-
-function getLabel(date: string) {
-  const now = dayjs();
-  const d = dayjs(date);
-
-  if (d.isSame(now, "day")) return "Today";
-  if (d.isSame(now.subtract(1, "day"), "day")) return "Yesterday";
-
-  if (d.isSame(now, "week")) return "This Week";
-  if (d.isSame(now, "month")) return "This Month";
-
-  if (d.isSame(now.subtract(1, "month"), "month")) return "Last Month";
-
-  if (d.isSame(now, "year")) return "This Year";
-
-  return d.format("YYYY"); // older → year
-}
-
-export default function FeedList({
-  feedUrl,
-  // feedList,
-  // getBookmarksPromise,
-  // folderName,
-}: {
-  feedUrl: string;
-  // feedList: any;
-  // getBookmarksPromise: any;
-  // folderName: string;
-}) {
-  //  const sortFirstTenFeedsByDate = feedList.items
-  //   .slice(0, 10)
-  //   .sort((a, b) => (dayjs(a.isoDate).isAfter(dayjs(b.isoDate)) ? -1 : 1));
-
-  // const sp = useSearchParams();
-
-  // const feedUrl = sp.get("feedUrl") as string;
-
+export default function FeedList({ feedUrl }: { feedUrl: string }) {
   const {
     data: feedList,
     isLoading,
@@ -146,32 +39,17 @@ export default function FeedList({
       revalidateIfStale: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
-      // throwOnError: false,
-      // suspense: true,
-      // revalidateOnMount: false,
     },
   );
-  // const { data: bookmarks, error: bookmarksError } = useSWR(
-  //   "/api/get-bookmarks",
-  //   fetcher,
-  //   {
-  //     revalidateIfStale: false,
-  //     revalidateOnFocus: false,
-  //     revalidateOnReconnect: false,
-  //     revalidateOnMount: false,
-  //   },
-  // );
 
   useEffect(() => {
     if (feedList) {
       localforage
         .setItem("browse-feed", feedList)
         .then(function (value) {
-          // Do other things once the value has been saved.
           console.log(value);
         })
         .catch(function (err) {
-          // This code runs if there were any errors
           console.log(err);
         });
     }
@@ -200,64 +78,10 @@ export default function FeedList({
     return <div className="text-danger px-4">{ERROR_MESSAGE}</div>;
   }
 
-  // if (feedUrlError?.status === 500) {
-  //   return "FEED URL ERROR";
-  // }
-
-  // if (bookmarksError?.status === 500 || feedUrlError?.status === 500) {
-  //   return bookmarksError?.info.msg || feedUrlError.info.msg;
-  // }
-
   return <FeedListItems feedList={feedList} />;
 }
 
-function FeedListItems({
-  // bookmarks,
-  feedList,
-}: {
-  // bookmarks: any;
-  feedList: any;
-}) {
-  console.log({ feedList });
-  // const modBookmarks = bookmarks.map((item: any) => {
-  //   return {
-  //     bookmarkId: item.id,
-  //     bookmarkFeedItemId:
-  //       JSON.parse(item.bookmarkItem).id || JSON.parse(item.bookmarkItem).guid,
-  //   };
-  // });
-
-  // const bookmarkIds = bookmarks.map((item: any) => item.id);
-
-  // const modFeedList = feedList.items.map((item: any) => {
-  //   const feedItemId = item.id || item.guid;
-  //   // const isBookmarked = modBookmarks.includes(feedItemId);
-  //   const bookmark = modBookmarks.find(
-  //     (b) => b.bookmarkFeedItemId === feedItemId,
-  //   );
-  //   return {
-  //     ...item,
-  //     isBookmarked: !!bookmark,
-  //     ...(bookmark && { bookmarkId: bookmark?.bookmarkId }),
-  //   };
-  // });
-
-  // console.log({ modFeedList });
-  // console.log({ modFeedListItem: modFeedList[0] });
-  // const bookmarksIds = bookmarks.map(bookmark => JSON.parse(bookmark.bookmarkItem) );
-
-  // console.log({ bookmarks });
-
-  // const modifiedFeedItems = JSON.parse(feedList).items.map(item => {
-
-  // })
-
-  // const categorizedFeedItemsList = categorizeFeedItems(modFeedList);
-
-  // console.log({
-  //   categorizedFeedItemsList: categorizedFeedItemsList,
-  // });
-
+function FeedListItems({ feedList }: { feedList: any }) {
   const sortedFeedList = [...feedList.items].sort(
     (a, b) => new Date(b.isoDate).getTime() - new Date(a.isoDate).getTime(),
   );
@@ -280,37 +104,11 @@ function FeedListItems({
   });
 
   console.log({ groupedList });
-  // const groupedList = modFeedList.reduce((map, item) => {
-  //   const { isoDate } = item;
-  //   const now = dayjs();
-  //   const d = dayjs(isoDate);
 
-  //   let key;
-  //   if (d.isSame(now, "day")) key = "Today";
-  //   else if (d.isSame(now.subtract(1, "day"), "day")) key = "Yesterday";
-  //   else if (d.isSame(now, "week")) key = "This Week";
-  //   else if (d.isSame(now, "month")) key = "This Month";
-  //   else if (d.isSame(now.subtract(1, "month"), "month")) key = "Last Month";
-  //   else if (d.isSame(now, "year")) key = "This Year";
-  //   else key = d.format("YYYY");
-
-  //   if (!map.has(key)) map.set(key, []);
-  //   map.get(key).push(item);
-  //   return map;
-  // }, new Map());
   console.log({ groupFeedList: groupedList });
   return (
     <>
-      {/* <SaveArticles feedList={feedList} /> */}
       <div className="flex flex-col gap-4">
-        {/* <p>{params.feedname.split("-").join(" ")}</p> */}
-        {/* {feedList.items
-    .sort((a, b) => (dayjs(a.isoDate).isAfter(dayjs(b.isoDate)) ? -1 : 1)) //TODO:
-    .slice(0, 10) //TODO: check for zero
-    .map((item, i) => {
-      console.log({ enclosure: item.enclosure });
-      return <FeedItem feedList={feedList} item={item} i={i} key={i} />;
-    })} */}
         {feedList.isStale ? (
           <p className="text-brand-primary px-4">
             Showing last updated content
@@ -324,14 +122,13 @@ function FeedListItems({
             </h2>
             <div className="flex flex-col">
               {items
-                .sort((a, b) => new Date(b.isoDate) - new Date(a.isoDate))
+                .sort(
+                  (a, b) =>
+                    new Date(b.isoDate).getTime() -
+                    new Date(a.isoDate).getTime(),
+                )
                 .map((item, i) => (
-                  <FeedItem
-                    feedList={feedList}
-                    item={item}
-                    key={i}
-                    // folderName={folderName}
-                  />
+                  <FeedItem feedList={feedList} item={item} key={i} />
                 ))}
             </div>
           </div>
@@ -354,18 +151,13 @@ function FeedListItems({
 function FeedItem({
   feedList,
   item,
-  // folderName,
 }: {
   feedList: FeedListType;
   item: FeedItemType;
-  // folderName: string;
 }) {
-  // const { setFolderName } = useFolderName();
-  // const { setArticleData } = useArticleContent();
   const d = dayjs(item.isoDate);
   console.log({ feedUrl: feedList.feedUrl });
   if (item.enclosure?.type?.includes("audio")) {
-    //TODO:
     return (
       <PodcastCard
         feedUrl={feedList.feedUrl}
@@ -386,8 +178,6 @@ function FeedItem({
           </span>
           <span className="text-text-secondary flex gap-1 text-sm">
             <span>{dayjs(item.isoDate).format("ll")}</span>
-            {/*<span>·</span>*/}
-            {/*<span>{dayjs(item.isoDate).fromNow()}</span>*/}
           </span>
         </div>
 
@@ -400,58 +190,30 @@ function FeedItem({
               (getYoutubeVideoId(item.link) as string)
             }
           />
-          {/* <PostModal
-              feedItem={JSON.stringify(item)}
-              feedTitle={feedList.title}
-              websiteLink={feedList.link}
-            /> */}
         </div>
       </div>
     );
   }
   return (
-    <div
-      className="hover:text-brand-primary border-dashed-b relative isolate flex flex-col gap-4 p-4 transition-[color]"
-      // prefetch={false}
-    >
+    <div className="hover:text-brand-primary border-dashed-b relative isolate flex flex-col gap-4 p-4 transition-[color]">
       <div className="flex flex-1 items-center">
         <span className="w-4/5 flex-1 flex-col text-pretty">
           {decode(item.title) || feedList?.title}
-          {/* <span className="line-clamp-2 text-text-secondary">
-              {item.contentSnippet}
-            </span> */}
         </span>
 
         <span className="text-text-secondary flex w-1/5 justify-end text-sm">
           <span>{dayjs(item.isoDate).format("ll")}</span>
-          {/* <span>·</span>
-            <span>{dayjs().to(dayjs(item.isoDate))}</span> */}
         </span>
-        {/* <PostModal
-          feedItem={JSON.stringify(item)}
-          className="z-2"
-          feedTitle={feedList.title}
-          websiteLink={feedList.link}
-        /> */}
       </div>
 
       <p className="text-text-secondary line-clamp-3">{item.contentSnippet}</p>
 
       <Link
-        // href={
-        //   item.link?.includes(new URL(feedList.link as string).hostname)
-        //     ? `/read/${encodeURIComponent(item.link as string)}`
-        //     : `/read/${encodeURIComponent(`${feedList.link}/${item.link}` as string)}`
-        // }
-        // href={`/read/${encodeURIComponent("https://www.alanwsmith.com/en/2v/mq/vc/om/")}`} //TODO:
         href={`/read?link=${item.link}`}
         id="main-item"
         onNavigate={(e) => {
-          // setArticleData(item.content, item.title);
           localStorage.setItem("feedItem", JSON.stringify(item));
           setCookie("articleId", item.id || item.guid);
-          // alert("navigated");
-          // setFolderName(folderName);
         }}
         className="absolute inset-0 z-1"
       />
@@ -476,8 +238,6 @@ const PodcastCard = ({
   feedUrl: string;
   webLink: string;
 }) => {
-  // console.log({ item });
-
   const title = item.title;
   const audioUrl = item.enclosure.url;
   const content = item["content:encoded"] || item.content; //TODO:: content or contentSnippet
@@ -509,8 +269,6 @@ const PodcastCard = ({
 
   console.log({ transcriptUrl });
 
-  // const transcriptUrl = item["podcast:transcript"]?.["$"]?.url ?? null;
-
   console.log({ duration: item?.itunes?.duration });
   return (
     <div className="hover:text-brand-primary border-dashed-b relative flex items-center justify-between gap-5 p-4 transition-[color]">
@@ -519,8 +277,7 @@ const PodcastCard = ({
 
         <span className="text-text-secondary flex gap-1 text-sm">
           <span>{dayjs(item.isoDate).format("ll")}</span>
-          {/*<span>·</span>
-          <span>{dayjs().to(dayjs(item.isoDate))}</span>*/}
+
           {item.itunes?.duration !== "0:00" ? (
             <>
               <span className="last:hidden">·</span>
@@ -545,21 +302,8 @@ const PodcastCard = ({
             chaptersUrl={chaptersUrl}
             transcriptUrl={transcriptUrl}
           />
-          {/* <PostModal
-              feedItem={JSON.stringify(item)}
-              feedTitle={albumName}
-              websiteLink={webLink}
-              feedAlbumCover={albumCover || item.itunes.image}
-            /> */}
         </div>
       )}
-      {/* <Link
-          href={`/podcast/${title
-            .trim()
-            .replace(/[^a-zA-Z0-9\s]/g, "")
-            .replace(/\s+/g, "-")}`}
-          className="absolute inset-0 z-1"
-        /> */}
     </div>
   );
 };

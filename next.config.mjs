@@ -14,6 +14,8 @@ const nextConfig = {
   },
   experimental: {
     typedEnv: true,
+    globalNotFound: true,
+
     // staleTimes: {
     //   dynamic: 180,
     // },

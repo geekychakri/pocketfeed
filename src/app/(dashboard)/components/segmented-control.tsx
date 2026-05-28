@@ -1,47 +1,27 @@
 "use client";
 
-import { JSX, useEffect } from "react";
+import { JSX } from "react";
 import type { Route } from "next";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { balloons } from "balloons-js";
-import { LayoutGroup, motion } from "motion/react";
+import { motion } from "motion/react";
 
 import { cn } from "@/lib/utils";
 
 type SegmentedControlProps = {
   items: { href: string; title: string }[];
-  // birthday: string;
 };
 
-const SegmentedControl = ({
-  items,
-  // birthday,
-}: SegmentedControlProps): JSX.Element => {
+const SegmentedControl = ({ items }: SegmentedControlProps): JSX.Element => {
   const pathname = usePathname();
 
-  // useEffect(() => {
-  //   if (birthday) {
-  //     if (new Date().getDate().toString() === birthday.split("-")[2]) {
-  //       balloons();
-  //     }
-  //   }
-  // }, []);
-
   return (
-    <motion.ul className="border-border-non-interactive flex border-b text-center">
+    <motion.ul className="border-dashed-b flex text-center">
       {items.map((item, index) => {
-        // const isActive = index === activeIndex;
         const isActive = item.href === pathname;
         return (
-          <motion.li
-            // layout
-            // layoutRoot
-            key={index}
-            // onClick={() => setActiveIndex(index)}
-            className="relative flex-1 list-none"
-          >
+          <motion.li key={index} className="relative flex-1 list-none">
             <Link
               href={item.href as Route}
               className={cn("inline-block w-full p-4")}
@@ -51,7 +31,7 @@ const SegmentedControl = ({
                 <motion.span
                   layoutId="profile-highlight"
                   initial={false}
-                  className="bg-brand-primary absolute right-0 bottom-0 left-0 h-[2px] rounded-full"
+                  className="bg-brand-primary absolute right-0 bottom-0 left-0 h-0.5 rounded-full"
                   style={{ originY: "0px" }}
                 ></motion.span>
               )}

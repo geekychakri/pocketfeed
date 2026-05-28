@@ -29,8 +29,8 @@ export const authSession = pgTable("auth_session", {
 export const users = pgTable("users", {
   did: text("did").primaryKey(),
   handle: text("handle").unique().notNull(),
-  displayName: text("displayName").notNull(),
-  avatar: text("avatar").notNull(),
+  displayName: text("displayName"),
+  avatar: text("avatar"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 

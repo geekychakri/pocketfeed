@@ -1,12 +1,11 @@
 "use client";
 
-import React, { memo, useEffect, useState } from "react";
+import { memo, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { useSelectedLayoutSegment } from "next/navigation";
 
 import { Cross2Icon } from "@radix-ui/react-icons";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-import { audio } from "motion/react-client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 
@@ -16,11 +15,9 @@ import { getInitials } from "@/lib/utils";
 import { useFeedItem } from "@/store/feed-item";
 import { useGlobalRef } from "@/store/globalRef";
 import { useShowPodcastPlayer } from "@/store/podcastplayer";
-import { useFullscreen } from "@/store/read-fullscreen";
 
 import IconOnlyAction from "../../../components/ui/icon-only-action";
 import CopyLink from "./copy-link";
-import CustomMediaPlayer from "./custom-media-player";
 
 const PostModal = dynamic(
   () => import("@/app/(dashboard)/components/post-modal"),
@@ -140,8 +137,7 @@ const PodcastPlayer = () => {
 
   return (
     <div
-      // className={`bg-background-primary fixed right-0 -bottom-72 left-0 z-10 flex flex-col gap-1 pb-3 md:left-64`}
-      className={`bg-background-primary animation-slide-up-player ease-out-player animate-player-slide-up fixed right-0 -bottom-72 left-0 z-10 flex flex-col gap-1 pb-3 transition-[translate] duration-700 md:left-[256px] ${show === "hide" ? "translate-y-80" : ""}`}
+      className={`bg-background-primary animation-slide-up-player ease-out-player animate-player-slide-up fixed right-0 -bottom-72 left-0 z-10 flex flex-col gap-1 pb-3 transition-[translate] duration-700 md:left-64 ${show === "hide" ? "translate-y-80" : ""}`}
     >
       <div className="border-dashed-y bg-background-secondary flex justify-between pr-3">
         <div className="flex items-center gap-1 select-none">
@@ -181,12 +177,13 @@ const PodcastPlayer = () => {
 
             <VaulDrawer audioRef={audioPlayerRef} />
 
-            <CopyLink
-              link={feedItem.link}
-              className="size-8"
-              iconClassName="size-[18px]"
-            />
-
+            {feedItem && (
+              <CopyLink
+                link={feedItem.link}
+                className="size-8"
+                iconClassName="size-[18px]"
+              />
+            )}
             <TooltipPrimitive.Root>
               <TooltipPrimitive.Trigger
                 onFocus={(e) => {
@@ -211,7 +208,7 @@ const PodcastPlayer = () => {
                 side="top"
                 align="center"
                 sideOffset={8}
-                className="bg-background-secondary border-shadow data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade z-100 rounded px-[10px] py-[5px] text-[13px] leading-none font-medium select-none"
+                className="bg-background-secondary border-shadow data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade z-100 cursor-pointer rounded px-2.5 py-1.25 text-[13px] leading-none font-medium select-none"
               >
                 <span>Close</span>
               </TooltipPrimitive.Content>

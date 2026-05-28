@@ -16,8 +16,8 @@ import {
 } from "@/lib/utils";
 import { FeedItemType, FeedListType } from "@/types";
 
-import PodcastPlayButton from "../../components/PodcastPlayButton";
-import YouTubePlayButton from "../../components/YouTubePlayButton";
+import PodcastPlayButton from "../../components/podcast-play-button";
+import YouTubePlayButton from "../../components/youtube-play-button";
 
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
@@ -81,7 +81,7 @@ export default function FeedItem({ item }: { item: FeedItemType }) {
           <span>{dayjs().to(dayjs(item.isoDate))}</span>
         </span>
 
-        {item.contentSnippet.length > 20 && (
+        {item.contentSnippet?.length > 20 && (
           <span className="text-text-secondary line-clamp-2">
             {item.contentSnippet}
           </span>

@@ -1,26 +1,13 @@
 @import "tailwindcss";
 
-/* light theme */
-/* @config '../../tailwind.config.ts'; */
-
 @plugin "@tailwindcss/typography";
 
 @plugin "tailwindcss-animate";
 
 @custom-variant prose-inline-code (&.prose :where(:not(pre)>code):not(:where([class~="not-prose"] *)));
 
-/*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
-
 @utility text-balance {
   text-wrap: balance;
-  /* color: #ff5a1f; */
 }
 
 @utility animation-pause {
@@ -109,42 +96,17 @@
     border-color: var(--color-gray-200, currentcolor);
   }
 
-  /* @font-face {
-    font-family: "Monaspace";
-    src: url("../../public/SyntaxHighlightRegular.woff2") format("woff2");
-  }
-
-  @font-palette-values --kung-fury {
-    font-family: "Monaspace";
-    override-colors:
-      0 hsl(225 100% 40%),
-      1 hsl(250 100% 80%),
-      2 hsl(225 100% 40%),
-      3 hsl(225 100% 40%),
-      4 hsl(270 50% 40%),
-      5 hsl(210 40% 2%),
-      6 hsl(210 10% 30%),
-      7 hsl(327 100% 54%);
-  } */
-
   [data-theme="light"] {
-    /* --color-primary: 248, 79, 57; */
-
     --brand-primary: 252, 89, 30;
     --background-primary: 250, 250, 251;
     --background-secondary: 245, 245, 240;
-    /* --ui-normal: #242424;
-    --ui-hover: #181818;
-    --ui-active: #e0e0e0; */
-    /* --ui-normal: #0307120d; */
+
     --ui-normal: #ecece6;
     --ui-hover: #e4e4dd;
     --ui-active: #ddddd5;
     --cta: #212121;
     --cta-hover: #111111;
-    /* --border-non-interactive: #d9d9d9;
-    --border-interactive: #898989;
-    --border-focus-ring: #bbbbbb; */
+
     --border-non-interactive: #e8e8e9;
     --border-interactive: #e5e5e5;
     --border-focus-ring: #bbbbbb;
@@ -158,32 +120,24 @@
   [data-theme="dark"] {
     --brand-primary: 252, 89, 30;
 
-    /* --background-primary: #1a1a1a; */
     --background-primary: 34, 34, 34;
     --background-secondary: 51, 51, 51;
-    /* --ui-normal: #222222; */
-    /* --ui-normal: #eee;
-    --ui-hover: #fff;
-    --ui-active: #313131; */
 
     --ui-normal: #333333;
     --ui-hover: #2a2a2a;
     --ui-active: #313131;
     --cta: #eee;
     --cta-hover: #fff;
-    /* --border-non-interactive: #3a3a3a;
-    --border-interactive: #747474;
-    --border-focus-ring: #606060;
-    --border-primary: #2e2e2e; */
+
     --border-non-interactive: #3a3a3a;
     --border-interactive: #333;
     --border-focus-ring: #606060;
     --border-primary: #2e2e2e;
-    /* --text-primary: #f2f2f2; */
+
     --text-primary: #eeeeee;
     --text-secondary: #a0a0a0;
     --skeleton-highlight: #363636;
-    /* --danger: #d93036; */
+
     --danger: 235, 87, 87;
   }
 
@@ -196,49 +150,10 @@
     scrollbar-color: #fc591e transparent;
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    html {
-      /* scroll-behavior: smooth; */
-    }
-  }
-
-  /*Fix for radix select when using scrollbar gutter to prevent layout shift*/
-  /*@supports (scrollbar-gutter: stable) {
-    html body[data-scroll-locked] {
-      margin: 0 !important;
-    }
-  }*/
-
-  /* html {
-    animation: smoothscroll1 1s;
-  }
-
-
-  html:focus-within {
-    animation-name: smoothscroll2;
-    scroll-behavior: smooth;
-  } */
-
   [id] {
     scroll-margin-top: 70px;
   }
 
-  body {
-    position: relative; /* iOS 26+ Safari base ui */
-    /*overflow-x: hidden;*/
-    /* background-color: #fafafa;
-    background-color: #fcfcfc; */
-    /* background-color: #fcfaf0; */
-    /* background-color: #f7f6f5; */
-    /* background-color: #fafafa; */
-
-    /* background-color: #f4f4f5 */
-    /* background: #f6f0ea;
-    color: #313131; */
-    /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
-      Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-      "Segoe UI Symbol"; */
-  }
   html,
   body {
     text-rendering: optimizeLegibility;
@@ -251,16 +166,13 @@
     text-size-adjust: none;
   }
 
+  body {
+    position: relative; /* iOS 26+ Safari base ui */
+  }
+
   input {
     font-size: 16px;
   }
-
-  /*input:focus-visible,
-  a:focus-visible,
-  button:focus-visible,
-  textarea:focus-visible {
-    outline: 2px solid rgb(var(--brand-primary));
-  }*/
 
   input:is(
     :-webkit-autofill,
@@ -278,23 +190,10 @@
     text-decoration-color: #f84f39;
   }
 
-  textarea {
-    /* min-block-size: 3.5rlh;
-    min-inline-size: 20ch;
-    max-inline-size: 50ch; */
-
-    /* field-sizing: content; */
-  }
-
   pre {
     scrollbar-width: thin !important;
     scrollbar-color: rgb(var(--color-primary)) #eee !important;
   }
-
-  /* code {
-    font-family: "Monaspace", monospace !important;
-    font-palette: --kung-fury !important;
-  } */
 
   textarea::-webkit-scrollbar {
     width: 18px;
@@ -370,109 +269,7 @@
   --color-danger: rgba(var(--danger));
 }
 
-@layer utilities {
-  /* article {
-  p,
-  table,
-  ul,
-  img {
-    margin: 1em 0 !important;
-    font-size: 20px;
-  }
-
-  table {
-    border-collapse: collapse;
-
-    td,
-    th {
-      border: 1px solid #ccc;
-      padding: 0.5em;
-    }
-  }
-
-  pre {
-    white-space: pre-wrap;
-    &:has(code) {
-      padding: 1em;
-      background: #f6f8fa;
-      border-radius: 5px;
-    }
-  }
-} */
-
-  /* ::selection {
-    background: #ff5a1f;
-    color: #fff;
-  } */
-
-  /* react drag drop  */
-  /* .juBESy > input {
-  opacity: 0;
-  position: absolute;
-} */
-
-  /* .outline-none {
-  outline: none !important;
-} */
-
-  /* @media (prefers-color-scheme: dark) {
-  :root {
-    --color-primary: 124, 79, 57;
-  }
-} */
-}
-
-/* custom scrollbar */
-
-/* custom scrollbar */
-
-/* @keyframes smoothscroll1 {
-  from,
-  to {
-    scroll-behavior: smooth;
-  }
-}
-
-@keyframes smoothscroll2 {
-  from,
-  to {
-    scroll-behavior: smooth;
-  }
-}
-
-@media screen and (prefers-reduced-motion: reduce) {
-  html {
-    animation: none;
-  }
-  html:focus-within {
-    scroll-behavior: auto;
-  }
-} */
-
-/* ::-webkit-scrollbar {
-  width: 16px;
-}
-
-::-webkit-scrollbar-track {
-  background-color: rgb(var(--background-secondary));
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: var(--text-primary);
-  border-radius: 20px;
-  border: 6px solid transparent;
-  -webkit-background-clip: content-box;
-  background-clip: content-box;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: var(--text-secondary);
-} */
-
-/* for file upload hide on initial load */
-
 /* custom copy code button*/
-
 @layer components {
   .copy-code-btn {
     position: absolute;
@@ -483,7 +280,6 @@
     top: 0;
     right: 0;
     display: flex;
-    /* gap: 4px; */
     align-items: center;
     justify-content: center;
     margin: -17px 10px;
@@ -683,30 +479,9 @@
   }
 }
 
-/* .audioPlayer {
-  animation-name: slideUp;
-
-  animation-duration: 0.8s;
-  animation-fill-mode: forwards;
-  animation-timing-function: ease-out;
-  transition: transform 0.8s cubic-bezier(0.5, 0, 0.5, 1);
-}
-
-@keyframes slideUp {
-
-  0% {
-    bottom: -288px;
-  }
-  100% {
-    bottom: 0;
-  }
-} */
 @media screen and (forced-colors: active) {
   button,
   input {
-    /* Use a border instead, since box-shadow is forced to 'none' in forced-colors mode */
-    /* border: 2px solid #fff; */
-    /* forced-color-adjust: none; */
     border: 1px solid var(--border-interactive);
   }
 }
@@ -728,10 +503,6 @@
 #skip-link:focus {
   top: 0;
 }
-
-/* .dropzone[data-drop-target] {
-  background: red;
-} */
 
 .DialogOverlay {
   background: rgba(0 0 0 / 0.5);
@@ -779,23 +550,6 @@
 pre:has(code) {
   user-select: none !important;
   /* cursor: not-allowed !important; */
-}
-
-.custom-caret {
-  animation: custom-caret-animation infinite linear alternate 0.75s;
-
-  caret-color: rgba(252, 89, 30);
-  caret-animation: manual;
-}
-
-@keyframes custom-caret-animation {
-  from {
-    caret-color: transparent;
-  }
-
-  to {
-    caret-color: rgba(252, 89, 30);
-  }
 }
 
 :focus-visible {
@@ -846,9 +600,6 @@ audio::-webkit-media-controls-enclosure {
 }
 
 .scrollable {
-  /*height: 300px;*/
-  /*background: yellow;*/
-  /*overflow-y: scroll;*/
   mask: linear-gradient(
     to bottom,
     #0000,
@@ -865,7 +616,6 @@ audio::-webkit-media-controls-enclosure {
 .bluesky-flutter {
   width: 120px;
   height: 120px;
-  transition: 200ms;
 }
 
 .bluesky-flutter .left {
@@ -905,39 +655,3 @@ audio::-webkit-media-controls-enclosure {
     transform: translateX(calc(-100% - var(--gap)));
   }
 }
-/*
-.active-word > span:nth-child(2) {
-  background-color: rgb(var(--brand-primary));
-  color: #fff;
-  border-radius: 6px;
-
-}*/
-
-/*#feed-search {
-  display: none !important;
-}
-
-#toggle-search:checked ~ div > #feed-search {
-  display: block !important;
-}*/
-
-/* ::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background-color: #e4e4e4;
-  border-radius: 100px;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #fc591e;
-  border-radius: 100px;
-} */
-
-/* q::before {
-  content: "";
-}
-q::after {
-  content: "";
-} */

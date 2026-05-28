@@ -2,7 +2,7 @@ import { cache } from "react";
 
 import { getDid } from "../auth/session";
 
-export let getAllRecords = async () => {
+let getAllRecords = async () => {
   const did = await getDid();
 
   const response = await fetch(

@@ -1,34 +1,41 @@
 "use server";
 
-import { refresh } from "next/cache";
-
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
-import { getDid } from "@/lib/auth/session";
+import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import getSession from "@/lib/iron-session/get-iron-session";
 
-export async function addOPMLFeeds(data: string) {
-  const session = await getSession();
+type ItemType = {
+  title: string;
+  feedUrl: string;
+  siteUrl: string;
+};
 
-  if (!session?.user?.did) {
+export async function addOPMLFeeds(data: []) {
+  try {
+    const session = await getSession();
+
+    const did = session.user?.did;
+    if (!did) {
+      return {
+        message: "Authentication required.",
+      };
+    }
+
+    const feedList = data.map((item: ItemType) => ({
+      ...item,
+      did,
+    }));
+    console.log({ feedList });
+
+    await db.insert(schema.feeds).values(feedList).onConflictDoNothing();
+
+    // refresh();
+    return { type: "success", message: "success" };
+  } catch (err) {
     return {
-      message: "Authentication required.",
+      type: "internal-error",
+      message: INTERNAL_ERROR_MESSAGE,
     };
   }
-
-  const feedList = data.map((item) => ({ ...item, did: session.user?.did }));
-  console.log({ feedList });
-
-  // console.log({ session: session });
-  // console.log({ did: session.did });
-
-  const res = await db
-    .insert(schema.feeds)
-    .values(feedList)
-    .onConflictDoNothing();
-
-  console.log({ res });
-
-  refresh();
-  return { message: "success" };
 }

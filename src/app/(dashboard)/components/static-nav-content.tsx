@@ -1,6 +1,5 @@
 "use client";
 
-import { ComponentType, SVGProps } from "react";
 import type { Route } from "next";
 import Link from "next/link";
 import { useSelectedLayoutSegment } from "next/navigation";
@@ -15,12 +14,12 @@ type NavItem<T extends string = string> = {
 };
 
 const links: NavItem<Route>[] = [
-  { label: "Daily", path: "/daily", segment: "daily" },
   {
     label: "Activity",
     path: "/activity/discover",
     segment: "activity",
   },
+  { label: "Daily", path: "/daily", segment: "daily" },
 ];
 
 export default function SideNavClient() {

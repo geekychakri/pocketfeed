@@ -60,7 +60,7 @@ export default function HighlightToolbar({
   );
 }
 
-export function HighlightIcon(props: SVGProps<SVGSVGElement>) {
+function HighlightIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -78,7 +78,7 @@ export function HighlightIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-export function NotebookIcon(props: SVGProps<SVGSVGElement>) {
+function NotebookIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -103,7 +103,7 @@ export function NotebookIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-export function CopyIcon(props: SVGProps<SVGSVGElement>) {
+function CopyIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

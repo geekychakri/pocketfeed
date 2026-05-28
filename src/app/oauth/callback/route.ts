@@ -1,5 +1,4 @@
-import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
+import { after, NextRequest, NextResponse } from "next/server";
 
 import type { AppBskyActorDefs } from "@atproto/api";
 
@@ -7,7 +6,6 @@ import { db } from "@/db/db";
 import * as schema from "@/db/schema";
 import { getOAuthClient } from "@/lib/auth/client";
 import { createUserSession } from "@/lib/iron-session/create-user-session";
-import type { User } from "@/lib/iron-session/create-user-session";
 import getSession from "@/lib/iron-session/get-iron-session";
 
 const PUBLIC_URL = process.env.PUBLIC_URL || "http://127.0.0.1:3000";
@@ -45,7 +43,9 @@ export async function GET(request: NextRequest) {
     // Save the session
     await ironSession.save();
 
-    const response = NextResponse.redirect(new URL("/daily", PUBLIC_URL)); //redirect after login
+    const response = NextResponse.redirect(
+      new URL("/activity/discover", PUBLIC_URL),
+    ); //redirect after login
 
     // Set DID cookie
     response.cookies.set("did", session.did, {
@@ -54,6 +54,25 @@ export async function GET(request: NextRequest) {
       sameSite: "lax",
       maxAge: 60 * 60 * 24 * 14, // 2 week
       path: "/",
+    });
+
+    after(async () => {
+      await db
+        .insert(schema.users)
+        .values({
+          did,
+          handle,
+          displayName,
+          avatar,
+        })
+        .onConflictDoUpdate({
+          target: schema.users.did,
+          set: {
+            handle,
+            avatar,
+            displayName,
+          },
+        });
     });
 
     return response;

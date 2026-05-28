@@ -1,36 +1,19 @@
 "use client";
 
-import {
-  ComponentType,
-  ReactElement,
-  ReactNode,
-  useRef,
-  useState,
-} from "react";
+import { ReactNode, useRef, useState } from "react";
 import type {
   ForwardRefExoticComponent,
   HTMLAttributes,
-  MutableRefObject,
   RefAttributes,
 } from "react";
 import type { Route } from "next";
 import Link from "next/link";
 
-// import * as Avatar from "@radix-ui/react-avatar";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import {
-  GearIcon,
-  HeartIcon,
-  PaperPlaneIcon,
-  PersonIcon,
-} from "@radix-ui/react-icons";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 
 import SignOutButton from "@/app/(dashboard)/components/sign-out";
-import { LogoutIcon } from "@/icons/animated/LogoutIcon";
-import { MessageCircleMoreIcon } from "@/icons/animated/MessageCircleMoreIcon";
-import { PartyPopperIcon } from "@/icons/animated/PartyPopperIcon";
 import { SettingsGearIcon } from "@/icons/animated/SettingsGearIcon";
 import { UserIcon } from "@/icons/animated/UserIcon";
 import { getInitials } from "@/lib/utils";
@@ -62,7 +45,7 @@ const AvatarDropdownItem = ({
   return (
     <DropdownMenu.Item
       // className="text-text-primary data-highlighted:bg-ui-normal data-disabled:text-mauve8 relative flex h-[25px] items-center justify-between gap-2 rounded-[3px] px-2 py-5 text-sm leading-none duration-150 select-none data-disabled:pointer-events-none data-highlighted:shadow-none"
-      className="text-text-primary data-highlighted:bg-ui-normal data-disabled:text-mauve8 relative flex h-[25px] cursor-pointer items-center justify-between gap-2 rounded-[3px] px-2 py-5 text-sm leading-none select-none focus-visible:outline-none! data-disabled:pointer-events-none"
+      className="text-text-primary data-highlighted:bg-ui-normal data-disabled:text-mauve8 relative flex h-6.25 cursor-pointer items-center justify-between gap-2 rounded-[3px] px-2 py-5 text-sm leading-none select-none focus-visible:outline-none! data-disabled:pointer-events-none"
       asChild
       // onMouseEnter={() => iconRef.current?.startAnimation()}
       // onMouseLeave={() => iconRef.current?.stopAnimation()}
@@ -89,13 +72,11 @@ export default function ProfileAvatar({
   handle: string;
   displayName: string;
 }) {
-  // console.log({ username });
-  // console.log({ avatarUrl });
   return (
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger asChild>
         <button className="flex w-full cursor-pointer items-center gap-2 rounded-full">
-          <Avatar className="hover:ring-ui-normal ring-ui-normal inline-flex size-[30px] flex-none items-center justify-center overflow-hidden rounded-full align-middle ring-1 duration-150 select-none hover:ring-4">
+          <Avatar className="hover:ring-ui-normal ring-ui-normal inline-flex size-7.5 flex-none items-center justify-center overflow-hidden rounded-full align-middle ring-1 duration-150 select-none hover:ring-4">
             <AvatarImage
               className="h-full w-full rounded-[inherit] object-cover"
               src={avatar}
@@ -116,7 +97,7 @@ export default function ProfileAvatar({
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content
-          className="border-shadow bg-background-primary text-text-primary data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-40 min-w-[220px] rounded-md p-[5px]"
+          className="border-shadow bg-background-primary text-text-primary data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-40 min-w-55 rounded-md p-1.25"
           sideOffset={14}
           align="start"
         >

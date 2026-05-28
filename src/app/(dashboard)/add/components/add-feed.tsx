@@ -11,6 +11,7 @@ import {
 import { useRouter } from "next/navigation";
 
 import * as Switch from "@radix-ui/react-switch";
+import localforage from "localforage";
 import { toast } from "sonner";
 import { mutate } from "swr";
 import useSound from "use-sound";
@@ -21,7 +22,6 @@ import Button from "@/components/ui/custom-button";
 import Input from "@/components/ui/custom-input";
 
 import { addFeeds } from "@/app/actions/add-feeds";
-// import { EditIcon } from "@/icons/edit";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import {
   checkIfObjectIsEmpty,
@@ -45,9 +45,6 @@ const initialState = {
   message: "",
   payload: [],
 };
-
-type Action = { type: "SUBMIT"; data: FormData } | { type: "RESET" };
-type State = { type: string; message: string | null; payload: [] };
 
 export default function AddFeed({ did }: { did: string }) {
   const [urlValue, setUrlValue] = useState("");
@@ -99,12 +96,7 @@ export default function AddFeed({ did }: { did: string }) {
         playCaution();
         return;
       }
-      // const feedUrls = data.feedUrls.map((item, i: number) => {
-      //   return {
-      //     ...item,
-      //     isChecked: i === 0 ? true : false,
-      //   };
-      // });
+
       setRssData(data);
     } catch (error) {
       playCaution();
@@ -129,10 +121,15 @@ export default function AddFeed({ did }: { did: string }) {
     if (state?.payload.length >= 1) {
       shouldReset.current = true;
       console.log({ payload: [...state.payload] });
+
       mutate(
         `/api/get-user-feeds?did=${did}`,
-        (prevFeeds) => {
+        async (prevFeeds) => {
           console.log({ prevFeeds });
+          await localforage.setItem("user-feeds", [
+            ...state?.payload,
+            ...prevFeeds,
+          ]);
           return [...state?.payload, ...prevFeeds];
         },
         {
@@ -236,7 +233,7 @@ export default function AddFeed({ did }: { did: string }) {
                       <div className="border-shadow focus-within:outline-brand-primary flex w-full rounded-md focus-within:outline-2">
                         <Input
                           type="text"
-                          className="flex-1 border-none shadow-none! outline-none"
+                          className="flex-1 border-none shadow-none! outline-none!"
                           name={`feeds[${i}][title]`}
                           defaultValue={
                             rssData.url?.includes("youtube.com")

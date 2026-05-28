@@ -8,7 +8,7 @@ import { motion, useAnimation } from "motion/react";
 
 import { cn } from "@/lib/utils";
 
-export interface UserIconHandle {
+interface UserIconHandle {
   startAnimation: () => void;
   stopAnimation: () => void;
 }

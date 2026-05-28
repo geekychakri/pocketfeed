@@ -8,7 +8,7 @@ import { motion, useAnimation } from "motion/react";
 
 import { cn } from "@/lib/utils";
 
-export interface LogoutIconHandle {
+interface LogoutIconHandle {
   startAnimation: () => void;
   stopAnimation: () => void;
 }

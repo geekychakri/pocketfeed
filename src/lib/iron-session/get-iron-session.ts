@@ -6,7 +6,7 @@ import { getIronSession, type IronSession } from "iron-session";
 
 import type { User } from "./create-user-session";
 
-export type Session = {
+type Session = {
   user: User | null;
 };
 

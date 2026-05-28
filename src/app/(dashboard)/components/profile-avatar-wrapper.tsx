@@ -1,16 +1,16 @@
-import { getProfile } from "@/lib/atproto/queries";
+import getSession from "@/lib/iron-session/get-iron-session";
 
 import ProfileAvatar from "./profile-avatar";
 
 export default async function ProfileAvatarWrapper() {
-  const profile = await getProfile();
+  const session = await getSession();
 
   return (
     <div className="flex items-center justify-between px-3">
       <ProfileAvatar
-        avatar={profile.avatar as string}
-        handle={profile.handle as string}
-        displayName={profile.displayName as string}
+        avatar={session.user?.avatar as string}
+        handle={session.user?.handle as string}
+        displayName={session.user?.displayName as string}
       />
     </div>
   );

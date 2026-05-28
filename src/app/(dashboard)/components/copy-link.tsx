@@ -31,9 +31,6 @@ export default function CopyLink({
   return (
     <TooltipPrimitive.Root>
       <TooltipPrimitive.Trigger asChild>
-        {/*<IconOnlyAction className={cn("rounded-md", customClassName)}>
-          <PostIcon className={cn("size-[20px] shrink-0", iconClassName)} />
-        </IconOnlyAction>*/}
         <button
           disabled={isCopied}
           onClick={handleCopy}

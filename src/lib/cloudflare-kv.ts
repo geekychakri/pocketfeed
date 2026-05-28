@@ -1,6 +1,6 @@
 const baseUrl = `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/storage/kv/namespaces/${process.env.CLOUDFLARE_KV_NAMESPACE_ID}`;
 
-export const hasKVItem = async () => {};
+const hasKVItem = async () => {};
 
 export const getKVItem = async (key: string) => {
   try {
@@ -43,5 +43,3 @@ export const setKVItem = async (key: string, value: any) => {
     return null;
   }
 };
-
-export const deleteKVItem = async () => {};

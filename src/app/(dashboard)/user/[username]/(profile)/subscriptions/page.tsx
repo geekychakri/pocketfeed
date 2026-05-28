@@ -1,5 +1,7 @@
 import { Suspense } from "react";
 
+import { ErrorBoundary } from "react-error-boundary";
+
 import { getDid } from "@/lib/auth/session";
 
 import SubscriptionList from "./subscription-list";
@@ -8,9 +10,13 @@ import SubscriptionList from "./subscription-list";
 
 export default function SubscriptionPage() {
   return (
-    <Suspense fallback={null}>
-      <SubscriptionListWrapper />
-    </Suspense>
+    <ErrorBoundary
+      fallback={<div className="text-danger p-4">Something went wrong!</div>}
+    >
+      <Suspense fallback={null}>
+        <SubscriptionListWrapper />
+      </Suspense>
+    </ErrorBoundary>
   );
 }
 

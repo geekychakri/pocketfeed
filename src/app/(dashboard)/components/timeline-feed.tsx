@@ -11,8 +11,8 @@ import updateLocale from "dayjs/plugin/updateLocale";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 
-import PodcastPlayButton from "@/app/(dashboard)/components/PodcastPlayButton";
-import YouTubePlayButton from "@/app/(dashboard)/components/YouTubePlayButton";
+import PodcastPlayButton from "@/app/(dashboard)/components/podcast-play-button";
+import YouTubePlayButton from "@/app/(dashboard)/components/youtube-play-button";
 import { getInitials, humanReadableDate } from "@/lib/utils";
 
 dayjs.extend(relativeTime);
@@ -100,7 +100,7 @@ const PodcastPost = ({ post, feedItem }: { post: any; feedItem: any }) => {
     >
       <div className="flex gap-4">
         <Link
-          href={`/user/${post.username}`}
+          href={`/user/${post.handle}`}
           className="flex items-center gap-1 self-start"
         >
           <Avatar className="hover:ring-ui-normal bg-ui-normal ring-ui-normal inline-flex size-11 flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full align-middle ring-1 transition-shadow select-none hover:ring-4">
@@ -122,7 +122,7 @@ const PodcastPost = ({ post, feedItem }: { post: any; feedItem: any }) => {
                   {post.displayName || post.handle}
                 </span>
                 <span className="flex gap-1">
-                  <span className="text-text-secondary">@{post.username}</span>
+                  <span className="text-text-secondary">@{post.handle}</span>
                   <span>·</span>
                   <span className="text-text-secondary">2h</span>
                 </span>
@@ -190,7 +190,7 @@ const YouTubePost = ({ post, feedItem }: { post: any; feedItem: any }) => {
     >
       <div className="flex gap-4">
         <Link
-          href={`/user/${post.username}`}
+          href={`/user/${post.handle}`}
           className="flex items-center gap-1 self-start"
         >
           <Avatar className="hover:ring-ui-normal bg-ui-normal ring-ui-normal inline-flex size-11 flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full align-middle ring-1 transition-shadow select-none hover:ring-4">
@@ -280,7 +280,7 @@ const ArticlePost = ({ post, feedItem }: { post: any; feedItem: any }) => {
       className="text-text-primary not-last:border-dashed-b flex flex-col gap-6 px-4 py-6"
     >
       <div className="flex gap-4">
-        <Link href={`/user/${post.username}`} className="flex gap-1 self-start">
+        <Link href={`/user/${post.handle}`} className="flex gap-1 self-start">
           <Avatar className="hover:ring-ui-normal bg-ui-normal ring-ui-normal inline-flex size-11 flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full align-middle ring-1 transition-shadow select-none hover:ring-4">
             <AvatarImage
               className="h-full w-full rounded-[inherit] object-cover"

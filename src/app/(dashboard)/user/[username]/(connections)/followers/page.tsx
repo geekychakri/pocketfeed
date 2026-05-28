@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
+import { ErrorBoundary } from "react-error-boundary";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 import RouteBack from "@/components/route-back";
@@ -23,9 +24,13 @@ export default async function Followers({
         <FollowersHeader params={params} />
       </Suspense>
 
-      <Suspense fallback={<FollowersListFallback />}>
-        <FollowersList params={params} />
-      </Suspense>
+      <ErrorBoundary
+        fallback={<div className="text-danger p-4">Something went wrong!</div>}
+      >
+        <Suspense fallback={<FollowersListFallback />}>
+          <FollowersList params={params} />
+        </Suspense>
+      </ErrorBoundary>
     </>
   );
 }
@@ -37,7 +42,7 @@ async function FollowersHeader({
 }) {
   const { username } = await params;
   return (
-    <div className="flex items-center h-14 border-dashed-b sticky top-0">
+    <div className="border-dashed-b sticky top-0 flex h-14 items-center">
       <RouteBack className="absolute -left-9" />
       <p className="text-brand-primary px-4">{username}</p>
     </div>
@@ -166,7 +171,7 @@ const FollowersList = async ({
               </Avatar>
               <div>
                 <p className="font-medium">{profile.displayName}</p>
-                <p className="text-sm text-text-secondary">{profile.handle}</p>
+                <p className="text-text-secondary text-sm">{profile.handle}</p>
               </div>
             </div>
           </Link>
@@ -178,16 +183,16 @@ const FollowersList = async ({
 
 function FollowersListFallback() {
   return (
-    <div className="animate-pulse min-h-screen">
+    <div className="min-h-screen animate-pulse">
       {Array.from({ length: 20 }, (_, i) => {
         return (
-          <div key={i} className="h-[75px] w-full border-dashed-b p-4">
+          <div key={i} className="border-dashed-b h-[75px] w-full p-4">
             <div className="flex items-center gap-3">
               <div className="bg-skeleton-highlight size-10 rounded-full"></div>
 
               <div className="flex flex-col gap-1">
-                <p className="bg-skeleton-highlight  h-4 w-[150px]"></p>
-                <p className="bg-skeleton-highlight  h-4 w-[150px]"></p>
+                <p className="bg-skeleton-highlight h-4 w-[150px]"></p>
+                <p className="bg-skeleton-highlight h-4 w-[150px]"></p>
               </div>
             </div>
           </div>

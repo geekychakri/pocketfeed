@@ -3,13 +3,10 @@
 import { MouseEvent, useState } from "react";
 
 import { PauseIcon, PlayIcon } from "@radix-ui/react-icons";
-import useSound from "use-sound";
 
 import { cn } from "@/lib/utils";
 import { useFeedItem } from "@/store/feed-item";
 import { useShowPodcastPlayer } from "@/store/podcastplayer";
-
-type PodcastPlayButtonType = {};
 
 export default function PodcastPlayButton({
   feedItem,
@@ -25,7 +22,6 @@ export default function PodcastPlayButton({
   chaptersUrl,
   transcriptUrl,
   showText,
-  bookmarkId,
 }: {
   feedItem?: any;
   className?: string;
@@ -40,7 +36,6 @@ export default function PodcastPlayButton({
   chaptersUrl?: string;
   transcriptUrl?: string;
   showText?: boolean;
-  bookmarkId?: string;
 }) {
   const {
     openPodcastPlayer,
@@ -69,8 +64,7 @@ export default function PodcastPlayButton({
   return (
     <button
       className={cn(
-        // "bg-ui-normal z-2 flex size-11 flex-none items-center justify-center gap-1 rounded-full px-4 py-2 text-base font-medium transition-transform will-change-transform active:scale-95",
-        "bg-ui-normal hover:border-brand-shadow hover:bg-ui-hover flex size-10 cursor-pointer items-center justify-center gap-1 rounded-full px-4 py-2 text-base font-medium transition-[scale] active:scale-95",
+        "bg-ui-normal hover:border-brand-shadow hover:bg-ui-hover flex size-10 cursor-pointer items-center justify-center gap-1 rounded-full px-4 py-2 text-base font-medium transition-[scale] will-change-transform active:scale-95",
         activeEpisode == episodeNumber && "border-brand-shadow",
         className,
       )}
@@ -88,14 +82,7 @@ export default function PodcastPlayButton({
           openPodcastPlayer();
           return;
         }
-        // if (show) {
-        //   setAlbumCover(albumCover);
-        //   setTitle(title);
-        //   setAudioUrl(audioUrl);
-        //   setIsPlayingTrue();
-        //   setActiveEpisode(episodeNumber);
-        //   return;
-        // }
+
         console.log("CLICKED");
         openPodcastPlayer();
         setAlbumCover(albumCover);
@@ -114,7 +101,7 @@ export default function PodcastPlayButton({
           ...feedItem,
           albumName,
           albumCover,
-        }); //TODO:
+        });
 
         localStorage.setItem("podcast-feedItem", JSON.stringify(feedItem)); // save item in a localStorage for a post share
       }}

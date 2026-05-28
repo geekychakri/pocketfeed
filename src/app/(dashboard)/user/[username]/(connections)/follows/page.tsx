@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
+import { ErrorBoundary } from "react-error-boundary";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 import RouteBack from "@/components/route-back";
@@ -22,9 +23,13 @@ export default async function Following({
       <Suspense fallback={null}>
         <FollowsHeader params={params} />
       </Suspense>
-      <Suspense fallback={<FollowsListFallback />}>
-        <FollowsList params={params} />
-      </Suspense>
+      <ErrorBoundary
+        fallback={<div className="text-danger p-4">Something went wrong!</div>}
+      >
+        <Suspense fallback={<FollowsListFallback />}>
+          <FollowsList params={params} />
+        </Suspense>
+      </ErrorBoundary>
     </>
   );
 }

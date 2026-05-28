@@ -20,13 +20,21 @@ const getKey = (
 };
 
 export default function DiscoverPostsList() {
-  const { data, size, setSize, isLoading } = useSWRInfinite(getKey, fetcher, {
-    revalidateIfStale: false,
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-    keepPreviousData: true,
-    revalidateFirstPage: false,
-  });
+  const { data, size, setSize, isLoading, error } = useSWRInfinite(
+    getKey,
+    fetcher,
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      keepPreviousData: true,
+      revalidateFirstPage: false,
+    },
+  );
+
+  if (error) {
+    return <div className="text-danger px-4">Something went wrong!</div>;
+  }
 
   if (!data) return <TimelineFeedSkeleton />;
 
@@ -41,6 +49,12 @@ export default function DiscoverPostsList() {
   const hasNextPage = lastPage?.hasNextPage ?? true;
 
   const posts = data.flatMap((data) => data.posts);
+
+  const isEmpty = posts.length === 0 && !hasNextPage;
+
+  if (isEmpty) {
+    return <div className="px-4">No new posts yet. Come back in a bit.</div>;
+  }
 
   return (
     <>

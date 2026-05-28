@@ -9,7 +9,7 @@ import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import DOMPurify from "isomorphic-dompurify";
 
 import PodcastChapters from "@/app/(dashboard)/components/podcast-chapters";
-import PodcastPlayButton from "@/app/(dashboard)/components/PodcastPlayButton";
+import PodcastPlayButton from "@/app/(dashboard)/components/podcast-play-button";
 import { useShowPodcastPlayer } from "@/store/podcastplayer";
 
 import PodcastTranscipt from "./podcast-transcript";
@@ -27,22 +27,10 @@ const initialState = {
 };
 
 function VaulDrawer({ audioRef }: { audioRef: any }) {
-  const {
-    title,
-    content,
-    episodeNumber,
-    chaptersUrl,
-    transcriptUrl,
-    audioUrl,
-    feedUrl,
-  } = useShowPodcastPlayer((state) => ({
+  const { title, content, episodeNumber } = useShowPodcastPlayer((state) => ({
     title: state.title,
     content: state.content,
     episodeNumber: state.episodeNumber,
-    audioUrl: state.audioUrl,
-    feedUrl: state.feedUrl,
-    chaptersUrl: state.chaptersUrl,
-    transcriptUrl: state.transcriptUrl,
   }));
 
   return (

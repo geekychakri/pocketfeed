@@ -15,7 +15,7 @@ const geist = Geist({
 
 export const metadata: Metadata = {
   title: "Pocket Feed",
-  description: "All of your favorite content in one place.",
+  description: "Be your own algorithm!",
 };
 
 export default function RootLayout({

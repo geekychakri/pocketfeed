@@ -34,7 +34,7 @@ const FeedHeader = async ({
   const { title, feedUrl } = await feedSearchParamPromise;
   return (
     <div className="relative mb-8 flex items-center px-4">
-      <RouteBack className="absolute -left-12 border-dashed" />
+      <RouteBack className="absolute -left-12" />
       <h1 className="font-medium">{title || new URL(feedUrl).hostname}</h1>
     </div>
   );

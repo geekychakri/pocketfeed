@@ -3,7 +3,8 @@ import { after } from "next/server";
 import pLimit from "p-limit";
 import Parser from "rss-parser";
 
-import { getUserFeeds } from "@/db/queries";
+// import { getUserFeeds } from "@/db/queries";
+import { getUserFeeds } from "@/data/get-user-feeds";
 import getSession from "@/lib/iron-session/get-iron-session";
 import { upstashRedis } from "@/lib/upstash-redis";
 import type { FeedItemType } from "@/types";
@@ -34,14 +35,6 @@ export async function GET(request: Request) {
       );
     }
 
-    const userFeeds = await getUserFeeds(session.user?.did as string);
-
-    console.log({ userFeeds });
-
-    if (userFeeds.length === 0) {
-      return Response.json({ dailyFeedItems: [], userHasFeeds: false });
-    }
-
     const getUserDailyFeed = await upstashRedis.get(
       `daily-${session.user?.did}-feed`,
     );
@@ -52,6 +45,14 @@ export async function GET(request: Request) {
         dailyFeedItems: getUserDailyFeed,
         userHasFeeds: true,
       });
+    }
+
+    const userFeeds = await getUserFeeds();
+
+    console.log({ userFeeds });
+
+    if (userFeeds.length === 0) {
+      return Response.json({ dailyFeedItems: [], userHasFeeds: false });
     }
 
     const tasks = userFeeds.map((feed) =>

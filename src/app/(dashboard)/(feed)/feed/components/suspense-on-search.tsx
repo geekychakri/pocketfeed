@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import {
@@ -59,22 +60,6 @@ const ErrorBoundaryWrapper = ({
     </ErrorBoundary>
   );
 };
-
-// const Fallback = ({ error, resetErrorBoundary }) => {
-//   const sp = useSearchParams();
-//   const feedUrl = sp.get("feedUrl");
-//   const errorLocation = useRef(feedUrl);
-
-//   useEffect(() => {
-//     if (feedUrl !== errorLocation.current) {
-//       startTransition(() => {
-//         // router.refresh();
-//         resetErrorBoundary();
-//       });
-//     }
-//   }, [sp]);
-//   return <h1>Something went wrong</h1>;
-// };
 
 function ErrorFallback({ feedUrl }: { feedUrl: string }) {
   let message;

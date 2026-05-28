@@ -24,9 +24,9 @@ export function isHttpValid(str: string) {
   }
 }
 
-export function relativeTime() {}
+function relativeTime() {}
 
-export function cleanUrl(url: string) {
+function cleanUrl(url: string) {
   // Remove http://, https://, or www.
   let cleanedUrl = url.replace(/^(https?:\/\/)?(www\.)?/, "");
 
@@ -50,41 +50,6 @@ export function getInitials(name: string, type?: string) {
     .map((word) => word[0])
     .join("");
 }
-
-// export function convertTextToLinks(text: string) {
-//   // // Regex to match URLs with or without scheme (http/https/ftp) and naked domains
-//   const urlRegex =
-//     /(https?:\/\/[^\s]+|www\.[^\s]+|[a-zA-Z0-9-]+\.[a-zA-Z0-9-]+\.[a-zA-Z]{2,})(?=\s|$)/g;
-
-//   return text.replace(urlRegex, (url) => {
-//     let formattedUrl = url;
-
-//     // If the URL doesn't have a scheme (http:// or https://), prepend http://
-//     if (!/^https?:\/\//i.test(url)) {
-//       // If it starts with "www", prepend "http://"
-//       if (url.startsWith("www.")) {
-//         formattedUrl = `https://${url}`;
-//       } else {
-//         // For naked domains, prepend "http://"
-//         formattedUrl = `https://${url}`;
-//       }
-//     }
-
-//     // Remove trailing slash if there's no pathname
-//     const parsedUrl = new URL(formattedUrl);
-
-//     // Only remove the trailing slash if there's no pathname
-//     if (!parsedUrl.pathname && parsedUrl.href.endsWith("/")) {
-//       formattedUrl = formattedUrl.replace(/\/$/, ""); // Remove trailing slash
-//     }
-
-//     // Remove the prefix (http://, https://, or www.) from the text
-//     const displayText = url.replace(/^(https?:\/\/|www\.)/i, "");
-
-//     // Return the <a> tag with the formatted full URL in the href, but show the stripped version
-//     return `<a href="${formattedUrl}" target="_blank">${displayText}</a>`;
-//   });
-// }
 
 export function convertTextToLinks(text: string) {
   // // Regex to match URLs with or without scheme (http/https/ftp) and naked domains
@@ -120,7 +85,7 @@ export function convertTextToLinks(text: string) {
   });
 }
 
-export function extractTimestampTags(
+function extractTimestampTags(
   htmlString: string,
 ): { timestamp: string; text: string }[] {
   // Parse the HTML string into a DOM object
@@ -154,30 +119,6 @@ export function extractTimestampTags(
 
   return results;
 }
-
-// export function extractTimestampTags(htmlString) {
-//   const timestamps = [];
-
-//   const parser = new DOMParser();
-//   // Parse the HTML string into a document
-//   const doc = parser.parseFromString(htmlString, "text/html");
-//   const listItems = doc.body.querySelectorAll("*");
-
-//   listItems.forEach((item) => {
-//     const text = item.innerText;
-//     const regex = /(\d{1,2}:\d{2}:\d{2}|\d{1,2}:\d{2})\s+(.*)/; // Matches hh:mm:ss or mm:ss followed by text
-//     const match = text.match(regex);
-
-//     if (match) {
-//       timestamps.push({
-//         timestamp: match[1],
-//         text: match[2],
-//       });
-//     }
-//   });
-
-//   return timestamps;
-// }
 
 export async function getYTChannelAvatar(channelId: string) {
   try {
@@ -224,7 +165,7 @@ export const getYoutubeVideoId = (url: string) => {
   }
 };
 
-export async function checkLinkIsBroken(link: string) {
+async function checkLinkIsBroken(link: string) {
   try {
     const res = await fetch(link, {
       method: "HEAD",
@@ -306,7 +247,7 @@ export function compactNumber(value: number) {
   }).format(value);
 }
 
-export function toastError(message: string, duration = 3000) {
+function toastError(message: string, duration = 3000) {
   return toast.error(message, {
     duration,
     style: {
@@ -353,12 +294,12 @@ export async function fetcher<JSON = any>(
 
 const secret = process.env.URL_SIGN_SECRET!;
 
-export function signUrl(url: string) {
+function signUrl(url: string) {
   const sig = crypto.createHmac("sha256", secret).update(url).digest("hex");
   return `${url}::${sig}`;
 }
 
-export function verifyUrl(signed: string) {
+function verifyUrl(signed: string) {
   const [url, sig] = signed.split("::");
   const expected = crypto
     .createHmac("sha256", secret)
@@ -385,7 +326,7 @@ export function transformFeedUrltoRkey(feedUrl: string) {
  * "a minute ago", "in 2 hours", "yesterday", "3 months ago", etc.
  * using Intl.RelativeTimeFormat
  */
-export function getRelativeTimeString(
+function getRelativeTimeString(
   date: Date | number,
   lang = navigator.language,
 ): string {

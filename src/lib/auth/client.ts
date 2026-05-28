@@ -16,7 +16,7 @@ import * as schema from "@/db/schema";
 
 // export const SCOPE = "atproto account:email repo:com.example.record";
 export const SCOPE =
-  "atproto repo:com.pocket-feed.feed.subscription repo:com.pocket-feed.social.post";
+  "atproto repo:at.pocketfeed.feed.subscription repo:at.pocketfeed.social.post";
 
 const PUBLIC_URL = process.env.PUBLIC_URL; //TODO: set public url in prod
 const PRIVATE_KEY = process.env.PRIVATE_KEY;

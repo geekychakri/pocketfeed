@@ -1,7 +1,6 @@
 import xml2js from "xml2js";
 
-import { getUserFeeds } from "@/db/queries";
-import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
+import { getUserFeeds } from "@/data/get-user-feeds";
 import getSession from "@/lib/iron-session/get-iron-session";
 
 export async function GET(request: Request) {
@@ -17,7 +16,7 @@ export async function GET(request: Request) {
       );
     }
 
-    const feeds = await getUserFeeds(session.user.did);
+    const feeds = await getUserFeeds();
 
     function createOPML(feeds: any) {
       const opmlObject = {
@@ -28,15 +27,17 @@ export async function GET(request: Request) {
             dateCreated: new Date().toString(),
           },
           body: {
-            outline: feeds.map((feed) => ({
-              $: {
-                type: "rss",
-                text: feed.title,
-                title: feed.title,
-                xmlUrl: feed.rssURL,
-                htmlUrl: feed.siteURL,
-              },
-            })),
+            outline: feeds.map(
+              (feed: { title: string; rssUrl: string; siteUrl: string }) => ({
+                $: {
+                  type: "rss",
+                  text: feed.title,
+                  title: feed.title,
+                  xmlUrl: feed.rssUrl,
+                  htmlUrl: feed.siteUrl,
+                },
+              }),
+            ),
           },
         },
       };

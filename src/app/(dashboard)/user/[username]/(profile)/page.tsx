@@ -22,13 +22,17 @@ const getKey = (
 export default function Posts() {
   // const p = () => new Promise((resolve) => setTimeout(resolve, 5000));
   // await p();
-  const { data, size, setSize, isLoading } = useSWRInfinite(getKey, fetcher, {
-    revalidateIfStale: false,
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-    keepPreviousData: true,
-    revalidateFirstPage: false,
-  });
+  const { data, size, setSize, isLoading, error } = useSWRInfinite(
+    getKey,
+    fetcher,
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      keepPreviousData: true,
+      revalidateFirstPage: false,
+    },
+  );
 
   // return "Loading...";
   if (!data) return <TimelineFeedSkeleton />;
@@ -42,6 +46,10 @@ export default function Posts() {
   const hasNextPage = lastPage?.hasNextPage ?? true;
 
   const posts = data.flatMap((data) => data.posts);
+
+  if (error) {
+    return <div className="text-danger p-4">Something went wrong!</div>;
+  }
 
   if (posts.length === 0) {
     return <div className="px-4">No posts yet!</div>;

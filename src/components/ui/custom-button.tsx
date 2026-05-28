@@ -21,7 +21,7 @@ export default forwardRef<
         "h-9 cursor-pointer rounded-md px-4 py-2 font-medium transition-[background-color,opacity]",
         variant === "delete" ? "hover:opacity-90" : "hover:bg-ui-hover",
         variant === "cta"
-          ? "bg-cta text-background-primary hover:bg-cta-hover"
+          ? "bg-brand-primary text-background-primary hover:bg-brand-primary/95"
           : "bg-ui-normal",
         className,
       )}

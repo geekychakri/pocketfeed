@@ -187,7 +187,7 @@ export default function SubscriptionList({ did }: { did: string }) {
               // href={`/feed/${item.title?.trim().replace(/\s+/g, "-").toLowerCase()}`}
               // href={`/feed/${item.feedId}`}
               key={record.id}
-              className="group/folder-feed relative isolate flex w-full items-center justify-between px-4 py-[10px] shadow-[0_1px_0_0_var(--border-non-interactive)] transition-[color]"
+              className="group/folder-feed not-last:border-dashed-b relative isolate flex h-18 w-full items-center justify-between px-4 py-[10px] transition-[color]"
             >
               <span className="flex items-center gap-3">
                 <Avatar className="bg-ui-normal inline-flex h-[30px] w-[30px] flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full select-none">
@@ -212,26 +212,29 @@ export default function SubscriptionList({ did }: { did: string }) {
                   {decode(record.title)}
                 </span>
               </span>
-              <label
-                htmlFor={record.id}
-                className="hover:bg-ui-hover z-2 flex size-[50px] cursor-pointer items-center justify-center rounded-full duration-150"
-              >
-                {/* <input id="test" type="checkbox" className="size-4" /> */}
-                <Checkbox.Root
-                  className="bg-ui-normal flex size-[20px] cursor-pointer appearance-none items-center justify-center rounded outline-none"
-                  // defaultChecked
-                  name={`feedIdList[${record.id}]`}
-                  value={record.id}
-                  id={record.id}
-                  onCheckedChange={() => {
-                    selectSound();
-                  }}
+
+              {!record.externalSub && (
+                <label
+                  htmlFor={record.id}
+                  className="hover:bg-ui-hover z-2 flex size-[50px] cursor-pointer items-center justify-center rounded-full duration-150"
                 >
-                  <Checkbox.Indicator className="text-brand-primary">
-                    <CheckIcon />
-                  </Checkbox.Indicator>
-                </Checkbox.Root>
-              </label>
+                  {/* <input id="test" type="checkbox" className="size-4" /> */}
+                  <Checkbox.Root
+                    className="bg-ui-normal flex size-[20px] cursor-pointer appearance-none items-center justify-center rounded outline-none"
+                    // defaultChecked
+                    name={`feedIdList[${record.id}]`}
+                    value={record.id}
+                    id={record.id}
+                    onCheckedChange={() => {
+                      selectSound();
+                    }}
+                  >
+                    <Checkbox.Indicator className="text-brand-primary">
+                      <CheckIcon />
+                    </Checkbox.Indicator>
+                  </Checkbox.Root>
+                </label>
+              )}
               {/* <input
                   type="hidden"
                   value={feed.id}

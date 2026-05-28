@@ -1,50 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
 
 import { useShowPodcastPlayer } from "@/store/podcastplayer";
 
 import "react-loading-skeleton/dist/skeleton.css";
 
 import { ScrollArea } from "@base-ui/react/scroll-area";
-import { toast } from "sonner";
-
-import { SpinnerRotate } from "@/components/spinner-rotate";
-import Button from "@/components/ui/custom-button";
 
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import { fetcher, internalErrorToast } from "@/lib/utils";
-
-function extractText(inputString: string) {
-  // Regular expression to match the timestamp and special characters
-  // const pattern =
-  //   /^\(?\d{1,2}:\d{2}:\d{2}\)?\s*–?\s*|\(?\d{1,2}:\d{2}\)?\s*–?\s*/;
-  const pattern = /^\(?\d{1,2}:\d{2}(:\d{2})?\)?\s*[-–]?\s*/;
-  // Replace the matched pattern with an empty string
-  return inputString.replace(pattern, "").trim();
-}
-
-const convertTimestampToSeconds = (timeStampString: any) => {
-  const timestamp = timeStampString.replace(/[()]/g, "");
-  const parts = timestamp.split(":").map(Number);
-
-  if (parts.length === 2) {
-    // mm:ss format
-    const [minutes, seconds] = parts;
-    // setCurrentTime(minutes * 60 + seconds);
-    // setIsPlayingTrue();
-    return minutes * 60 + seconds;
-  } else if (parts.length === 3) {
-    // hh:mm:ss format
-    const [hours, minutes, seconds] = parts;
-    return hours * 3600 + minutes * 60 + seconds;
-    // setCurrentTime(hours * 3600 + minutes * 60 + seconds);
-    // setIsPlayingTrue();
-  } else {
-    throw new Error("Invalid time format"); //TODO: handle error
-  }
-};
 
 const toHHMMSS = (numSecs: string) => {
   let secNum = parseInt(numSecs, 10);
@@ -58,6 +23,14 @@ const toHHMMSS = (numSecs: string) => {
   return `${hours}:${minutes}:${seconds}`;
 };
 
+type DataResponseType = {
+  chapters: {
+    title: string;
+    startTime: string;
+    endTime: string;
+  }[];
+};
+
 export default function PodcastChapters({
   audioRef,
   guid,
@@ -65,14 +38,11 @@ export default function PodcastChapters({
   audioRef: any;
   guid: string;
 }) {
-  const { setCurrentTime, setIsPlayingTrue, isPlaying, feedUrl, chaptersUrl } =
-    useShowPodcastPlayer();
+  const { setIsPlayingTrue, isPlaying, chaptersUrl } = useShowPodcastPlayer();
 
   const chapterRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-  const { onError } = useSWRConfig();
-
-  const { data, error, isLoading, mutate } = useSWR(
+  const { data, error, isLoading } = useSWR<DataResponseType>(
     chaptersUrl
       ? `/api/get-chapters?chaptersUrl=${encodeURIComponent(chaptersUrl)}`
       : null,
@@ -95,19 +65,6 @@ export default function PodcastChapters({
       },
     },
   );
-
-  // useEffect(() => {
-  //   if (data) {
-  //     const onTimeUpdate = () => {
-  //       setAudioCurrentTime(audioRef.current?.currentTime);
-  //     };
-  //     const audioElement = audioRef.current;
-  //     audioElement.addEventListener("timeupdate", onTimeUpdate);
-  //     return () => {
-  //       audioElement.removeEventListener("timeupdate", onTimeUpdate);
-  //     };
-  //   }
-  // }, [data]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -152,9 +109,6 @@ export default function PodcastChapters({
     return (
       <div className="flex flex-col gap-4">
         <p className="text-lg">Something went wrong!</p>
-        {/*<Button onClick={() => mutate()} className="self-start">
-          Try again
-        </Button>*/}
       </div>
     );
   }
@@ -178,12 +132,9 @@ export default function PodcastChapters({
     return <div>Chapters not found!</div>;
   }
 
-  // return <div>{JSON.stringify(data, null, 2)}</div>;
-
   return (
     <ScrollArea.Root className="min-h-0 flex-1">
       <ScrollArea.Viewport className="scrollable focus-visible:border-brand-shadow flex h-full scroll-pb-6 flex-col gap-4 overscroll-contain py-2 pr-6 pl-1">
-        {/*<div className="flex flex-col justify-center gap-4">*/}
         {data?.chapters?.map((chapter, i) => {
           return (
             <button
@@ -202,40 +153,19 @@ export default function PodcastChapters({
             >
               <span className="flex justify-between gap-4">
                 <span className="flex items-center gap-2">
-                  {/*{isActive ? (
-                      <AnimatedMusicBars isPlaying={isPlaying} />
-                    ) : null}*/}
-                  <span className="line-clamp-1">
-                    {chapter.title}
-                    {/* {chapter?.text} */}
-                  </span>
+                  <span className="line-clamp-1">{chapter.title}</span>
                 </span>
                 <span className="text-text-secondary flex-none">
                   {toHHMMSS(chapter.startTime)}
                 </span>
               </span>
-              {/* {isActive ? <AnimatedMusicBars isPlaying={isPlaying} /> : ""} */}
-              {/* <span>{activeIndex === i ? "Logo" : ""}</span> */}
             </button>
           );
         })}
-        {/*</div>*/}
       </ScrollArea.Viewport>
       <ScrollArea.Scrollbar className="pointer-events-none m-2 flex w-1 justify-center rounded-sm opacity-0 transition-opacity data-hovering:pointer-events-auto data-hovering:opacity-100 data-hovering:delay-0 data-scrolling:pointer-events-auto data-scrolling:opacity-100 data-scrolling:duration-0">
         <ScrollArea.Thumb className="bg-brand-primary w-full rounded-sm" />
       </ScrollArea.Scrollbar>
     </ScrollArea.Root>
-  );
-}
-
-function AnimatedMusicBars({ isPlaying }: { isPlaying: boolean }) {
-  return (
-    <div
-      className={`*:bg-brand-primary *:animate-bounce-bar flex size-[13px] flex-none justify-between content-[""] *:size-[3px] *:h-full *:origin-bottom *:rounded-[3px] *:nth-of-type-2:delay-[-2.2s] *:nth-of-type-3:delay-[-3.7s] ${isPlaying ? "*:!animation-play" : "*:animation-pause!"}`}
-    >
-      <span />
-      <span />
-      <span />
-    </div>
   );
 }

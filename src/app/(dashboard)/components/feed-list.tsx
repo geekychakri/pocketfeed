@@ -1,6 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import { ScrollArea } from "@base-ui/react/scroll-area";
+import localforage from "localforage";
 import useSWR from "swr";
 
 import { ERROR_MESSAGE } from "@/lib/constants";
@@ -17,17 +20,48 @@ type FeedDataType = {
 }[];
 
 export default function FeedList({ did }: { did: string }) {
+  const [cacheLoaded, setCacheLoaded] = useState(false);
+  const [localUserFeeds, setLocalUserFeeds] = useState<FeedDataType>([]);
+
   const { data, error, isLoading } = useSWR<FeedDataType>(
-    `/api/get-user-feeds?did=${did}`,
+    cacheLoaded ? `/api/get-user-feeds?did=${did}` : null,
     fetcher,
     {
-      revalidateIfStale: false,
+      // revalidateIfStale: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
+      fallbackData: localUserFeeds,
+      onSuccess: (data) => {
+        localforage
+          .setItem("user-feeds", data)
+          .then(function (value) {
+            console.log(value);
+          })
+          .catch(function (err) {
+            console.log(err);
+          });
+      },
     },
   );
 
-  if (isLoading) {
+  console.log({ feedData: data });
+
+  useEffect(() => {
+    async function loadUserFeeds() {
+      try {
+        const feeds = await localforage.getItem<FeedDataType>("user-feeds");
+
+        setLocalUserFeeds(feeds ?? []);
+      } catch (err) {
+      } finally {
+        setCacheLoaded(true);
+      }
+    }
+
+    loadUserFeeds();
+  }, []);
+
+  if (!cacheLoaded || (!data && isLoading)) {
     return (
       <div className="flex min-h-0 flex-1 animate-pulse scrollbar-none flex-col gap-4 overflow-y-scroll p-2 [&::-webkit-scrollbar]:hidden">
         {Array.from({ length: 20 }, (_, i) => {

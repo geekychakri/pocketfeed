@@ -1,1 +1,1 @@
-export * from "./findFeed";
+export * from "./find-feed";

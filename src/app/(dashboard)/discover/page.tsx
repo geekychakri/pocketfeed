@@ -1,6 +1,9 @@
 import { Suspense } from "react";
 
-import { and, eq, inArray, notExists } from "drizzle-orm";
+import { and, eq, inArray, ne, notExists } from "drizzle-orm";
+import { ErrorBoundary } from "react-error-boundary";
+
+import RouteBack from "@/components/route-back";
 
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
@@ -10,9 +13,23 @@ import FollowBskyUsers from "./components/follow-bsky-users";
 
 export default function Discover() {
   return (
-    <Suspense fallback="Finding...">
-      <DiscoverBlueskyTribe />
-    </Suspense>
+    <ErrorBoundary
+      fallback={<div className="text-danger p-4">Something went wrong!</div>}
+    >
+      <div className="bg-background-primary border-dashed-b sticky top-0 flex h-14 items-center gap-2 px-4 max-md:top-14">
+        <RouteBack />
+        <h1>Your Bluesky Tribe</h1>
+      </div>
+      <Suspense
+        fallback={
+          <div className="flex h-100 animate-pulse items-center justify-center p-4">
+            Discovering your Bluesky tribe...
+          </div>
+        }
+      >
+        <DiscoverBlueskyTribe />
+      </Suspense>
+    </ErrorBoundary>
   );
 }
 
@@ -23,17 +40,13 @@ const DiscoverBlueskyTribe = async () => {
 
   const dids = followsList.map((f) => f.did);
 
-  // const bskyAppUsers = await db
-  //   .select()
-  //   .from(schema.users)
-  //   .where(inArray(schema.users.did, dids));
-
   const bskyAppUsers = await db
     .select()
     .from(schema.users)
     .where(
       and(
         inArray(schema.users.did, dids),
+        ne(schema.users.did, currentUserDid),
         notExists(
           db
             .select()
@@ -55,11 +68,10 @@ const DiscoverBlueskyTribe = async () => {
       "Let's connect on @pocketfeed! It's a simple social rss app. Join now: twitter.com";
     return (
       <div>
-        <h1 className="flex h-14 items-center px-4">Your Bluesky Tribe</h1>
-        <p className="border-dashed-t group flex h-100 flex-col items-center justify-center gap-4 px-4">
+        <p className="group flex h-100 flex-col items-center justify-center gap-4 px-4">
           <svg
             id="flutterby"
-            className="bluesky-flutter transition-[rotate] group-has-[a:hover]:rotate-6"
+            className="bluesky-flutter"
             viewBox="0 0 566 500"
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -72,15 +84,15 @@ const DiscoverBlueskyTribe = async () => {
             </defs>
             <use
               xlinkHref="#wing"
-              className="left group-has-[a:hover]:animate-[flutter_500ms_ease-in-out] group-has-[a:hover]:[--flip:1] motion-reduce:group-has-[a:hover]:animate-none"
+              className="left group-has-[a:hover]:animate-[flutter_500ms_ease-in-out_300ms] group-has-[a:hover]:[--flip:1] motion-reduce:group-has-[a:hover]:animate-none"
             />
             <use
               xlinkHref="#wing"
-              className="right group-has-[a:hover]:animate-[flutter_500ms_ease-in-out] group-has-[a:hover]:[--flip:-1] motion-reduce:group-has-[a:hover]:animate-none"
+              className="right group-has-[a:hover]:animate-[flutter_500ms_ease-in-out_300ms] group-has-[a:hover]:[--flip:-1] motion-reduce:group-has-[a:hover]:animate-none"
             />
           </svg>
           <span className="text-text-secondary">
-            Your Bluesky tribe isn’t on the app yet.{" "}
+            Your Bluesky tribe isn’t on the app yet.
           </span>
           <span>
             <a
@@ -98,35 +110,7 @@ const DiscoverBlueskyTribe = async () => {
   }
 
   return (
-    <div className="pb-36">
-      <h1 className="bg-background-primary sticky top-0 flex h-14 items-center px-4 max-md:top-14">
-        Your Bluesky Tribe
-      </h1>
-      {/*<div className="grid grid-cols-5 gap-5">
-        {followsList.map((follow) => {
-          return (
-            <div key={follow.did} className="border-shadow rounded-md p-4">
-              <div className="flex flex-col gap-2">
-                <Avatar className="hover:ring-ui-normal bg-ui-normal ring-ui-normal inline-flex size-11 flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full align-middle ring-1 transition-shadow select-none hover:ring-4">
-                  <AvatarImage
-                    className="h-full w-full rounded-[inherit] object-cover"
-                    src={follow.avatar}
-                    alt={follow.displayName || follow.handle}
-                  />
-                  <AvatarFallback
-                    // className="bg-ui-normal flex h-full w-full items-center justify-center text-[15px] leading-1 font-medium"
-                    delayMs={600}
-                  >
-                    {getInitials(follow.displayName || follow.handle)}
-                  </AvatarFallback>
-                </Avatar>
-                <p>{follow.displayName}</p>
-                <p className="text-text-secondary text-sm">@{follow.handle}</p>
-              </div>
-            </div>
-          );
-        })}
-      </div>*/}
+    <div className="pb-30">
       <FollowBskyUsers followsList={bskyAppUsers} />
     </div>
   );
