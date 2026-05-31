@@ -2,6 +2,8 @@
 
 import useSWRInfinite from "swr/infinite";
 
+import { SpinnerRotate } from "@/components/spinner-rotate";
+
 import TimelineFeed from "@/app/(dashboard)/components/timeline-feed";
 import TimelineFeedSkeleton from "@/app/(dashboard)/components/timeline-feed-skeleton";
 import { fetcher } from "@/lib/utils";
@@ -22,17 +24,14 @@ const getKey = (
 export default function Posts() {
   // const p = () => new Promise((resolve) => setTimeout(resolve, 5000));
   // await p();
-  const { data, size, setSize, isLoading, error } = useSWRInfinite(
-    getKey,
-    fetcher,
-    {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
+  const { data, size, setSize, isLoading, error, isValidating } =
+    useSWRInfinite(getKey, fetcher, {
+      // revalidateIfStale: false,
+      // revalidateOnFocus: false,
+      // revalidateOnReconnect: false,
       keepPreviousData: true,
-      revalidateFirstPage: false,
-    },
-  );
+      // revalidateFirstPage: false,
+    });
 
   // return "Loading...";
   if (!data) return <TimelineFeedSkeleton />;
@@ -59,6 +58,11 @@ export default function Posts() {
     <div className="flex min-h-75 flex-col gap-4">
       {/*<PostIcon className="size-20" />
       <span>No posts yet!</span>*/}
+      {isValidating && (
+        <div className="flex items-center justify-center">
+          <SpinnerRotate className="size-6" />
+        </div>
+      )}
       <TimelineFeed
         posts={posts}
         hasNextPage={hasNextPage}

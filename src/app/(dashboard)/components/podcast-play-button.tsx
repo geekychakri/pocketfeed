@@ -1,8 +1,9 @@
 "use client";
 
-import { MouseEvent, useState } from "react";
+import { MouseEvent } from "react";
 
 import { PauseIcon, PlayIcon } from "@radix-ui/react-icons";
+import useSound from "use-sound";
 
 import { cn } from "@/lib/utils";
 import { useFeedItem } from "@/store/feed-item";
@@ -59,7 +60,9 @@ export default function PodcastPlayButton({
 
   const { setFeedItem } = useFeedItem();
 
-  // const [tap] = useSound("/sounds/tap.wav");
+  const [tap] = useSound("/sounds/tap.wav", {
+    volume: 0.25,
+  });
 
   return (
     <button
@@ -70,7 +73,7 @@ export default function PodcastPlayButton({
       )}
       onClick={(e: MouseEvent<HTMLButtonElement>) => {
         e.currentTarget.blur();
-        // tap();
+        tap();
         if (activeEpisode == episodeNumber && isPlaying) {
           console.log("PREVIOUS CLICK");
           setIsPlayingFalse();

@@ -1,15 +1,13 @@
 import { Suspense } from "react";
 
 import { ErrorBoundary } from "react-error-boundary";
-import { SWRConfig } from "swr";
 
 import MobileNav from "@/components/mobile-nav";
 import SidebarNavigation from "@/components/sidebar-nav";
 
-import FeedList from "@/app/(dashboard)/components/feed-list";
+import FeedSubList from "@/app/(dashboard)/components/feed-sub-list";
 import PodcastLoader from "@/app/(dashboard)/components/podcast-loader";
 import ProfileAvatarWrapper from "@/app/(dashboard)/components/profile-avatar-wrapper";
-import { getSelectedFeeds } from "@/db/queries";
 import { getDid } from "@/lib/auth/session";
 
 import YouTubeModal from "./(feed)/feed/components/YouTubeModal";
@@ -20,8 +18,6 @@ export default async function MainLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const getSelectedFeedsPromise = getSelectedFeeds();
-
   return (
     <div className="flex w-full max-[768px]:flex-col">
       <SidebarNavigation>
@@ -51,19 +47,11 @@ export default async function MainLayout({
       <main className="flex-1" id="main">
         <MobileNav />
 
-        <SWRConfig
-        // value={{
-        //   fallback: {
-        //     "/api/get-daily-feeds": getSelectedFeedsPromise,
-        //   },
-        // }}
-        >
-          <PodcastLoader />
-          {children}
+        <PodcastLoader />
+        {children}
 
-          <YouTubeModal />
-          <CheckIsOnline />
-        </SWRConfig>
+        <YouTubeModal />
+        <CheckIsOnline />
       </main>
     </div>
   );
@@ -71,7 +59,7 @@ export default async function MainLayout({
 
 const FeedListWrapper = async () => {
   const did = (await getDid()) as string;
-  return <FeedList did={did} />;
+  return <FeedSubList did={did} />;
 };
 
 function ProfileAvatarFallback() {

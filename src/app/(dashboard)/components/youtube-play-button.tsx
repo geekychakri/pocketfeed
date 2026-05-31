@@ -1,14 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
-
 import { PlayIcon } from "@radix-ui/react-icons";
 import useSound from "use-sound";
 
 import { cn } from "@/lib/utils";
 import { useFeedItem } from "@/store/feed-item";
 import { useGlobalRef } from "@/store/globalRef";
-import { useShowPodcastPlayer } from "@/store/podcastplayer";
 import { useYTPlayer } from "@/store/youtubeplayer";
 
 export default function YouTubePlayButton({
@@ -32,11 +29,11 @@ export default function YouTubePlayButton({
     useYTPlayer();
   const { setFeedItem } = useFeedItem();
 
-  const [tap] = useSound("/sounds/tap.wav");
+  const [tap] = useSound("/sounds/tap.wav", {
+    volume: 0.25,
+  });
 
   const { audioPlayerRef } = useGlobalRef();
-
-  const { isPlaying } = useShowPodcastPlayer();
 
   // useEffect(() => {
   //   isOpen

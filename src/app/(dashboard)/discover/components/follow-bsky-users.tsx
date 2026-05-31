@@ -105,7 +105,7 @@ export default function FollowBskyUsers({ followsList }: { followsList: any }) {
       internalErrorToast(state.message);
       playCaution();
     }
-  }, [state]);
+  }, [state, playCaution]);
 
   console.log({ selectedIds });
 

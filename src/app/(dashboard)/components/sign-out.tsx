@@ -1,23 +1,45 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { toast } from "sonner";
 
-import { LogoutIcon } from "@/icons/animated/LogoutIcon";
+import { SpinnerRotate } from "@/components/spinner-rotate";
 
-interface UserIconHandle {
+import { LogoutIcon } from "@/icons/animated/logout-icon";
+
+type UserIconHandle = {
   startAnimation: () => void;
   stopAnimation: () => void;
-}
-
+};
+type LogoutResponse = {
+  success: boolean;
+};
 const SignOutButton = () => {
   const router = useRouter();
 
+  // const clearCache = () => mutate(() => true, undefined, { revalidate: false });
+
+  const [isLoading, setIsLoading] = useState(false);
+
   async function handleLogout() {
-    await fetch("/oauth/logout", { method: "POST" });
-    router.push("/");
+    setIsLoading(true);
+    try {
+      const res = await fetch("/oauth/logout", { method: "POST" });
+      const data: LogoutResponse = await res.json();
+      if (data.success) {
+        // clearCache();
+        router.push("/");
+      } else {
+        throw new Error("");
+      }
+    } catch (err) {
+      toast.error("Something went wrong!");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   const iconRef = useRef<UserIconHandle>(null);
@@ -33,7 +55,9 @@ const SignOutButton = () => {
       onMouseEnter={() => iconRef.current?.startAnimation()}
       onMouseLeave={() => iconRef.current?.stopAnimation()}
     >
-      <span>Sign out</span>
+      <span className="flex items-center gap-1">
+        Sign out {isLoading && <SpinnerRotate />}
+      </span>
       <span>
         <LogoutIcon ref={iconRef} />
       </span>

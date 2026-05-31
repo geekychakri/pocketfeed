@@ -19,7 +19,7 @@ type FeedDataType = {
   favicon?: string;
 }[];
 
-export default function FeedList({ did }: { did: string }) {
+export default function FeedSubList({ did }: { did: string }) {
   const [cacheLoaded, setCacheLoaded] = useState(false);
   const [localUserFeeds, setLocalUserFeeds] = useState<FeedDataType>([]);
 
@@ -30,10 +30,10 @@ export default function FeedList({ did }: { did: string }) {
       // revalidateIfStale: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
-      fallbackData: localUserFeeds,
+      fallbackData: localUserFeeds.length > 0 ? localUserFeeds : undefined,
       onSuccess: (data) => {
         localforage
-          .setItem("user-feeds", data)
+          .setItem(`user-feeds-${did}`, data)
           .then(function (value) {
             console.log(value);
           })
@@ -49,7 +49,9 @@ export default function FeedList({ did }: { did: string }) {
   useEffect(() => {
     async function loadUserFeeds() {
       try {
-        const feeds = await localforage.getItem<FeedDataType>("user-feeds");
+        const feeds = await localforage.getItem<FeedDataType>(
+          `user-feeds-${did}`,
+        );
 
         setLocalUserFeeds(feeds ?? []);
       } catch (err) {
@@ -61,7 +63,7 @@ export default function FeedList({ did }: { did: string }) {
     loadUserFeeds();
   }, []);
 
-  if (!cacheLoaded || (!data && isLoading)) {
+  if (!cacheLoaded || (localUserFeeds.length === 0 && isLoading)) {
     return (
       <div className="flex min-h-0 flex-1 animate-pulse scrollbar-none flex-col gap-4 overflow-y-scroll p-2 [&::-webkit-scrollbar]:hidden">
         {Array.from({ length: 20 }, (_, i) => {

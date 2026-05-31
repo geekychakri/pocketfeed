@@ -1,10 +1,9 @@
 "use server";
 
-import { desc, eq, sql } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
-import { getProfile } from "@/lib/atproto/queries";
 import { getDid } from "@/lib/auth/session";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import getSession from "@/lib/iron-session/get-iron-session";
@@ -41,6 +40,12 @@ export async function addPost(prevState: any, formData: FormData) {
           sharedFeedItem: feedItem,
         })
         .returning();
+
+      //add to author own feed
+      await tx.insert(schema.userFeed).values({
+        userDid: did,
+        postId: post.id,
+      });
 
       await tx.execute(sql`
         insert into ${schema.userFeed} (user_did, post_id, created_at)

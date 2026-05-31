@@ -1,8 +1,5 @@
 "use client";
 
-import { use } from "react";
-import dynamic from "next/dynamic";
-
 import { ClientArticle } from "./client-article";
 import ReadNav from "./read-nav";
 
@@ -15,7 +12,7 @@ export default function ArticleContent({ articleUrl }: { articleUrl: string }) {
   return (
     <div
       // className={`${isNotebookOpen ? "flex-1" : "w-full max-w-[60ch]"} pb-14 border-x min-h-screen`}
-      className="pb-14 min-h-screen"
+      className="min-h-screen pb-14"
     >
       <ReadNav
         key={articleUrl}

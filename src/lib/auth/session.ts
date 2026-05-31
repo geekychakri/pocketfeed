@@ -21,9 +21,12 @@ export async function getSessionAgent(): Promise<Agent | null> {
   const did = await getDid();
   if (!did) return null;
 
+  console.log({ did });
   try {
     const client = await getOAuthClient();
+    console.log({ client });
     const oauthSession = await client.restore(did);
+    console.log({ oauthSession });
     return oauthSession ? new Agent(oauthSession) : null;
   } catch {
     return null;

@@ -8,6 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
+import type { Route } from "next";
 import { useRouter } from "next/navigation";
 
 import * as Switch from "@radix-ui/react-switch";
@@ -124,9 +125,9 @@ export default function AddFeed({ did }: { did: string }) {
 
       mutate(
         `/api/get-user-feeds?did=${did}`,
-        async (prevFeeds) => {
+        async (prevFeeds: any) => {
           console.log({ prevFeeds });
-          await localforage.setItem("user-feeds", [
+          await localforage.setItem(`user-feeds-${did}`, [
             ...state?.payload,
             ...prevFeeds,
           ]);
@@ -138,7 +139,7 @@ export default function AddFeed({ did }: { did: string }) {
       );
 
       router.push(
-        `/feed?feedUrl=${state?.payload[0].feedUrl}&title=${encodeURIComponent(state?.payload[0].title)}`,
+        `/feed?feedUrl=${state?.payload[0].feedUrl}&title=${encodeURIComponent(state?.payload[0].title)}` as Route,
       );
     }
   }, [state, playCaution, did, router]);

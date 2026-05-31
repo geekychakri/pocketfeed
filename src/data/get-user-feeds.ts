@@ -28,6 +28,8 @@ export const getUserFeeds = cache(async () => {
     throw new Error("You must be signed in!");
   }
 
+  console.log({ agentDid: agent.did });
+
   const [standardSiteResult, skyReaderResult, inAppFeedsResult] =
     await Promise.allSettled([
       agent?.com.atproto.repo.listRecords({

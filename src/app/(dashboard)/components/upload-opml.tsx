@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import { mutate } from "swr";
 import useSound from "use-sound";
 import { v7 as uuidv7 } from "uuid";
-import { experimental_VGrid as VGrid, Virtualizer, VList } from "virtua";
+import { Virtualizer } from "virtua";
 
 import { SpinnerRotate } from "@/components/spinner-rotate";
 import Button from "@/components/ui/custom-button";
@@ -248,7 +248,7 @@ function OPMLFeeds({
           `/api/get-user-feeds?did=${did}`,
           (prevFeeds) => {
             console.log({ prevFeeds });
-            void localforage.setItem("user-feeds", [
+            void localforage.setItem(`user-feeds-${did}`, [
               ...selectedFeeds,
               ...prevFeeds,
             ]);

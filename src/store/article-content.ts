@@ -16,6 +16,7 @@ export const useArticleContent = create<ArticleContentType>((set) => ({
   articleTitle: "",
   articleLink: "",
   isExtracted: false,
+
   setArticleContent: (articleContent: string) =>
     set(() => ({ articleContent })),
   setArticleTitle: (articleTitle: string) => set(() => ({ articleTitle })),

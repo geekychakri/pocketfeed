@@ -1,6 +1,4 @@
-import { NextResponse } from "next/server";
-
-import { desc, lte } from "drizzle-orm";
+import { and, desc, lt, ne } from "drizzle-orm";
 
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
@@ -14,7 +12,9 @@ export async function GET(request: Request) {
 
     const session = await getSession();
 
-    if (!session.user?.did) {
+    const did = session.user?.did;
+
+    if (!did) {
       return Response.json(
         {
           message: "You must be signed in to see posts.",
@@ -27,29 +27,40 @@ export async function GET(request: Request) {
 
     let limit = 50; //TODO:
     let hasNextPage = false;
-    let nextCursor = null;
+    let nextCursor: string | null = null;
+
+    // const posts = await db
+    //   .select()
+    //   .from(schema.posts)
+    //   .where(cursor ? lte(schema.posts.id, cursor) : undefined) // if cursor is provided, get rows after it
+    //   .orderBy(desc(schema.posts.id)) // ordering
+    //   .limit(limit + 1); // the number of rows to return
 
     const posts = await db
       .select()
       .from(schema.posts)
-      .where(cursor ? lte(schema.posts.id, cursor) : undefined) // if cursor is provided, get rows after it
-      .orderBy(desc(schema.posts.id)) // ordering
-      .limit(limit + 1); // the number of rows to return
-
+      .where(
+        and(
+          ne(schema.posts.did, did), // exclude current user's posts
+          cursor ? lt(schema.posts.id, cursor) : undefined,
+        ),
+      )
+      .orderBy(desc(schema.posts.id))
+      .limit(limit + 1);
     console.log({ posts });
 
     if (posts.length > limit) {
       hasNextPage = true;
-      nextCursor = posts.at(-1)?.id; // remove the extra fetched item
+      nextCursor = posts.at(-1)?.id ?? null; // remove the extra fetched item
       posts.pop();
     }
 
-    return NextResponse.json({
+    return Response.json({
       posts,
       hasNextPage,
       nextCursor: nextCursor, // Corrected path to cursor
     });
   } catch (error) {
-    return NextResponse.json("", { status: 500 });
+    return Response.json("", { status: 500 });
   }
 }

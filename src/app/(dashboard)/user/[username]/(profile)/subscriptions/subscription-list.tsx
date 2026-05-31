@@ -12,11 +12,8 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 
 import * as Checkbox from "@radix-ui/react-checkbox";
-import { CheckIcon, TrashIcon } from "@radix-ui/react-icons";
-import { PageRecordArray, SelectedPick } from "@xata.io/client";
-import { motion, useMotionValueEvent, useScroll } from "framer-motion";
+import { CheckIcon } from "@radix-ui/react-icons";
 import { decode } from "html-entities";
-import { useFormState, useFormStatus } from "react-dom";
 import { InView, useInView } from "react-intersection-observer";
 import { toast } from "sonner";
 import useSWR, { mutate } from "swr";
@@ -32,7 +29,17 @@ import { fetcher, getInitials, internalErrorToast } from "@/lib/utils";
 const initialState = {
   type: "",
   message: "",
+  payload: [],
 };
+
+type UserFeedsType = {
+  id: string;
+  title: string;
+  feedUrl: string;
+  siteUrl: string;
+
+  externalSub?: true;
+}[];
 
 export default function SubscriptionList({ did }: { did: string }) {
   const [isFeedItemChecked, setIsFeedItemChecked] = useState(false);
@@ -48,7 +55,7 @@ export default function SubscriptionList({ did }: { did: string }) {
 
   const shouldReset = useRef(false);
 
-  const { data, error, isLoading } = useSWR(
+  const { data, error, isLoading } = useSWR<UserFeedsType>(
     `/api/get-user-feeds?did=${did}`,
     fetcher,
     {
@@ -56,19 +63,6 @@ export default function SubscriptionList({ did }: { did: string }) {
       revalidateOnFocus: false,
     },
   );
-
-  // const [isHidden, setIsHidden] = useState(true);
-
-  // const { scrollY } = useScroll();
-
-  // useMotionValueEvent(scrollY, "change", (y) => {
-  //   console.log({ y });
-  //   if (y > 300) {
-  //     setIsHidden(true);
-  //   } else {
-  //     setIsHidden(false);
-  //   }
-  // });
 
   const [selectSound] = useSound("/sounds/select.wav", {
     volume: 0.25,
@@ -84,10 +78,11 @@ export default function SubscriptionList({ did }: { did: string }) {
       toast.success(state.message);
       mutate(
         `/api/get-user-feeds?did=${did}`,
-        (prevFeeds) => {
+        (prevFeeds: UserFeedsType | undefined) => {
           console.log({ prevFeeds });
+
           const ids = new Set(state.payload.map((s) => s.deletedId));
-          return prevFeeds.filter((feed) => !ids.has(feed.id));
+          return prevFeeds?.filter((feed) => !ids.has(feed.id));
           // const filterFeeds = prevFeeds.filter(feed => feed.id !== )
           // return [...state?.payload, ...prevFeeds];
         },
@@ -104,7 +99,7 @@ export default function SubscriptionList({ did }: { did: string }) {
       internalErrorToast(state.message);
       playCaution();
     }
-  }, [state]);
+  }, [state, did, playCaution]);
 
   useLayoutEffect(() => {
     return () => {
@@ -116,25 +111,6 @@ export default function SubscriptionList({ did }: { did: string }) {
       }
     };
   }, [dispatch]);
-
-  // if (records.length === 0) {
-  //   return (
-  //     <div className="flex min-h-[300px] flex-col items-center justify-center gap-8">
-  //       <div className="flex flex-col items-center justify-center gap-2">
-  //         <FeedIcon className="size-20" />
-  //         <span>No subscriptions yet!</span>
-  //       </div>
-  //       {loggedInUser?.username === displayedUserName && (
-  //         <Link
-  //           href="/add"
-  //           className="bg-ui-normal hover:bg-ui-hover flex items-center justify-center rounded-md px-4 py-2 font-medium text-white duration-100"
-  //         >
-  //           Add a feed
-  //         </Link>
-  //       )}
-  //     </div>
-  //   );
-  // }
 
   console.log("CHECKED");
 
@@ -158,9 +134,10 @@ export default function SubscriptionList({ did }: { did: string }) {
     return <div className="px-4">{ERROR_MESSAGE}</div>;
   }
 
-  if (data?.length === 0) {
+  if (!data?.length) {
     return <div className="px-4">No subscriptions yet!</div>;
   }
+
   return (
     <div className="flex flex-col gap-2">
       <form
@@ -172,7 +149,7 @@ export default function SubscriptionList({ did }: { did: string }) {
           {isFeedItemChecked && (
             <button
               disabled={isPending}
-              className="bg-ui-normal hover:bg-ui-hover flex h-9 w-[120px] cursor-pointer items-center justify-center gap-2 rounded-md px-4 font-medium opacity-100 transition-opacity starting:opacity-0"
+              className="bg-ui-normal hover:bg-ui-hover flex h-9 w-30 cursor-pointer items-center justify-center gap-2 rounded-md px-4 font-medium opacity-100 transition-opacity starting:opacity-0"
             >
               Delete
               {isPending && <SpinnerRotate />}
@@ -187,10 +164,10 @@ export default function SubscriptionList({ did }: { did: string }) {
               // href={`/feed/${item.title?.trim().replace(/\s+/g, "-").toLowerCase()}`}
               // href={`/feed/${item.feedId}`}
               key={record.id}
-              className="group/folder-feed not-last:border-dashed-b relative isolate flex h-18 w-full items-center justify-between px-4 py-[10px] transition-[color]"
+              className="group/folder-feed not-last:border-dashed-b relative isolate flex h-18 w-full items-center justify-between px-4 py-2.5 transition-[color]"
             >
               <span className="flex items-center gap-3">
-                <Avatar className="bg-ui-normal inline-flex h-[30px] w-[30px] flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full select-none">
+                <Avatar className="bg-ui-normal inline-flex h-7.5 w-7.5 flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full select-none">
                   <AvatarImage
                     className="h-full w-full rounded-[inherit] object-cover"
                     // src={
@@ -216,11 +193,11 @@ export default function SubscriptionList({ did }: { did: string }) {
               {!record.externalSub && (
                 <label
                   htmlFor={record.id}
-                  className="hover:bg-ui-hover z-2 flex size-[50px] cursor-pointer items-center justify-center rounded-full duration-150"
+                  className="hover:bg-ui-hover z-2 flex size-12.5 cursor-pointer items-center justify-center rounded-full duration-150"
                 >
                   {/* <input id="test" type="checkbox" className="size-4" /> */}
                   <Checkbox.Root
-                    className="bg-ui-normal flex size-[20px] cursor-pointer appearance-none items-center justify-center rounded outline-none"
+                    className="bg-ui-normal flex size-5 cursor-pointer appearance-none items-center justify-center rounded outline-none"
                     // defaultChecked
                     name={`feedIdList[${record.id}]`}
                     value={record.id}
@@ -274,7 +251,7 @@ function SubscriptionListStatusBar({
           setIsSticky(false);
         }
       }}
-      className={`bg-background-primary sticky -top-px z-10 flex h-[56px] items-center justify-between px-4 transition-shadow ${isSticky && "shadow-[0_1px_0_0_var(--border-non-interactive)]"}`}
+      className={`bg-background-primary sticky -top-px z-10 flex h-14 items-center justify-between px-4 transition-shadow ${isSticky && "shadow-[0_1px_0_0_var(--border-non-interactive)]"}`}
     >
       <h2>
         {recordsCount}{" "}

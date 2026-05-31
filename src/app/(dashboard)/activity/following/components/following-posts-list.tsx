@@ -4,6 +4,8 @@ import Link from "next/link";
 
 import useSWRInfinite from "swr/infinite";
 
+import { SpinnerRotate } from "@/components/spinner-rotate";
+
 import TimelineFeed from "@/app/(dashboard)/components/timeline-feed";
 import TimelineFeedSkeleton from "@/app/(dashboard)/components/timeline-feed-skeleton";
 import { fetcher } from "@/lib/utils";
@@ -22,17 +24,14 @@ const getKey = (
 };
 
 export default function FollowingPostsList() {
-  const { data, size, setSize, isLoading, error } = useSWRInfinite(
-    getKey,
-    fetcher,
-    {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
+  const { data, size, setSize, isLoading, error, isValidating } =
+    useSWRInfinite(getKey, fetcher, {
+      // revalidateIfStale: false,
+      // revalidateOnFocus: false,
+      // revalidateOnReconnect: false,
       keepPreviousData: true,
-      revalidateFirstPage: false,
-    },
-  );
+      // revalidateFirstPage: false,
+    });
 
   if (error) {
     return <div className="text-danger px-4">Something went wrong!</div>;
@@ -58,7 +57,8 @@ export default function FollowingPostsList() {
   if (isEmpty) {
     return (
       <div className="flex flex-col gap-2 px-4">
-        Your following feed is empty! Follow more users to see what's happening.
+        Your following feed is empty! Follow more users to see what&apos;s
+        happening.
         <Link href="/discover" className="custom-underline self-start">
           Discover your Bluesky Tribe
         </Link>
@@ -67,10 +67,17 @@ export default function FollowingPostsList() {
   }
 
   return (
-    <TimelineFeed
-      posts={posts}
-      hasNextPage={hasNextPage}
-      onSetSize={() => setSize(size + 1)}
-    />
+    <>
+      {isValidating && (
+        <div className="flex items-center justify-center">
+          <SpinnerRotate className="size-6" />
+        </div>
+      )}
+      <TimelineFeed
+        posts={posts}
+        hasNextPage={hasNextPage}
+        onSetSize={() => setSize(size + 1)}
+      />
+    </>
   );
 }

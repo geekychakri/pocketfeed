@@ -10,7 +10,7 @@ export default function Page() {
     <div className="border-dashed-x relative mx-auto min-h-screen w-full max-w-187.5 pb-30">
       <div className="border-dashed-b flex h-14 items-center justify-between gap-2 px-4">
         <div className="relative flex gap-2">
-          <RouteBack className="absolute -left-12" />
+          <RouteBack className="absolute -left-12 max-md:static" />
           <h1 className="font-medium">Daily</h1>
         </div>
         <RefreshDailyFeeds />

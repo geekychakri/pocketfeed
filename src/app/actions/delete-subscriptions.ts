@@ -11,6 +11,7 @@ import getSession from "@/lib/iron-session/get-iron-session";
 const initialState = {
   type: "",
   message: "",
+  payload: [],
 };
 
 export async function deleteSubscriptions(

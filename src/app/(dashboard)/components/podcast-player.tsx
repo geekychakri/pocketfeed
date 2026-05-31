@@ -152,17 +152,17 @@ const PodcastPlayer = () => {
                 // className="bg-ui-normal flex h-full w-full items-center justify-center text-[15px] leading-1 font-medium"
                 delayMs={600}
               >
-                {getInitials(title)}
+                {getInitials(albumName)}
               </AvatarFallback>
             </Avatar>
           )}
           <div className="max-md:marquee text-text-secondary text-sm">
-            <p className="max-md:marquee__content">{albumName}</p>
+            <p className="max-md:marquee__content">{title}</p>
             <p
               className="max-md:marquee__content hidden max-md:block"
               aria-hidden={true}
             >
-              {albumName}
+              {title}
             </p>
           </div>
         </div>

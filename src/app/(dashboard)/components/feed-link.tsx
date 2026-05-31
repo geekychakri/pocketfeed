@@ -6,6 +6,7 @@ import { decode } from "html-entities";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 
 import { cn, getInitials } from "@/lib/utils";
+import { useToggleSidenav } from "@/store/toggle-sidenav";
 
 type FeedDataType = {
   id: string;
@@ -19,6 +20,8 @@ export default function FeedLinks({ records }: { records: FeedDataType }) {
   const sp = useSearchParams();
   const feedUrl = sp.get("feedUrl");
 
+  const { toggleIsOpen } = useToggleSidenav();
+
   if (records.length === 0) return null;
 
   return (
@@ -29,6 +32,7 @@ export default function FeedLinks({ records }: { records: FeedDataType }) {
           {...(i === 0 ? { id: "main-item" } : {})}
           key={record.id}
           className={cn("text-sm", feedUrl === record.feedUrl && "font-medium")}
+          onNavigate={() => toggleIsOpen()}
         >
           <span className="flex items-center gap-3">
             <Avatar className="bg-ui-normal inline-flex h-4.5 w-4.5 flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full select-none">

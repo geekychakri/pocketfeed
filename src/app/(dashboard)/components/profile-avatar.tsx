@@ -14,9 +14,10 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 
 import SignOutButton from "@/app/(dashboard)/components/sign-out";
-import { SettingsGearIcon } from "@/icons/animated/SettingsGearIcon";
-import { UserIcon } from "@/icons/animated/UserIcon";
+import { SettingsGearIcon } from "@/icons/animated/settings-icon";
+import { UserIcon } from "@/icons/animated/user-icon";
 import { getInitials } from "@/lib/utils";
+import { useToggleSidenav } from "@/store/toggle-sidenav";
 
 interface UserIconProps extends HTMLAttributes<HTMLSpanElement> {
   size?: number;
@@ -42,6 +43,8 @@ const AvatarDropdownItem = ({
   const [hovered, setHovered] = useState(false);
 
   const iconRef = useRef<UserIconHandle>(null);
+
+  const { toggleIsOpen } = useToggleSidenav();
   return (
     <DropdownMenu.Item
       // className="text-text-primary data-highlighted:bg-ui-normal data-disabled:text-mauve8 relative flex h-[25px] items-center justify-between gap-2 rounded-[3px] px-2 py-5 text-sm leading-none duration-150 select-none data-disabled:pointer-events-none data-highlighted:shadow-none"
@@ -54,6 +57,7 @@ const AvatarDropdownItem = ({
         href={href}
         onMouseEnter={() => iconRef.current?.startAnimation()}
         onMouseLeave={() => iconRef.current?.stopAnimation()}
+        onNavigate={() => toggleIsOpen()}
       >
         {/* <Icon data-hovered={hovered} /> */}
         {children}
@@ -97,7 +101,7 @@ export default function ProfileAvatar({
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content
-          className="border-shadow bg-background-primary text-text-primary data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-40 min-w-55 rounded-md p-1.25"
+          className="border-shadow bg-background-primary text-text-primary data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-40 min-w-55 rounded-md p-1.25 max-md:w-[90vw]"
           sideOffset={14}
           align="start"
         >

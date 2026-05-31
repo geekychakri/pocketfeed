@@ -3,13 +3,13 @@ import { createWithEqualityFn } from "zustand/traditional";
 
 type ToggleSidenav = {
   isOpen: boolean;
-  setIsOpen: () => void;
+  toggleIsOpen: () => void;
 };
 
 export const useToggleSidenav = createWithEqualityFn<ToggleSidenav>()(
   (set) => ({
     isOpen: false,
-    setIsOpen: () => set((state) => ({ isOpen: !state.isOpen })),
+    toggleIsOpen: () => set((state) => ({ isOpen: !state.isOpen })),
   }),
   shallow,
 );

@@ -1,21 +1,7 @@
-import { NextResponse } from "next/server";
-
-import {
-  and,
-  asc,
-  desc,
-  eq,
-  getTableColumns,
-  gt,
-  lt,
-  lte,
-  ne,
-  or,
-} from "drizzle-orm";
+import { and, desc, eq, lt } from "drizzle-orm";
 
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
-import { getDid } from "@/lib/auth/session";
 import getSession from "@/lib/iron-session/get-iron-session";
 
 type Post = typeof schema.posts.$inferSelect;
@@ -31,8 +17,12 @@ type ParsedCursor = {
   postId: string;
 };
 
-async function getProfilePosts(profileDid: string, cursor?: string, limit = 1) {
-  const pageSize = Math.min(limit, 1);
+async function getProfilePosts(
+  profileDid: string,
+  cursor?: string,
+  limit = 50,
+) {
+  const pageSize = Math.min(limit, 50);
   const posts = await db
     .select()
     .from(schema.posts)
@@ -72,8 +62,8 @@ export async function GET(request: Request) {
 
     const result = await getProfilePosts(session.user.did, cursor);
     console.log({ result: result.posts });
-    return NextResponse.json(result);
+    return Response.json(result);
   } catch (error) {
-    return NextResponse.json("", { status: 500 });
+    return Response.json("", { status: 500 });
   }
 }

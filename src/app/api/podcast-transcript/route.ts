@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 import getSession from "@/lib/iron-session/get-iron-session";
 import { parse } from "@/lib/vtt-srt-parser";
@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
 
       const data = await res.json();
 
-      return NextResponse.json({ segments: data.segments });
+      return Response.json({ segments: data.segments });
     } else if (
       transcriptUrl.includes(".vtt") ||
       transcriptUrl.includes(".srt")
@@ -35,15 +35,15 @@ export async function GET(request: NextRequest) {
 
       const data = parse(vttText);
 
-      return NextResponse.json({ segments: data.segments });
+      return Response.json({ segments: data.segments });
     } else if (transcriptUrl.includes("txt") || transcriptUrl) {
       const res = await fetch(transcriptUrl);
 
       const parsedText = await res.text();
 
-      return NextResponse.json({ parsedText });
+      return Response.json({ parsedText });
     }
   } catch (err) {
-    return NextResponse.json("", { status: 500 });
+    return Response.json("", { status: 500 });
   }
 }

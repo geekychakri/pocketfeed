@@ -20,6 +20,9 @@ const nextConfig = {
     //   dynamic: 180,
     // },
   },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
   allowedDevOrigins: ["127.0.0.1"],
 };
 

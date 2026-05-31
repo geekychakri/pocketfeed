@@ -4,17 +4,8 @@ import { nanoid } from "nanoid";
 import xml2js from "xml2js";
 
 import getSession from "@/lib/iron-session/get-iron-session";
-import { transformFeedUrltoRkey } from "@/lib/utils";
 
-function chunkArray(array: [], size: number) {
-  const chunks = [];
-  for (let i = 0; i < array.length; i += size) {
-    chunks.push(array.slice(i, i + size));
-  }
-  return chunks;
-}
-
-export async function POST(request: NextRequest, response: NextResponse) {
+export async function POST(request: NextRequest) {
   try {
     const session = await getSession();
 
@@ -53,7 +44,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
               title: attributes.title,
               siteUrl: attributes.htmlUrl,
               feedUrl: attributes.xmlUrl,
-              folder: outline.$.title,
+              // folder: outline.$.title,
               // feedType: feedtype,
             });
           }
@@ -69,11 +60,6 @@ export async function POST(request: NextRequest, response: NextResponse) {
         });
       }
 
-      // if (outline.outline) {
-      //   for (let subOutline of outline.outline) {
-      //     feeds = feeds.concat(extractFeeds(subOutline));
-      //   }
-      // }
       return feeds;
     }
 
@@ -99,54 +85,6 @@ export async function POST(request: NextRequest, response: NextResponse) {
     console.log({ uniqueFeeds });
 
     return NextResponse.json({ feeds: uniqueFeeds });
-
-    // atproto create records TODO:
-    const bulkRecords = uniqueFeeds.map((record) => {
-      let rkey;
-      if (record.feedUrl.includes("youtube.com")) {
-        rkey = transformFeedUrltoRkey(record.siteUrl);
-      } else {
-        rkey = transformFeedUrltoRkey(record.feedUrl);
-      }
-      return {
-        $type: "com.atproto.repo.applyWrites#create" as const,
-        collection: "app.pocketfeed.feed.subscription",
-        rkey,
-        value: {
-          $type: "app.pocketfeed.feed.subscription",
-          ...record,
-          createdAt: new Date().toISOString(),
-        },
-      };
-    });
-
-    console.log({ bulkRecords });
-
-    //TODO: types
-    async function createBulkSubscriptions(records: any) {
-      const batches = chunkArray(records, 10);
-      // const results = [];
-
-      const promises = [];
-
-      for (const batch of batches) {
-        promises.push(
-          agent?.com.atproto.repo.applyWrites({
-            repo: agent.assertDid,
-            writes: [...batch],
-          }),
-        );
-
-        // Optional: add a small delay to avoid rate limits
-        // await new Promise((resolve) => setTimeout(resolve, 100));
-      }
-      const results = await Promise.all(promises);
-      console.log({ results });
-    }
-
-    await createBulkSubscriptions(bulkRecords);
-
-    return NextResponse.json({ message: "success" });
   } catch (err) {
     console.log(err);
     return NextResponse.json({ message: "error" }, { status: 500 });

@@ -2,6 +2,8 @@
 
 import useSWRInfinite from "swr/infinite";
 
+import { SpinnerRotate } from "@/components/spinner-rotate";
+
 import TimelineFeed from "@/app/(dashboard)/components/timeline-feed";
 import TimelineFeedSkeleton from "@/app/(dashboard)/components/timeline-feed-skeleton";
 import { fetcher } from "@/lib/utils";
@@ -20,17 +22,14 @@ const getKey = (
 };
 
 export default function DiscoverPostsList() {
-  const { data, size, setSize, isLoading, error } = useSWRInfinite(
-    getKey,
-    fetcher,
-    {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
+  const { data, size, setSize, isLoading, error, isValidating } =
+    useSWRInfinite(getKey, fetcher, {
+      // revalidateIfStale: false,
+      // revalidateOnFocus: false,
+      // revalidateOnReconnect: false,
       keepPreviousData: true,
-      revalidateFirstPage: false,
-    },
-  );
+      // revalidateFirstPage: false,
+    });
 
   if (error) {
     return <div className="text-danger px-4">Something went wrong!</div>;
@@ -58,6 +57,11 @@ export default function DiscoverPostsList() {
 
   return (
     <>
+      {isValidating && (
+        <div className="flex items-center justify-center">
+          <SpinnerRotate className="size-6" />
+        </div>
+      )}
       <TimelineFeed
         posts={posts}
         hasNextPage={hasNextPage}

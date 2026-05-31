@@ -10,7 +10,7 @@ import RouteBack from "@/components/route-back";
 
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
-import { getDid } from "@/lib/auth/session";
+// import { getDid } from "@/lib/auth/session";
 import { getInitials } from "@/lib/utils";
 
 export default async function Following({
@@ -143,7 +143,7 @@ const FollowsList = async ({
               <Avatar className="hover:ring-ui-normal bg-ui-normal ring-ui-normal inline-flex size-10 flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full align-middle ring-1 transition-shadow select-none group-hover:ring-2">
                 <AvatarImage
                   className="h-full w-full rounded-[inherit] object-cover"
-                  src={profile.avatar}
+                  src={profile.avatar as string}
                   alt={profile.displayName || profile.handle}
                 />
                 <AvatarFallback
@@ -184,13 +184,13 @@ function FollowsListFallback() {
     <div className="min-h-screen animate-pulse">
       {Array.from({ length: 20 }, (_, i) => {
         return (
-          <div key={i} className="border-dashed-b h-[75px] w-full p-4">
+          <div key={i} className="border-dashed-b h-18.75 w-full p-4">
             <div className="flex items-center gap-3">
               <div className="bg-skeleton-highlight size-10 rounded-full"></div>
 
               <div className="flex flex-col gap-1">
-                <p className="bg-skeleton-highlight h-4 w-[150px]"></p>
-                <p className="bg-skeleton-highlight h-4 w-[150px]"></p>
+                <p className="bg-skeleton-highlight h-4 w-37.5"></p>
+                <p className="bg-skeleton-highlight h-4 w-37.5"></p>
               </div>
             </div>
           </div>

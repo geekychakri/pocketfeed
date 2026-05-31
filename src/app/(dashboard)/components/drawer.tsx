@@ -22,10 +22,6 @@ DOMPurify.addHook("afterSanitizeAttributes", function (node) {
   }
 });
 
-const initialState = {
-  message: "",
-};
-
 function VaulDrawer({ audioRef }: { audioRef: any }) {
   const { title, content, episodeNumber } = useShowPodcastPlayer((state) => ({
     title: state.title,

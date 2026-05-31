@@ -1,8 +1,7 @@
-import { after, NextResponse, type NextRequest } from "next/server";
+import { after, type NextRequest } from "next/server";
 
 import Parser from "rss-parser";
 
-import { getKVItem, setKVItem } from "@/lib/cloudflare-kv";
 import getSession from "@/lib/iron-session/get-iron-session";
 import { upstashRedis } from "@/lib/upstash-redis";
 
@@ -74,14 +73,6 @@ export async function GET(request: NextRequest) {
       if (cachedFeed) return Response.json({ ...cachedFeed, isStale: true });
       console.log("ERRRRRRRRRRRRR");
       throw new Error("Something went wrong!");
-      // if (feedUrl.includes("youtube.com")) {
-      //   throw new Error("Looks like YouTube feeds are temporarily unavailable. Please check back shortly.")
-
-      // } else if (error.message === "unable to verify the first certificate") {
-      //   message = "Unable to access this feed.";
-      // } else {
-      //   message = "Something went wrong but don't fret — it's not your fault.";
-      // }
     }
 
     const etag = res.headers.get("etag");
@@ -111,19 +102,21 @@ export async function GET(request: NextRequest) {
       });
     });
     return Response.json(newFeedData);
-  } catch (err) {
+  } catch (err: unknown) {
     console.log({ err });
-    // console.log({ errMessage: err.cause.message });
+
     if (
-      err?.cause?.message.includes("unable") ||
-      err?.name === "TimeoutError"
+      err instanceof Error &&
+      (err.cause instanceof Error
+        ? err.cause.message.includes("unable")
+        : false || err.name === "TimeoutError")
     ) {
-      // fallback strategy
       return Response.json(
         { message: "unable to fetch the feed." },
         { status: 502 },
       );
     }
+
     return Response.json({ message: "Something went wrong!" }, { status: 500 });
   }
 }

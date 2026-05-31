@@ -24,7 +24,7 @@ const links: NavItem<Route>[] = [
 
 export default function SideNavClient() {
   const layoutSegment = useSelectedLayoutSegment();
-  const { setIsOpen } = useToggleSidenav();
+  const { toggleIsOpen } = useToggleSidenav();
   return (
     <div className="border-dashed-b flex flex-col gap-1 py-2.5">
       {links.map(({ label, path, segment }, i) => {
@@ -40,7 +40,7 @@ export default function SideNavClient() {
                 "hover:bg-ui-hover flex h-11 items-center gap-3 rounded-md px-3 py-2.5 transition-[background-color] duration-100",
                 isActive && "bg-ui-hover font-medium",
               )}
-              onNavigate={setIsOpen}
+              onNavigate={toggleIsOpen}
             >
               <span>{label}</span>
             </Link>

@@ -1,21 +1,7 @@
-import { NextResponse } from "next/server";
-
-import {
-  and,
-  asc,
-  desc,
-  eq,
-  getTableColumns,
-  gt,
-  lt,
-  lte,
-  ne,
-  or,
-} from "drizzle-orm";
+import { and, desc, eq, getTableColumns, lt, or } from "drizzle-orm";
 
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
-import { getDid } from "@/lib/auth/session";
 import getSession from "@/lib/iron-session/get-iron-session";
 
 type Post = typeof schema.posts.$inferSelect;
@@ -53,9 +39,9 @@ const cursorCondition = (parsed: ParsedCursor) =>
 export async function getFollowingFeed(
   userDid: string,
   cursor?: string,
-  limit = 1,
+  limit = 50,
 ): Promise<FeedResult> {
-  const pageSize = Math.min(limit, 1);
+  const pageSize = Math.min(limit, 50);
   const parsed = cursor ? decodeCursor(cursor) : undefined;
 
   const posts = await db
@@ -107,8 +93,8 @@ export async function GET(request: Request) {
     const result = await getFollowingFeed(session.user.did, cursor);
 
     console.log({ result: result.posts });
-    return NextResponse.json(result);
+    return Response.json(result);
   } catch (error) {
-    return NextResponse.json("", { status: 500 });
+    return Response.json("", { status: 500 });
   }
 }

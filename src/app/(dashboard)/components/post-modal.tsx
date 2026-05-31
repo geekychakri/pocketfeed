@@ -6,6 +6,9 @@ import { useParams } from "next/navigation";
 import { Dialog } from "@base-ui/react/dialog";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import { toast } from "sonner";
+import { useSWRConfig } from "swr";
+import { unstable_serialize } from "swr/infinite";
+import useSound from "use-sound";
 
 import Button from "@/components/ui/custom-button";
 import Textarea from "@/components/ui/custom-textarea";
@@ -33,6 +36,8 @@ export default function PostModal({
 }) {
   let feedItem;
 
+  const { mutate, cache } = useSWRConfig();
+
   const { link } = useParams<{ link: string }>();
   console.log({ link });
 
@@ -52,10 +57,24 @@ export default function PostModal({
 
   const postRef = useRef<HTMLTextAreaElement | null>(null);
 
+  const [playSuccess] = useSound("sounds/success.wav", {
+    volume: 0.25,
+  });
+
   const [state, formAction, isPending] = useActionState(addPost, initialState);
 
   useEffect(() => {
     if (state?.type === "success") {
+      // mutate(
+      //    unstable_serialize((index, prevPageData) => `my-key-of-page-${index}`),
+      // )
+      // for (const key of cache.keys()) {
+      //   if (key.includes("/api/discover-posts")) {
+      //     mutate(key); // With this you can revalidate whatever the key is. (with @, $inf$ or whatever)
+      //   }
+      // }
+      playSuccess();
+      toast.success("Your post was sent!");
       setIsModalOpen(false);
     } else if (state.type === "duplicate-post") {
       toast.warning(state.message);
@@ -64,7 +83,7 @@ export default function PostModal({
     } else if (state.type === "auth-error") {
       toast.error(state.message);
     }
-  }, [state]);
+  }, [state, playSuccess, cache, mutate]);
 
   return (
     <>
@@ -138,8 +157,9 @@ export default function PostModal({
                 >
                   Cancel
                 </Button>
-                <Button className="bg-ui-normal hover:bg-ui-hover flex-1 transition-[background-color]">
-                  {isPending ? loadingSkeleton : "Post"}
+                <Button className="bg-ui-normal hover:bg-ui-hover flex flex-1 items-center justify-center gap-1 transition-[background-color]">
+                  <span>Post</span>
+                  {isPending && loadingSkeleton}
                 </Button>
               </div>
             </form>

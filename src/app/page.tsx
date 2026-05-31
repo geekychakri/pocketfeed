@@ -57,23 +57,26 @@ export default async function Home() {
       className="overflow-hidden"
     >
       <motion.div
-        className="h-screen grid grid-rows-[auto_1fr_auto]"
+        className="grid h-screen grid-rows-[auto_1fr_auto]"
         variants={stagger}
       >
-        <motion.nav className="border-dashed-b px-8  overflow-hidden">
+        <motion.nav className="border-dashed-b overflow-hidden px-8">
           <motion.div
-            className="flex items-center justify-between h-14"
+            className="flex h-14 items-center justify-between"
             variants={fadeInDown}
           >
             Pocket Feed
-            <div className="flex items-center gap-6 text-text-secondary">
-              <p>Log in</p>
-            </div>
+            <Link
+              href={`/signin` as Route}
+              className="text-text-secondary flex items-center gap-6"
+            >
+              Log in
+            </Link>
           </motion.div>
         </motion.nav>
 
-        <motion.div className="max-w-225 mx-auto px-4 py-8 border-dashed-x flex justify-center ">
-          <div className="flex flex-col gap-11 justify-center ">
+        <motion.div className="border-dashed-x mx-auto flex max-w-225 justify-center px-4 py-8">
+          <div className="flex flex-col justify-center gap-11">
             <div className="flex flex-col gap-4">
               <motion.h1
                 className={`flex gap-4 text-center text-8xl leading-none tracking-tight ${InstrumentSerif.className}`}
@@ -95,7 +98,7 @@ export default async function Home() {
             <motion.div variants={fadeInUp}>
               <Link
                 href={`/signin` as Route}
-                className="w-48 rounded-md bg-brand-primary/90 px-6 py-3 text-center text-lg font-medium text-white select-none hover:bg-brand-primary duration-100"
+                className="bg-brand-primary/90 hover:bg-brand-primary w-48 rounded-md px-6 py-3 text-center text-lg font-medium text-white duration-100 select-none"
               >
                 Get started
               </Link>
@@ -104,7 +107,7 @@ export default async function Home() {
         </motion.div>
         <motion.div className="border-dashed-t">
           <motion.div
-            className="px-8 h-14 text-sm text-text-secondary flex items-center justify-between"
+            className="text-text-secondary flex h-14 items-center justify-between px-8 text-sm"
             variants={fadeInUp}
           >
             <p>Pocket Feed </p>

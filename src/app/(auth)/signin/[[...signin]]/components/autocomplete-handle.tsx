@@ -77,7 +77,7 @@ export default function AutocompleteHandle() {
     >
       <label className="flex flex-col gap-1 text-sm leading-5 font-medium">
         Handle
-        <div className="border-shadow focus-within:outline-brand-primary flex items-center rounded-md focus-within:outline-2">
+        <div className="border-shadow focus-within:outline-brand-primary flex items-center rounded-md outline-offset-2 focus-within:outline-2">
           <span className="text-text-secondary border-dashed-r h-11 content-center px-2">
             @
           </span>

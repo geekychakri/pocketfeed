@@ -2,7 +2,7 @@ import { Suspense } from "react";
 
 import RouteBack from "@/components/route-back";
 
-import FeedList from "./components/feed-list";
+import FeedItems from "./components/feed-items";
 
 export default async function Feed(props: {
   params: Promise<{ feedId: string }>;
@@ -33,8 +33,8 @@ const FeedHeader = async ({
   console.log("FEED HEADER RENDERED");
   const { title, feedUrl } = await feedSearchParamPromise;
   return (
-    <div className="relative mb-8 flex items-center px-4">
-      <RouteBack className="absolute -left-12" />
+    <div className="relative mb-8 flex items-center px-4 max-md:gap-2">
+      <RouteBack className="absolute -left-12 max-md:static" />
       <h1 className="font-medium">{title || new URL(feedUrl).hostname}</h1>
     </div>
   );
@@ -60,5 +60,5 @@ const FeedListWrapper = async ({
       </p>
     );
   }
-  return <FeedList feedUrl={feedUrl} />;
+  return <FeedItems feedUrl={feedUrl} />;
 };

@@ -20,7 +20,7 @@ export default async function UserLayout({
   params: Promise<{ username: string }>;
 }) {
   return (
-    <main className="border-dashed-x mx-auto flex min-h-screen w-full max-w-180 flex-col gap-5">
+    <main className="border-dashed-x mx-auto flex min-h-screen w-full max-w-180 flex-col gap-5 pb-30">
       <Suspense fallback={null}>
         <ProfileHeader params={params} />
       </Suspense>

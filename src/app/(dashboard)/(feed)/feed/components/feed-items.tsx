@@ -25,7 +25,7 @@ import YouTubePlayButton from "../../../components/youtube-play-button";
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
 
-export default function FeedList({ feedUrl }: { feedUrl: string }) {
+export default function FeedItems({ feedUrl }: { feedUrl: string }) {
   const {
     data: feedList,
     isLoading,
@@ -56,6 +56,8 @@ export default function FeedList({ feedUrl }: { feedUrl: string }) {
   }, [feedList]);
 
   console.log({ feedListError });
+
+  console.log({ feedData: feedList });
 
   if (isLoading) {
     return <FeedListFallback />;
@@ -195,13 +197,13 @@ function FeedItem({
     );
   }
   return (
-    <div className="hover:text-brand-primary border-dashed-b relative isolate flex flex-col gap-4 p-4 transition-[color]">
-      <div className="flex flex-1 items-center">
-        <span className="w-4/5 flex-1 flex-col text-pretty">
+    <div className="hover:text-brand-primary border-dashed-b relative isolate flex flex-col gap-3 p-4 transition-[color]">
+      <div className="flex flex-1 max-md:flex-col">
+        <span className="flex-1 flex-col text-pretty">
           {decode(item.title) || feedList?.title}
         </span>
 
-        <span className="text-text-secondary flex w-1/5 justify-end text-sm">
+        <span className="text-text-secondary flex shrink-0 text-sm">
           <span>{dayjs(item.isoDate).format("ll")}</span>
         </span>
       </div>

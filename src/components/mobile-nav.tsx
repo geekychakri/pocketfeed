@@ -1,14 +1,33 @@
 "use client";
 
+import { useEffect, useLayoutEffect, useRef } from "react";
+
 import { useToggleSidenav } from "@/store/toggle-sidenav";
 
 export default function MobileNav() {
-  const { setIsOpen, isOpen } = useToggleSidenav();
+  const { toggleIsOpen, isOpen } = useToggleSidenav();
   console.log({ isOpen });
+
   return (
-    <nav className="bg-background-primary sticky top-0 z-1000 hidden justify-between border p-4 max-md:flex">
+    <nav className="bg-background-primary border-dashed-b sticky top-0 z-1000 hidden justify-between p-4 max-md:flex">
       <h1>Pocket Feed</h1>
-      <button onClick={setIsOpen}>Menu</button>
+      <button className="flex items-center gap-1" onClick={toggleIsOpen}>
+        Menu
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeWidth="1.5"
+            d="M20 7H4m16 5H4m16 5H4"
+          />
+        </svg>
+      </button>
     </nav>
   );
 }

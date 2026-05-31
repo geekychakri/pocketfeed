@@ -1,16 +1,12 @@
 "use client";
 
-import { use, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 
-// import PostModal from "@/components/post-modal";
-import RouteBack from "@/components/route-back";
 import { CustomTooltip } from "@/components/ui/custom-tooltip";
 import IconOnlyAction from "@/components/ui/icon-only-action";
 
-import { ExtractArticleIcon } from "@/icons/animated/extract-article-icon";
 import { GlobalIcon } from "@/icons/globe";
 import { PostIcon } from "@/icons/post";
 
@@ -33,22 +29,8 @@ const PostModal = dynamic(
   },
 );
 
-export default function ReadNav({
-  articleSiteName,
-  articleUrl,
-  bookmarkExists,
-  bookmarkId,
-  articleTitle,
-}: {
-  articleSiteName?: string | undefined;
-  articleUrl: string;
-  articleTitle?: string;
-  bookmarkExists?: boolean | null;
-  bookmarkId?: string | null;
-}) {
+export default function ReadNav({ articleUrl }: { articleUrl: string }) {
   console.log({ readNavUrl: articleUrl });
-
-  const extractArticleIconRef = useRef(null);
 
   return (
     <div className="border-border-non-interactive bg-background-primary sticky top-0 z-10 flex h-14 items-center justify-between gap-3 border-b px-4">

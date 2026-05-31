@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 
+import { Dialog } from "@base-ui/react/dialog";
 import dayjs from "dayjs";
 import isToday from "dayjs/plugin/isToday";
 import isYesterday from "dayjs/plugin/isYesterday";
@@ -10,7 +11,6 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import useSWR from "swr";
 
 import { ERROR_MESSAGE } from "@/lib/constants";
-import { fetcher } from "@/lib/utils";
 import type { FeedItemType, FeedListType } from "@/types";
 
 import YouTubeModal from "../../(feed)/feed/components/YouTubeModal";
@@ -25,6 +25,33 @@ type SWRDataType = {
   dailyFeedItems: [];
   userHasFeeds: [];
 };
+
+class StatusError extends Error {
+  info: string | undefined;
+  status: number | undefined;
+}
+
+async function fetcher<JSON = any>(
+  input: RequestInfo,
+  init?: RequestInit,
+): Promise<JSON> {
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  const res = await fetch(input, {
+    ...init,
+    headers: {
+      "pf-user-timezone": timezone,
+    },
+  });
+  if (!res.ok) {
+    const error = new StatusError("An error occurred while fetching the data.");
+    // Attach extra info to the error object.
+    error.info = await res.json();
+    error.status = res.status;
+    throw error;
+  }
+  return res.json();
+}
 
 type GroupedFeedsType = Record<string, FeedItemType[]>;
 
@@ -42,7 +69,7 @@ export default function DailyFeedList() {
   console.log({ swrData: data });
 
   if (error) {
-    return <p className="p-4 text-danger">{ERROR_MESSAGE}</p>;
+    return <p className="text-danger p-4">{ERROR_MESSAGE}</p>;
   }
 
   if (isLoading) {
@@ -51,7 +78,7 @@ export default function DailyFeedList() {
 
   if (!data?.userHasFeeds) {
     return (
-      <div className="px-3 text-base flex flex-col gap-3 flex-1 justify-center items-center py-10">
+      <div className="flex flex-1 flex-col items-center justify-center gap-3 px-3 py-10 text-base">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="80"
@@ -81,6 +108,10 @@ export default function DailyFeedList() {
 
   const flatData = data?.dailyFeedItems.flat();
   console.log({ flatDatad: flatData });
+
+  if (flatData.length === 0) {
+    return <div className="p-4">No new posts yet. Check back later!</div>;
+  }
   const groupByFeedTitle: GroupedFeedsType = Object.groupBy(
     flatData,
     ({ feedTitle }) => {
@@ -88,13 +119,15 @@ export default function DailyFeedList() {
     },
   );
 
+  console.log({ flatData });
+
   console.log({ groupByFeedTitle });
 
   return (
     <div className="flex flex-col gap-4">
       {Object.entries(groupByFeedTitle).map(([feedTitle, items]) => (
         <div key={feedTitle} className="group">
-          <h2 className="text-brand-primary font-medium p-4 group-hover:text-text-primary">
+          <h2 className="text-brand-primary group-hover:text-text-primary p-4 font-medium">
             {feedTitle}
           </h2>
           <div className="flex flex-col gap-4">
@@ -104,7 +137,7 @@ export default function DailyFeedList() {
           </div>
         </div>
       ))}
-      <p className="text-center text-text-secondary h-32 pt-4">
+      <p className="text-text-secondary h-32 pt-4 text-center">
         End of feed! See ya tomorrow.
       </p>
       <YouTubeModal />
@@ -114,36 +147,42 @@ export default function DailyFeedList() {
 
 function DailyFeedListFallback() {
   return (
-    <div className="animate-pulse flex flex-col gap-5 px-4 mt-5">
-      <p>Preparing your daily brew...</p>
-      <div className="h-7 w-56 bg-ui-normal rounded"></div>
-      <div className="flex flex-col  space-y-3">
-        <div className="h-14 w-full flex justify-between items-center">
-          <div className="rounded bg-ui-normal h-7 w-56"></div>
-          <div className="rounded bg-ui-normal h-7 w-20"></div>
-        </div>
-        <div className="flex-1 space-y-3">
-          <div className="h-5 rounded bg-ui-normal"></div>
-          <div className="h-5 rounded bg-ui-normal"></div>
-          <div className="h-5 rounded bg-ui-normal"></div>
-        </div>
-      </div>
-
-      {Array.from({ length: 10 }).map((_, i, a) => {
-        return (
-          <div key={i} className="flex flex-col  space-y-3 ">
-            <div className="h-14 w-full flex justify-between items-center">
-              <div className="rounded bg-ui-normal h-7 w-56"></div>
-              <div className="rounded bg-ui-normal h-7 w-20"></div>
-            </div>
-            <div className="flex-1 space-y-3">
-              <div className="h-5 rounded bg-ui-normal"></div>
-              <div className="h-5 rounded bg-ui-normal"></div>
-              <div className="h-5 rounded bg-ui-normal"></div>
-            </div>
+    <div className="mt-5 flex flex-col gap-2 px-4">
+      <p>
+        Catch up on the latest posts from the feeds you follow, all in one
+        place.
+      </p>
+      <div className="flex animate-pulse flex-col gap-5">
+        <p>Preparing your daily digest...</p>
+        <div className="bg-ui-normal h-7 w-56 rounded"></div>
+        <div className="flex flex-col space-y-3">
+          <div className="flex h-14 w-full items-center justify-between">
+            <div className="bg-ui-normal h-7 w-56 rounded"></div>
+            <div className="bg-ui-normal h-7 w-20 rounded"></div>
           </div>
-        );
-      })}
+          <div className="flex-1 space-y-3">
+            <div className="bg-ui-normal h-5 rounded"></div>
+            <div className="bg-ui-normal h-5 rounded"></div>
+            <div className="bg-ui-normal h-5 rounded"></div>
+          </div>
+        </div>
+
+        {Array.from({ length: 10 }).map((_, i, a) => {
+          return (
+            <div key={i} className="flex flex-col space-y-3">
+              <div className="flex h-14 w-full items-center justify-between">
+                <div className="bg-ui-normal h-7 w-56 rounded"></div>
+                <div className="bg-ui-normal h-7 w-20 rounded"></div>
+              </div>
+              <div className="flex-1 space-y-3">
+                <div className="bg-ui-normal h-5 rounded"></div>
+                <div className="bg-ui-normal h-5 rounded"></div>
+                <div className="bg-ui-normal h-5 rounded"></div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

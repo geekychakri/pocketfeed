@@ -1,13 +1,21 @@
+import { headers } from "next/headers";
 import { after } from "next/server";
 
+import dayjs from "dayjs";
+import isToday from "dayjs/plugin/isToday";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
 import pLimit from "p-limit";
 import Parser from "rss-parser";
 
-// import { getUserFeeds } from "@/db/queries";
 import { getUserFeeds } from "@/data/get-user-feeds";
 import getSession from "@/lib/iron-session/get-iron-session";
 import { upstashRedis } from "@/lib/upstash-redis";
 import type { FeedItemType } from "@/types";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.extend(isToday);
 
 const parser = new Parser({
   customFields: {
@@ -17,11 +25,13 @@ const parser = new Parser({
 
 const limit = pLimit(10);
 
-const today = new Date();
-today.setHours(0, 0, 0, 0);
-
 export async function GET(request: Request) {
   try {
+    const headersList = await headers();
+    const userTimezone = headersList.get("pf-user-timezone") as string;
+
+    console.log({ userTimezone });
+
     const session = await getSession();
 
     if (!session.user?.did) {
@@ -65,14 +75,16 @@ export async function GET(request: Request) {
             console.log("SERVED FROM CACHE");
 
             const latestFeed = cachedFeed.items
-              // .slice(0, 10)
               .sort(
                 (a: { isoDate: string }, b: { isoDate: string }) =>
                   new Date(b.isoDate).getTime() - new Date(a.isoDate).getTime(),
               )
               .flatMap((item: FeedItemType) => {
-                const date = item.pubDate ? new Date(item.pubDate) : undefined;
-                if (date && date >= today) {
+                const isItemToday = dayjs(item.isoDate)
+                  .tz(userTimezone)
+                  .isToday();
+
+                if (isItemToday) {
                   return {
                     ...item,
                     feedTitle: feed.title,
@@ -81,12 +93,13 @@ export async function GET(request: Request) {
                     ...(item.enclosure?.url && {
                       feedListMetadata: {
                         itunes: {
-                          ...feedData.itunes,
+                          // ✅ use cachedFeed instead of feedData
+                          ...cachedFeed.itunes,
                         },
-                        link: feedData.link,
+                        link: cachedFeed.link,
                         title: feed.title,
                         image: {
-                          ...feedData.image,
+                          ...cachedFeed.image,
                         },
                       },
                     }),
@@ -98,19 +111,21 @@ export async function GET(request: Request) {
             return latestFeed;
           }
         }
+
         console.log("FETCH REQUEST");
         console.log({ etag: cachedFeed?.etag });
         console.log({ lastModified: cachedFeed?.lastModified });
-        const headers: Record<string, string> = {};
+
+        const fetchHeaders: Record<string, string> = {};
         if (cachedFeed?.etag) {
-          headers["If-None-Match"] = cachedFeed.etag;
+          fetchHeaders["If-None-Match"] = cachedFeed.etag;
         }
         if (cachedFeed?.lastModified) {
-          headers["If-Modified-Since"] = cachedFeed.lastModified;
+          fetchHeaders["If-Modified-Since"] = cachedFeed.lastModified;
         }
 
         const res = await fetch(feed.feedUrl, {
-          headers,
+          headers: fetchHeaders,
           signal: AbortSignal.timeout(5000),
         });
 
@@ -124,14 +139,16 @@ export async function GET(request: Request) {
           });
 
           const latestFeed = cachedFeed.items
-            // .slice(0, 10)
             .sort(
               (a: { isoDate: string }, b: { isoDate: string }) =>
                 new Date(b.isoDate).getTime() - new Date(a.isoDate).getTime(),
             )
             .flatMap((item: FeedItemType) => {
-              const date = item.pubDate ? new Date(item.pubDate) : undefined;
-              if (date && date >= today) {
+              const isItemToday = dayjs(item.isoDate)
+                .tz(userTimezone)
+                .isToday();
+
+              if (isItemToday) {
                 return {
                   ...item,
                   feedTitle: feed.title,
@@ -140,12 +157,13 @@ export async function GET(request: Request) {
                   ...(item.enclosure?.url && {
                     feedListMetadata: {
                       itunes: {
-                        ...feedData.itunes,
+                        // ✅ use cachedFeed instead of feedData
+                        ...cachedFeed.itunes,
                       },
-                      link: feedData.link,
+                      link: cachedFeed.link,
                       title: feed.title,
                       image: {
-                        ...feedData.image,
+                        ...cachedFeed.image,
                       },
                     },
                   }),
@@ -155,9 +173,8 @@ export async function GET(request: Request) {
               }
             });
           return latestFeed;
-
-          // return cachedFeed;
         }
+
         if (!res.ok) {
           return [];
         }
@@ -180,6 +197,7 @@ export async function GET(request: Request) {
           lastModified,
           lastChecked: Date.now(),
         };
+
         after(async () => {
           await upstashRedis.set(feed.feedUrl, JSON.stringify(newFeedData), {
             ex: 86400,
@@ -192,8 +210,9 @@ export async function GET(request: Request) {
               new Date(b.isoDate).getTime() - new Date(a.isoDate).getTime(),
           )
           .flatMap((item: FeedItemType) => {
-            const date = item.pubDate ? new Date(item.pubDate) : undefined;
-            if (date && date >= today) {
+            const isItemToday = dayjs(item.isoDate).tz(userTimezone).isToday();
+
+            if (isItemToday) {
               return {
                 ...item,
                 feedTitle: feed.title,
@@ -202,6 +221,7 @@ export async function GET(request: Request) {
                 ...(item.enclosure?.url && {
                   feedListMetadata: {
                     itunes: {
+                      // ✅ feedData is correctly defined here (fresh fetch path)
                       ...feedData.itunes,
                     },
                     link: feedData.link,
@@ -216,8 +236,8 @@ export async function GET(request: Request) {
               return [];
             }
           });
+
         return latestFeed || [];
-        // return feedData.items.slice(0, 10);
       }),
     );
 
@@ -225,11 +245,10 @@ export async function GET(request: Request) {
 
     const results = await Promise.allSettled(tasks);
 
-    const resultsArr = results.map((result, i) => {
+    const resultsArr = results.map((result) => {
       if (result.status === "fulfilled") {
         return Array.isArray(result.value) ? result.value : [];
       }
-
       return [];
     });
 
@@ -243,7 +262,7 @@ export async function GET(request: Request) {
       );
     });
 
-    console.log({ resultsArr: resultsArr });
+    console.log({ resultsArr });
 
     return Response.json({ dailyFeedItems: resultsArr, userHasFeeds: true });
   } catch (err) {

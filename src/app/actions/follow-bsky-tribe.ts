@@ -1,7 +1,5 @@
 "use server";
 
-import { refresh } from "next/cache";
-
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
 import { getDid } from "@/lib/auth/session";
