@@ -30,6 +30,19 @@ export default function RootLayout({
           name="format-detection"
           content="telephone=no, date=no, email=no, address=no"
         />
+        <meta name="description" content="An RSS Reader for the AT Protocol" />
+        <meta name="theme-color" content="#fc6934" />
+        <meta property="og:title" content="Pocket Feed" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://pocketfeed.at" />
+        <meta property="og:description" content="Be your own algorithm!" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content="https://pocketfeed.at/cover.png" />
+        <meta name="twitter:title" content="Pocket Feed" />
+        <meta name="twitter:description" content="Be your own algorithm!" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32" />
       </head>
       <body className="bg-background-primary text-text-primary leading-snug tracking-tight antialiased selection:bg-[#ff5a1f] selection:text-white">
         <a href="#main-item" id="skip-link">
