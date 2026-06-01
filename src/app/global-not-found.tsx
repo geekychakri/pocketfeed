@@ -18,10 +18,10 @@ export default function GlobalNotFound() {
   return (
     <html lang="en" className={geist.className}>
       <body className="bg-background-primary text-text-primary flex h-screen flex-col items-center justify-center gap-8 leading-snug tracking-tight antialiased selection:bg-[#ff5a1f] selection:text-white">
-        <h1 className="text-brand-primary text-7xl font-medium max-md:text-2xl">
+        <h1>Pocket Feed</h1>
+        <h2 className="text-brand-primary text-7xl font-medium max-md:text-2xl">
           PAGE NOT FOUND
-        </h1>
-
+        </h2>
         <Link href="/activity/discover" className="border-b">
           GO TO HOMEPAGE
         </Link>

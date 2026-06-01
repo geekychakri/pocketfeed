@@ -14,11 +14,20 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
 
+const PUBLIC_URL =
+  process.env.NEXT_PUBLIC_VERCEL_ENV == null ||
+  process.env.NEXT_PUBLIC_VERCEL_ENV === "development" ||
+  process.env.NODE_ENV === "development"
+    ? "http://127.0.0.1:3000"
+    : process.env.NEXT_PUBLIC_VERCEL_ENV === "preview"
+      ? `https://${process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL}`
+      : `https://${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}`;
+
 // export const SCOPE = "atproto account:email repo:com.example.record";
 export const SCOPE =
   "atproto repo:at.pocketfeed.feed.subscription repo:at.pocketfeed.social.post";
 
-const PUBLIC_URL = process.env.PUBLIC_URL; //TODO: set public url in prod
+// const PUBLIC_URL = process.env.PUBLIC_URL;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
 function getClientMetadata(): OAuthClientMetadataInput {

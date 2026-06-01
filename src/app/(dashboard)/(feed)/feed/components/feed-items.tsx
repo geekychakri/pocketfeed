@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import Link from "next/link";
 
-import { setCookie } from "cookies-next/client";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -215,7 +214,6 @@ function FeedItem({
         id="main-item"
         onNavigate={(e) => {
           localStorage.setItem("feedItem", JSON.stringify(item));
-          setCookie("articleId", item.id || item.guid);
         }}
         className="absolute inset-0 z-1"
       />

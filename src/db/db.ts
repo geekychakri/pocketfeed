@@ -1,11 +1,6 @@
 import { attachDatabasePool } from "@vercel/functions";
-import dotenv from "dotenv";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
-
-dotenv.config({
-  path: ".env.local",
-});
 
 const globalForPool = globalThis as unknown as { pool: Pool };
 
