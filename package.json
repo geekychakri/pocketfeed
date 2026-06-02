@@ -38,6 +38,7 @@
     "canvas": "^3.1.2",
     "clsx": "^2.1.0",
     "dayjs": "^1.11.13",
+    "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.1",
     "extend": "^3.0.2",
     "feedparser": "^2.2.10",
