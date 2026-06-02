@@ -28,6 +28,7 @@ Create an .env file in root and add your variables
 
 ```
   DATABASE_URL=
+  DATABASE_URL_UNPOOLED=
   UPSTASH_REDIS_REST_URL=
   UPSTASH_REDIS_REST_TOKEN=
   IRON_SESSION_PASSWORD=
