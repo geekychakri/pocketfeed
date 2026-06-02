@@ -85,7 +85,7 @@ export async function GET(request: NextRequest) {
     // stringify and parse to counter serialization error object null prototype
     const sortFirstTenFeedsByDate = JSON.parse(
       JSON.stringify(feedList),
-    ).items.slice(0, 50);
+    ).items.slice(0, 10);
     // .sort((a, b) => (dayjs(a.isoDate).isAfter(dayjs(b.isoDate)) ? -1 : 1));
 
     const newFeedData = {

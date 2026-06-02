@@ -29,6 +29,8 @@ export default function Posts() {
       // revalidateIfStale: false,
       // revalidateOnFocus: false,
       // revalidateOnReconnect: false,
+      dedupingInterval: 5000,
+      // focusThrottleInterval: 10000,
       keepPreviousData: true,
       // revalidateFirstPage: false,
     });

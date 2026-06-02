@@ -27,6 +27,7 @@ export default function DiscoverPostsList() {
       // revalidateIfStale: false,
       // revalidateOnFocus: false,
       // revalidateOnReconnect: false,
+      dedupingInterval: 5000,
       keepPreviousData: true,
       // revalidateFirstPage: false,
     });

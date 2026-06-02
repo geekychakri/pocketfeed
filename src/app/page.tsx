@@ -59,7 +59,7 @@ export default async function Home() {
         className="grid h-screen grid-rows-[auto_1fr_auto]"
         variants={stagger}
       >
-        <motion.nav className="border-dashed-b overflow-hidden px-8">
+        <motion.nav className="border-dashed-b overflow-hidden px-4">
           <motion.div
             className="flex h-14 items-center justify-between"
             variants={fadeInDown}
@@ -83,10 +83,10 @@ export default async function Home() {
         </motion.nav>
 
         <motion.div className="border-dashed-x mx-auto flex max-w-225 justify-center px-4 py-8">
-          <div className="flex flex-col justify-center gap-11">
-            <div className="flex flex-col gap-4">
+          <div className="flex flex-col justify-center gap-11 max-md:items-center max-md:justify-center">
+            <div className="flex flex-col gap-4 max-md:items-center max-md:justify-center">
               <motion.h1
-                className={`flex gap-4 text-center text-8xl leading-none tracking-tight ${InstrumentSerif.className}`}
+                className={`flex gap-4 text-center text-8xl leading-none tracking-tight max-md:text-7xl ${InstrumentSerif.className}`}
                 variants={fadeInUp}
               >
                 <span>
@@ -95,17 +95,18 @@ export default async function Home() {
                 </span>
               </motion.h1>
               <motion.h2
-                className="text-2xl text-[#969696]"
+                className="text-2xl text-pretty text-[#969696] max-md:text-center max-md:text-lg"
                 variants={fadeInUp}
               >
-                All of your favorite content in one place.
+                A social feed reader built on the AT Protocol — follow your
+                favourite feeds in one place.
               </motion.h2>
             </div>
 
             <motion.div variants={fadeInUp}>
               <Link
                 href={`/signin` as Route}
-                className="bg-brand-primary/90 hover:bg-brand-primary w-48 rounded-md px-6 py-3 text-center text-lg font-medium text-white duration-100 select-none"
+                className="bg-brand-primary/90 hover:bg-brand-primary rounded-md px-6 py-3 text-center text-lg font-medium text-white duration-100 select-none"
               >
                 Get started
               </Link>
@@ -114,7 +115,7 @@ export default async function Home() {
         </motion.div>
         <motion.div className="border-dashed-t">
           <motion.div
-            className="text-text-secondary flex h-14 items-center justify-between px-8 text-sm"
+            className="text-text-secondary flex h-14 items-center justify-between px-4 text-sm"
             variants={fadeInUp}
           >
             <p>Built on AT Protocol</p>

@@ -14,6 +14,7 @@
     "prettier": "prettier . --write",
     "drizzle-generate": "npx drizzle-kit generate",
     "drizzle-migrate": "npx drizzle-kit migrate",
+    "drizzle-push": "npx drizzle-kit push",
     "gen-key": "node src/scripts/gen-key.mts",
     "lex-gen": "lex build --lexicons ./lexicons --out ./src/lexicon",
     "lex-gen-build": "lex gen-server ./src/lexicon ./lexicons/**/*"

@@ -6,8 +6,6 @@ import { useParams } from "next/navigation";
 import { Dialog } from "@base-ui/react/dialog";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import { toast } from "sonner";
-import { useSWRConfig } from "swr";
-import { unstable_serialize } from "swr/infinite";
 import useSound from "use-sound";
 
 import Button from "@/components/ui/custom-button";
@@ -36,8 +34,6 @@ export default function PostModal({
 }) {
   let feedItem;
 
-  const { mutate, cache } = useSWRConfig();
-
   const { link } = useParams<{ link: string }>();
   console.log({ link });
 
@@ -65,6 +61,7 @@ export default function PostModal({
 
   useEffect(() => {
     if (state?.type === "success") {
+      // mutate(unstable_serialize(getKey));
       // mutate(
       //    unstable_serialize((index, prevPageData) => `my-key-of-page-${index}`),
       // )
@@ -83,7 +80,7 @@ export default function PostModal({
     } else if (state.type === "auth-error") {
       toast.error(state.message);
     }
-  }, [state, playSuccess, cache, mutate]);
+  }, [state, playSuccess]);
 
   return (
     <>
@@ -134,10 +131,13 @@ export default function PostModal({
 
                   <p className="text-text-secondary/70 flex flex-col gap-1 text-sm">
                     <span className="line-clamp-2">
-                      {feedItem?.contentSnippet}
+                      {feedItem?.contentSnippet ||
+                        feedItem?.["content:encodedSnippet"]}
                     </span>
 
-                    <span>{feedItem?.author || feedItem?.creator}</span>
+                    <span>
+                      {feedItem?.author || feedItem?.creator || feedItem?.link}
+                    </span>
                   </p>
                 </div>
               </div>

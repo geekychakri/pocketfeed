@@ -376,8 +376,11 @@ const ArticlePost = ({ post, feedItem }: { post: any; feedItem: any }) => {
               </svg>
             </div>
           </div>
-          <p className="line-clamp-2">
-            {feedItem?.summary || feedItem?.contentSnippet || feedItem.content}
+          <p className="text-text-secondary/70 line-clamp-2">
+            {feedItem?.summary ||
+              feedItem?.contentSnippet ||
+              feedItem?.["content:encodedSnippet"] ||
+              feedItem.content}
           </p>
         </Link>
 

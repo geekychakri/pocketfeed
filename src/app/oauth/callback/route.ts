@@ -10,14 +10,25 @@ import getSession from "@/lib/iron-session/get-iron-session";
 
 // const PUBLIC_URL = process.env.PUBLIC_URL || "http://127.0.0.1:3000";
 
-const PUBLIC_URL =
+// const PUBLIC_URL =
+//   process.env.NEXT_PUBLIC_VERCEL_ENV == null ||
+//   process.env.NEXT_PUBLIC_VERCEL_ENV === "development" ||
+//   process.env.NODE_ENV === "development"
+//     ? "http://127.0.0.1:3000"
+//     : process.env.NEXT_PUBLIC_VERCEL_ENV === "preview"
+//       ? `https://${process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL}`
+//       : `https://${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}`;
+
+const IS_LOCAL =
+  process.env.NODE_ENV === "development" ||
   process.env.NEXT_PUBLIC_VERCEL_ENV == null ||
-  process.env.NEXT_PUBLIC_VERCEL_ENV === "development" ||
-  process.env.NODE_ENV === "development"
-    ? "http://127.0.0.1:3000"
-    : process.env.NEXT_PUBLIC_VERCEL_ENV === "preview"
-      ? `https://${process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL}`
-      : `https://${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}`;
+  process.env.NEXT_PUBLIC_VERCEL_ENV === "development";
+
+const PUBLIC_URL = IS_LOCAL
+  ? "http://127.0.0.1:3000"
+  : process.env.NEXT_PUBLIC_VERCEL_ENV === "preview"
+    ? `https://${process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL}`
+    : `https://${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}`;
 
 export async function GET(request: NextRequest) {
   try {

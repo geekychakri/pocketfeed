@@ -6,7 +6,7 @@ const globalForPool = globalThis as unknown as { pool: Pool };
 
 if (!globalForPool.pool) {
   globalForPool.pool = new Pool({
-    connectionString: process.env.NEON_APP_USER_DB_URL!,
+    connectionString: process.env.DATABASE_URL!,
     idleTimeoutMillis: 5000,
   });
 }

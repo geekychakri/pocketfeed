@@ -25,6 +25,8 @@ export async function POST(request: NextRequest) {
 
   const client = await getOAuthClient();
 
+  console.log({ client });
+
   // Resolves handle, finds their auth server, returns authorization URL
   const authUrl = await client.authorize(handle, {
     scope: SCOPE,

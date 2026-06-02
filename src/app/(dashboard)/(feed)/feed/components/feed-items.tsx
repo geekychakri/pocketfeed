@@ -207,7 +207,9 @@ function FeedItem({
         </span>
       </div>
 
-      <p className="text-text-secondary line-clamp-3">{item.contentSnippet}</p>
+      <p className="text-text-secondary line-clamp-3">
+        {item.contentSnippet || item?.["content:encodedSnippet"]}
+      </p>
 
       <Link
         href={`/read?link=${item.link}`}

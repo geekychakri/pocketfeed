@@ -29,6 +29,7 @@ export default function FollowingPostsList() {
       // revalidateIfStale: false,
       // revalidateOnFocus: false,
       // revalidateOnReconnect: false,
+      dedupingInterval: 5000,
       keepPreviousData: true,
       // revalidateFirstPage: false,
     });

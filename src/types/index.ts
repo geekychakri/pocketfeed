@@ -43,6 +43,7 @@ export type FeedItemType = {
   creator: string;
   content: string;
   contentSnippet: string;
+  "content:encodedSnippet": string;
   guid: string;
   categories?: string;
   isoDate: string;

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 import { ScrollArea } from "@base-ui/react/scroll-area";
 import localforage from "localforage";
@@ -61,7 +62,7 @@ export default function FeedSubList({ did }: { did: string }) {
     }
 
     loadUserFeeds();
-  }, []);
+  }, [did]);
 
   if (!cacheLoaded || (localUserFeeds.length === 0 && isLoading)) {
     return (
@@ -97,6 +98,12 @@ export default function FeedSubList({ did }: { did: string }) {
           </g>
         </svg>
         No subscriptions yet!
+        <Link href="/add" className="custom-underline">
+          Add feed
+        </Link>
+        <Link href="/settings/import_export" className="custom-underline">
+          Import OPML
+        </Link>
       </div>
     );
   }

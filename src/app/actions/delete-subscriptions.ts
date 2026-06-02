@@ -60,7 +60,7 @@ export async function deleteSubscriptions(
     console.log({ res });
 
     // refresh();
-    return { type: "success", message: "Successfully deleted!", payload: res };
+    return { type: "success", message: "Deleted successfully!", payload: res };
   } catch (err) {
     return {
       type: "internal-error",

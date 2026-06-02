@@ -5,8 +5,9 @@ export default function RootLayout({
 }) {
   return (
     <>
-      <nav className="border-dashed-b flex h-14 items-center px-6">Logo</nav>
-
+      <nav className="border-dashed-b flex h-14 items-center px-4">
+        Pocket Feed
+      </nav>
       <main
         id="main"
         className="border-dashed-x mx-auto flex h-[calc(100vh-56px)] w-full max-w-95 flex-col gap-8 px-4 py-10"

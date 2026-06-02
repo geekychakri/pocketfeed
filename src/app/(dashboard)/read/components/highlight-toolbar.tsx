@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 const HighlightToolbar = () => {
   const [currentSelection, setCurrentSelection] = useState<string | undefined>(
     "",
   );
   const [position, setPosition] = useState<Record<string, number>>();
+
+  const sp = useSearchParams();
+  const link = sp.get("link");
 
   function onSelectStart() {
     setCurrentSelection(undefined);
@@ -75,7 +79,9 @@ const HighlightToolbar = () => {
 
           <a
             className="hover:bg-ui-hover text-text-primary! underline-none! flex flex-1 cursor-pointer items-center justify-center gap-2 rounded bg-none px-2 text-sm no-underline"
-            href={`https://bsky.app/intent/compose?text=${encodeURIComponent(currentSelection)}`}
+            href={`https://bsky.app/intent/compose?text=${encodeURIComponent(
+              `${currentSelection}\n\nvia @pocketfeed.at\n\n${link}`,
+            )}`}
             target="__blank"
           >
             <span>Share</span>

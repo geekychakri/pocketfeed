@@ -260,7 +260,7 @@ function OPMLFeeds({
         );
 
         onIsFeedsDialogOpen();
-        toast.error("Imported successfully!");
+        toast.success("Imported successfully!");
       } else {
       }
     } catch (err) {

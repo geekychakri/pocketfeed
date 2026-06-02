@@ -40,7 +40,7 @@ export default function RootLayout({
         <meta name="twitter:image" content="https://pocketfeed.at/cover.png" />
         <meta name="twitter:title" content="Pocket Feed" />
         <meta name="twitter:description" content="Be your own algorithm!" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="mobile-web-app-capable" content="yes" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32" />
       </head>
