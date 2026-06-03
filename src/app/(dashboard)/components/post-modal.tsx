@@ -135,7 +135,7 @@ export default function PostModal({
                         feedItem?.["content:encodedSnippet"]}
                     </span>
 
-                    <span>
+                    <span className="line-clamp-1">
                       {feedItem?.author || feedItem?.creator || feedItem?.link}
                     </span>
                   </p>

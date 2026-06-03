@@ -438,7 +438,7 @@ function Share({ link }: { link: string }) {
                 </button>
                 <a
                   target="_blank"
-                  href={`https://bsky.app/intent/compose?text=${link}%20via%20@pocketfeed.app`}
+                  href={`https://bsky.app/intent/compose?text=${link}%20via%20@pocketfeed.at`}
                   className="cursor-pointer rounded-md p-2 hover:bg-[#1185FE]/20"
                 >
                   <BlueskyLogo />

@@ -199,7 +199,7 @@ const PodcastPlayer = () => {
                     // setIsPlaying(false);
                     audioPlayerRef.current?.pause();
                   }}
-                  className="hover:bg-ui-hover flex size-8 items-center justify-center rounded-full"
+                  className="hover:bg-ui-hover flex size-8 cursor-pointer items-center justify-center rounded-full"
                 >
                   <Cross2Icon className="size-4" />
                 </button>

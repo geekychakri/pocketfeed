@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import Link from "next/link";
 
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
@@ -10,6 +9,7 @@ import { decode } from "html-entities";
 import localforage from "localforage";
 import useSWR from "swr";
 
+import HoverPrefetchLink from "@/app/(dashboard)/components/hover-prefetch-link";
 import { ERROR_MESSAGE } from "@/lib/constants";
 import {
   convertTimeStringToReadable,
@@ -197,7 +197,7 @@ function FeedItem({
   }
   return (
     <div className="hover:text-brand-primary border-dashed-b relative isolate flex flex-col gap-3 p-4 transition-[color]">
-      <div className="flex flex-1 max-md:flex-col">
+      <div className="flex flex-1 gap-2 max-md:flex-col">
         <span className="flex-1 flex-col text-pretty">
           {decode(item.title) || feedList?.title}
         </span>
@@ -211,7 +211,7 @@ function FeedItem({
         {item.contentSnippet || item?.["content:encodedSnippet"]}
       </p>
 
-      <Link
+      <HoverPrefetchLink
         href={`/read?link=${item.link}`}
         id="main-item"
         onNavigate={(e) => {

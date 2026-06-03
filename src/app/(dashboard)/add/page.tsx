@@ -20,7 +20,11 @@ export default async function Page() {
       <ErrorBoundary
         fallback={<div className="text-danger p-4">Something went wrong!</div>}
       >
-        <Suspense fallback={null}>
+        <Suspense
+          fallback={
+            <div className="bg-skeleton-highlight h-8 w-64 animate-pulse rounded-md"></div>
+          }
+        >
           <AddFeedWrapper />
         </Suspense>
       </ErrorBoundary>

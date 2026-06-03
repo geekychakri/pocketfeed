@@ -7,7 +7,14 @@ export async function GET(request: NextRequest) {
     const feeds = await getUserFeeds();
 
     return Response.json(feeds);
-  } catch (err) {
-    return Response.json("", { status: 500 });
+  } catch (error: unknown) {
+    if (error instanceof Error && error.message === "You must be signed in!") {
+      return Response.json({ message: error.message }, { status: 500 });
+    } else {
+      return Response.json(
+        { message: "Something went wrong!" },
+        { status: 500 },
+      );
+    }
   }
 }

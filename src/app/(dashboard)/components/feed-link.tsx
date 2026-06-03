@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
 import { decode } from "html-entities";
@@ -7,6 +6,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 
 import { cn, getInitials } from "@/lib/utils";
 import { useToggleSidenav } from "@/store/toggle-sidenav";
+
+import HoverPrefetchLink from "./hover-prefetch-link";
 
 type FeedDataType = {
   id: string;
@@ -27,7 +28,7 @@ export default function FeedLinks({ records }: { records: FeedDataType }) {
   return (
     <>
       {records.map((record, i) => (
-        <Link
+        <HoverPrefetchLink
           href={`/feed?feedUrl=${record.feedUrl}&title=${record.title}`}
           {...(i === 0 ? { id: "main-item" } : {})}
           key={record.id}
@@ -53,7 +54,7 @@ export default function FeedLinks({ records }: { records: FeedDataType }) {
               {decode(record.title)}
             </span>
           </span>
-        </Link>
+        </HoverPrefetchLink>
       ))}
     </>
   );

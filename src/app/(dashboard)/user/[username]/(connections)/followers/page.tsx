@@ -19,7 +19,11 @@ export default async function Followers({
 }) {
   return (
     <>
-      <Suspense fallback={null}>
+      <Suspense
+        fallback={
+          <div className="bg-skeleton-highlight h-8 w-64 animate-pulse rounded-md"></div>
+        }
+      >
         <FollowersHeader params={params} />
       </Suspense>
 

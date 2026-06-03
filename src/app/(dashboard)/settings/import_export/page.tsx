@@ -16,7 +16,11 @@ export default function ImportExportOPML() {
       </div>
       <div className="flex flex-col gap-4">
         <h2 className="font-medium">Import</h2>
-        <Suspense fallback={null}>
+        <Suspense
+          fallback={
+            <div className="bg-skeleton-highlight h-30.5 w-130 animate-pulse rounded-md"></div>
+          }
+        >
           <UploadOPMLWrapper />
         </Suspense>
         <ExportOPML />
