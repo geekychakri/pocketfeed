@@ -31,7 +31,7 @@ const SignOutButton = () => {
       const data: LogoutResponse = await res.json();
       if (data.success) {
         // clearCache();
-        router.push("/");
+        router.replace("/");
       } else {
         throw new Error("");
       }

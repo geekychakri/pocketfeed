@@ -22,7 +22,7 @@ export default async function Following({
     <>
       <Suspense
         fallback={
-          <div className="bg-skeleton-highlight h-8 w-64 animate-pulse rounded-md"></div>
+          <div className="bg-skeleton-highlight h-8 w-64 animate-pulse rounded-md p-4"></div>
         }
       >
         <FollowsHeader params={params} />

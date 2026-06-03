@@ -31,7 +31,7 @@ export default async function proxy(req: NextRequest) {
 
   // 5. Redirect to /dashboard if the user is authenticated
   if (isPublicRoute && session.user?.did) {
-    return NextResponse.redirect(new URL("/settings", req.nextUrl));
+    return NextResponse.redirect(new URL("/activity/discover", req.nextUrl));
   }
 
   return NextResponse.next();

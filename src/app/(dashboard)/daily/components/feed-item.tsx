@@ -1,7 +1,5 @@
 "use client";
 
-import Link from "next/link";
-
 import dayjs from "dayjs";
 import isToday from "dayjs/plugin/isToday";
 import isYesterday from "dayjs/plugin/isYesterday";
@@ -16,6 +14,7 @@ import {
 } from "@/lib/utils";
 import { FeedItemType, FeedListType } from "@/types";
 
+import HoverPrefetchLink from "../../components/hover-prefetch-link";
 import PodcastPlayButton from "../../components/podcast-play-button";
 import YouTubePlayButton from "../../components/youtube-play-button";
 
@@ -111,7 +110,7 @@ export default function FeedItem({ item }: { item: FeedItemType }) {
         </svg>
       </div>
 
-      <Link
+      <HoverPrefetchLink
         href={`/read?link=${item.link}&source=daily`}
         onNavigate={(e) => {
           localStorage.setItem("feedItem", JSON.stringify(item));

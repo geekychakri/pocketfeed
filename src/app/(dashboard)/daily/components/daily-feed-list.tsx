@@ -1,8 +1,5 @@
 "use client";
 
-import Link from "next/link";
-
-import { Dialog } from "@base-ui/react/dialog";
 import dayjs from "dayjs";
 import isToday from "dayjs/plugin/isToday";
 import isYesterday from "dayjs/plugin/isYesterday";
@@ -14,6 +11,7 @@ import { ERROR_MESSAGE } from "@/lib/constants";
 import type { FeedItemType, FeedListType } from "@/types";
 
 import YouTubeModal from "../../(feed)/feed/components/YouTubeModal";
+import HoverPrefetchLink from "../../components/hover-prefetch-link";
 import FeedItem from "./feed-item";
 
 dayjs.extend(relativeTime);
@@ -96,12 +94,15 @@ export default function DailyFeedList() {
         </svg>
         <p className="">Build your feed to see your daily updates here.</p>
         {/*<h2 className="text-sm text-text-secondary">Build your feed!</h2>*/}
-        <Link href="/add" className="custom-underline">
+        <HoverPrefetchLink href="/add" className="custom-underline">
           Add feed
-        </Link>
-        <Link href="/settings/import_export" className="custom-underline">
+        </HoverPrefetchLink>
+        <HoverPrefetchLink
+          href="/settings/import_export"
+          className="custom-underline"
+        >
           Import OPML
-        </Link>
+        </HoverPrefetchLink>
       </div>
     );
   }

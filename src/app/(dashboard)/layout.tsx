@@ -26,7 +26,20 @@ export default async function MainLayout({
             Subscriptions
           </h2>
 
-          <Suspense fallback={null}>
+          <Suspense
+            fallback={
+              <div className="flex min-h-0 flex-1 animate-pulse scrollbar-none flex-col gap-4 overflow-y-scroll p-2 [&::-webkit-scrollbar]:hidden">
+                {Array.from({ length: 20 }, (_, i) => {
+                  return (
+                    <div
+                      key={i}
+                      className="bg-skeleton-highlight h-5 w-full shrink-0 rounded-md"
+                    ></div>
+                  );
+                })}
+              </div>
+            }
+          >
             <FeedListWrapper />
           </Suspense>
         </div>

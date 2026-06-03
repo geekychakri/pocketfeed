@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useState } from "react";
-import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 import { decode } from "html-entities";
@@ -13,10 +12,9 @@ import useSound from "use-sound";
 import NothingToReadSVG from "@/components/svg/nothing-to-read";
 
 import { ExternalLinkIcon } from "@/icons/external-link";
-import { fetcher } from "@/lib/utils";
-import { useArticleContent } from "@/store/article-content";
 import { FeedItemType } from "@/types";
 
+import HoverPrefetchLink from "../../components/hover-prefetch-link";
 import ArticleText from "./article-text";
 
 DOMPurify.addHook("afterSanitizeAttributes", function (node) {
@@ -261,12 +259,12 @@ function ReadNextList() {
   if (source === "daily") {
     return (
       <div className="flex flex-col gap-5 p-4">
-        <Link
+        <HoverPrefetchLink
           href={`/feed?feedUrl=${getFeedItem.feedUrl}`}
           className="text-brand-primary custom-underline flex items-center gap-1 self-start"
         >
           More from this blog
-        </Link>
+        </HoverPrefetchLink>
       </div>
     );
   }
@@ -294,7 +292,7 @@ function ReadNextList() {
         {feedData.items.flatMap((item, index) => {
           if (item.link !== link) {
             return (
-              <Link
+              <HoverPrefetchLink
                 key={index}
                 href={`/read?link=${item.link}`}
                 onNavigate={(e) => {
@@ -303,7 +301,7 @@ function ReadNextList() {
                 className="custom-underline self-start"
               >
                 {item.title}
-              </Link>
+              </HoverPrefetchLink>
             );
           }
         })}

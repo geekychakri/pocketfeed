@@ -1,11 +1,12 @@
 "use client";
 
 import type { Route } from "next";
-import Link from "next/link";
 import { useSelectedLayoutSegment } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 import { useToggleSidenav } from "@/store/toggle-sidenav";
+
+import HoverPrefetchLink from "./hover-prefetch-link";
 
 type NavItem<T extends string = string> = {
   label: string;
@@ -34,7 +35,7 @@ export default function SideNavClient() {
 
         return (
           <div key={i} className="px-3">
-            <Link
+            <HoverPrefetchLink
               href={path}
               className={cn(
                 "hover:bg-ui-hover flex h-11 items-center gap-3 rounded-md px-3 py-2.5 transition-[background-color] duration-100",
@@ -43,7 +44,7 @@ export default function SideNavClient() {
               onNavigate={toggleIsOpen}
             >
               <span>{label}</span>
-            </Link>
+            </HoverPrefetchLink>
           </div>
         );
       })}

@@ -18,7 +18,7 @@ export default async function Feed(props: {
     <div className="flex flex-col py-18">
       <Suspense
         fallback={
-          <div className="bg-skeleton-highlight h-8 w-64 animate-pulse rounded-md"></div>
+          <div className="bg-skeleton-highlight h-8 w-64 animate-pulse rounded-md px-4"></div>
         }
       >
         <FeedHeader feedSearchParamPromise={feedSearchParamPromise} />
