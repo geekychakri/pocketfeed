@@ -36,9 +36,18 @@ async function ArticleContentWrapper({
 
 function ArticleFallback() {
   return (
-    <div className="flex animate-pulse flex-col space-y-6 px-4">
-      <div className="flex h-14 w-48 items-center">
-        <div className="bg-ui-normal h-7 w-full rounded"></div>
+    <div className="flex animate-pulse flex-col px-4">
+      <div className="flex h-14 w-full items-center justify-between">
+        <div className="bg-ui-normal h-11 w-48 rounded"></div>
+        <div className="flex items-center gap-4">
+          <div className="bg-ui-normal size-6 rounded"></div>
+          <div className="bg-ui-normal size-6 rounded"></div>
+          <div className="bg-ui-normal size-6 rounded"></div>
+        </div>
+      </div>
+      <div className="h-14 w-full animate-none! bg-transparent"></div>
+      <div className="mb-6 flex h-14 w-72 items-center">
+        <div className="bg-ui-normal h-full w-full rounded"></div>
       </div>
       <div className="flex-1 space-y-6">
         <div className="bg-ui-normal h-8 rounded"></div>

@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+
+// import { useRouter } from "next/navigation";
 
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { toast } from "sonner";
@@ -18,7 +19,7 @@ type LogoutResponse = {
   success: boolean;
 };
 const SignOutButton = () => {
-  const router = useRouter();
+  // const router = useRouter();
 
   // const clearCache = () => mutate(() => true, undefined, { revalidate: false });
 
@@ -31,7 +32,8 @@ const SignOutButton = () => {
       const data: LogoutResponse = await res.json();
       if (data.success) {
         // clearCache();
-        router.replace("/");
+        // router.replace("/");
+        window.location.replace("/");
       } else {
         throw new Error("");
       }

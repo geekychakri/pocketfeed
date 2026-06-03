@@ -23,7 +23,7 @@ export default async function UserLayout({
     <main className="border-dashed-x mx-auto flex min-h-screen w-full max-w-180 flex-col gap-5 pb-30">
       <Suspense
         fallback={
-          <div className="bg-skeleton-highlight h-8 w-64 animate-pulse rounded-md p-4"></div>
+          <div className="bg-skeleton-highlight m-4 h-8 w-64 animate-pulse rounded-md"></div>
         }
       >
         <ProfileHeader params={params} />

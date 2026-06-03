@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+
+// import { useRouter } from "next/navigation";
 
 import { toast } from "sonner";
 
@@ -13,7 +14,7 @@ type LogoutResponse = {
 };
 
 export default function SettingsFooter() {
-  const router = useRouter();
+  // const router = useRouter();
 
   // const clearCache = () => mutate(() => true, undefined, { revalidate: false });
 
@@ -26,7 +27,8 @@ export default function SettingsFooter() {
       const data: LogoutResponse = await res.json();
       if (data.success) {
         // clearCache();
-        router.replace("/");
+        // router.replace("/");
+        window.location.replace("/");
       } else {
         throw new Error("");
       }

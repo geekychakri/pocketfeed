@@ -9,21 +9,21 @@ export const ClientArticle = dynamic(() => import("./article"), {
 
 function ArticleFallback() {
   return (
-    <div className="flex flex-col animate-pulse space-y-6 px-4">
-      <div className="h-14 w-48 flex items-center">
-        <div className="rounded bg-ui-normal h-10 w-full"></div>
+    <div className="flex animate-pulse flex-col space-y-6 px-4">
+      <div className="flex h-14 w-72 items-center">
+        <div className="bg-ui-normal h-14 w-full rounded"></div>
       </div>
       <div className="flex-1 space-y-6">
-        <div className="h-8 rounded bg-ui-normal"></div>
-        <div className="h-8 rounded bg-ui-normal"></div>
-        <div className="h-8 rounded bg-ui-normal"></div>
-        <div className="h-8 rounded bg-ui-normal"></div>
-        <div className="h-8 rounded bg-ui-normal"></div>
-        <div className="h-8 rounded bg-ui-normal"></div>
-        <div className="h-8 rounded bg-ui-normal"></div>
-        <div className="h-8 rounded bg-ui-normal"></div>
-        <div className="h-8 rounded bg-ui-normal"></div>
-        <div className="h-8 rounded bg-ui-normal"></div>
+        <div className="bg-ui-normal h-8 rounded"></div>
+        <div className="bg-ui-normal h-8 rounded"></div>
+        <div className="bg-ui-normal h-8 rounded"></div>
+        <div className="bg-ui-normal h-8 rounded"></div>
+        <div className="bg-ui-normal h-8 rounded"></div>
+        <div className="bg-ui-normal h-8 rounded"></div>
+        <div className="bg-ui-normal h-8 rounded"></div>
+        <div className="bg-ui-normal h-8 rounded"></div>
+        <div className="bg-ui-normal h-8 rounded"></div>
+        <div className="bg-ui-normal h-8 rounded"></div>
       </div>
     </div>
   );
