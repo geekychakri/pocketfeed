@@ -56,7 +56,7 @@ export default async function Home() {
       className="overflow-hidden"
     >
       <motion.div
-        className="grid h-screen grid-rows-[auto_1fr_auto]"
+        className="grid h-dvh grid-rows-[auto_1fr_auto]"
         variants={stagger}
       >
         <motion.nav className="border-dashed-b overflow-hidden px-4">

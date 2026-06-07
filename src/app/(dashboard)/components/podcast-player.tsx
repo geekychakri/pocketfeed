@@ -137,7 +137,7 @@ const PodcastPlayer = () => {
 
   return (
     <div
-      className={`bg-background-primary animation-slide-up-player ease-out-player animate-player-slide-up fixed right-0 -bottom-72 left-0 z-10 flex flex-col gap-1 pb-3 transition-[translate] duration-700 md:left-64 ${show === "hide" ? "translate-y-80" : ""}`}
+      className={`bg-background-primary animation-slide-up-player ease-out-player animate-player-slide-up fixed right-0 -bottom-72 left-0 z-20 flex flex-col gap-1 pb-3 transition-[translate] duration-700 md:left-64 ${show === "hide" ? "translate-y-80" : ""}`}
     >
       <div className="border-dashed-y bg-background-secondary flex justify-between pr-3">
         <div className="flex items-center gap-1 select-none">

@@ -33,7 +33,7 @@ export default function ReadNav({ articleUrl }: { articleUrl: string }) {
   console.log({ readNavUrl: articleUrl });
 
   return (
-    <div className="border-border-non-interactive bg-background-primary sticky top-0 z-10 flex h-14 items-center justify-between gap-3 border-b px-4">
+    <div className="border-dashed-b bg-background-primary sticky top-0 z-10 flex h-14 items-center justify-between gap-3 px-4 max-md:top-13.5">
       <Author />
       <div className="flex items-center">
         <TooltipPrimitive.Provider delayDuration={700}>

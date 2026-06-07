@@ -251,7 +251,7 @@ function SubscriptionListStatusBar({
           setIsSticky(false);
         }
       }}
-      className={`bg-background-primary sticky -top-px z-10 flex h-14 items-center justify-between px-4 transition-shadow ${isSticky && "shadow-[0_1px_0_0_var(--border-non-interactive)]"}`}
+      className={`bg-background-primary sticky -top-px z-10 flex h-14 items-center justify-between px-4 transition-shadow max-md:top-13.5 ${isSticky && "shadow-[0_1px_0_0_var(--border-non-interactive)]"}`}
     >
       <h2>
         {recordsCount}{" "}

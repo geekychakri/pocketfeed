@@ -150,19 +150,36 @@ export default function PostModal({
               />
 
               <div className="flex gap-5">
-                <Button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="border-shadow flex-1 bg-transparent"
-                >
-                  Cancel
-                </Button>
-                <Button className="bg-ui-normal hover:bg-ui-hover flex flex-1 items-center justify-center gap-1 transition-[background-color]">
+                <Button className="bg-ui-normal hover:bg-ui-hover order-2 flex flex-1 items-center justify-center gap-1 transition-[background-color]">
                   <span>Post</span>
                   {isPending && loadingSkeleton}
                 </Button>
+                <Button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="border-shadow order-1 flex-1 bg-transparent"
+                >
+                  Cancel
+                </Button>
               </div>
             </form>
+            <Dialog.Close className="absolute top-5 right-5 cursor-pointer rounded-full">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="1.5"
+                  d="M18 6L6 18m12 0L6 6"
+                />
+              </svg>
+            </Dialog.Close>
           </Dialog.Popup>
         </Dialog.Portal>
       </Dialog.Root>

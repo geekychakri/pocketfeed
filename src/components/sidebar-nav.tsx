@@ -24,7 +24,7 @@ export default function SidebarNavigation({
         id="sidebar"
         // ref={ref}
         className={cn(
-          `text-textColor bg-background-primary border-dashed-r fixed top-0 bottom-0 left-0 isolate z-2000 grid h-screen w-[256px] grid-rows-[56px_56px_auto_minmax(0,1fr)_56px] transition-[translate] duration-150 select-none max-md:w-full max-md:-translate-x-full`,
+          `text-textColor bg-background-primary border-dashed-r fixed top-0 bottom-0 left-0 isolate z-2000 grid h-dvh w-[256px] grid-rows-[56px_56px_auto_minmax(0,1fr)_56px] transition-[translate] duration-150 select-none max-md:w-full max-md:-translate-x-full`,
           isOpen && "max-md:translate-x-0",
         )}
       >

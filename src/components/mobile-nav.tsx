@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef } from "react";
+import Link from "next/link";
 
 import { useToggleSidenav } from "@/store/toggle-sidenav";
 
@@ -10,7 +11,9 @@ export default function MobileNav() {
 
   return (
     <nav className="bg-background-primary border-dashed-b sticky top-0 z-1000 hidden justify-between p-4 max-md:flex">
-      <h1>Pocket Feed</h1>
+      <Link href="/activity/discover" prefetch={false}>
+        Pocket Feed
+      </Link>
       <button className="flex items-center gap-1" onClick={toggleIsOpen}>
         Menu
         <svg

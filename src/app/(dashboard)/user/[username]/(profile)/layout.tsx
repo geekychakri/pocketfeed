@@ -96,9 +96,9 @@ async function ProfileHeader({
 }) {
   const { username } = await params;
   return (
-    <div className="border-dashed-b relative flex h-14 items-center gap-3">
-      <RouteBack className="absolute -left-9" />
-      <p className="text-brand-primary px-4">{username}</p>
+    <div className="border-dashed-b relative flex h-14 items-center gap-3 px-4">
+      <RouteBack className="absolute -left-9 max-md:static" />
+      <p className="text-brand-primary">{username}</p>
     </div>
   );
 }

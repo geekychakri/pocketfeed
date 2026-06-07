@@ -12,7 +12,7 @@ export default function Read({
   const linkParamsPromise = searchParams.then((pa) => ({ link: pa.link }));
 
   return (
-    <div className="mx-auto min-h-screen w-full max-w-[65ch] pb-14 shadow-[0px_0px_10px_1px_var(--border-non-interactive)]">
+    <div className="border-dashed-x mx-auto min-h-screen w-full max-w-[65ch] pb-14">
       <ErrorBoundary
         fallback={<div className="text-danger p-4">Something went wrong!</div>}
       >
