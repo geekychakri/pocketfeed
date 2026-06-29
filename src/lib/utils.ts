@@ -45,6 +45,12 @@ export function getInitials(name: string, type?: string) {
   if (type === "folder") {
     return name.split(" ").map((word) => word[0])[0];
   }
+
+  const splitArr = name.split("");
+
+  if (splitArr.length > 2) {
+    return splitArr[0].at(0);
+  }
   return name
     .split(" ")
     .map((word) => word[0])
@@ -373,8 +379,14 @@ function getRelativeTimeString(
 }
 
 export function humanReadableDate(date: string, lang = navigator.language) {
-  return new Date(date).toLocaleString(lang, {
+  const d = new Date(date).toLocaleString(lang, {
     dateStyle: "medium",
+    // timeStyle: "short",
+  });
+
+  const t = new Date(date).toLocaleString(lang, {
     timeStyle: "short",
   });
+
+  return `${d} · ${t}`;
 }

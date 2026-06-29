@@ -24,15 +24,18 @@ const getKey = (
 };
 
 export default function FollowingPostsList() {
-  const { data, size, setSize, isLoading, error, isValidating } =
-    useSWRInfinite(getKey, fetcher, {
+  const { data, size, setSize, error, isValidating } = useSWRInfinite(
+    getKey,
+    fetcher,
+    {
       // revalidateIfStale: false,
       // revalidateOnFocus: false,
       // revalidateOnReconnect: false,
       dedupingInterval: 5000,
       keepPreviousData: true,
       // revalidateFirstPage: false,
-    });
+    },
+  );
 
   if (error) {
     return <div className="text-danger px-4">Something went wrong!</div>;
@@ -43,8 +46,8 @@ export default function FollowingPostsList() {
 
   console.log({ data });
 
-  const isLoadingMore =
-    isLoading || (size > 0 && data && typeof data[size - 1] === "undefined");
+  // const isLoadingMore =
+  //   isLoading || (size > 0 && data && typeof data[size - 1] === "undefined");
 
   console.log(data.flatMap((data) => data.posts));
 

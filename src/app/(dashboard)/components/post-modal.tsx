@@ -1,6 +1,13 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
+import {
+  startTransition,
+  useActionState,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { useParams } from "next/navigation";
 
 import { Dialog } from "@base-ui/react/dialog";
@@ -34,6 +41,8 @@ export default function PostModal({
 }) {
   let feedItem;
 
+  const shouldReset = useRef(false);
+
   const { link } = useParams<{ link: string }>();
   console.log({ link });
 
@@ -57,7 +66,7 @@ export default function PostModal({
     volume: 0.25,
   });
 
-  const [state, formAction, isPending] = useActionState(addPost, initialState);
+  const [state, dispatch, isPending] = useActionState(addPost, initialState);
 
   useEffect(() => {
     if (state?.type === "success") {
@@ -82,6 +91,18 @@ export default function PostModal({
     }
   }, [state, playSuccess]);
 
+  useLayoutEffect(() => {
+    return () => {
+      if (shouldReset.current) {
+        shouldReset.current = false;
+
+        startTransition(() => {
+          dispatch(null);
+        });
+      }
+    };
+  }, [dispatch]);
+
   return (
     <>
       <TooltipPrimitive.Root>
@@ -94,7 +115,7 @@ export default function PostModal({
           asChild
         >
           <IconOnlyAction className={cn("rounded-md", customClassName)}>
-            <PostIcon className={cn("size-5 shrink-0", iconClassName)} />
+            <PostIcon className={cn("size-4.5 shrink-0", iconClassName)} />
           </IconOnlyAction>
         </TooltipPrimitive.Trigger>
         <TooltipPrimitive.Content
@@ -112,18 +133,21 @@ export default function PostModal({
           <Dialog.Backdrop className="fixed inset-0 min-h-dvh bg-black opacity-20 transition-all duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0 supports-[-webkit-touch-callout:none]:absolute dark:opacity-70" />
           <Dialog.Popup className="border-shadow focus-visible:outline-brand-primary bg-background-primary fixed top-1/2 left-1/2 -mt-8 w-[90vw] max-w-112.5 -translate-x-1/2 -translate-y-1/2 rounded-lg p-6 transition-all duration-150 focus-visible:outline data-ending-style:scale-90 data-ending-style:opacity-0 data-starting-style:scale-90 data-starting-style:opacity-0">
             <Dialog.Title className="-mt-1.5 mb-1 text-lg font-medium">
-              <label htmlFor="post">What&apos;s on your mind?</label>
+              <label htmlFor="post">Share with note</label>
             </Dialog.Title>
 
-            <form className="flex flex-col gap-4" action={formAction}>
+            <form
+              className="mt-4 flex flex-col gap-4"
+              action={(formData) => dispatch(formData)}
+            >
               <Textarea
                 placeholder="Share a thought (optional) or just Post :)"
                 className="min-h-24 resize-none scroll-pb-2"
                 name="post"
-                id="post"
+                // id="post"
+                labelText="What's on your mind?"
                 // required
                 ref={postRef}
-                defaultValue={state.postText}
               />
               <div className="border-shadow flex flex-col gap-3 rounded-md p-4">
                 <div className="flex flex-col gap-1">

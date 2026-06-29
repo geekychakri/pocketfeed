@@ -1,0 +1,19 @@
+{
+  "lexicon": 1,
+  "id": "at.pocketfeed.authFullPermissions",
+  "defs": {
+    "main": {
+      "type": "permission-set",
+      "title": "Full Pocket Feed Permissions",
+      "detail": "Manage your pocket feed subscriptions.",
+      "permissions": [
+        {
+          "type": "permission",
+          "resource": "repo",
+          "action": ["create", "update", "delete"],
+          "collection": ["at.pocketfeed.subscription"]
+        }
+      ]
+    }
+  }
+}

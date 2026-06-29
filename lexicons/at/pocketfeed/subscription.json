@@ -1,40 +1,36 @@
 {
   "lexicon": 1,
-  "id": "app.pocketfeed.feed.subscription",
+  "id": "at.pocketfeed.subscription",
   "defs": {
     "main": {
       "type": "record",
+      "description": "Pocket feed subscription",
       "key": "tid",
       "record": {
         "type": "object",
         "required": ["feedUrl", "createdAt"],
         "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 512,
+            "description": "Feed title"
+          },
           "feedUrl": {
             "type": "string",
             "format": "uri",
             "maxLength": 2048,
-            "description": "URL of RSS/Atom feed."
-          },
-          "title": {
-            "type": "string",
-            "maxLength": 512,
-            "description": "User-provided or auto-detected feed title"
+            "description": "RSS Feed URL"
           },
           "favicon": {
             "type": "string",
             "maxLength": 2048,
-            "description": "The main website's favicon"
+            "description": "Website favicon"
           },
           "siteUrl": {
             "type": "string",
             "format": "uri",
             "maxLength": 2048,
-            "description": "The main website URL associated with the feed"
-          },
-          "folder": {
-            "type": "string",
-            "maxLength": 128,
-            "description": "User-defined category/folder for organization"
+            "description": "Website URL"
           },
           "createdAt": {
             "type": "string",

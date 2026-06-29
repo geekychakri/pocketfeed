@@ -35,10 +35,12 @@ export const getUserFeeds = cache(async () => {
       agent?.com.atproto.repo.listRecords({
         repo: agent.did as string,
         collection: "site.standard.graph.subscription",
+        limit: 100, // limit to 100
       }),
       agent?.com.atproto.repo.listRecords({
         repo: agent.did as string,
         collection: "app.skyreader.feed.subscription",
+        limit: 100, // limit to 100
       }),
 
       db
@@ -107,13 +109,16 @@ export const getUserFeeds = cache(async () => {
           item.status === "fulfilled" && !!item.value,
       )
       .map((item) => item.value)
-      .map((item) => ({
-        id: item.cid,
-        title: item.value.name,
-        feedUrl: `${item.value.url}/rss`,
-        siteUrl: item.value.url,
-        externalSub: true,
-      }));
+      .map((item) => {
+        // console.log({ item });
+        return {
+          id: item.cid,
+          title: item.value.name || item.value.url,
+          feedUrl: `${item.value.url}/${item.value.theme["$type"].includes("leaflet") ? "rss" : "feed"}`,
+          siteUrl: item.value.url,
+          externalSub: true,
+        };
+      });
   }
 
   if (
@@ -132,6 +137,13 @@ export const getUserFeeds = cache(async () => {
     });
   }
 
+  const filteredSkyFeedSubscriptions = skyFeedSubscriptions.filter(
+    ({ title, siteUrl }) =>
+      !standardSiteSubscriptions.some(
+        (item) => item.title === title || item.siteUrl === siteUrl,
+      ),
+  );
+
   if (
     inAppFeedsResult.status === "fulfilled" &&
     inAppFeedsResult.value.length >= 1
@@ -142,6 +154,6 @@ export const getUserFeeds = cache(async () => {
   return [
     ...inAppFeedSubscriptions,
     ...standardSiteSubscriptions,
-    ...skyFeedSubscriptions,
+    ...filteredSkyFeedSubscriptions,
   ];
 });

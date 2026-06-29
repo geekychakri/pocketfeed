@@ -1,0 +1,1 @@
+ALTER TABLE "posts" ADD COLUMN "bsky_post_rkey" text NOT NULL;

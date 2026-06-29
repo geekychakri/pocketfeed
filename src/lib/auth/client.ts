@@ -26,8 +26,11 @@ const PUBLIC_URL = IS_LOCAL
     : `https://${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}`;
 
 // export const SCOPE = "atproto account:email repo:com.example.record";
+// export const SCOPE =
+//   "atproto repo:at.pocketfeed.subscription repo:app.bsky.feed.post?action=create blob:*/*";
+
 export const SCOPE =
-  "atproto repo:at.pocketfeed.feed.subscription repo:at.pocketfeed.social.post";
+  "atproto blob:*/* include:at.pocketfeed.authFullPermissions include:app.bsky.authCreatePosts";
 
 // const PUBLIC_URL = process.env.PUBLIC_URL;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;

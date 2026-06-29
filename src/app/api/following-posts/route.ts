@@ -7,7 +7,7 @@ import getSession from "@/lib/iron-session/get-iron-session";
 type Post = typeof schema.posts.$inferSelect;
 
 type FeedResult = {
-  posts: (Post & { feedCreatedAt: Date })[];
+  posts: (Post & { feedCreatedAt: Date; replyCount?: number })[];
   nextCursor: string | null;
   hasNextPage: boolean;
 };
@@ -60,13 +60,66 @@ export async function getFollowingFeed(
     .orderBy(desc(schema.userFeed.createdAt), desc(schema.userFeed.postId))
     .limit(pageSize + 1);
 
+  if (posts.length === 0) {
+    return {
+      posts: [],
+      nextCursor: null,
+      hasNextPage: false,
+    };
+  }
+
   const hasNextPage = posts.length > pageSize;
   if (hasNextPage) posts.pop();
 
   const last = posts.at(-1);
 
+  const bskyPostData = posts.map((post) => {
+    return {
+      did: post.did,
+      bskyPostRkey: post.bskyPostRkey,
+    };
+  });
+
+  const params = new URLSearchParams();
+
+  bskyPostData.forEach((item) => {
+    params.append(
+      "uris",
+      `at://${item.did}/app.bsky.feed.post/${item.bskyPostRkey}`,
+    );
+  });
+
+  const res = await fetch(
+    `https://public.api.bsky.app/xrpc/app.bsky.feed.getPosts?${params}`,
+  );
+
+  const bskyPosts = await res.json();
+
+  type BskyPost = {
+    uri: string;
+    replyCount: number;
+  };
+
+  const uriToReplyCount = new Map<string, number>(
+    (bskyPosts.posts as BskyPost[]).map(
+      (item: { uri: string; replyCount: number }) => [
+        item.uri,
+        item.replyCount,
+      ],
+    ),
+  );
+
+  const postsWithReplyCount = posts.map((post) => {
+    const uri = `at://${post.did}/app.bsky.feed.post/${post.bskyPostRkey}`;
+
+    return {
+      ...post,
+      replyCount: uriToReplyCount.get(uri) ?? 0,
+    };
+  });
+
   return {
-    posts,
+    posts: postsWithReplyCount,
     nextCursor:
       hasNextPage && last ? encodeCursor(last.feedCreatedAt, last.id) : null,
     hasNextPage,

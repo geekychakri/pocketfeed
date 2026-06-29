@@ -88,6 +88,7 @@ export const posts = pgTable(
       .primaryKey()
       .default(sql`uuid_generate_v7()`),
     did: text("did").notNull(),
+    bskyPostRkey: text("bsky_post_rkey").notNull(),
     displayName: text("display_name"),
     handle: text("handle").notNull(),
     avatar: text("avatar"),
