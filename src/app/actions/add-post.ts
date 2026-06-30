@@ -74,7 +74,12 @@ export async function addPost(prevState: any, formData: FormData | null) {
           },
         );
       } else {
-        res = await fetch(metatags.image as string);
+        if (!metatags.image) {
+          throw new Error("No image URL found in metadata");
+        }
+        res = await fetch(metatags.image, {
+          signal: AbortSignal.timeout(5000),
+        });
       }
 
       console.log({ res });
@@ -92,7 +97,7 @@ export async function addPost(prevState: any, formData: FormData | null) {
 
       thumb = upload.data.blob;
     } catch (err) {
-      console.log({ err });
+      console.error(err);
     }
 
     const description: string = parsedFeedItem.link.includes("www.youtube.com")
@@ -150,6 +155,7 @@ export async function addPost(prevState: any, formData: FormData | null) {
 
     return { type: "success", message: "success" };
   } catch (err) {
+    console.error(err);
     return {
       type: "internal-error",
       message: INTERNAL_ERROR_MESSAGE,

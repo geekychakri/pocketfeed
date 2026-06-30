@@ -21,7 +21,9 @@ const nextConfig = {
     // },
   },
   compiler: {
-    removeConsole: process.env.NODE_ENV === "production",
+    removeConsole: {
+      exclude: ["error"],
+    },
   },
   allowedDevOrigins: ["127.0.0.1"],
 };
