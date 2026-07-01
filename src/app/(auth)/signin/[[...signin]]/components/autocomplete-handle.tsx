@@ -26,7 +26,7 @@ export default function AutocompleteHandle() {
 
   const { data, isLoading, error } = useSWR<Actors>(
     debouncedValue.length > 1
-      ? `https://public.api.bsky.app/xrpc/app.bsky.actor.searchActorsTypeahead?q=${debouncedValue}&limit=10`
+      ? `https://typeahead.waow.tech/xrpc/app.bsky.actor.searchActorsTypeahead?q=${debouncedValue}&limit=10`
       : null,
     fetcher,
     {
@@ -93,7 +93,7 @@ export default function AutocompleteHandle() {
       <Autocomplete.Portal>
         <Autocomplete.Positioner
           className="outline-hidden"
-          sideOffset={4}
+          sideOffset={10}
           align="start"
         >
           <Autocomplete.Popup

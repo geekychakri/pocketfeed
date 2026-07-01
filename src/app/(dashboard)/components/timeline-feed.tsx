@@ -13,7 +13,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 
 import PodcastPlayButton from "@/app/(dashboard)/components/podcast-play-button";
 import YouTubePlayButton from "@/app/(dashboard)/components/youtube-play-button";
-import { getInitials, humanReadableDate } from "@/lib/utils";
+import { getInitials } from "@/lib/utils";
+
+import CommentsDialog from "./comments-dialog";
 
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
@@ -140,30 +142,24 @@ const PodcastPost = ({ post, feedItem }: { post: any; feedItem: any }) => {
           <p>{post.text}</p>
         </div>
 
-        <div className="bg-background-secondary flex flex-col gap-2 rounded-md border p-3 text-sm">
+        <div className="bg-background-secondary flex flex-col gap-2 rounded-md p-3 text-sm">
           <div className="flex flex-col gap-1">
             <div className="flex justify-between">
               <h2 className="text-primary">{feedItem.title}</h2>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
               >
                 <path
-                  fill="#888888"
-                  d="M2 12.124C2 6.533 6.477 2 12 2s10 4.533 10 10.124v5.243c0 .817 0 1.378-.143 1.87a3.52 3.52 0 0 1-1.847 2.188c-.458.22-1.004.307-1.801.434l-.13.02a13 13 0 0 1-.727.105c-.209.02-.422.027-.64-.016a2.1 2.1 0 0 1-1.561-1.35a2.2 2.2 0 0 1-.116-.639c-.012-.204-.012-.452-.012-.742v-4.173c0-.425 0-.791.097-1.105a2.1 2.1 0 0 1 1.528-1.43c.316-.073.677-.044 1.096-.01l.093.007l.11.01c.783.062 1.32.104 1.775.275q.481.181.883.487v-1.174c0-4.811-3.853-8.711-8.605-8.711s-8.605 3.9-8.605 8.711v1.174c.267-.203.563-.368.883-.487c.455-.17.992-.213 1.775-.276l.11-.009l.093-.007c.42-.034.78-.063 1.096.01a2.1 2.1 0 0 1 1.528 1.43c.098.314.097.68.097 1.105v4.172c0 .291 0 .54-.012.743c-.012.213-.04.427-.116.638a2.1 2.1 0 0 1-1.56 1.35a2.2 2.2 0 0 1-.641.017c-.201-.02-.444-.059-.727-.104l-.13-.02c-.797-.128-1.344-.215-1.801-.436a3.52 3.52 0 0 1-1.847-2.188c-.118-.405-.139-.857-.142-1.461L2 17.58z"
-                />
-                <path
-                  fill="#888888"
+                  fill="currentColor"
                   fillRule="evenodd"
-                  d="M12 5.75a.75.75 0 0 1 .75.75v5a.75.75 0 0 1-1.5 0v-5a.75.75 0 0 1 .75-.75m3 1.5a.75.75 0 0 1 .75.75v2a.75.75 0 0 1-1.5 0V8a.75.75 0 0 1 .75-.75m-6 0a.75.75 0 0 1 .75.75v2a.75.75 0 0 1-1.5 0V8A.75.75 0 0 1 9 7.25"
+                  d="M4.397 2.59a6.5 6.5 0 0 1 8.227 9.978a.75.75 0 0 0 1.067 1.054a8 8 0 1 0-11.382 0a.75.75 0 1 0 1.067-1.054A6.5 6.5 0 0 1 4.397 2.59M8 4.5a3.5 3.5 0 0 1 2.5 5.949a.75.75 0 1 0 1.072 1.05a5 5 0 1 0-7.144 0A.75.75 0 0 0 5.5 10.45A3.5 3.5 0 0 1 8 4.5M10 8a2 2 0 1 1-4 0a2 2 0 0 1 4 0m-1.25 4.25a.75.75 0 0 0-1.5 0v3a.75.75 0 0 0 1.5 0z"
                   clipRule="evenodd"
-                  opacity=".5"
                 />
               </svg>
             </div>
-            <p className="text-gray-500">{post.feedTitle}</p>
           </div>
           <p className="line-clamp-2">
             {feedItem.contentSnippet || feedItem.content}
@@ -183,12 +179,21 @@ const PodcastPost = ({ post, feedItem }: { post: any; feedItem: any }) => {
           />
         </div>
 
-        <div className="mt-4 flex justify-between">
-          <Share link={feedItem.link} />
-
-          <span className="text-text-secondary text-[13px]">
-            {humanReadableDate(post.createdAt)}
-          </span>
+        <div className="mt-5 flex items-center justify-between">
+          <div className="text-sm">
+            <CommentsDialog
+              did={post.did}
+              bskyPostRkey={post.bskyPostRkey}
+              replyCount={post.replyCount}
+            />
+          </div>
+          <div className="flex items-center gap-4 max-md:gap-2">
+            {/*<Share link={feedItem.link} />*/}
+            <ViewOnBsky handle={post.handle} bskyPostRkey={post.bskyPostRkey} />
+            {/*<span className="text-text-secondary text-[13px]">
+              {humanReadableDate(post.createdAt)}
+            </span>*/}
+          </div>
         </div>
       </div>
     </div>
@@ -243,30 +248,30 @@ const YouTubePost = ({ post, feedItem }: { post: any; feedItem: any }) => {
           <p>{post.text}</p>
         </div>
 
-        <div className="bg-background-secondary flex flex-col gap-2 rounded-md border p-3 text-sm">
+        <div className="bg-background-secondary flex flex-col gap-1 rounded-md p-3 text-sm">
           <div className="flex flex-col gap-1">
             <div className="flex justify-between">
               <h2 className="text-primary">{feedItem.title}</h2>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="14"
-                height="14"
+                width="16"
+                height="16"
                 viewBox="0 0 24 24"
               >
-                <path
-                  fill="#888888"
-                  d="M2 12.124C2 6.533 6.477 2 12 2s10 4.533 10 10.124v5.243c0 .817 0 1.378-.143 1.87a3.52 3.52 0 0 1-1.847 2.188c-.458.22-1.004.307-1.801.434l-.13.02a13 13 0 0 1-.727.105c-.209.02-.422.027-.64-.016a2.1 2.1 0 0 1-1.561-1.35a2.2 2.2 0 0 1-.116-.639c-.012-.204-.012-.452-.012-.742v-4.173c0-.425 0-.791.097-1.105a2.1 2.1 0 0 1 1.528-1.43c.316-.073.677-.044 1.096-.01l.093.007l.11.01c.783.062 1.32.104 1.775.275q.481.181.883.487v-1.174c0-4.811-3.853-8.711-8.605-8.711s-8.605 3.9-8.605 8.711v1.174c.267-.203.563-.368.883-.487c.455-.17.992-.213 1.775-.276l.11-.009l.093-.007c.42-.034.78-.063 1.096.01a2.1 2.1 0 0 1 1.528 1.43c.098.314.097.68.097 1.105v4.172c0 .291 0 .54-.012.743c-.012.213-.04.427-.116.638a2.1 2.1 0 0 1-1.56 1.35a2.2 2.2 0 0 1-.641.017c-.201-.02-.444-.059-.727-.104l-.13-.02c-.797-.128-1.344-.215-1.801-.436a3.52 3.52 0 0 1-1.847-2.188c-.118-.405-.139-.857-.142-1.461L2 17.58z"
-                />
-                <path
-                  fill="#888888"
-                  fillRule="evenodd"
-                  d="M12 5.75a.75.75 0 0 1 .75.75v5a.75.75 0 0 1-1.5 0v-5a.75.75 0 0 1 .75-.75m3 1.5a.75.75 0 0 1 .75.75v2a.75.75 0 0 1-1.5 0V8a.75.75 0 0 1 .75-.75m-6 0a.75.75 0 0 1 .75.75v2a.75.75 0 0 1-1.5 0V8A.75.75 0 0 1 9 7.25"
-                  clipRule="evenodd"
-                  opacity=".5"
-                />
+                <g fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path
+                    fill="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m14 12l-3.5 2v-4z"
+                  />
+                  <path d="M2 12.708v-1.416c0-2.895 0-4.343.905-5.274c.906-.932 2.332-.972 5.183-1.053C9.438 4.927 10.818 4.9 12 4.9s2.561.027 3.912.065c2.851.081 4.277.121 5.182 1.053S22 8.398 22 11.292v1.415c0 2.896 0 4.343-.905 5.275c-.906.931-2.331.972-5.183 1.052c-1.35.039-2.73.066-3.912.066s-2.561-.027-3.912-.066c-2.851-.08-4.277-.12-5.183-1.052S2 15.602 2 12.708Z" />
+                </g>
               </svg>
             </div>
-            <p className="text-gray-500">{post.feedTitle}</p>
+            <p className="text-text-secondary">
+              YouTube video by {feedItem.author}
+            </p>
           </div>
           <p className="line-clamp-2">
             {feedItem.contentSnippet || feedItem.content}
@@ -275,17 +280,26 @@ const YouTubePost = ({ post, feedItem }: { post: any; feedItem: any }) => {
             feedItem={feedItem}
             ytVideoTitle={feedItem?.title}
             youtubeId={feedItem.id.split(":")[2]}
-            className="border-border-primary bg-background-primary h-9 w-24 rounded-md border text-sm transition-[background] hover:bg-transparent"
+            className="bg-background-primary border-shadow h-9 w-24 rounded-md text-sm transition-[background] hover:bg-transparent"
             showText={true}
           />
         </div>
 
-        <div className="mt-5 flex justify-between">
-          <Share link={feedItem.link} />
-
-          <span className="text-text-secondary text-[13px]">
-            {humanReadableDate(post.createdAt)}
-          </span>
+        <div className="mt-5 flex items-center justify-between">
+          <div className="text-sm">
+            <CommentsDialog
+              did={post.did}
+              bskyPostRkey={post.bskyPostRkey}
+              replyCount={post.replyCount}
+            />
+          </div>
+          <div className="flex items-center gap-4 max-md:gap-2">
+            {/*<Share link={feedItem.link} />*/}
+            <ViewOnBsky handle={post.handle} bskyPostRkey={post.bskyPostRkey} />
+            {/*<span className="text-text-secondary text-[13px]">
+              {humanReadableDate(post.createdAt)}
+            </span>*/}
+          </div>
         </div>
       </div>
     </div>
@@ -353,7 +367,7 @@ const ArticlePost = ({ post, feedItem }: { post: any; feedItem: any }) => {
           }
           prefetch={false}
           rel="noopener noreferrer"
-          className="border-border-primary bg-background-secondary flex flex-col gap-4 rounded-md border p-3 text-sm"
+          className="bg-background-secondary flex flex-col gap-4 rounded-md p-3 text-sm"
           onNavigate={(e) => {
             // setArticleData(item.content, item.title);
             localStorage.setItem("feedItem", JSON.stringify(feedItem));
@@ -365,11 +379,11 @@ const ArticlePost = ({ post, feedItem }: { post: any; feedItem: any }) => {
               <h2 className="text-primary">{feedItem.title}</h2>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="14"
-                height="14"
+                width="16"
+                height="16"
                 viewBox="0 0 24 24"
               >
-                <g fill="none" stroke="#888888" strokeWidth="1.5">
+                <g fill="none" stroke="currentColor" strokeWidth="1.5">
                   <path d="M3 10c0-3.771 0-5.657 1.172-6.828S7.229 2 11 2h2c3.771 0 5.657 0 6.828 1.172S21 6.229 21 10v4c0 3.771 0 5.657-1.172 6.828S16.771 22 13 22h-2c-3.771 0-5.657 0-6.828-1.172S3 17.771 3 14z" />
                   <path strokeLinecap="round" d="M8 12h8M8 8h8m-8 8h5" />
                 </g>
@@ -382,19 +396,62 @@ const ArticlePost = ({ post, feedItem }: { post: any; feedItem: any }) => {
               feedItem?.["content:encodedSnippet"] ||
               feedItem.content}
           </p>
+
+          <p className="text-text-secondary">
+            {new URL(feedItem.link).hostname}
+          </p>
         </Link>
 
         <div className="mt-5 flex justify-between">
-          <Share link={feedItem.link} />
+          <div className="text-sm">
+            <CommentsDialog
+              did={post.did}
+              bskyPostRkey={post.bskyPostRkey}
+              replyCount={post.replyCount}
+            />
+          </div>
+          <div className="flex items-center gap-3 max-md:gap-2">
+            {/*<Share link={feedItem.link} />*/}
 
-          <span className="text-text-secondary text-[13px]">
-            {humanReadableDate(post.createdAt)}
-          </span>
+            <ViewOnBsky handle={post.handle} bskyPostRkey={post.bskyPostRkey} />
+            {/*<span className="text-text-secondary text-[13px]">
+              {humanReadableDate(post.createdAt)}
+            </span>*/}
+          </div>
         </div>
       </div>
     </div>
   );
 };
+
+function ViewOnBsky({
+  handle,
+  bskyPostRkey,
+}: {
+  handle: string;
+  bskyPostRkey: string;
+}) {
+  return (
+    <a
+      href={`https://bsky.app/profile/${handle}/post/${bskyPostRkey}`}
+      target="_blank"
+      className="flex gap-1 underline"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20.25"
+        height="16"
+        viewBox="0 0 256 226"
+      >
+        <path
+          fill="#1185FE"
+          d="M55.491 15.172c29.35 22.035 60.917 66.712 72.509 90.686c11.592-23.974 43.159-68.651 72.509-90.686C221.686-.727 256-13.028 256 26.116c0 7.818-4.482 65.674-7.111 75.068c-9.138 32.654-42.436 40.983-72.057 35.942c51.775 8.812 64.946 38 36.501 67.187c-54.021 55.433-77.644-13.908-83.696-31.676c-1.11-3.257-1.63-4.78-1.637-3.485c-.008-1.296-.527.228-1.637 3.485c-6.052 17.768-29.675 87.11-83.696 31.676c-28.445-29.187-15.274-58.375 36.5-67.187c-29.62 5.041-62.918-3.288-72.056-35.942C4.482 91.79 0 33.934 0 26.116C0-13.028 34.314-.727 55.491 15.172"
+        />
+      </svg>
+      <span className="text-[13px]">View on Bluesky</span>
+    </a>
+  );
+}
 
 function Share({ link }: { link: string }) {
   const [btnText, setBtnText] = useState("Copy link");
@@ -412,7 +469,7 @@ function Share({ link }: { link: string }) {
   };
   return (
     <Popover.Root>
-      <Popover.Trigger className="text-text-secondary flex cursor-pointer items-center justify-center text-sm select-none">
+      <Popover.Trigger className="text-text-secondary hover:text-text-primary flex cursor-pointer items-center justify-center text-sm duration-100 select-none">
         Share
       </Popover.Trigger>
       <Popover.Portal>

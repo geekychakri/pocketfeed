@@ -68,8 +68,8 @@ function CustomYouTubeModal({
                     <Dialog.Close className="hover:bg-ui-hover flex size-9 cursor-pointer items-center justify-center rounded-full transition-[background-color] duration-150">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
+                        width="18"
+                        height="18"
                         viewBox="0 0 24 24"
                       >
                         <path

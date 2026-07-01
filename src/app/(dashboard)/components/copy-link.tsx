@@ -54,7 +54,7 @@ export default function CopyLink({
               {isCopied ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className={cn("size-5", iconClassName)}
+                  className={cn("size-4.5", iconClassName)}
                   viewBox="0 0 24 24"
                 >
                   <path
@@ -69,7 +69,7 @@ export default function CopyLink({
               ) : (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className={cn("size-5", iconClassName)}
+                  className={cn("size-4.5", iconClassName)}
                   viewBox="0 0 24 24"
                 >
                   <g

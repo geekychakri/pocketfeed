@@ -49,14 +49,67 @@ export async function GET(request: Request) {
       .limit(limit + 1);
     console.log({ posts });
 
+    if (posts.length === 0) {
+      return Response.json({
+        posts: [],
+        hasNextPage: false,
+        nextCursor: null,
+      });
+    }
+
     if (posts.length > limit) {
       hasNextPage = true;
       nextCursor = posts.at(-1)?.id ?? null; // remove the extra fetched item
       posts.pop();
     }
 
+    const bskyPostData = posts.map((post) => {
+      return {
+        did: post.did,
+        bskyPostRkey: post.bskyPostRkey,
+      };
+    });
+
+    const params = new URLSearchParams();
+
+    bskyPostData.forEach((item) => {
+      params.append(
+        "uris",
+        `at://${item.did}/app.bsky.feed.post/${item.bskyPostRkey}`,
+      );
+    });
+
+    const res = await fetch(
+      `https://public.api.bsky.app/xrpc/app.bsky.feed.getPosts?${params}`,
+    );
+
+    const bskyPosts = await res.json();
+
+    type BskyPost = {
+      uri: string;
+      replyCount: number;
+    };
+
+    const uriToReplyCount = new Map<string, number>(
+      (bskyPosts.posts as BskyPost[]).map(
+        (item: { uri: string; replyCount: number }) => [
+          item.uri,
+          item.replyCount,
+        ],
+      ),
+    );
+
+    const postsWithReplyCount = posts.map((post) => {
+      const uri = `at://${post.did}/app.bsky.feed.post/${post.bskyPostRkey}`;
+
+      return {
+        ...post,
+        replyCount: uriToReplyCount.get(uri) ?? 0,
+      };
+    });
+
     return Response.json({
-      posts,
+      posts: postsWithReplyCount,
       hasNextPage,
       nextCursor: nextCursor, // Corrected path to cursor
     });

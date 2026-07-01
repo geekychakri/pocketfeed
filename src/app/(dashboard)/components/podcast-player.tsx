@@ -142,7 +142,7 @@ const PodcastPlayer = () => {
       <div className="border-dashed-y bg-background-secondary flex justify-between pr-3">
         <div className="flex items-center gap-1 select-none">
           {albumCover && (
-            <Avatar className="bg-ui-normal ring-ui-normal inline-flex size-10 flex-none cursor-pointer items-center justify-center overflow-hidden align-middle transition-shadow select-none">
+            <Avatar className="bg-ui-normal ring-ui-normal inline-flex size-10 flex-none cursor-pointer items-center justify-center overflow-hidden align-middle text-sm transition-shadow select-none">
               <AvatarImage
                 className="h-full w-full object-cover"
                 src={albumCover}

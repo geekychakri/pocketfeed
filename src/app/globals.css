@@ -98,8 +98,10 @@
 
   [data-theme="light"] {
     --brand-primary: 252, 89, 30;
-    --background-primary: 250, 250, 251;
-    --background-secondary: 245, 245, 240;
+    /*--background-primary: 250, 250, 251;
+    --background-secondary: 245, 245, 240;*/
+    --background-primary: 250, 250, 250;
+    --background-secondary: 242, 242, 242;
 
     --ui-normal: #ecece6;
     --ui-hover: #e4e4dd;
