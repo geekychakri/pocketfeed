@@ -120,6 +120,20 @@
       "when": 1781158137082,
       "tag": "0016_daily_hemingway",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1783595967959,
+      "tag": "0017_short_sumo",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1783923285831,
+      "tag": "0018_dapper_the_phantom",
+      "breakpoints": true
     }
   ]
 }

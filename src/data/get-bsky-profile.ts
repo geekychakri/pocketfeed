@@ -1,6 +1,6 @@
-export async function getCurrentUser(did: string) {
+export async function getBskyProfile(username: string) {
   const res = await fetch(
-    `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${did}`,
+    `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${username}`,
   );
 
   const json = await res.json();

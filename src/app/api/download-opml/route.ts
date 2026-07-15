@@ -16,7 +16,7 @@ export async function GET(request: Request) {
       );
     }
 
-    const feeds = await getUserFeeds();
+    const feeds = await getUserFeeds(session.user.did);
 
     function createOPML(feeds: any) {
       const opmlObject = {

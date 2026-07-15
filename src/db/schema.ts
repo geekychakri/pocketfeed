@@ -29,9 +29,10 @@ export const authSession = pgTable("auth_session", {
 export const users = pgTable("users", {
   did: text("did").primaryKey(),
   handle: text("handle").unique().notNull(),
-  displayName: text("displayName"),
+  displayName: text("display_name"),
   avatar: text("avatar"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
+  lastBskyFollowsSyncAt: timestamp("last_bsky_follows_sync_at"),
 });
 
 export const feeds = pgTable(
@@ -46,8 +47,8 @@ export const feeds = pgTable(
       })
       .notNull(),
     title: text("title").notNull(),
-    feedUrl: text("feedUrl").notNull(),
-    siteUrl: text("siteUrl").notNull(),
+    feedUrl: text("feed_url").notNull(),
+    siteUrl: text("site_url").notNull(),
     favicon: text("favicon"),
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },
@@ -65,7 +66,7 @@ export const todayFeeds = pgTable(
     id: uuid("id").primaryKey().defaultRandom(),
     did: text("did").notNull(),
     title: text("title").notNull(),
-    feedUrl: text("feedUrl").notNull(),
+    feedUrl: text("feed_url").notNull(),
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },
   (table) => [uniqueIndex("user_feed_unique").on(table.did, table.feedUrl)],

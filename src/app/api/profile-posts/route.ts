@@ -1,27 +1,17 @@
+import { type NextRequest } from "next/server";
+
 import { and, desc, eq, lt } from "drizzle-orm";
 
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
 import getSession from "@/lib/iron-session/get-iron-session";
 
-type Post = typeof schema.posts.$inferSelect;
-
-type FeedResult = {
-  data: (Post & { feedCreatedAt: Date })[];
-  nextCursor: string | null;
-  hasNextPage: boolean;
-};
-
-type ParsedCursor = {
-  createdAt: Date;
-  postId: string;
-};
-
 async function getProfilePosts(
   profileDid: string,
   cursor?: string,
   limit = 50,
 ) {
+  console.log({ profileDid });
   const pageSize = Math.min(limit, 50);
   const posts = await db
     .select()
@@ -43,7 +33,7 @@ async function getProfilePosts(
   return { posts, nextCursor, hasNextPage };
 }
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
     const session = await getSession();
 
@@ -56,11 +46,17 @@ export async function GET(request: Request) {
       );
     }
 
-    const { searchParams } = new URL(request.url);
-    const cursor = searchParams.get("cursor") as string;
-    console.log({ cursor });
+    const searchParams = request.nextUrl.searchParams;
 
-    const result = await getProfilePosts(session.user.did, cursor);
+    console.log({ searchParams });
+
+    // const { searchParams } = new URL(request.url);
+    const cursor = searchParams.get("cursor") as string;
+    const did = searchParams.get("did") as string;
+    console.log({ cursor });
+    console.log({ did });
+
+    const result = await getProfilePosts(did, cursor);
     console.log({ result: result.posts });
     return Response.json(result);
   } catch (error) {

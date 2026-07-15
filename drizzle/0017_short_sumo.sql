@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "last_bsky_follows_sync_at" timestamp;

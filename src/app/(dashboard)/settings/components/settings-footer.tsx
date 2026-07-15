@@ -39,7 +39,8 @@ export default function SettingsFooter() {
     }
   }
   return (
-    <div className="flex gap-4 font-medium *:flex-1 *:rounded-md *:px-4 *:py-2 *:text-[15px]">
+    <div className="flex flex-1 flex-col gap-4 p-4 font-medium">
+      <h2 className="text-brand-primary">Sign out of your account</h2>
       <Button
         onClick={(e) => {
           handleLogout();

@@ -3,8 +3,11 @@ import { NextRequest } from "next/server";
 import { getUserFeeds } from "@/data/get-user-feeds";
 
 export async function GET(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams;
+
+  const did = searchParams.get("did") as string;
   try {
-    const feeds = await getUserFeeds();
+    const feeds = await getUserFeeds(did);
 
     return Response.json(feeds);
   } catch (error: unknown) {

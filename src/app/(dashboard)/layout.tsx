@@ -12,6 +12,8 @@ import { getDid } from "@/lib/auth/session";
 
 import YouTubeModal from "./(feed)/feed/components/YouTubeModal";
 import CheckIsOnline from "./components/check-is-online";
+import SyncBskyFollows from "./components/sync-bsky-follows";
+import WelcomeModal from "./components/welcome-modal";
 
 export default async function MainLayout({
   children,
@@ -22,9 +24,7 @@ export default async function MainLayout({
     <div className="flex w-full max-[768px]:flex-col">
       <SidebarNavigation>
         <div className="border-dashed-b flex min-h-0 flex-col">
-          <h2 className="text-text-secondary bg-background-primary px-3 py-2">
-            Subscriptions
-          </h2>
+          <h2 className="text-text-secondary px-3 py-2">Subscriptions</h2>
 
           <Suspense
             fallback={
@@ -65,6 +65,8 @@ export default async function MainLayout({
 
         <YouTubeModal />
         <CheckIsOnline />
+        <WelcomeModal />
+        <SyncBskyFollows />
       </main>
     </div>
   );

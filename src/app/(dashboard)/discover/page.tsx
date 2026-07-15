@@ -65,7 +65,7 @@ const DiscoverBlueskyTribe = async () => {
 
   if (bskyAppUsers.length === 0) {
     const inviteText =
-      "Let's connect on @pocketfeed! It's a simple social rss app. Join now: twitter.com";
+      "Join me on @pocketfeed.at!\nIt's a simple social rss reader built on the AT Protocol.\n\npocketfeed.at";
     return (
       <div>
         <p className="group flex h-100 flex-col items-center justify-center gap-4 px-4">

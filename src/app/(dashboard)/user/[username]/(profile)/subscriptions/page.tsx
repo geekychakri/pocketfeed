@@ -1,26 +1,24 @@
-import { Suspense } from "react";
-
 import { ErrorBoundary } from "react-error-boundary";
 
-import { getDid } from "@/lib/auth/session";
+import getSession from "@/lib/iron-session/get-iron-session";
 
 import SubscriptionList from "./subscription-list";
 
-// const xata = getXataClient();
+export default async function SubscriptionPage() {
+  const session = getSession();
 
-export default function SubscriptionPage() {
   return (
     <ErrorBoundary
       fallback={<div className="text-danger p-4">Something went wrong!</div>}
     >
-      <Suspense fallback={null}>
-        <SubscriptionListWrapper />
-      </Suspense>
+      {session.then(({ user }) => (
+        <>
+          <SubscriptionList
+            loggedInHandle={user?.handle as string}
+            loggedInDid={user?.did as string}
+          />
+        </>
+      ))}
     </ErrorBoundary>
   );
 }
-
-const SubscriptionListWrapper = async () => {
-  const did = (await getDid()) as string;
-  return <SubscriptionList did={did} />;
-};

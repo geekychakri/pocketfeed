@@ -18,6 +18,7 @@ type FeedDataType = {
   feedUrl: string;
   siteUrl: string;
   favicon?: string;
+  source: string;
 }[];
 
 export default function FeedSubList({ did }: { did: string }) {
@@ -110,7 +111,7 @@ export default function FeedSubList({ did }: { did: string }) {
 
   return (
     <ScrollArea.Root className="min-h-0 flex-1">
-      <ScrollArea.Viewport className="scrollable focus-visible:border-brand-shadow flex h-full scroll-p-4 flex-col gap-4 overscroll-contain px-3 py-2">
+      <ScrollArea.Viewport className="scrollable focus-visible:border-brand-shadow flex h-full scroll-p-4 flex-col gap-4 overscroll-contain px-3 pb-3">
         <FeedLinks records={data} />
       </ScrollArea.Viewport>
       <ScrollArea.Scrollbar className="pointer-events-none m-2 flex w-1 justify-center rounded-sm opacity-0 transition-opacity data-hovering:pointer-events-auto data-hovering:opacity-100 data-hovering:delay-0 data-scrolling:pointer-events-auto data-scrolling:opacity-100 data-scrolling:duration-0">

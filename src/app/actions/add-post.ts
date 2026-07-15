@@ -41,15 +41,23 @@ export async function addPost(prevState: any, formData: FormData | null) {
     const { handle, avatar, displayName } = session.user;
 
     text = formData.get("post") as string;
+    console.log({ text });
     const feedItem = formData.get("feedItem") as string;
 
     console.log({ feedItem: JSON.parse(feedItem) });
 
     const parsedFeedItem = JSON.parse(feedItem);
 
-    const rt = new RichText({
-      text: `${text}\n\n${parsedFeedItem.link}\n\nvia @pocketfeed.at`,
-    });
+    let rt;
+    if (!text) {
+      rt = new RichText({
+        text: `${parsedFeedItem.link}\n\nvia @pocketfeed.at`,
+      });
+    } else {
+      rt = new RichText({
+        text: `${text}\n\n${parsedFeedItem.link}\n\nvia @pocketfeed.at`,
+      });
+    }
 
     await rt.detectFacets(agent);
 

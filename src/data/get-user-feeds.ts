@@ -16,7 +16,7 @@ type SubscriptionType = {
   siteUrl: string;
 }[];
 
-export const getUserFeeds = cache(async () => {
+export const getUserFeeds = cache(async (did: string) => {
   console.log("USER_FEEDs");
   let standardSiteSubscriptions: SubscriptionType = [];
   let skyFeedSubscriptions: SubscriptionType = [];
@@ -33,12 +33,12 @@ export const getUserFeeds = cache(async () => {
   const [standardSiteResult, skyReaderResult, inAppFeedsResult] =
     await Promise.allSettled([
       agent?.com.atproto.repo.listRecords({
-        repo: agent.did as string,
+        repo: did as string,
         collection: "site.standard.graph.subscription",
         limit: 100, // limit to 100
       }),
       agent?.com.atproto.repo.listRecords({
-        repo: agent.did as string,
+        repo: did as string,
         collection: "app.skyreader.feed.subscription",
         limit: 100, // limit to 100
       }),
@@ -46,7 +46,7 @@ export const getUserFeeds = cache(async () => {
       db
         .select()
         .from(schema.feeds)
-        .where(eq(schema.feeds.did, agent?.did as string))
+        .where(eq(schema.feeds.did, did as string))
         .orderBy(desc(schema.feeds.createdAt)),
     ]);
 
@@ -117,6 +117,7 @@ export const getUserFeeds = cache(async () => {
           feedUrl: `${item.value.url}/${item.value.theme["$type"].includes("leaflet") ? "rss" : "feed"}`,
           siteUrl: item.value.url,
           externalSub: true,
+          source: "standard.site",
         };
       });
   }
@@ -133,6 +134,7 @@ export const getUserFeeds = cache(async () => {
           new URL(record.value.feedUrl as string).origin) as string,
         id: record.cid,
         externalSub: true,
+        source: "skyreader",
       };
     });
   }
@@ -148,7 +150,10 @@ export const getUserFeeds = cache(async () => {
     inAppFeedsResult.status === "fulfilled" &&
     inAppFeedsResult.value.length >= 1
   ) {
-    inAppFeedSubscriptions = inAppFeedsResult.value;
+    inAppFeedSubscriptions = inAppFeedsResult.value.map((item) => ({
+      ...item,
+      source: "pocketfeed",
+    }));
   }
 
   return [
