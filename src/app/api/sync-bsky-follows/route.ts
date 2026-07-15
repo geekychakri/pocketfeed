@@ -1,3 +1,5 @@
+import { type NextRequest } from "next/server";
+
 import { and, eq, inArray, ne, notExists } from "drizzle-orm";
 
 import { db } from "@/db/db";
@@ -38,9 +40,12 @@ async function getAllFollows(did: string) {
   return all;
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const session = await getSession();
+
+    const sp = request.nextUrl.searchParams;
+    const force = sp.get("force") === "true";
 
     const currentUserDid = session.user?.did as string;
 
@@ -67,7 +72,7 @@ export async function POST(request: Request) {
       lastBskyFollowsSyncAt === null ||
       lastBskyFollowsSyncAt < new Date(Date.now() - 24 * 60 * 60 * 1000);
 
-    if (!shouldSync) {
+    if (!force && !shouldSync) {
       console.log("SKIPPED SYNC");
       await db
         .update(schema.users)
@@ -78,6 +83,8 @@ export async function POST(request: Request) {
 
       return Response.json({ msg: "Already synced recently!" });
     }
+
+    console.log("SYNCING...");
 
     const followsList = await getAllFollows(currentUserDid);
 

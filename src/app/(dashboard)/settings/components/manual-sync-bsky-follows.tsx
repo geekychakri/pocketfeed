@@ -32,7 +32,7 @@ const mutationFetcher = async (url: string) => {
 
 export default function ManualSyncBskyFollows() {
   const { trigger, isMutating } = useSWRMutation(
-    "/api/sync-bsky-follows",
+    "/api/sync-bsky-follows?force=true",
     mutationFetcher,
     {
       onSuccess: () => {
