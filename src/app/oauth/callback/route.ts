@@ -31,10 +31,11 @@ const PUBLIC_URL = IS_LOCAL
     : `https://${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}`;
 
 export async function GET(request: NextRequest) {
+  const params = request.nextUrl.searchParams;
   try {
     // const cookieStore = await cookies();
     // const handle = cookieStore.get("pf_bsky_handle")?.value as string;
-    const params = request.nextUrl.searchParams;
+
     const client = await getOAuthClient();
 
     console.log("CALLBACK ROUTE");

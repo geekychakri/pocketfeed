@@ -26,6 +26,7 @@ export async function GET(request: Request) {
       .limit(1);
 
     const { lastBskyFollowsSyncAt } = user;
+    console.log({ lastBskyFollowsSyncAt });
     return Response.json({ lastBskyFollowsSyncAt });
   } catch (err) {
     console.log(err);

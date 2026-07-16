@@ -60,13 +60,11 @@ export async function POST(request: NextRequest) {
 
     const syncedAt = new Date();
 
-    const [user] = await db
+    const [{ lastBskyFollowsSyncAt }] = await db
       .select({ lastBskyFollowsSyncAt: schema.users.lastBskyFollowsSyncAt })
       .from(schema.users)
       .where(eq(schema.users.did, currentUserDid))
       .limit(1);
-
-    const { lastBskyFollowsSyncAt } = user;
 
     const shouldSync =
       lastBskyFollowsSyncAt === null ||
@@ -74,13 +72,6 @@ export async function POST(request: NextRequest) {
 
     if (!force && !shouldSync) {
       console.log("SKIPPED SYNC");
-      await db
-        .update(schema.users)
-        .set({
-          lastBskyFollowsSyncAt: syncedAt,
-        })
-        .where(eq(schema.users.did, currentUserDid));
-
       return Response.json({ msg: "Already synced recently!" });
     }
 
