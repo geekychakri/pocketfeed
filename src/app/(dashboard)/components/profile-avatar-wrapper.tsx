@@ -6,7 +6,7 @@ export default async function ProfileAvatarWrapper() {
   const session = await getSession();
 
   return (
-    <div className="flex items-center justify-between px-3">
+    <div className="bg-background-primary z-10 flex items-center justify-between px-3">
       <ProfileAvatar
         avatar={session.user?.avatar as string}
         handle={session.user?.handle as string}

@@ -5,6 +5,8 @@ import { generateErrorMessage } from "zod-error";
 
 import z from "@/lib/zod";
 
+import { INTERNAL_ERROR_MESSAGE } from "../constants";
+
 const ErrorSchema = z.object({
   error: z.object({
     message: z.string(),
@@ -76,7 +78,7 @@ function handleApiError(error: any) {
 
   return {
     error: {
-      message: "An internal server error occurred. Please contact pocket-feed.",
+      message: INTERNAL_ERROR_MESSAGE,
     },
     status: errorCodeToHttpStatus.internal_server_error,
   };
@@ -87,5 +89,5 @@ export function handleAndReturnErrorResponse(
   headers?: Record<string, string>,
 ) {
   const { error, status } = handleApiError(err);
-  return new Response(error.message, { headers, status });
+  return Response.json({ message: error.message }, { headers, status });
 }

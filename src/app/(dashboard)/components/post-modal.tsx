@@ -141,7 +141,7 @@ export default function PostModal({
               action={(formData) => dispatch(formData)}
             >
               <Textarea
-                placeholder="Share a thought (optional) or just Post :)"
+                placeholder="Add a thought, if you'd like..."
                 className="min-h-24 resize-none scroll-pb-2"
                 name="post"
                 // id="post"

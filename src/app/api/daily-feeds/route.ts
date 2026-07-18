@@ -57,7 +57,7 @@ export async function GET(request: Request) {
       });
     }
 
-    const userFeeds = await getUserFeeds();
+    const userFeeds = await getUserFeeds(session.user.did);
 
     console.log({ userFeeds });
 

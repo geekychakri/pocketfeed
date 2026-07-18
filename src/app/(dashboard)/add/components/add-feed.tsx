@@ -23,7 +23,7 @@ import Button from "@/components/ui/custom-button";
 import Input from "@/components/ui/custom-input";
 
 import { addFeeds } from "@/app/actions/add-feeds";
-import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
+// import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import {
   checkIfObjectIsEmpty,
   getInitials,
@@ -86,9 +86,9 @@ export default function AddFeed({ did }: { did: string }) {
         }),
       });
       if (!res.ok) {
-        const text = await res.text();
-        console.log({ text });
-        throw new Error(text);
+        const { message } = await res.json();
+        console.log({ message });
+        throw new Error(message);
       }
       const data: RSSFinderType = await res.json();
       console.log(data);
@@ -100,8 +100,11 @@ export default function AddFeed({ did }: { did: string }) {
 
       setRssData(data);
     } catch (error) {
+      let message;
+      if (error instanceof Error) message = error.message;
+      console.log({ message });
       playCaution();
-      internalErrorToast(INTERNAL_ERROR_MESSAGE);
+      internalErrorToast(message as string);
     } finally {
       setIsLoading(false);
     }

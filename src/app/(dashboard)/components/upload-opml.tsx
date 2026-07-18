@@ -236,6 +236,7 @@ function OPMLFeeds({
               title: feed.title,
               feedUrl: feed.feedUrl,
               siteUrl: feed.siteUrl,
+              source: "pocketfeed",
             }
           : [],
       );

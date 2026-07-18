@@ -82,41 +82,41 @@ export default async function UserProfile({
   );
 }
 
-async function FollowButtonWrapper({
-  loggedInUserDid,
-  profile,
-}: {
-  loggedInUserDid: string;
-  profile: any;
-}) {
-  const checkIsFollowingPromise = db
-    .select()
-    .from(schema.follows)
-    .where(
-      and(
-        eq(schema.follows.followerDid, loggedInUserDid),
-        eq(schema.follows.followingDid, profile.did),
-      ),
-    );
+// async function FollowButtonWrapper({
+//   loggedInUserDid,
+//   profile,
+// }: {
+//   loggedInUserDid: string;
+//   profile: any;
+// }) {
+//   const checkIsFollowingPromise = db
+//     .select()
+//     .from(schema.follows)
+//     .where(
+//       and(
+//         eq(schema.follows.followerDid, loggedInUserDid),
+//         eq(schema.follows.followingDid, profile.did),
+//       ),
+//     );
 
-  return (
-    <Suspense
-      fallback={
-        <div className="animate-pulse">
-          <div className="bg-skeleton-highlight h-9 w-25 rounded-md"></div>
-        </div>
-      }
-    >
-      <FollowButton
-        checkIsFollowingPromise={checkIsFollowingPromise}
-        did={profile.did}
-        loggedInUserDid={loggedInUserDid}
-        // isFollowing={isFollowing}
-        displayName={profile.displayName}
-      />
-    </Suspense>
-  );
-}
+//   return (
+//     <Suspense
+//       fallback={
+//         <div className="animate-pulse">
+//           <div className="bg-skeleton-highlight h-9 w-25 rounded-md"></div>
+//         </div>
+//       }
+//     >
+//       <FollowButton
+//         checkIsFollowingPromise={checkIsFollowingPromise}
+//         did={profile.did}
+//         loggedInUserDid={loggedInUserDid}
+//         // isFollowing={isFollowing}
+//         displayName={profile.displayName}
+//       />
+//     </Suspense>
+//   );
+// }
 
 async function ProfileInfo({ children }: { children: React.ReactNode }) {
   return <div className="flex flex-col gap-4 px-4">{children}</div>;
@@ -154,12 +154,7 @@ function ProfileHeader({
           >
             Settings
           </Link>
-        ) : (
-          <FollowButtonWrapper
-            loggedInUserDid={loggedInUserDid}
-            profile={profile}
-          />
-        )}
+        ) : null}
       </div>
 
       <div className="flex flex-col gap-2">
@@ -259,9 +254,17 @@ function ProfileFooter({
         </Suspense>
       </ErrorBoundary>
 
-      <Link href="/discover" className="custom-underline text-sm">
+      {/*<Link href="/discover" className="custom-underline text-sm">
         Discover your Bluesky tribe
-      </Link>
+      </Link>*/}
+
+      <a
+        href={`https://bsky.app/intent/compose?text=${encodeURIComponent("Join me on @pocketfeed.at!\nIt's a simple social rss reader built on the AT Protocol.\n\npocketfeed.at")}`}
+        target="_blank"
+        className="custom-underline"
+      >
+        Invite your friends
+      </a>
     </div>
   );
 }

@@ -1,29 +1,53 @@
 "use client";
 
+import { useCallback } from "react";
+import { useParams } from "next/navigation";
+
+import useSWR, { useSWRConfig } from "swr";
 import useSWRInfinite from "swr/infinite";
 
 import { SpinnerRotate } from "@/components/spinner-rotate";
 
 import TimelineFeed from "@/app/(dashboard)/components/timeline-feed";
 import TimelineFeedSkeleton from "@/app/(dashboard)/components/timeline-feed-skeleton";
+import { getBskyProfile } from "@/data/get-bsky-profile";
 import { fetcher } from "@/lib/utils";
 
-const getKey = (
-  pageIndex: number,
-  previousPageData: { posts: []; hasNextPage: boolean; nextCursor: string },
-) => {
-  console.log({ previousPageData });
-  // reached the end
-  if (previousPageData && !previousPageData.hasNextPage) return null;
-  // first page, we don't have `previousPageData`
-  if (pageIndex === 0) return `/api/profile-posts`;
-  // add the cursor to the API endpoint
-  return `/api/profile-posts?cursor=${previousPageData.nextCursor}`;
-};
-
 export default function Posts() {
-  // const p = () => new Promise((resolve) => setTimeout(resolve, 5000));
-  // await p();
+  const { username } = useParams<{ username: string }>();
+
+  const { cache } = useSWRConfig();
+
+  console.log({ cacheUsername: cache.get(username) });
+
+  // console.log({ params });
+
+  const { data: bSkyProfileData } = useSWR(username, getBskyProfile, {
+    revalidateOnMount: !cache.get(username),
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
+
+  const getKey = useCallback(
+    (
+      pageIndex: number,
+      previousPageData: { posts: []; hasNextPage: boolean; nextCursor: string },
+    ) => {
+      console.log({ previousPageData });
+      // bSkyProfile data is not ready
+      if (!bSkyProfileData?.did) return null;
+      // reached the end
+      if (previousPageData && !previousPageData.hasNextPage) return null;
+      // first page, we don't have `previousPageData`
+      if (pageIndex === 0)
+        return `/api/profile-posts?did=${bSkyProfileData.did}`;
+      // add the cursor to the API endpoint
+      return `/api/profile-posts?cursor=${previousPageData.nextCursor}&did=${bSkyProfileData.did}`;
+    },
+    [bSkyProfileData?.did],
+  );
+
   const { data, size, setSize, isLoading, error, isValidating } =
     useSWRInfinite(getKey, fetcher, {
       // revalidateIfStale: false,

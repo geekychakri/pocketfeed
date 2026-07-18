@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
 
     const res = await fetch(feedUrl, {
       headers,
-      signal: AbortSignal.timeout(5000),
+      signal: AbortSignal.timeout(20000),
     });
 
     console.log({ res });

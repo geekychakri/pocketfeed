@@ -1,7 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useLayoutEffect, useRef } from "react";
-import type { Route } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
@@ -30,7 +29,7 @@ export default function SidebarNavigation({
       >
         <div className="border-dashed-b flex items-center justify-between px-3">
           <h1 className="font-medium">
-            <span className="text-primary">Pocket Feed</span>
+            <span className="text-primary text-brand-primary">PocketFeed</span>
           </h1>
           <button
             className="hidden items-center gap-1 max-md:flex"

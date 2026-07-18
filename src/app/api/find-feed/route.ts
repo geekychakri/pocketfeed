@@ -54,6 +54,20 @@ export async function POST(request: Request) {
       return Response.json({});
     }
   } catch (err) {
+    console.log({ err });
+    if (
+      err instanceof Error &&
+      (err.message.includes("ENOTFOUND") ||
+        err.message.includes("fetch failed"))
+    ) {
+      return Response.json(
+        {
+          message:
+            "Couldn't reach that website. Please check the URL and try again.",
+        },
+        { status: 400 },
+      );
+    }
     return handleAndReturnErrorResponse(err);
   }
 }

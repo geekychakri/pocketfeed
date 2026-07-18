@@ -46,7 +46,9 @@ const ProfileWrapper = async ({
   children: React.ReactNode;
   params: Promise<{ username: string }>;
 }) => {
+  console.log({ params: await params });
   const { username: handle } = await params;
+  console.log({ handle });
   const checkIfUserExists = await db
     .select()
     .from(schema.users)

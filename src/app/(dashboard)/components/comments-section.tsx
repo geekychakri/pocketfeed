@@ -25,7 +25,6 @@ import CustomButton from "@/components/ui/custom-button";
 import Textarea from "@/components/ui/custom-textarea";
 
 import { postComment } from "@/app/actions/post-comment";
-import { getCurrentUser } from "@/data/get-current-user";
 import { fetcher, getInitials, internalErrorToast } from "@/lib/utils";
 
 const initialState = {
@@ -74,7 +73,7 @@ const CommentsSection = ({ uri }: { uri: string }) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
-        // Never retry on 500.
+        // Never retry on 400.
         if (error.status === 400) return;
 
         // Only retry up to 5 times.
