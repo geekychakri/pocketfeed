@@ -134,6 +134,13 @@
       "when": 1783923285831,
       "tag": "0018_dapper_the_phantom",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1784441326438,
+      "tag": "0019_striped_george_stacy",
+      "breakpoints": true
     }
   ]
 }

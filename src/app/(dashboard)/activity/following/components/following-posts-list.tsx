@@ -61,11 +61,7 @@ export default function FollowingPostsList() {
   if (isEmpty) {
     return (
       <div className="flex flex-col gap-2 px-4">
-        Your following feed is empty! Follow more users to see what&apos;s
-        happening.
-        <Link href="/discover" className="custom-underline self-start">
-          Discover your Bluesky Tribe
-        </Link>
+        No recent posts from people you follow!
       </div>
     );
   }

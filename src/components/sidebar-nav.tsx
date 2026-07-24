@@ -21,7 +21,6 @@ export default function SidebarNavigation({
     <>
       <nav
         id="sidebar"
-        // ref={ref}
         className={cn(
           `text-textColor bg-background-primary border-dashed-r fixed top-0 bottom-0 left-0 isolate z-2000 grid h-dvh w-[256px] grid-rows-[56px_56px_auto_minmax(0,1fr)_56px] transition-[translate] duration-150 select-none max-md:w-full max-md:-translate-x-full`,
           isOpen && "max-md:translate-x-0",
@@ -29,7 +28,7 @@ export default function SidebarNavigation({
       >
         <div className="border-dashed-b flex items-center justify-between px-3">
           <h1 className="font-medium">
-            <span className="text-primary text-brand-primary">PocketFeed</span>
+            <span className="text-primary text-brand-primary">Pocket Feed</span>
           </h1>
           <button
             className="hidden items-center gap-1 max-md:flex"

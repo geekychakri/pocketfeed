@@ -81,7 +81,7 @@ export default function FeedSubList({ did }: { did: string }) {
   }
 
   if (error) {
-    return <div className="text-danger px-4">{ERROR_MESSAGE}</div>;
+    return <div className="text-danger px-2">{ERROR_MESSAGE}</div>;
   }
 
   if (!data || data.length === 0) {
@@ -111,10 +111,10 @@ export default function FeedSubList({ did }: { did: string }) {
 
   return (
     <ScrollArea.Root className="min-h-0 flex-1">
-      <ScrollArea.Viewport className="scrollable focus-visible:border-brand-shadow flex h-full scroll-p-4 flex-col gap-4 overscroll-contain px-3 pb-3">
+      <ScrollArea.Viewport className="scrollable focus-visible:border-brand-shadow flex h-full scroll-p-4 flex-col gap-4 overscroll-contain pb-3">
         <FeedLinks records={data} />
       </ScrollArea.Viewport>
-      <ScrollArea.Scrollbar className="pointer-events-none m-2 flex w-1 justify-center rounded-sm opacity-0 transition-opacity data-hovering:pointer-events-auto data-hovering:opacity-100 data-hovering:delay-0 data-scrolling:pointer-events-auto data-scrolling:opacity-100 data-scrolling:duration-0">
+      <ScrollArea.Scrollbar className="pointer-events-none m-2 flex w-1 justify-center rounded-sm opacity-0 transition-opacity data-hovering:pointer-events-auto data-scrolling:pointer-events-auto data-scrolling:opacity-100 data-scrolling:duration-0">
         <ScrollArea.Thumb className="bg-brand-primary w-full rounded-sm" />
       </ScrollArea.Scrollbar>
     </ScrollArea.Root>

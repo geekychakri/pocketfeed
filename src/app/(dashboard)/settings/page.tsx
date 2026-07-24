@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import RouteBack from "@/components/route-back";
 
+import FeedbinSync from "./components/feedbin-sync";
 import ManualSyncBskyFollows from "./components/manual-sync-bsky-follows";
 import SettingsFooter from "./components/settings-footer";
 
@@ -14,6 +15,9 @@ export default async function Settings() {
       </div>
 
       <ManualSyncBskyFollows />
+
+      <FeedbinSync />
+
       <div className="border-dashed-b flex flex-col gap-3 px-4 py-8">
         <h2 className="text-brand-primary font-medium">Import/Export Data</h2>
         <Link

@@ -24,7 +24,7 @@ export default async function MainLayout({
     <div className="flex w-full max-[768px]:flex-col">
       <SidebarNavigation>
         <div className="border-dashed-b flex min-h-0 flex-col">
-          <h2 className="text-text-secondary px-3 py-2">Subscriptions</h2>
+          <h2 className="text-text-secondary px-3 pt-2">Subscriptions</h2>
 
           <Suspense
             fallback={
