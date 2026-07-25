@@ -9,8 +9,9 @@ import useSWR from "swr";
 
 import { ERROR_MESSAGE } from "@/lib/constants";
 import { fetcher } from "@/lib/utils";
+import { useFeedbinPanel } from "@/store/feedbin-panel";
 
-import FeedLinks from "./feed-link";
+import FeedLinks from "./feed-links";
 
 type FeedDataType = {
   id: string;
@@ -25,7 +26,9 @@ export default function FeedSubList({ did }: { did: string }) {
   const [cacheLoaded, setCacheLoaded] = useState(false);
   const [localUserFeeds, setLocalUserFeeds] = useState<FeedDataType>([]);
 
-  const { data, error, isLoading } = useSWR<FeedDataType>(
+  const isFeedbinOpen = useFeedbinPanel((state) => state.openFeedbinPanel);
+
+  const { data, error, isLoading, isValidating } = useSWR<FeedDataType>(
     cacheLoaded ? `/api/get-user-feeds?did=${did}` : null,
     fetcher,
     {
@@ -111,10 +114,18 @@ export default function FeedSubList({ did }: { did: string }) {
 
   return (
     <ScrollArea.Root className="min-h-0 flex-1">
-      <ScrollArea.Viewport className="scrollable focus-visible:border-brand-shadow flex h-full scroll-p-4 flex-col gap-4 overscroll-contain pb-3">
-        <FeedLinks records={data} />
+      <ScrollArea.Viewport className="focus-visible:border-brand-shadow scrollable flex h-full scroll-p-4 flex-col overscroll-contain pb-3 will-change-transform">
+        {isValidating && (
+          <span className="flex animate-pulse items-center gap-1 px-3 text-sm font-medium">
+            Refreshing...
+          </span>
+        )}
+        <FeedLinks
+          records={data}
+          openFeedbin={!isValidating && isFeedbinOpen}
+        />
       </ScrollArea.Viewport>
-      <ScrollArea.Scrollbar className="pointer-events-none m-2 flex w-1 justify-center rounded-sm opacity-0 transition-opacity data-hovering:pointer-events-auto data-scrolling:pointer-events-auto data-scrolling:opacity-100 data-scrolling:duration-0">
+      <ScrollArea.Scrollbar className="pointer-events-none m-2 flex w-1 justify-center rounded-sm opacity-0 transition-opacity data-scrolling:pointer-events-auto data-scrolling:opacity-100 data-scrolling:duration-0">
         <ScrollArea.Thumb className="bg-brand-primary w-full rounded-sm" />
       </ScrollArea.Scrollbar>
     </ScrollArea.Root>

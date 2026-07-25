@@ -22,7 +22,7 @@ export async function disconnectFeedbin() {
       .delete(schema.feedbinAccounts)
       .where(eq(schema.feedbinAccounts.userDid, session.user.did));
 
-    return { type: "success", message: "success" };
+    return { type: "success", message: "success", userDid: session.user.did };
   } catch (err) {
     console.log(err);
     return {

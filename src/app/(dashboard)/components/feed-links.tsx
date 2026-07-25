@@ -22,11 +22,25 @@ type FeedDataType = {
   source: string;
 }[];
 
-export default function FeedLinks({ records }: { records: FeedDataType }) {
+export default function FeedLinks({
+  records,
+  openFeedbin,
+}: {
+  records: FeedDataType;
+  openFeedbin: boolean;
+}) {
+  const [value, setValue] = React.useState<string[]>(["pocketfeed"]);
+
   const sp = useSearchParams();
   const feedUrl = sp.get("feedUrl");
 
   const { toggleIsOpen } = useToggleSidenav();
+
+  React.useEffect(() => {
+    if (openFeedbin) {
+      setValue(["feedbin"]);
+    }
+  }, [openFeedbin]);
 
   if (records.length === 0) return null;
 
@@ -37,7 +51,8 @@ export default function FeedLinks({ records }: { records: FeedDataType }) {
   return (
     <Accordion.Root
       multiple
-      defaultValue={["pocketfeed"]}
+      value={value}
+      onValueChange={setValue}
       className="flex w-full max-w-80 flex-col"
     >
       {Object.entries(groupedRecords).map(([source, records]) => (
@@ -52,7 +67,7 @@ export default function FeedLinks({ records }: { records: FeedDataType }) {
               <ChevronIcon className="shrink-0 transition-transform duration-100 ease-[ease-out] group-data-panel-open:rotate-90" />
             </Accordion.Trigger>
           </Accordion.Header>
-          <Accordion.Panel className="h-(--accordion-panel-height) overflow-hidden text-sm transition-[height] duration-150 ease-[ease-out] data-ending-style:h-0 data-starting-style:h-0">
+          <Accordion.Panel className="h-(--accordion-panel-height) overflow-hidden text-sm transition-[height] ease-[ease-out] data-ending-style:h-0 data-starting-style:h-0">
             <div className="flex flex-col gap-2 px-3">
               {records?.map((record, i) => (
                 <HoverPrefetchLink
@@ -114,7 +129,7 @@ const AccordionFeedItem = React.forwardRef<
         }
 
         // needs to match durations in CSS
-        timeout.start(200, () => {
+        timeout.start(150, () => {
           itemRef.current?.scrollIntoView({
             behavior: "smooth",
             block: "nearest",

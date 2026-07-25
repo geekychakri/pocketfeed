@@ -16,6 +16,7 @@ type ActionStateType = {
     feedbinPassword?: string[];
   };
   formData?: FormData;
+  userDid?: string;
 };
 
 const initialState = {
@@ -102,7 +103,12 @@ export async function saveFeedbinCreds(
       encryptedPassword,
     });
 
-    return { type: "success", message: "success", feedbinEmail };
+    return {
+      type: "success",
+      message: "success",
+      feedbinEmail,
+      userDid: session.user.did,
+    };
   } catch (err) {
     console.log(err);
     return {

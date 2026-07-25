@@ -20,6 +20,7 @@ import Input from "@/components/ui/custom-input";
 import { disconnectFeedbin } from "@/app/actions/disconnect-feedbin";
 import { saveFeedbinCreds } from "@/app/actions/save-feedbin-creds";
 import { fetcher, internalErrorToast } from "@/lib/utils";
+import { useFeedbinPanel } from "@/store/feedbin-panel";
 
 type ActionStateType = {
   type: string;
@@ -30,6 +31,7 @@ type ActionStateType = {
     feedbinPassword?: string[];
   };
   formData?: FormData;
+  userDid?: string;
 };
 
 const initialState: ActionStateType = {
@@ -66,7 +68,13 @@ const FeedbinSyncForm = () => {
     initialState,
   );
 
+  const setOpenFeedbinPanel = useFeedbinPanel(
+    (state) => state.setOpenFeedbinPanel,
+  );
+
   const [showPassword, setShowPassword] = useState(false);
+
+  const { mutate: globalMutate } = useSWRConfig();
 
   const { data, isLoading, error, mutate } = useSWR<SWRDataType>(
     "/api/check-feedbin-connect",
@@ -87,20 +95,16 @@ const FeedbinSyncForm = () => {
   useEffect(() => {
     if (state.type === "success") {
       mutate(
-        (current) =>
-          current
-            ? {
-                ...current,
-                hasFeedbinAccount: true,
-              }
-            : {
-                hasFeedbinAccount: true,
-                feedbinEmail: "",
-              },
+        {
+          hasFeedbinAccount: true,
+          feedbinEmail: state.feedbinEmail,
+        },
         {
           revalidate: false,
         },
       );
+      globalMutate(`/api/get-user-feeds?did=${state.userDid}`);
+      setOpenFeedbinPanel(true);
     } else if (state.type === "error") {
       toast.warning(state.message, {
         id: "error",
@@ -108,7 +112,7 @@ const FeedbinSyncForm = () => {
     } else if (state.type === "internal-error") {
       internalErrorToast(state.message);
     }
-  }, [state, mutate]);
+  }, [state, mutate, globalMutate, setOpenFeedbinPanel]);
 
   useLayoutEffect(() => {
     return () => {
@@ -209,14 +213,14 @@ const FeedbinSyncForm = () => {
 };
 
 const DisconnectFeedbin = ({ feedbinEmail }: { feedbinEmail: string }) => {
-  const { mutate } = useSWRConfig();
+  const { mutate: globalMutate } = useSWRConfig();
   const [isPending, startTransition] = useTransition();
 
   const handleFeedbinDisconnect = async () => {
     startTransition(async () => {
-      const { type, message } = await disconnectFeedbin();
+      const { type, message, userDid } = await disconnectFeedbin();
       if (type === "success") {
-        mutate(
+        globalMutate(
           "/api/check-feedbin-connect",
           (prevData) => {
             return {
@@ -228,6 +232,7 @@ const DisconnectFeedbin = ({ feedbinEmail }: { feedbinEmail: string }) => {
             revalidate: false,
           },
         );
+        globalMutate(`/api/get-user-feeds?did=${userDid}`);
         toast.success("Feedbin disconnected.");
       } else {
         internalErrorToast(message);
