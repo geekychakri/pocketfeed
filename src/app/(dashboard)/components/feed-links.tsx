@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { Accordion } from "@base-ui/react/accordion";
 import { useMergedRefs } from "@base-ui/utils/useMergedRefs";
 import { useTimeout } from "@base-ui/utils/useTimeout";
+import { play } from "cuelume";
 import { decode } from "html-entities";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
@@ -53,13 +54,16 @@ export default function FeedLinks({
       multiple
       value={value}
       onValueChange={setValue}
-      className="flex w-full max-w-80 flex-col"
+      className="flex w-full flex-col"
     >
       {Object.entries(groupedRecords).map(([source, records]) => (
         <AccordionFeedItem
           key={source}
           value={source}
           className="flex flex-col gap-2"
+          onOpenChange={() => {
+            play("tick");
+          }}
         >
           <Accordion.Header>
             <Accordion.Trigger className="group data-panel-open:text-brand-primary hover:text-brand-primary focus-visible:outline-brand-primary mt-1 flex w-full cursor-pointer items-center justify-between gap-4 px-3 py-1 text-sm select-none focus-visible:relative focus-visible:z-1 focus-visible:outline-2">

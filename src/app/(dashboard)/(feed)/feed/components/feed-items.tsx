@@ -109,7 +109,7 @@ function FeedListItems({ feedList }: { feedList: any }) {
   console.log({ groupFeedList: groupedList });
   return (
     <>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 py-4">
         {feedList.isStale ? (
           <p className="text-brand-primary px-4">
             Showing last updated content
@@ -312,7 +312,7 @@ const PodcastCard = ({
 
 function FeedListFallback() {
   return (
-    <div className="flex animate-pulse flex-col gap-5 px-4">
+    <div className="flex animate-pulse flex-col gap-5 p-4">
       <div className="bg-ui-normal h-7 w-56 rounded"></div>
       <div className="flex flex-col space-y-3">
         <div className="flex h-14 w-full items-center justify-between">
@@ -326,7 +326,7 @@ function FeedListFallback() {
         </div>
       </div>
 
-      {Array.from({ length: 10 }).map((_, i, a) => {
+      {Array.from({ length: 10 }).map((_, i) => {
         return (
           <div key={i} className="flex flex-col space-y-3">
             <div className="flex h-14 w-full items-center justify-between">

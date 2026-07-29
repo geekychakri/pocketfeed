@@ -12,6 +12,7 @@ import { getDid } from "@/lib/auth/session";
 
 import YouTubeModal from "./(feed)/feed/components/YouTubeModal";
 import CheckIsOnline from "./components/check-is-online";
+import { CuelumeInit } from "./components/cuelume-init";
 import SyncBskyFollows from "./components/sync-bsky-follows";
 import WelcomeModal from "./components/welcome-modal";
 
@@ -67,6 +68,7 @@ export default async function MainLayout({
         <CheckIsOnline />
         <WelcomeModal />
         <SyncBskyFollows />
+        <CuelumeInit />
       </main>
     </div>
   );

@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef } from "react";
 import Link from "next/link";
+
+import { play } from "cuelume";
 
 import { useToggleSidenav } from "@/store/toggle-sidenav";
 
@@ -14,7 +15,13 @@ export default function MobileNav() {
       <Link href="/activity/discover" prefetch={false}>
         Pocket Feed
       </Link>
-      <button className="flex items-center gap-1" onClick={toggleIsOpen}>
+      <button
+        className="flex items-center gap-1"
+        onClick={() => {
+          toggleIsOpen();
+          play("tick");
+        }}
+      >
         Menu
         <svg
           xmlns="http://www.w3.org/2000/svg"

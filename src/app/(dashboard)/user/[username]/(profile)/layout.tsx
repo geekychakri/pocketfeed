@@ -20,14 +20,19 @@ export default async function UserLayout({
   params: Promise<{ username: string }>;
 }) {
   return (
-    <main className="border-dashed-x mx-auto flex min-h-screen w-full max-w-180 flex-col gap-5 pb-30">
+    <main className="border-dashed-x mx-auto flex min-h-screen w-full max-w-[65ch] flex-col gap-5 pb-30">
       <Suspense
         fallback={
-          <div className="bg-skeleton-highlight m-4 h-8 w-64 animate-pulse rounded-md"></div>
+          <div className="border-dashed-b flex h-14 animate-pulse items-center px-4">
+            <div className="bg-skeleton-highlight h-8 w-64 rounded-md"></div>
+          </div>
         }
       >
-        <ProfileHeader params={params} />
+        {params.then(({ username }) => {
+          return <ProfileHeader username={username} />;
+        })}
       </Suspense>
+
       <ErrorBoundary
         fallback={<div className="text-danger p-4">Something went wrong!</div>}
       >
@@ -91,12 +96,7 @@ async function SegmentedControlWrapper({
   return <SegmentedControl items={items} />;
 }
 
-async function ProfileHeader({
-  params,
-}: {
-  params: Promise<{ username: string }>;
-}) {
-  const { username } = await params;
+async function ProfileHeader({ username }: { username: string }) {
   return (
     <div className="border-dashed-b relative flex h-14 items-center gap-3 px-4">
       <RouteBack className="absolute -left-9 max-md:static" />

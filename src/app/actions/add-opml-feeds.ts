@@ -22,6 +22,13 @@ export async function addOPMLFeeds(data: []) {
       };
     }
 
+    if (data.length === 0) {
+      return {
+        type: "validation-error",
+        message: "Select at least one feed.",
+      };
+    }
+
     const feedList = data.map((item: ItemType) => ({
       ...item,
       did,

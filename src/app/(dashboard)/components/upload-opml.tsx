@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { Dialog } from "@base-ui/react/dialog";
 import { ScrollArea } from "@base-ui/react/scroll-area";
+import { play } from "cuelume";
 import localforage from "localforage";
 import type { FileDropItem } from "react-aria-components";
 import {
@@ -13,7 +14,6 @@ import {
 } from "react-aria-components";
 import { toast } from "sonner";
 import { mutate } from "swr";
-import useSound from "use-sound";
 import { v7 as uuidv7 } from "uuid";
 import { Virtualizer } from "virtua";
 
@@ -41,11 +41,9 @@ export default function UploadOPML({ did }: { did: string }) {
 
   const [isFeedsDialogOpen, setIsFeedDialogOpen] = useState(false);
 
-  const [playCaution] = useSound("/sounds/caution.wav");
-
   const handleImport = async () => {
     if (!file) {
-      playCaution();
+      play("error");
       toast.warning("Please select an OPML file to import.", {
         id: "import-warning",
       });
@@ -224,8 +222,16 @@ function OPMLFeeds({
       e.preventDefault();
 
       setIsSubmitting(true);
+      if (selectedIds.length === 0) {
+        play("error");
+        return toast.warning("Select atleast one item.", {
+          id: "min-limit",
+        });
+      }
       if (selectedIds.length > 150) {
-        return toast.warning("Only 150 feeds are allowed to import.");
+        return toast.warning("Only 150 feeds are allowed to import.", {
+          id: "max-limit",
+        });
       }
 
       const selectedIdsSet = new Set(selectedIds);
@@ -262,11 +268,14 @@ function OPMLFeeds({
 
         onIsFeedsDialogOpen();
         toast.success("Imported successfully!");
-      } else {
+      } else if (res.type === "validation-error") {
+        play("error");
+        toast.error(res.message);
       }
     } catch (err) {
       // setIsSubmitting(false);
-      toast.error("Something went wrong!");
+      play("error");
+      internalErrorToast(INTERNAL_ERROR_MESSAGE);
     } finally {
       setIsSubmitting(false);
     }

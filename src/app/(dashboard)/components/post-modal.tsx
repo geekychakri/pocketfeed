@@ -12,8 +12,8 @@ import { useParams } from "next/navigation";
 
 import { Dialog } from "@base-ui/react/dialog";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
+import { play } from "cuelume";
 import { toast } from "sonner";
-import useSound from "use-sound";
 
 import Button from "@/components/ui/custom-button";
 import Textarea from "@/components/ui/custom-textarea";
@@ -62,10 +62,6 @@ export default function PostModal({
 
   const postRef = useRef<HTMLTextAreaElement | null>(null);
 
-  const [playSuccess] = useSound("sounds/success.wav", {
-    volume: 0.25,
-  });
-
   const [state, dispatch, isPending] = useActionState(addPost, initialState);
 
   useEffect(() => {
@@ -79,7 +75,7 @@ export default function PostModal({
       //     mutate(key); // With this you can revalidate whatever the key is. (with @, $inf$ or whatever)
       //   }
       // }
-      playSuccess();
+      play("success");
       toast.success("Your post was sent!");
       setIsModalOpen(false);
     } else if (state.type === "duplicate-post") {
@@ -89,7 +85,7 @@ export default function PostModal({
     } else if (state.type === "auth-error") {
       toast.error(state.message);
     }
-  }, [state, playSuccess]);
+  }, [state]);
 
   useLayoutEffect(() => {
     return () => {

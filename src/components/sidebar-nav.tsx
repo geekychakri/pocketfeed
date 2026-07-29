@@ -1,7 +1,9 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import Link from "next/link";
+
+import { play } from "cuelume";
 
 import { cn } from "@/lib/utils";
 import { useToggleSidenav } from "@/store/toggle-sidenav";
@@ -32,7 +34,10 @@ export default function SidebarNavigation({
           </h1>
           <button
             className="hidden items-center gap-1 max-md:flex"
-            onClick={toggleIsOpen}
+            onClick={() => {
+              toggleIsOpen();
+              play("tick");
+            }}
           >
             Close
             <svg
@@ -56,7 +61,7 @@ export default function SidebarNavigation({
         <div className="border-dashed-b flex items-center justify-between gap-3 px-3">
           <Link
             href="/add"
-            className="bg-ui-normal border-shadow hover:bg-ui-hover flex h-9 flex-1 items-center justify-center rounded-md font-medium transition-[background-color]"
+            className="bg-ui-normal hover:bg-ui-hover flex h-9 flex-1 items-center justify-center rounded-md font-medium transition-[background-color]"
             onNavigate={() => toggleIsOpen()}
           >
             Add feed
