@@ -1,11 +1,15 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 import dayjs from "dayjs";
 import isToday from "dayjs/plugin/isToday";
 import isYesterday from "dayjs/plugin/isYesterday";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import useSWR from "swr";
+
+import { SpinnerRotate } from "@/components/spinner-rotate";
 
 import { ERROR_MESSAGE } from "@/lib/constants";
 import type { FeedItemType, FeedListType } from "@/types";
@@ -53,16 +57,23 @@ async function fetcher<JSON = any>(
 
 type GroupedFeedsType = Record<string, FeedItemType[]>;
 
-export default function DailyFeedList() {
-  const { data, isLoading, error } = useSWR<SWRDataType>(
+export default function DailyFeedListBoundary() {
+  const { bfcacheId } = useRouter();
+  return <DailyFeedList key={bfcacheId} />;
+}
+
+function DailyFeedList() {
+  const { data, isLoading, isValidating, error } = useSWR<SWRDataType>(
     "/api/daily-feeds",
     fetcher,
     {
-      revalidateIfStale: false,
+      // revalidateIfStale: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
     },
   );
+
+  console.log({ isValidating });
 
   console.log({ swrData: data });
 
@@ -108,9 +119,19 @@ export default function DailyFeedList() {
   }
 
   const flatData = data?.dailyFeedItems.flat();
-  console.log({ flatDatad: flatData });
+  console.log({ flatData: flatData });
 
-  if (flatData.length === 0) {
+  if (flatData?.length === 0 && isValidating) {
+    return (
+      <div className="flex flex-1 flex-col items-center justify-center gap-3 px-3 py-10 text-base">
+        <div className="flex animate-pulse gap-1 text-sm font-medium">
+          Checking for new posts <SpinnerRotate className="size-5" />
+        </div>
+      </div>
+    );
+  }
+
+  if (flatData?.length === 0) {
     return <div className="p-4">No new posts yet. Check back later!</div>;
   }
   const groupByFeedTitle: GroupedFeedsType = Object.groupBy(
@@ -125,24 +146,31 @@ export default function DailyFeedList() {
   console.log({ groupByFeedTitle });
 
   return (
-    <div className="flex flex-col gap-4">
-      {Object.entries(groupByFeedTitle).map(([feedTitle, items]) => (
-        <div key={feedTitle} className="group">
-          <h2 className="text-brand-primary group-hover:text-text-primary p-4 font-medium">
-            {feedTitle}
-          </h2>
-          <div className="flex flex-col gap-4">
-            {items.map((item, index: number) => (
-              <FeedItem key={index} item={item} />
-            ))}
-          </div>
+    <>
+      {isValidating && (
+        <div className="flex animate-pulse items-center justify-center gap-1 p-4 text-sm font-medium">
+          Checking for new posts <SpinnerRotate className="size-5" />
         </div>
-      ))}
-      <p className="text-text-secondary h-32 pt-4 text-center">
-        End of feed! See ya tomorrow.
-      </p>
-      <YouTubeModal />
-    </div>
+      )}
+      <div className="flex flex-col gap-4">
+        {Object.entries(groupByFeedTitle).map(([feedTitle, items]) => (
+          <div key={feedTitle} className="group">
+            <h2 className="text-brand-primary group-hover:text-text-primary p-4 font-medium">
+              {feedTitle}
+            </h2>
+            <div className="flex flex-col gap-4">
+              {items.map((item, index: number) => (
+                <FeedItem key={index} item={item} />
+              ))}
+            </div>
+          </div>
+        ))}
+        <p className="text-text-secondary h-32 pt-4 text-center">
+          End of feed! See ya tomorrow.
+        </p>
+        <YouTubeModal />
+      </div>
+    </>
   );
 }
 

@@ -42,6 +42,9 @@ const ActivitySegmentedControl = (): React.ReactElement => {
               href={item.href as Route}
               draggable={false}
               className="absolute inset-0 z-2"
+              onNavigate={() => {
+                localStorage.setItem("activity-preferred", item.href);
+              }}
               //   replace
             ></Link>
           </motion.li>

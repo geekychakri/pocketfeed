@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { Dialog } from "@base-ui/react/dialog";
 import { ScrollArea } from "@base-ui/react/scroll-area";
 
+import { PostIcon } from "@/icons/post";
+
 export default function WelcomeModal() {
   const [open, setOpen] = useState(false);
 
@@ -29,7 +31,7 @@ export default function WelcomeModal() {
           <Dialog.Popup className="border-shadow bg-background-primary relative flex max-h-full min-h-0 w-[min(40rem,calc(100vw-2rem))] max-w-full flex-col rounded-md transition-[scale,opacity] duration-100 ease-out data-ending-style:scale-[0.98] data-ending-style:opacity-0 data-starting-style:scale-[0.98] data-starting-style:opacity-0">
             <div className="border-dashed-b flex items-center justify-between gap-1 p-4">
               <Dialog.Title className="font-medium">
-                Welcome to PocketFeed!
+                Welcome to Pocket Feed
               </Dialog.Title>
               <Dialog.Close className="absolute top-4 right-4 flex size-6 cursor-pointer items-center justify-center gap-2 rounded-full select-none">
                 <span className="sr-only">Close</span>
@@ -53,9 +55,9 @@ export default function WelcomeModal() {
                   <div className="border-dashed-b flex flex-col gap-1 px-4 py-2">
                     <h1 className="text-brand-primary font-medium">Activity</h1>
                     <p className="text-text-secondary">
-                      Stay up to date with what people are sharing on
-                      PocketFeed. The Discover tab shows posts from everyone,
-                      while Following shows posts from the people you follow.
+                      Stay up to date with what people are sharing on Pocket
+                      Feed. Discover shows posts from everyone, while Following
+                      shows posts from the people you follow.
                     </p>
                   </div>
                   <div className="border-dashed-b flex flex-col gap-1 px-4 py-2">
@@ -70,9 +72,19 @@ export default function WelcomeModal() {
                       Subscriptions
                     </h1>
                     <p className="text-text-secondary">
-                      Subscribe to RSS feeds, import OPML files, and PocketFeed
+                      Subscribe to RSS feeds, import OPML files, and Pocket Feed
                       automatically syncs your standard.site, Feedbin, and
                       Skyreader subscriptions.
+                    </p>
+                  </div>
+                  <div className="border-dashed-b flex flex-col gap-1 px-4 py-2">
+                    <h1 className="text-brand-primary flex items-center gap-1 font-medium">
+                      Share with note <PostIcon />
+                    </h1>
+                    <p className="text-text-secondary">
+                      Share links with an optional note. Your posts appear in
+                      the Activity feed, on your Pocket Feed profile, and are
+                      automatically shared to your Bluesky profile.
                     </p>
                   </div>
                   <div className="border-dashed-b flex flex-col gap-1 px-4 py-2">
@@ -80,8 +92,8 @@ export default function WelcomeModal() {
                       Bluesky Follows Sync
                     </h1>
                     <p className="text-text-secondary">
-                      If someone you follow on Bluesky is already on PocketFeed,
-                      you&apos;ll automatically follow them here too. Your
+                      If someone you follow on Bluesky is already on Pocket
+                      Feed, you&apos;ll automatically follow them here too. Your
                       follows stay in sync, so you can start reading posts right
                       away. You can manually refresh them anytime from Settings.
                     </p>
@@ -92,9 +104,7 @@ export default function WelcomeModal() {
                     </h1>
                     <p className="text-text-secondary">
                       Connect your Feedbin account to automatically import and
-                      keep your subscriptions in sync with PocketFeed. Support
-                      for more third party app integration will be added in
-                      future updates.
+                      keep your subscriptions in sync with Pocket Feed.
                     </p>
                   </div>
                 </ScrollArea.Content>

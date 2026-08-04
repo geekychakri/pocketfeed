@@ -85,8 +85,10 @@ export default function Posts() {
       {/*<PostIcon className="size-20" />
       <span>No posts yet!</span>*/}
       {isValidating && (
-        <div className="flex items-center justify-center">
-          <SpinnerRotate className="size-6" />
+        <div className="flex flex-col items-center justify-center gap-3 p-4 text-base">
+          <div className="flex animate-pulse gap-1 text-sm font-medium">
+            Checking for new posts <SpinnerRotate className="size-5" />
+          </div>
         </div>
       )}
       <TimelineFeed

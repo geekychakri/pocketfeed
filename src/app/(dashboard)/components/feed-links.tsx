@@ -25,10 +25,10 @@ type FeedDataType = {
 
 export default function FeedLinks({
   records,
-  openFeedbin,
+  feedPanelName,
 }: {
   records: FeedDataType;
-  openFeedbin: boolean;
+  feedPanelName: string;
 }) {
   const [value, setValue] = React.useState<string[]>(["pocketfeed"]);
 
@@ -38,10 +38,10 @@ export default function FeedLinks({
   const { toggleIsOpen } = useToggleSidenav();
 
   React.useEffect(() => {
-    if (openFeedbin) {
-      setValue(["feedbin"]);
+    if (records.some((r) => r.source === feedPanelName)) {
+      setValue([feedPanelName]);
     }
-  }, [openFeedbin]);
+  }, [feedPanelName, records]);
 
   if (records.length === 0) return null;
 

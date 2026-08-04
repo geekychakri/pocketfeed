@@ -49,8 +49,8 @@ export default function ManualSyncBskyFollows() {
     <div className="border-dashed-b flex flex-col gap-3 px-4 py-8">
       <h2 className="text-brand-primary font-medium">Bluesky Follows Sync</h2>
       <p className="text-text-secondary">
-        PocketFeed automatically syncs your Bluesky follows once a day. Sync now
-        to automatically follow people you already follow on Bluesky who are
+        Pocket Feed automatically syncs your Bluesky follows once a day. Sync
+        now to automatically follow people you already follow on Bluesky who are
         also using Pocket Feed.
       </p>
       <CustomButton

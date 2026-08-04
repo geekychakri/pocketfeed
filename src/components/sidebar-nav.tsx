@@ -1,6 +1,7 @@
 "use client";
 
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
+import type { Route } from "next";
 import Link from "next/link";
 
 import { play } from "cuelume";
@@ -15,9 +16,19 @@ export default function SidebarNavigation({
 }: {
   children: React.ReactNode;
 }) {
+  const [activityPath, setActivityPath] = useState<Route>("/activity/discover");
+
   const { isOpen, toggleIsOpen } = useToggleSidenav();
 
   console.log("Sidenav");
+
+  useEffect(() => {
+    const path =
+      (localStorage.getItem("activity-preferred") as Route | null) ??
+      "/activity/discover";
+
+    setActivityPath(path);
+  }, []);
 
   return (
     <>
@@ -29,9 +40,10 @@ export default function SidebarNavigation({
         )}
       >
         <div className="border-dashed-b flex items-center justify-between px-3">
-          <h1 className="font-medium">
-            <span className="text-primary text-brand-primary">Pocket Feed</span>
-          </h1>
+          <Link href={activityPath} className="flex items-center gap-1">
+            <img src="/apple-touch-icon.png" className="size-8" />
+            <span className="text-text-primary font-medium">Pocket Feed</span>
+          </Link>
           <button
             className="hidden items-center gap-1 max-md:flex"
             onClick={() => {

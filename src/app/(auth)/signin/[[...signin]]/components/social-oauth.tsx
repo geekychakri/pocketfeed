@@ -34,7 +34,7 @@ export default function SocialOauth() {
       }
 
       // Redirect to authorization server
-      window.location.href = data.redirectUrl;
+      window.location.replace(data.redirectUrl);
     } catch (err) {
       // setError(err instanceof Error ? err.message : "Login failed");
       setError("Unable to login! Please try again.");

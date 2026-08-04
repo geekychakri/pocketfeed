@@ -93,7 +93,7 @@ export async function GET(request: Request) {
                     ...(item.enclosure?.url && {
                       feedListMetadata: {
                         itunes: {
-                          // ✅ use cachedFeed instead of feedData
+                          // use cachedFeed instead of feedData
                           ...cachedFeed.itunes,
                         },
                         link: cachedFeed.link,
@@ -157,7 +157,7 @@ export async function GET(request: Request) {
                   ...(item.enclosure?.url && {
                     feedListMetadata: {
                       itunes: {
-                        // ✅ use cachedFeed instead of feedData
+                        // use cachedFeed instead of feedData
                         ...cachedFeed.itunes,
                       },
                       link: cachedFeed.link,
@@ -221,7 +221,7 @@ export async function GET(request: Request) {
                 ...(item.enclosure?.url && {
                   feedListMetadata: {
                     itunes: {
-                      // ✅ feedData is correctly defined here (fresh fetch path)
+                      // feedData is correctly defined here (fresh fetch path)
                       ...feedData.itunes,
                     },
                     link: feedData.link,

@@ -20,7 +20,7 @@ import Input from "@/components/ui/custom-input";
 import { disconnectFeedbin } from "@/app/actions/disconnect-feedbin";
 import { saveFeedbinCreds } from "@/app/actions/save-feedbin-creds";
 import { fetcher, internalErrorToast } from "@/lib/utils";
-import { useFeedbinPanel } from "@/store/feedbin-panel";
+import { useFeedPanel } from "@/store/feed-panel";
 
 type ActionStateType = {
   type: string;
@@ -68,9 +68,7 @@ const FeedbinSyncForm = () => {
     initialState,
   );
 
-  const setOpenFeedbinPanel = useFeedbinPanel(
-    (state) => state.setOpenFeedbinPanel,
-  );
+  const setFeedPanelName = useFeedPanel((state) => state.setFeedPanelName);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -94,6 +92,7 @@ const FeedbinSyncForm = () => {
 
   useEffect(() => {
     if (state.type === "success") {
+      shouldReset.current = true;
       mutate(
         {
           hasFeedbinAccount: true,
@@ -104,21 +103,22 @@ const FeedbinSyncForm = () => {
         },
       );
       globalMutate(`/api/get-user-feeds?did=${state.userDid}`);
-      setOpenFeedbinPanel(true);
+      setFeedPanelName("feedbin");
     } else if (state.type === "error") {
+      shouldReset.current = true;
       toast.warning(state.message, {
         id: "error",
       });
     } else if (state.type === "internal-error") {
+      shouldReset.current = true;
       internalErrorToast(state.message);
     }
-  }, [state, mutate, globalMutate, setOpenFeedbinPanel]);
+  }, [state, mutate, globalMutate, setFeedPanelName]);
 
   useLayoutEffect(() => {
     return () => {
       if (shouldReset.current) {
         shouldReset.current = false;
-
         startTransition(() => {
           dispatch(null);
         });

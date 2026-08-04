@@ -75,14 +75,18 @@ export default function PostModal({
       //     mutate(key); // With this you can revalidate whatever the key is. (with @, $inf$ or whatever)
       //   }
       // }
+      shouldReset.current = true;
       play("success");
       toast.success("Your post was sent!");
       setIsModalOpen(false);
     } else if (state.type === "duplicate-post") {
+      shouldReset.current = true;
       toast.warning(state.message);
     } else if (state.type === "internal-error") {
+      shouldReset.current = true;
       internalErrorToast(state.message);
     } else if (state.type === "auth-error") {
+      shouldReset.current = true;
       toast.error(state.message);
     }
   }, [state]);
@@ -137,7 +141,7 @@ export default function PostModal({
               action={(formData) => dispatch(formData)}
             >
               <Textarea
-                placeholder="Add a thought, if you'd like..."
+                placeholder="Add a note, or just hit Post."
                 className="min-h-24 resize-none scroll-pb-2"
                 name="post"
                 // id="post"

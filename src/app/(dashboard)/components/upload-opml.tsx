@@ -23,6 +23,7 @@ import Button from "@/components/ui/custom-button";
 import { addOPMLFeeds } from "@/app/actions/add-opml-feeds";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import { internalErrorToast } from "@/lib/utils";
+import { useFeedPanel } from "@/store/feed-panel";
 
 const MAX_FILE_SIZE = 4 * 1024 * 1024;
 
@@ -151,6 +152,7 @@ export default function UploadOPML({ did }: { did: string }) {
         opmlFeeds={opmlFeeds}
         isFeedsDialogOpen={isFeedsDialogOpen}
         onIsFeedsDialogOpen={() => setIsFeedDialogOpen(!isFeedsDialogOpen)}
+        onSuccess={() => setFile(null)}
       />
     </>
   );
@@ -161,14 +163,18 @@ function OPMLFeeds({
   opmlFeeds,
   isFeedsDialogOpen,
   onIsFeedsDialogOpen,
+  onSuccess,
 }: {
   did: string;
   opmlFeeds: any;
   isFeedsDialogOpen: boolean;
   onIsFeedsDialogOpen: () => void;
+  onSuccess: () => void;
 }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
+  const setFeedPanelName = useFeedPanel((state) => state.setFeedPanelName);
 
   const selectAllCheckboxRef = useRef<HTMLInputElement | null>(null);
 
@@ -229,7 +235,7 @@ function OPMLFeeds({
         });
       }
       if (selectedIds.length > 150) {
-        return toast.warning("Only 150 feeds are allowed to import.", {
+        return toast.warning("Only up to 150 feeds can be imported.", {
           id: "max-limit",
         });
       }
@@ -266,7 +272,20 @@ function OPMLFeeds({
           },
         );
 
+        mutate(
+          "/api/daily-feeds",
+          (current) =>
+            current
+              ? { ...current, userHasFeeds: true }
+              : { dailyFeedItems: [], userHasFeeds: true },
+          {
+            revalidate: false,
+          },
+        );
+
+        setFeedPanelName("pocketfeed");
         onIsFeedsDialogOpen();
+        onSuccess();
         toast.success("Imported successfully!");
       } else if (res.type === "validation-error") {
         play("error");

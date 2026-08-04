@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import type { Route } from "next";
 import { useSelectedLayoutSegment } from "next/navigation";
 
@@ -24,8 +25,27 @@ const links: NavItem<Route>[] = [
 ];
 
 export default function SideNavClient() {
+  const [activityPath, setActivityPath] = useState<Route>("/activity/discover");
+
+  useEffect(() => {
+    const path =
+      (localStorage.getItem("activity-preferred") as Route | null) ??
+      "/activity/discover";
+
+    setActivityPath(path);
+  }, []);
   const layoutSegment = useSelectedLayoutSegment();
   const { toggleIsOpen } = useToggleSidenav();
+
+  const links: NavItem<Route>[] = [
+    {
+      label: "Activity",
+      path: activityPath,
+      segment: "activity",
+    },
+    { label: "Daily", path: "/daily", segment: "daily" },
+  ];
+
   return (
     <div className="border-dashed-b flex flex-col gap-1 py-2.5">
       {links.map(({ label, path, segment }, i) => {

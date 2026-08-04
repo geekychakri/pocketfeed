@@ -56,14 +56,27 @@ export default function DiscoverPostsList() {
   const isEmpty = posts.length === 0 && !hasNextPage;
 
   if (isEmpty) {
-    return <div className="px-4">No new posts yet. Come back in a bit.</div>;
+    return (
+      <div className="flex gap-2 px-4">
+        <span>No new posts yet!</span>
+        <a
+          href={`https://bsky.app/intent/compose?text=${encodeURIComponent("Join me on @pocketfeed.at!\nIt's a simple social rss reader built on the AT Protocol.\n\npocketfeed.at")}`}
+          target="_blank"
+          className="custom-underline self-start"
+        >
+          Invite your friends
+        </a>
+      </div>
+    );
   }
 
   return (
     <>
       {isValidating && (
-        <div className="flex items-center justify-center">
-          <SpinnerRotate className="size-6" />
+        <div className="flex flex-col items-center justify-center gap-3 p-4 text-base">
+          <div className="flex animate-pulse gap-1 text-sm font-medium">
+            Checking for new posts <SpinnerRotate className="size-5" />
+          </div>
         </div>
       )}
       <TimelineFeed

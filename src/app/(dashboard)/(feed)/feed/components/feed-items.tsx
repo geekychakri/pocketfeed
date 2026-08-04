@@ -207,9 +207,28 @@ function FeedItem({
         </span>
       </div>
 
-      <p className="text-text-secondary line-clamp-3">
-        {item.contentSnippet || item?.["content:encodedSnippet"]}
-      </p>
+      <div className="flex items-center gap-1">
+        <p className="text-text-secondary line-clamp-3">
+          {item.contentSnippet || item?.["content:encodedSnippet"]}
+        </p>
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          className="shrink-0"
+        >
+          <path
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="1.5"
+            d="m9 5l6 7l-6 7"
+          />
+        </svg>
+      </div>
 
       <HoverPrefetchLink
         href={`/read?link=${item.link}`}

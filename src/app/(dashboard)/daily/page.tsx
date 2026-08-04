@@ -1,8 +1,11 @@
+import { Suspense } from "react";
+import { connection } from "next/server";
+
 import { ErrorBoundary } from "react-error-boundary";
 
 import RouteBack from "@/components/route-back";
 
-import DailyFeedList from "./components/daily-feed-list";
+import DailyFeedListBoundary from "./components/daily-feed-list";
 import RefreshDailyFeeds from "./components/refresh-daily-feeds";
 
 export default function Page() {
@@ -19,7 +22,7 @@ export default function Page() {
       <ErrorBoundary
         fallback={<div className="text-danger p-4">Something went wrong!</div>}
       >
-        <DailyFeedList />
+        <DailyFeedListBoundary />
       </ErrorBoundary>
     </div>
   );

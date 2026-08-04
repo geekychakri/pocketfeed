@@ -9,7 +9,7 @@ import useSWR from "swr";
 
 import { ERROR_MESSAGE } from "@/lib/constants";
 import { fetcher } from "@/lib/utils";
-import { useFeedbinPanel } from "@/store/feedbin-panel";
+import { useFeedPanel } from "@/store/feed-panel";
 
 import FeedLinks from "./feed-links";
 
@@ -26,7 +26,7 @@ export default function FeedSubList({ did }: { did: string }) {
   const [cacheLoaded, setCacheLoaded] = useState(false);
   const [localUserFeeds, setLocalUserFeeds] = useState<FeedDataType>([]);
 
-  const isFeedbinOpen = useFeedbinPanel((state) => state.openFeedbinPanel);
+  const feedPanelName = useFeedPanel((state) => state.feedPanelName);
 
   const { data, error, isLoading, isValidating } = useSWR<FeedDataType>(
     cacheLoaded ? `/api/get-user-feeds?did=${did}` : null,
@@ -120,10 +120,7 @@ export default function FeedSubList({ did }: { did: string }) {
             Refreshing...
           </span>
         )}
-        <FeedLinks
-          records={data}
-          openFeedbin={!isValidating && isFeedbinOpen}
-        />
+        <FeedLinks records={data} feedPanelName={feedPanelName} />
       </ScrollArea.Viewport>
       <ScrollArea.Scrollbar className="pointer-events-none m-2 flex w-1 justify-center rounded-sm opacity-0 transition-opacity data-scrolling:pointer-events-auto data-scrolling:opacity-100 data-scrolling:duration-0">
         <ScrollArea.Thumb className="bg-brand-primary w-full rounded-sm" />

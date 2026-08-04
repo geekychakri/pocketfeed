@@ -30,6 +30,7 @@ import {
   internalErrorToast,
   isHttpValid,
 } from "@/lib/utils";
+import { useFeedPanel } from "@/store/feed-panel";
 
 type RSSFinderType = {
   url: string;
@@ -57,6 +58,8 @@ export default function AddFeed({ did }: { did: string }) {
   const shouldReset = useRef(false);
 
   const [state, dispatch, isPending] = useActionState(addFeeds, initialState);
+
+  const setFeedPanelName = useFeedPanel((state) => state.setFeedPanelName);
 
   console.log({ state });
 
@@ -131,6 +134,19 @@ export default function AddFeed({ did }: { did: string }) {
         },
       );
 
+      mutate(
+        "/api/daily-feeds",
+        (current) =>
+          current
+            ? { ...current, userHasFeeds: true }
+            : { dailyFeedItems: [], userHasFeeds: true },
+        {
+          revalidate: false,
+        },
+      );
+
+      setFeedPanelName("pocketfeed");
+
       router.push(
         `/feed?feedUrl=${state?.payload[0].feedUrl}&title=${encodeURIComponent(state?.payload[0].title)}` as Route,
       );
@@ -186,7 +202,7 @@ export default function AddFeed({ did }: { did: string }) {
 
         {isRssDataEmpty && (
           <Button
-            className="border-shadow flex items-center justify-center gap-1"
+            className="flex items-center justify-center gap-1"
             disabled={isLoading}
           >
             <span>Continue</span>
@@ -292,7 +308,7 @@ export default function AddFeed({ did }: { did: string }) {
               {state?.message}
             </p>
             <Button
-              className="border-shadow flex items-center justify-center gap-1"
+              className="flex items-center justify-center gap-1"
               disabled={isPending}
             >
               <span>Add</span>
