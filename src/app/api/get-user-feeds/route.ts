@@ -11,6 +11,10 @@ export async function GET(request: NextRequest) {
 
     return Response.json(feeds);
   } catch (error: unknown) {
+    console.error("get-user-feeds error", {
+      did,
+      error,
+    });
     if (error instanceof Error && error.message === "You must be signed in!") {
       return Response.json({ message: error.message }, { status: 500 });
     } else {

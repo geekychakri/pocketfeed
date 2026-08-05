@@ -265,7 +265,10 @@ export async function GET(request: Request) {
     console.log({ resultsArr });
 
     return Response.json({ dailyFeedItems: resultsArr, userHasFeeds: true });
-  } catch (err) {
+  } catch (error) {
+    console.error("daily-feeds error", {
+      error,
+    });
     return Response.json({}, { status: 500 });
   }
 }

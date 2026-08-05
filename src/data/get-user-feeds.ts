@@ -89,14 +89,23 @@ export const getUserFeeds = cache(async (did: string) => {
     standardSiteResult.status === "fulfilled" &&
     standardSiteResult.value.data.records.length >= 1
   ) {
-    const getPublications = standardSiteResult.value.data.records.map(
+    // skip standard site subscription records without a publication field.
+    const getPublications = standardSiteResult.value.data.records.flatMap(
       (record) => {
-        const atUri = new AtUri(record.value.publication as string);
-        return {
-          repo: atUri.hostname,
-          collection: atUri.collection,
-          rkey: atUri.rkey,
-        };
+        if (typeof record.value.publication !== "string") {
+          console.warn("skipping the record", record.uri);
+          return [];
+        }
+
+        const atUri = new AtUri(record.value.publication);
+
+        return [
+          {
+            repo: atUri.hostname,
+            collection: atUri.collection,
+            rkey: atUri.rkey,
+          },
+        ];
       },
     );
 
