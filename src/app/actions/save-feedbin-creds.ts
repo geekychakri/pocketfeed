@@ -5,6 +5,7 @@ import * as schema from "@/db/schema";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import { encryptPassword } from "@/lib/crypto";
 import getSession from "@/lib/iron-session/get-iron-session";
+import { upstashRedis } from "@/lib/upstash-redis";
 import { validateFeedbinEmailSchema } from "@/lib/zod/schemas/validate-feedbin-email";
 
 type ActionStateType = {
@@ -54,7 +55,9 @@ export async function saveFeedbinCreds(
 
     const session = await getSession();
 
-    if (!session.user?.did) {
+    const did = session.user?.did;
+
+    if (!did) {
       return {
         type: "auth-error",
         message: "Authentication required.",
@@ -98,16 +101,22 @@ export async function saveFeedbinCreds(
     const encryptedPassword = encryptPassword(feedbinPassword);
 
     await db.insert(schema.feedbinAccounts).values({
-      userDid: session.user.did,
+      userDid: did,
       email: feedbinEmail,
       encryptedPassword,
     });
+
+    try {
+      await upstashRedis.del(`daily-${did}-feed`);
+    } catch (err) {
+      console.error("Failed to invalidate daily feed cache:", err);
+    }
 
     return {
       type: "success",
       message: "success",
       feedbinEmail,
-      userDid: session.user.did,
+      userDid: did,
     };
   } catch (err) {
     console.log(err);
