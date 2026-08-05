@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import type { Route } from "next";
 import { useSelectedLayoutSegment } from "next/navigation";
 
 import { cn } from "@/lib/utils";
+import { activityPreferenceStore } from "@/store/activity-preference";
 import { useToggleSidenav } from "@/store/toggle-sidenav";
 
 import HoverPrefetchLink from "./hover-prefetch-link";
@@ -15,32 +15,16 @@ type NavItem<T extends string = string> = {
   segment: string;
 };
 
-const links: NavItem<Route>[] = [
-  {
-    label: "Activity",
-    path: "/activity/discover",
-    segment: "activity",
-  },
-  { label: "Daily", path: "/daily", segment: "daily" },
-];
-
 export default function SideNavClient() {
-  const [activityPath, setActivityPath] = useState<Route>("/activity/discover");
-
-  useEffect(() => {
-    const path =
-      (localStorage.getItem("activity-preferred") as Route | null) ??
-      "/activity/discover";
-
-    setActivityPath(path);
-  }, []);
   const layoutSegment = useSelectedLayoutSegment();
+
+  const { activityPath } = activityPreferenceStore();
   const { toggleIsOpen } = useToggleSidenav();
 
   const links: NavItem<Route>[] = [
     {
       label: "Activity",
-      path: activityPath,
+      path: activityPath as Route,
       segment: "activity",
     },
     { label: "Daily", path: "/daily", segment: "daily" },

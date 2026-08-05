@@ -1,9 +1,6 @@
-import { Suspense } from "react";
-
 import RouteBack from "@/components/route-back";
 
 import UploadOPML from "@/app/(dashboard)/components/upload-opml";
-import { getDid } from "@/lib/auth/session";
 
 import ExportOPML from "../components/export-opml";
 
@@ -19,22 +16,12 @@ export default function ImportExportOPML() {
       <div className="flex flex-col gap-8">
         <div className="flex flex-col gap-4">
           <h2 className="font-medium">Import</h2>
-          <Suspense
-            fallback={
-              <div className="bg-skeleton-highlight h-30.5 w-130 animate-pulse rounded-md"></div>
-            }
-          >
-            <UploadOPMLWrapper />
-          </Suspense>
+
+          <UploadOPML />
         </div>
 
         <ExportOPML />
       </div>
     </div>
   );
-}
-
-async function UploadOPMLWrapper() {
-  const did = (await getDid()) as string;
-  return <UploadOPML did={did} />;
 }

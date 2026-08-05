@@ -26,6 +26,7 @@ const initialState = {
   type: "",
   message: "",
   payload: [],
+  did: "",
 };
 
 export async function addFeeds(prevState: any, formData: FormData | null) {
@@ -156,6 +157,7 @@ export async function addFeeds(prevState: any, formData: FormData | null) {
       type: "success",
       message: "",
       payload: responseFeedItems,
+      did,
     };
   } catch (err) {
     return {

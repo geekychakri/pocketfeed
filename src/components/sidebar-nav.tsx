@@ -1,12 +1,13 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense } from "react";
 import type { Route } from "next";
 import Link from "next/link";
 
 import { play } from "cuelume";
 
 import { cn } from "@/lib/utils";
+import { activityPreferenceStore } from "@/store/activity-preference";
 import { useToggleSidenav } from "@/store/toggle-sidenav";
 
 import StaticNavContent from "../app/(dashboard)/components/static-nav-content";
@@ -16,19 +17,11 @@ export default function SidebarNavigation({
 }: {
   children: React.ReactNode;
 }) {
-  const [activityPath, setActivityPath] = useState<Route>("/activity/discover");
+  const { activityPath } = activityPreferenceStore();
 
   const { isOpen, toggleIsOpen } = useToggleSidenav();
 
   console.log("Sidenav");
-
-  useEffect(() => {
-    const path =
-      (localStorage.getItem("activity-preferred") as Route | null) ??
-      "/activity/discover";
-
-    setActivityPath(path);
-  }, []);
 
   return (
     <>
@@ -40,7 +33,10 @@ export default function SidebarNavigation({
         )}
       >
         <div className="border-dashed-b flex items-center justify-between px-3">
-          <Link href={activityPath} className="flex items-center gap-1">
+          <Link
+            href={activityPath as Route}
+            className="flex items-center gap-1"
+          >
             <img src="/apple-touch-icon.png" className="size-8" />
             <span className="text-text-primary font-medium">Pocket Feed</span>
           </Link>

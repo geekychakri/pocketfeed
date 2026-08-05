@@ -46,9 +46,10 @@ const initialState = {
   type: "",
   message: "",
   payload: [],
+  did: "",
 };
 
-export default function AddFeed({ did }: { did: string }) {
+export default function AddFeed() {
   const [urlValue, setUrlValue] = useState("");
   const [rssData, setRssData] = useState<Partial<RSSFinderType>>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -120,10 +121,10 @@ export default function AddFeed({ did }: { did: string }) {
       console.log({ payload: [...state.payload] });
 
       mutate(
-        `/api/get-user-feeds?did=${did}`,
+        `/api/get-user-feeds?did=${state.did}`,
         async (prevFeeds: any) => {
           console.log({ prevFeeds });
-          await localforage.setItem(`user-feeds-${did}`, [
+          await localforage.setItem(`user-feeds-${state.did}`, [
             ...state?.payload,
             ...prevFeeds,
           ]);
@@ -151,7 +152,7 @@ export default function AddFeed({ did }: { did: string }) {
         `/feed?feedUrl=${state?.payload[0].feedUrl}&title=${encodeURIComponent(state?.payload[0].title)}` as Route,
       );
     }
-  }, [state, did, router]);
+  }, [state, router]);
 
   useLayoutEffect(() => {
     return () => {

@@ -34,7 +34,7 @@ type OPMLFeedType = {
   siteUrl: string;
 };
 
-export default function UploadOPML({ did }: { did: string }) {
+export default function UploadOPML() {
   const [file, setFile] = useState<File | null>(null);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -148,7 +148,6 @@ export default function UploadOPML({ did }: { did: string }) {
       </DropZone>
 
       <OPMLFeeds
-        did={did}
         opmlFeeds={opmlFeeds}
         isFeedsDialogOpen={isFeedsDialogOpen}
         onIsFeedsDialogOpen={() => setIsFeedDialogOpen(!isFeedsDialogOpen)}
@@ -159,13 +158,11 @@ export default function UploadOPML({ did }: { did: string }) {
 }
 
 function OPMLFeeds({
-  did,
   opmlFeeds,
   isFeedsDialogOpen,
   onIsFeedsDialogOpen,
   onSuccess,
 }: {
-  did: string;
   opmlFeeds: any;
   isFeedsDialogOpen: boolean;
   onIsFeedsDialogOpen: () => void;
@@ -258,10 +255,10 @@ function OPMLFeeds({
 
       if (res.type === "success") {
         mutate(
-          `/api/get-user-feeds?did=${did}`,
+          `/api/get-user-feeds?did=${res.did}`,
           (prevFeeds) => {
             console.log({ prevFeeds });
-            void localforage.setItem(`user-feeds-${did}`, [
+            void localforage.setItem(`user-feeds-${res.did}`, [
               ...selectedFeeds,
               ...prevFeeds,
             ]);

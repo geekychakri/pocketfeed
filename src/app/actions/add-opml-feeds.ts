@@ -70,7 +70,7 @@ export async function addOPMLFeeds(data: []) {
     }
 
     // refresh();
-    return { type: "success", message: "success" };
+    return { type: "success", message: "success", did };
   } catch (err) {
     return {
       type: "internal-error",
