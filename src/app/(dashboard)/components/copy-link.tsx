@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
+import { play } from "cuelume";
 import { AnimatePresence, motion } from "motion/react";
 
 import { cn } from "@/lib/utils";
@@ -17,10 +18,12 @@ export default function CopyLink({
   iconClassName?: string;
 }) {
   const [isCopied, setIsCopied] = useState(false);
+
   const handleCopy = (e: any) => {
     navigator.clipboard
       .writeText(link)
       .then(() => {
+        play("success");
         setIsCopied(true);
         setTimeout(() => {
           setIsCopied(false);

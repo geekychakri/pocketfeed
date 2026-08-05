@@ -1,10 +1,4 @@
-import { Suspense } from "react";
-
-import { ErrorBoundary } from "react-error-boundary";
-
 import RouteBack from "@/components/route-back";
-
-import { getDid } from "@/lib/auth/session";
 
 import AddFeed from "./components/add-feed";
 
@@ -17,23 +11,7 @@ export default async function Page() {
           <span>Add feed</span>
         </h1>
       </div>
-      <ErrorBoundary
-        fallback={<div className="text-danger p-4">Something went wrong!</div>}
-      >
-        <Suspense
-          fallback={
-            <div className="bg-skeleton-highlight h-8 w-64 animate-pulse rounded-md"></div>
-          }
-        >
-          <AddFeedWrapper />
-        </Suspense>
-      </ErrorBoundary>
+      <AddFeed />
     </div>
   );
 }
-
-const AddFeedWrapper = async () => {
-  const did = (await getDid()) as string;
-
-  return <AddFeed did={did} />;
-};

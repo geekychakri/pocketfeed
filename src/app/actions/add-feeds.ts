@@ -1,11 +1,13 @@
 "use server";
 
+import { count, eq } from "drizzle-orm";
 import qs from "qs";
 
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
 import getSession from "@/lib/iron-session/get-iron-session";
+import { upstashRedis } from "@/lib/upstash-redis";
 import { addFeedSchema } from "@/lib/zod/schemas/add-feed";
 
 type FeedsType = {
@@ -24,6 +26,7 @@ const initialState = {
   type: "",
   message: "",
   payload: [],
+  did: "",
 };
 
 export async function addFeeds(prevState: any, formData: FormData | null) {
@@ -79,6 +82,23 @@ export async function addFeeds(prevState: any, formData: FormData | null) {
       };
     }
 
+    const [{ feedCount }] = await db
+      .select({
+        feedCount: count(),
+      })
+      .from(schema.feeds)
+      .where(eq(schema.feeds.did, did));
+
+    console.log({ feedCount });
+
+    if (feedCount > 150) {
+      return {
+        type: "error",
+        message: "You've reached the 150-feed limit.",
+        payload: [],
+      };
+    }
+
     if (results.feeds?.length > 1) {
       feeds = results?.feeds
         .filter((item) => Boolean(item.isChecked))
@@ -116,16 +136,28 @@ export async function addFeeds(prevState: any, formData: FormData | null) {
       .onConflictDoNothing()
       .returning();
 
+    try {
+      await upstashRedis.del(`daily-${session.user.did}-feed`);
+    } catch (err) {
+      console.error("Failed to invalidate daily feed cache:", err);
+    }
+
     // refresh();
 
     console.log({ insertedFeedItems });
+
+    const responseFeedItems = insertedFeedItems.map((item) => ({
+      ...item,
+      source: "pocketfeed",
+    }));
 
     shouldRedirect = true;
 
     return {
       type: "success",
       message: "",
-      payload: insertedFeedItems,
+      payload: responseFeedItems,
+      did,
     };
   } catch (err) {
     return {

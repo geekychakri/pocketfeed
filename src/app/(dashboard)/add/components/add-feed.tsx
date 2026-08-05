@@ -12,10 +12,10 @@ import type { Route } from "next";
 import { useRouter } from "next/navigation";
 
 import * as Switch from "@radix-ui/react-switch";
+import { play } from "cuelume";
 import localforage from "localforage";
 import { toast } from "sonner";
 import { mutate } from "swr";
-import useSound from "use-sound";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 import { SpinnerRotate } from "@/components/spinner-rotate";
@@ -30,6 +30,7 @@ import {
   internalErrorToast,
   isHttpValid,
 } from "@/lib/utils";
+import { useFeedPanel } from "@/store/feed-panel";
 
 type RSSFinderType = {
   url: string;
@@ -45,9 +46,10 @@ const initialState = {
   type: "",
   message: "",
   payload: [],
+  did: "",
 };
 
-export default function AddFeed({ did }: { did: string }) {
+export default function AddFeed() {
   const [urlValue, setUrlValue] = useState("");
   const [rssData, setRssData] = useState<Partial<RSSFinderType>>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -56,17 +58,9 @@ export default function AddFeed({ did }: { did: string }) {
 
   const shouldReset = useRef(false);
 
-  const [playToggleOn] = useSound("sounds/toggle_on.wav", {
-    volume: 0.25,
-  });
-  const [playToggleOff] = useSound("sounds/toggle_off.wav", {
-    volume: 0.25,
-  });
-  const [playCaution] = useSound("sounds/caution.wav", {
-    volume: 0.25,
-  });
-
   const [state, dispatch, isPending] = useActionState(addFeeds, initialState);
+
+  const setFeedPanelName = useFeedPanel((state) => state.setFeedPanelName);
 
   console.log({ state });
 
@@ -94,7 +88,7 @@ export default function AddFeed({ did }: { did: string }) {
       console.log(data);
       if (checkIfObjectIsEmpty(data)) {
         toast.warning("Feed URL not found");
-        playCaution();
+        play("error");
         return;
       }
 
@@ -103,7 +97,7 @@ export default function AddFeed({ did }: { did: string }) {
       let message;
       if (error instanceof Error) message = error.message;
       console.log({ message });
-      playCaution();
+      play("error");
       internalErrorToast(message as string);
     } finally {
       setIsLoading(false);
@@ -119,7 +113,7 @@ export default function AddFeed({ did }: { did: string }) {
       toast.error(state?.message, {
         id: "error",
       });
-      playCaution();
+      play("error");
       return;
     }
     if (state?.payload.length >= 1) {
@@ -127,10 +121,10 @@ export default function AddFeed({ did }: { did: string }) {
       console.log({ payload: [...state.payload] });
 
       mutate(
-        `/api/get-user-feeds?did=${did}`,
+        `/api/get-user-feeds?did=${state.did}`,
         async (prevFeeds: any) => {
           console.log({ prevFeeds });
-          await localforage.setItem(`user-feeds-${did}`, [
+          await localforage.setItem(`user-feeds-${state.did}`, [
             ...state?.payload,
             ...prevFeeds,
           ]);
@@ -141,11 +135,24 @@ export default function AddFeed({ did }: { did: string }) {
         },
       );
 
+      mutate(
+        "/api/daily-feeds",
+        (current) =>
+          current
+            ? { ...current, userHasFeeds: true }
+            : { dailyFeedItems: [], userHasFeeds: true },
+        {
+          revalidate: false,
+        },
+      );
+
+      setFeedPanelName("pocketfeed");
+
       router.push(
         `/feed?feedUrl=${state?.payload[0].feedUrl}&title=${encodeURIComponent(state?.payload[0].title)}` as Route,
       );
     }
-  }, [state, playCaution, did, router]);
+  }, [state, router]);
 
   useLayoutEffect(() => {
     return () => {
@@ -196,7 +203,7 @@ export default function AddFeed({ did }: { did: string }) {
 
         {isRssDataEmpty && (
           <Button
-            className="border-shadow flex items-center justify-center gap-1"
+            className="flex items-center justify-center gap-1"
             disabled={isLoading}
           >
             <span>Continue</span>
@@ -262,14 +269,14 @@ export default function AddFeed({ did }: { did: string }) {
                       {(rssData?.feedUrls?.length ?? 0) > 1 && (
                         <Switch.Root
                           name={`feeds[${i}][isChecked]`}
-                          className="bg-ui-normal brand-primary relative h-6.25 w-10.5 cursor-default rounded-full outline-none data-[state=checked]:bg-[rgba(252,89,30,0.2)]"
+                          className="bg-ui-normal brand-primary relative h-6.25 w-10.5 cursor-pointer rounded-full outline-none data-[state=checked]:bg-[rgba(252,89,30,0.2)]"
                           id={`select-feed-${i}`}
                           style={{
                             WebkitTapHighlightColor: "rgba(0, 0, 0, 0)",
                           }}
                           onCheckedChange={(checked) => {
                             console.log({ checked });
-                            checked ? playToggleOn() : playToggleOff();
+                            checked && play("toggle");
                           }}
                           defaultChecked={i === 0 ? true : false}
                         >
@@ -302,7 +309,7 @@ export default function AddFeed({ did }: { did: string }) {
               {state?.message}
             </p>
             <Button
-              className="border-shadow flex items-center justify-center gap-1"
+              className="flex items-center justify-center gap-1"
               disabled={isPending}
             >
               <span>Add</span>

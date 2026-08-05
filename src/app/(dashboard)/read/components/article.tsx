@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
+import { play } from "cuelume";
 import { decode } from "html-entities";
 import DOMPurify from "isomorphic-dompurify";
 import localforage from "localforage";
 import useSWR from "swr";
-import useSound from "use-sound";
 
 import NothingToReadSVG from "@/components/svg/nothing-to-read";
 
@@ -117,8 +117,6 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
 
   const articleLinkOrigin = new URL(articleUrl).origin;
 
-  const [copySound] = useSound("/sounds/copy.wav");
-
   // console.log({ pathname });
 
   // const {
@@ -156,7 +154,7 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
         button.disabled = true;
         button.innerHTML = "Copied!";
         // animate("#svgIconCheck", { opacity: 1 }, { duration: 0.5 });
-        copySound();
+        play("success");
         navigator.clipboard
           .writeText(pre.textContent as string)
           .then(() => {
@@ -169,7 +167,7 @@ export default function Article({ articleUrl }: { articleUrl: string }) {
           .catch((err) => console.error("Error copying text: ", err));
       });
     });
-  }, [copySound]);
+  }, []);
 
   // useLayoutEffect(() => {
   //   return () => {

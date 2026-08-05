@@ -3,11 +3,10 @@ import { cache } from "react";
 import { AtUri } from "@atproto/api";
 import { desc, eq } from "drizzle-orm";
 
-// import { nanoid } from "nanoid";
-
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
 import { getSessionAgent } from "@/lib/auth/session";
+import { decryptPassword } from "@/lib/crypto";
 
 type SubscriptionType = {
   id: string;
@@ -16,11 +15,21 @@ type SubscriptionType = {
   siteUrl: string;
 }[];
 
+type FeedbinItemType = {
+  id: string;
+  created_at: string;
+  feed_id: number;
+  title: string;
+  feed_url: string;
+  site_url: string;
+};
+
 export const getUserFeeds = cache(async (did: string) => {
   console.log("USER_FEEDs");
   let standardSiteSubscriptions: SubscriptionType = [];
   let skyFeedSubscriptions: SubscriptionType = [];
   let inAppFeedSubscriptions: SubscriptionType = [];
+  let feedbinSubscriptions: SubscriptionType = [];
 
   const agent = await getSessionAgent();
 
@@ -30,7 +39,25 @@ export const getUserFeeds = cache(async (did: string) => {
 
   console.log({ agentDid: agent.did });
 
-  const [standardSiteResult, skyReaderResult, inAppFeedsResult] =
+  const [userFeedbinAccount] = await db
+    .select({
+      email: schema.feedbinAccounts.email,
+      password: schema.feedbinAccounts.encryptedPassword,
+    })
+    .from(schema.feedbinAccounts)
+    .where(eq(schema.feedbinAccounts.userDid, agent.did))
+    .limit(1);
+
+  let auth;
+  if (userFeedbinAccount) {
+    const decryptedPassword = decryptPassword(userFeedbinAccount.password);
+
+    auth = Buffer.from(
+      `${userFeedbinAccount.email}:${decryptedPassword}`,
+    ).toString("base64");
+  }
+
+  const [standardSiteResult, skyReaderResult, inAppFeedsResult, feedbinResult] =
     await Promise.allSettled([
       agent?.com.atproto.repo.listRecords({
         repo: did as string,
@@ -48,6 +75,14 @@ export const getUserFeeds = cache(async (did: string) => {
         .from(schema.feeds)
         .where(eq(schema.feeds.did, did as string))
         .orderBy(desc(schema.feeds.createdAt)),
+
+      userFeedbinAccount
+        ? fetch("https://api.feedbin.com/v2/subscriptions.json", {
+            headers: {
+              Authorization: `Basic ${auth}`,
+            },
+          })
+        : Promise.resolve(null),
     ]);
 
   if (
@@ -156,9 +191,26 @@ export const getUserFeeds = cache(async (did: string) => {
     }));
   }
 
+  if (feedbinResult.status === "fulfilled" && feedbinResult.value) {
+    const res = feedbinResult.value;
+
+    if (res.ok) {
+      const subscriptions = await res.json();
+      feedbinSubscriptions = subscriptions.map((item: FeedbinItemType) => ({
+        title: item.title as string,
+        feedUrl: item.feed_url as string,
+        siteUrl: item.site_url,
+        id: item.id,
+        externalSub: true,
+        source: "feedbin",
+      }));
+    }
+  }
+
   return [
     ...inAppFeedSubscriptions,
     ...standardSiteSubscriptions,
     ...filteredSkyFeedSubscriptions,
+    ...feedbinSubscriptions,
   ];
 });

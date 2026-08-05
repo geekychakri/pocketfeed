@@ -109,7 +109,7 @@ function FeedListItems({ feedList }: { feedList: any }) {
   console.log({ groupFeedList: groupedList });
   return (
     <>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 py-4">
         {feedList.isStale ? (
           <p className="text-brand-primary px-4">
             Showing last updated content
@@ -207,9 +207,28 @@ function FeedItem({
         </span>
       </div>
 
-      <p className="text-text-secondary line-clamp-3">
-        {item.contentSnippet || item?.["content:encodedSnippet"]}
-      </p>
+      <div className="flex items-center gap-1">
+        <p className="text-text-secondary line-clamp-3">
+          {item.contentSnippet || item?.["content:encodedSnippet"]}
+        </p>
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          className="shrink-0"
+        >
+          <path
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="1.5"
+            d="m9 5l6 7l-6 7"
+          />
+        </svg>
+      </div>
 
       <HoverPrefetchLink
         href={`/read?link=${item.link}`}
@@ -312,7 +331,7 @@ const PodcastCard = ({
 
 function FeedListFallback() {
   return (
-    <div className="flex animate-pulse flex-col gap-5 px-4">
+    <div className="flex animate-pulse flex-col gap-5 p-4">
       <div className="bg-ui-normal h-7 w-56 rounded"></div>
       <div className="flex flex-col space-y-3">
         <div className="flex h-14 w-full items-center justify-between">
@@ -326,7 +345,7 @@ function FeedListFallback() {
         </div>
       </div>
 
-      {Array.from({ length: 10 }).map((_, i, a) => {
+      {Array.from({ length: 10 }).map((_, i) => {
         return (
           <div key={i} className="flex flex-col space-y-3">
             <div className="flex h-14 w-full items-center justify-between">

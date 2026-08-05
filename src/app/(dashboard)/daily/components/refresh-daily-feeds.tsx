@@ -31,12 +31,21 @@ async function fetcher<JSON = any>(
 }
 
 export default function RefreshDailyFeeds() {
-  const { isValidating, mutate } = useSWR("/api/daily-feeds", fetcher, {
-    revalidateIfStale: false,
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-    revalidateOnMount: false,
-  });
+  const { data, isValidating, mutate } = useSWR<{ userHasFeeds: boolean }>(
+    "/api/daily-feeds",
+    fetcher,
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      revalidateOnMount: false,
+    },
+  );
+
+  if (!data?.userHasFeeds) {
+    return null;
+  }
+
   return (
     <button
       className="bg-ui-normal hover:bg-ui-hover cursor-pointer rounded-md px-4 py-2 font-medium disabled:opacity-20"

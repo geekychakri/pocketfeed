@@ -12,8 +12,8 @@ import { useParams } from "next/navigation";
 
 import { Dialog } from "@base-ui/react/dialog";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
+import { play } from "cuelume";
 import { toast } from "sonner";
-import useSound from "use-sound";
 
 import Button from "@/components/ui/custom-button";
 import Textarea from "@/components/ui/custom-textarea";
@@ -62,10 +62,6 @@ export default function PostModal({
 
   const postRef = useRef<HTMLTextAreaElement | null>(null);
 
-  const [playSuccess] = useSound("sounds/success.wav", {
-    volume: 0.25,
-  });
-
   const [state, dispatch, isPending] = useActionState(addPost, initialState);
 
   useEffect(() => {
@@ -79,17 +75,21 @@ export default function PostModal({
       //     mutate(key); // With this you can revalidate whatever the key is. (with @, $inf$ or whatever)
       //   }
       // }
-      playSuccess();
+      shouldReset.current = true;
+      play("success");
       toast.success("Your post was sent!");
       setIsModalOpen(false);
     } else if (state.type === "duplicate-post") {
+      shouldReset.current = true;
       toast.warning(state.message);
     } else if (state.type === "internal-error") {
+      shouldReset.current = true;
       internalErrorToast(state.message);
     } else if (state.type === "auth-error") {
+      shouldReset.current = true;
       toast.error(state.message);
     }
-  }, [state, playSuccess]);
+  }, [state]);
 
   useLayoutEffect(() => {
     return () => {
@@ -131,7 +131,7 @@ export default function PostModal({
       <Dialog.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
         <Dialog.Portal>
           <Dialog.Backdrop className="fixed inset-0 min-h-dvh bg-black opacity-20 transition-all duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0 supports-[-webkit-touch-callout:none]:absolute dark:opacity-70" />
-          <Dialog.Popup className="border-shadow focus-visible:outline-brand-primary bg-background-primary fixed top-1/2 left-1/2 -mt-8 w-[90vw] max-w-112.5 -translate-x-1/2 -translate-y-1/2 rounded-lg p-6 transition-all duration-150 focus-visible:outline data-ending-style:scale-90 data-ending-style:opacity-0 data-starting-style:scale-90 data-starting-style:opacity-0">
+          <Dialog.Popup className="border-shadow focus-visible:outline-brand-primary bg-background-primary fixed top-1/2 left-1/2 -mt-5 w-[90vw] max-w-112.5 -translate-x-1/2 -translate-y-1/2 rounded-lg p-6 transition-all duration-150 focus-visible:outline data-ending-style:scale-90 data-ending-style:opacity-0 data-starting-style:scale-90 data-starting-style:opacity-0">
             <Dialog.Title className="-mt-1.5 mb-1 text-lg font-medium">
               <label htmlFor="post">Share with note</label>
             </Dialog.Title>
@@ -141,7 +141,7 @@ export default function PostModal({
               action={(formData) => dispatch(formData)}
             >
               <Textarea
-                placeholder="Add a thought, if you'd like..."
+                placeholder="Add a note, or just hit Post."
                 className="min-h-24 resize-none scroll-pb-2"
                 name="post"
                 // id="post"
@@ -174,12 +174,16 @@ export default function PostModal({
               />
 
               <div className="flex gap-5">
-                <Button className="bg-ui-normal hover:bg-ui-hover order-2 flex flex-1 items-center justify-center gap-1 transition-[background-color]">
+                <Button
+                  disabled={isPending}
+                  className="bg-ui-normal hover:bg-ui-hover order-2 flex flex-1 items-center justify-center gap-1 transition-[background-color]"
+                >
                   <span>Post</span>
                   {isPending && loadingSkeleton}
                 </Button>
                 <Button
                   type="button"
+                  disabled={isPending}
                   onClick={() => setIsModalOpen(false)}
                   className="border-shadow order-1 flex-1 bg-transparent"
                 >

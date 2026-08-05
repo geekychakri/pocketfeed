@@ -61,19 +61,24 @@ export default async function Home() {
       >
         <motion.nav className="border-dashed-b overflow-hidden px-4">
           <motion.div
-            className="flex h-14 items-center justify-between"
+            className="text-brand-primary flex h-14 items-center justify-between font-medium"
             variants={fadeInDown}
           >
-            Pocket Feed
+            <Link href="/" className="flex items-center gap-1">
+              <img src="/apple-touch-icon.png" className="size-8" />
+              <span className="text-text-primary font-medium">Pocket Feed</span>
+            </Link>
             <div className="flex gap-5">
               <Link
                 href={`/signin` as Route}
+                // replace={true}
                 className="text-text-secondary flex items-center gap-6"
               >
                 Log In
               </Link>
               <Link
                 href={`/signin` as Route}
+                // replace={true}
                 className="text-text-secondary flex items-center gap-6"
               >
                 Sign Up
@@ -106,6 +111,7 @@ export default async function Home() {
             <motion.div variants={fadeInUp}>
               <Link
                 href={`/signin` as Route}
+                // replace={true}
                 className="bg-brand-primary/90 hover:bg-brand-primary rounded-md px-6 py-3 text-center text-lg font-medium text-white duration-100 select-none"
               >
                 Get started

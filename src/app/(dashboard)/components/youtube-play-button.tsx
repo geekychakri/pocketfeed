@@ -1,7 +1,9 @@
 "use client";
 
+import { useEffect } from "react";
+
 import { PlayIcon } from "@radix-ui/react-icons";
-import useSound from "use-sound";
+import { play } from "cuelume";
 
 import { cn } from "@/lib/utils";
 import { useFeedItem } from "@/store/feed-item";
@@ -29,10 +31,6 @@ export default function YouTubePlayButton({
     useYTPlayer();
   const { setFeedItem } = useFeedItem();
 
-  const [tap] = useSound("/sounds/tap.wav", {
-    volume: 0.25,
-  });
-
   const { audioPlayerRef } = useGlobalRef();
 
   // useEffect(() => {
@@ -42,6 +40,7 @@ export default function YouTubePlayButton({
   //     : ((document.body.style.overflowY = "auto"),
   //       (document.documentElement.style.scrollbarGutter = "auto"));
   // }, [isOpen]);
+
   return (
     <button
       onClick={() => {
@@ -50,7 +49,7 @@ export default function YouTubePlayButton({
         setYtVideoTitle(ytVideoTitle);
         setFeedItem(feedItem); //TODO:
         audioPlayerRef.current?.pause();
-        tap();
+        play("press");
         // save item in a localStorage for a post share
         localStorage.setItem("feedItem", JSON.stringify(feedItem));
       }}

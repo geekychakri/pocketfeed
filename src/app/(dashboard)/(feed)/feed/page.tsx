@@ -15,14 +15,17 @@ export default async function Feed(props: {
   }));
 
   return (
-    <div className="flex flex-col py-18">
+    <div className="flex flex-col">
       <Suspense
         fallback={
-          <div className="bg-skeleton-highlight mx-4 h-8 w-64 animate-pulse rounded-md"></div>
+          <div className="border-dashed-b flex h-14 animate-pulse items-center px-4">
+            <div className="bg-skeleton-highlight h-8 w-64 rounded-md"></div>
+          </div>
         }
       >
         <FeedHeader feedSearchParamPromise={feedSearchParamPromise} />
-
+      </Suspense>
+      <Suspense fallback={<FeedListFallback />}>
         <FeedListWrapper feedSearchParamPromise={feedSearchParamPromise} />
       </Suspense>
     </div>
@@ -37,7 +40,7 @@ const FeedHeader = async ({
   console.log("FEED HEADER RENDERED");
   const { title, feedUrl } = await feedSearchParamPromise;
   return (
-    <div className="relative mb-8 flex items-center px-4 max-md:gap-2">
+    <div className="border-dashed-b relative flex h-14 items-center px-4 max-md:gap-2">
       <RouteBack className="absolute -left-12 max-md:static" />
       <h1 className="font-medium">{title || new URL(feedUrl).hostname}</h1>
     </div>
@@ -66,3 +69,38 @@ const FeedListWrapper = async ({
   }
   return <FeedItems feedUrl={feedUrl} />;
 };
+
+function FeedListFallback() {
+  return (
+    <div className="flex animate-pulse flex-col gap-5 p-4">
+      <div className="bg-ui-normal h-7 w-56 rounded"></div>
+      <div className="flex flex-col space-y-3">
+        <div className="flex h-14 w-full items-center justify-between">
+          <div className="bg-ui-normal h-7 w-56 rounded"></div>
+          <div className="bg-ui-normal h-7 w-20 rounded"></div>
+        </div>
+        <div className="flex-1 space-y-3">
+          <div className="bg-ui-normal h-5 rounded"></div>
+          <div className="bg-ui-normal h-5 rounded"></div>
+          <div className="bg-ui-normal h-5 rounded"></div>
+        </div>
+      </div>
+
+      {Array.from({ length: 10 }).map((_, i) => {
+        return (
+          <div key={i} className="flex flex-col space-y-3">
+            <div className="flex h-14 w-full items-center justify-between">
+              <div className="bg-ui-normal h-7 w-56 rounded"></div>
+              <div className="bg-ui-normal h-7 w-20 rounded"></div>
+            </div>
+            <div className="flex-1 space-y-3">
+              <div className="bg-ui-normal h-5 rounded"></div>
+              <div className="bg-ui-normal h-5 rounded"></div>
+              <div className="bg-ui-normal h-5 rounded"></div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function RootLayout({
   children,
 }: {
@@ -5,8 +7,11 @@ export default function RootLayout({
 }) {
   return (
     <>
-      <nav className="border-dashed-b flex h-14 items-center px-4">
-        Pocket Feed
+      <nav className="border-dashed-b text-brand-primary flex h-14 items-center px-4 font-medium">
+        <Link href="/" className="flex items-center gap-1">
+          <img src="/apple-touch-icon.png" className="size-8" />
+          <span className="text-text-primary font-medium">Pocket Feed</span>
+        </Link>
       </nav>
       <main
         id="main"

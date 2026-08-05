@@ -60,12 +60,15 @@ export default function FollowingPostsList() {
 
   if (isEmpty) {
     return (
-      <div className="flex flex-col gap-2 px-4">
-        Your following feed is empty! Follow more users to see what&apos;s
-        happening.
-        <Link href="/discover" className="custom-underline self-start">
-          Discover your Bluesky Tribe
-        </Link>
+      <div className="flex gap-2 px-4">
+        <span>No new posts yet!</span>
+        <a
+          href={`https://bsky.app/intent/compose?text=${encodeURIComponent("Join me on @pocketfeed.at!\nIt's a simple social rss reader built on the AT Protocol.\n\npocketfeed.at")}`}
+          target="_blank"
+          className="custom-underline self-start"
+        >
+          Invite your friends
+        </a>
       </div>
     );
   }
@@ -73,8 +76,10 @@ export default function FollowingPostsList() {
   return (
     <>
       {isValidating && (
-        <div className="flex items-center justify-center">
-          <SpinnerRotate className="size-6" />
+        <div className="flex flex-col items-center justify-center gap-3 p-4 text-base">
+          <div className="flex animate-pulse gap-1 text-sm font-medium">
+            Checking for new posts <SpinnerRotate className="size-5" />
+          </div>
         </div>
       )}
       <TimelineFeed

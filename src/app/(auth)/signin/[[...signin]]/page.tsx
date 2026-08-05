@@ -16,9 +16,10 @@ export default function SignIn() {
           </span>
           <span className="text-text-secondary text-sm text-pretty">
             If you have an account on{" "}
-            <span className="text-[#006aff]">Bluesky</span>, Tangled or{" "}
-            <span className="text-[#57822b]">Leaflet</span> you already have an
-            Atmosphere account.
+            <span className="text-[#006aff]">Bluesky</span>,{" "}
+            <span className="text-danger">pckt.blog</span> or{" "}
+            <span className="text-[#57822b]">leaflet.pub</span> you already have
+            an Atmosphere account.
           </span>
         </p>
       </div>

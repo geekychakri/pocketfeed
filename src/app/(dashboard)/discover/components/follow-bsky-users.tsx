@@ -10,7 +10,6 @@ import {
 } from "react";
 
 import { toast } from "sonner";
-import useSound from "use-sound";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 import { SpinnerRotate } from "@/components/spinner-rotate";
@@ -35,10 +34,6 @@ export default function FollowBskyUsers({ followsList }: { followsList: any }) {
   const selectAllCheckboxRef = useRef<HTMLInputElement | null>(null);
 
   const formRef = useRef<HTMLFormElement>(null);
-
-  const [playCaution] = useSound("sounds/caution.wav", {
-    volume: 0.25,
-  });
 
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     //getting an array of all roleIds
@@ -103,9 +98,8 @@ export default function FollowBskyUsers({ followsList }: { followsList: any }) {
       toast.success("Followed successfully!");
     } else if (state.type === "internal-error") {
       internalErrorToast(state.message);
-      playCaution();
     }
-  }, [state, playCaution]);
+  }, [state]);
 
   console.log({ selectedIds });
 

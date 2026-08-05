@@ -132,4 +132,16 @@ export const userFeed = pgTable(
   ],
 );
 
+export const feedbinAccounts = pgTable("feedbin_accounts", {
+  userDid: text("user_did")
+    .primaryKey()
+    .references(() => users.did, {
+      onDelete: "cascade",
+    }),
+  email: text("email").notNull(),
+  encryptedPassword: text("encrypted_password").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
 export type User = InferSelectModel<typeof users>;

@@ -6,6 +6,8 @@ import { usePathname } from "next/navigation";
 
 import { motion } from "motion/react";
 
+import { activityPreferenceStore } from "@/store/activity-preference";
+
 const items = [
   { href: `/activity/discover`, title: "Discover" },
   { href: `/activity/following`, title: "Following" },
@@ -13,6 +15,8 @@ const items = [
 
 const ActivitySegmentedControl = (): React.ReactElement => {
   const pathname = usePathname();
+
+  const { setActivityPath } = activityPreferenceStore();
 
   return (
     <ul className="flex h-full">
@@ -42,6 +46,9 @@ const ActivitySegmentedControl = (): React.ReactElement => {
               href={item.href as Route}
               draggable={false}
               className="absolute inset-0 z-2"
+              onNavigate={() => {
+                setActivityPath(item.href);
+              }}
               //   replace
             ></Link>
           </motion.li>

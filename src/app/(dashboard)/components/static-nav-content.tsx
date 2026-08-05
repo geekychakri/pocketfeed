@@ -4,6 +4,7 @@ import type { Route } from "next";
 import { useSelectedLayoutSegment } from "next/navigation";
 
 import { cn } from "@/lib/utils";
+import { activityPreferenceStore } from "@/store/activity-preference";
 import { useToggleSidenav } from "@/store/toggle-sidenav";
 
 import HoverPrefetchLink from "./hover-prefetch-link";
@@ -14,18 +15,21 @@ type NavItem<T extends string = string> = {
   segment: string;
 };
 
-const links: NavItem<Route>[] = [
-  {
-    label: "Activity",
-    path: "/activity/discover",
-    segment: "activity",
-  },
-  { label: "Daily", path: "/daily", segment: "daily" },
-];
-
 export default function SideNavClient() {
   const layoutSegment = useSelectedLayoutSegment();
+
+  const { activityPath } = activityPreferenceStore();
   const { toggleIsOpen } = useToggleSidenav();
+
+  const links: NavItem<Route>[] = [
+    {
+      label: "Activity",
+      path: activityPath as Route,
+      segment: "activity",
+    },
+    { label: "Daily", path: "/daily", segment: "daily" },
+  ];
+
   return (
     <div className="border-dashed-b flex flex-col gap-1 py-2.5">
       {links.map(({ label, path, segment }, i) => {

@@ -76,19 +76,12 @@ export default function SubscriptionList({
     },
   );
 
+  if (!bSkyProfileData?.did) {
+    return <LoadingSkeleton />;
+  }
+
   if (isLoading) {
-    return (
-      <div className="flex flex-col gap-8 p-4">
-        {Array.from({ length: 50 }, (_, i) => {
-          return (
-            <div
-              key={i}
-              className="bg-skeleton-highlight flex h-8 w-full animate-pulse flex-col gap-4 rounded-md px-4"
-            ></div>
-          );
-        })}
-      </div>
-    );
+    return <LoadingSkeleton />;
   }
 
   if (error) {
@@ -449,3 +442,16 @@ function SubscriptionListStatusBar({
     </InView>
   );
 }
+
+const LoadingSkeleton = () => (
+  <div className="flex flex-col gap-8 p-4">
+    {Array.from({ length: 50 }, (_, i) => {
+      return (
+        <div
+          key={i}
+          className="bg-skeleton-highlight flex h-8 w-full animate-pulse flex-col gap-4 rounded-md px-4"
+        ></div>
+      );
+    })}
+  </div>
+);

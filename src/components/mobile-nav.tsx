@@ -1,20 +1,31 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef } from "react";
+import type { Route } from "next";
 import Link from "next/link";
 
+import { play } from "cuelume";
+
+import { activityPreferenceStore } from "@/store/activity-preference";
 import { useToggleSidenav } from "@/store/toggle-sidenav";
 
 export default function MobileNav() {
+  const { activityPath } = activityPreferenceStore();
   const { toggleIsOpen, isOpen } = useToggleSidenav();
   console.log({ isOpen });
 
   return (
     <nav className="bg-background-primary border-dashed-b sticky top-0 z-1000 hidden justify-between p-4 max-md:flex">
-      <Link href="/activity/discover" prefetch={false}>
-        Pocket Feed
+      <Link href={activityPath as Route} className="flex items-center gap-1">
+        <img src="/apple-touch-icon.png" className="size-8" />
+        <span className="text-text-primary font-medium">Pocket Feed</span>
       </Link>
-      <button className="flex items-center gap-1" onClick={toggleIsOpen}>
+      <button
+        className="flex items-center gap-1"
+        onClick={() => {
+          toggleIsOpen();
+          play("tick");
+        }}
+      >
         Menu
         <svg
           xmlns="http://www.w3.org/2000/svg"
