@@ -72,9 +72,7 @@ export default function WelcomeModal() {
                       Subscriptions
                     </h1>
                     <p className="text-text-secondary">
-                      Subscribe to RSS feeds, import OPML files, and Pocket Feed
-                      automatically syncs your standard.site, Feedbin, and
-                      Skyreader subscriptions.
+                      Subscribe to RSS feeds and import OPML files.
                     </p>
                   </div>
                   <div className="border-dashed-b flex flex-col gap-1 px-4 py-2">
