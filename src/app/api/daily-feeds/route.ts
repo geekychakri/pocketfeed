@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import { after } from "next/server";
+import { after, connection } from "next/server";
 
 import * as Sentry from "@sentry/nextjs";
 import dayjs from "dayjs";
@@ -27,6 +27,7 @@ const parser = new Parser({
 const limit = pLimit(10);
 
 export async function GET(request: Request) {
+  await connection();
   try {
     const headersList = await headers();
     const userTimezone = headersList.get("pf-user-timezone") as string;
