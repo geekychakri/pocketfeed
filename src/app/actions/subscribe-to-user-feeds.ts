@@ -1,5 +1,6 @@
 "use server";
 
+import * as Sentry from "@sentry/nextjs";
 import { inArray, sql } from "drizzle-orm";
 import qs from "qs";
 
@@ -81,6 +82,9 @@ export async function subscribeToUserFeeds(
       payload: records,
     };
   } catch (err) {
+    Sentry.captureException(err, {
+      tags: { action: "subscribe-to-user-feeds" },
+    });
     return {
       type: "internal-error",
       message: INTERNAL_ERROR_MESSAGE,

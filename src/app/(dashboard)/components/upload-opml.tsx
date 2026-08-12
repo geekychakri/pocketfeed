@@ -223,11 +223,9 @@ function OPMLFeeds({
   const handleOPMLImport = async (e: React.SubmitEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
-
-      setIsSubmitting(true);
       if (selectedIds.length === 0) {
         play("error");
-        return toast.warning("Select atleast one item.", {
+        return toast.warning("Select at least one feed.", {
           id: "min-limit",
         });
       }
@@ -237,6 +235,8 @@ function OPMLFeeds({
         });
       }
 
+      setIsSubmitting(true);
+
       const selectedIdsSet = new Set(selectedIds);
       const selectedFeeds = opmlFeeds.feeds.flatMap((feed: OPMLFeedType) =>
         selectedIdsSet.has(feed.id)
@@ -245,7 +245,6 @@ function OPMLFeeds({
               title: feed.title,
               feedUrl: feed.feedUrl,
               siteUrl: feed.siteUrl,
-              source: "pocketfeed",
             }
           : [],
       );
@@ -256,13 +255,12 @@ function OPMLFeeds({
       if (res.type === "success") {
         mutate(
           `/api/get-user-feeds?did=${res.did}`,
-          (prevFeeds) => {
+          (prevFeeds = []) => {
             console.log({ prevFeeds });
-            void localforage.setItem(`user-feeds-${res.did}`, [
-              ...selectedFeeds,
-              ...prevFeeds,
-            ]);
-            return [...selectedFeeds, ...prevFeeds];
+
+            const updatedFeeds = [...res.feeds, ...prevFeeds];
+            void localforage.setItem(`user-feeds-${res.did}`, updatedFeeds);
+            return updatedFeeds;
           },
           {
             revalidate: false,
@@ -284,9 +282,15 @@ function OPMLFeeds({
         onIsFeedsDialogOpen();
         onSuccess();
         toast.success("Imported successfully!");
+      } else if (res.type === "auth-error") {
+        play("error");
+        toast.error(res.message);
       } else if (res.type === "validation-error") {
         play("error");
         toast.error(res.message);
+      } else if (res.type === "internal-error") {
+        play("error");
+        internalErrorToast(INTERNAL_ERROR_MESSAGE);
       }
     } catch (err) {
       // setIsSubmitting(false);

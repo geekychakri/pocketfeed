@@ -1,5 +1,7 @@
 import { NextRequest } from "next/server";
 
+import * as Sentry from "@sentry/nextjs";
+
 import { getUserFeeds } from "@/data/get-user-feeds";
 
 export async function GET(request: NextRequest) {
@@ -11,6 +13,9 @@ export async function GET(request: NextRequest) {
 
     return Response.json(feeds);
   } catch (error: unknown) {
+    Sentry.captureException(error, {
+      tags: { api: "get-user-feeds" },
+    });
     console.error("get-user-feeds error", {
       did,
       error,

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import * as Sentry from "@sentry/nextjs";
 import { nanoid } from "nanoid";
 import xml2js from "xml2js";
 
@@ -87,6 +88,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ feeds: uniqueFeeds });
   } catch (err) {
     console.log(err);
+    Sentry.captureException(err, {
+      tags: { api: "parse-opml" },
+    });
     return NextResponse.json({ message: "error" }, { status: 500 });
   }
 }

@@ -1,5 +1,7 @@
 "use server";
 
+import * as Sentry from "@sentry/nextjs";
+
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
 import { getDid } from "@/lib/auth/session";
@@ -34,6 +36,9 @@ export async function followBskyTribe(prevState: any, formData: FormData) {
       .onConflictDoNothing();
     return { type: "success", message: "success" };
   } catch (err) {
+    Sentry.captureException(err, {
+      tags: { action: "follow-bsky-tribe" },
+    });
     return { type: "internal-error", message: INTERNAL_ERROR_MESSAGE };
   }
 }

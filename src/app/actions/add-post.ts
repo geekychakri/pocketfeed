@@ -1,6 +1,7 @@
 "use server";
 
 import { AppBskyFeedPost, RichText } from "@atproto/api";
+import * as Sentry from "@sentry/nextjs";
 import { sql } from "drizzle-orm";
 
 import { db } from "@/db/db";
@@ -164,6 +165,9 @@ export async function addPost(prevState: any, formData: FormData | null) {
     return { type: "success", message: "success" };
   } catch (err) {
     console.error(err);
+    Sentry.captureException(err, {
+      tags: { action: "add-post" },
+    });
     return {
       type: "internal-error",
       message: INTERNAL_ERROR_MESSAGE,

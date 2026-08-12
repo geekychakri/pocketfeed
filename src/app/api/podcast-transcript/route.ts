@@ -1,5 +1,7 @@
 import { NextRequest } from "next/server";
 
+import * as Sentry from "@sentry/nextjs";
+
 import getSession from "@/lib/iron-session/get-iron-session";
 import { parse } from "@/lib/vtt-srt-parser";
 
@@ -44,6 +46,9 @@ export async function GET(request: NextRequest) {
       return Response.json({ parsedText });
     }
   } catch (err) {
+    Sentry.captureException(err, {
+      tags: { api: "podcast-transcript" },
+    });
     return Response.json("", { status: 500 });
   }
 }

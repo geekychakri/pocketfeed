@@ -1,5 +1,6 @@
 import { type NextRequest } from "next/server";
 
+import * as Sentry from "@sentry/nextjs";
 import { and, eq, inArray, ne, notExists } from "drizzle-orm";
 
 import { db } from "@/db/db";
@@ -137,6 +138,9 @@ export async function POST(request: NextRequest) {
     return Response.json({ msg: "successfully synced!" }, { status: 200 });
   } catch (err) {
     console.log(err);
+    Sentry.captureException(err, {
+      tags: { api: "sync-bsky-follows" },
+    });
     return Response.json({ msg: "Something went wrong" }, { status: 500 });
   }
 }

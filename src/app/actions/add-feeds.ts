@@ -1,5 +1,6 @@
 "use server";
 
+import * as Sentry from "@sentry/nextjs";
 import { count, eq } from "drizzle-orm";
 import qs from "qs";
 
@@ -160,6 +161,9 @@ export async function addFeeds(prevState: any, formData: FormData | null) {
       did,
     };
   } catch (err) {
+    Sentry.captureException(err, {
+      tags: { action: "add-feeds" },
+    });
     return {
       type: "internal-error",
       // message: getErrorMessage(err) || INTERNAL_ERROR_MESSAGE,

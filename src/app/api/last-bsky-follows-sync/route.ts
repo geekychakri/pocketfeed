@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import { eq } from "drizzle-orm";
 
 import { db } from "@/db/db";
@@ -30,6 +31,9 @@ export async function GET(request: Request) {
     return Response.json({ lastBskyFollowsSyncAt });
   } catch (err) {
     console.log(err);
+    Sentry.captureException(err, {
+      tags: { api: "last-bsky-follows-sync" },
+    });
     return Response.json({ msg: "Something went wrong!" }, { status: 500 });
   }
 }
