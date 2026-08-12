@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import { and, desc, eq, getTableColumns, lt, or } from "drizzle-orm";
 
 import { db } from "@/db/db";
@@ -148,6 +149,9 @@ export async function GET(request: Request) {
     console.log({ result: result.posts });
     return Response.json(result);
   } catch (error) {
+    Sentry.captureException(error, {
+      tags: { api: "following-posts" },
+    });
     return Response.json("", { status: 500 });
   }
 }

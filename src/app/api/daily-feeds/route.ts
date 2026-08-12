@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
-import { after } from "next/server";
+import { after, connection } from "next/server";
 
+import * as Sentry from "@sentry/nextjs";
 import dayjs from "dayjs";
 import isToday from "dayjs/plugin/isToday";
 import timezone from "dayjs/plugin/timezone";
@@ -26,6 +27,7 @@ const parser = new Parser({
 const limit = pLimit(10);
 
 export async function GET(request: Request) {
+  await connection();
   try {
     const headersList = await headers();
     const userTimezone = headersList.get("pf-user-timezone") as string;
@@ -268,6 +270,9 @@ export async function GET(request: Request) {
   } catch (error) {
     console.error("daily-feeds error", {
       error,
+    });
+    Sentry.captureException(error, {
+      tags: { api: "daily-feed" },
     });
     return Response.json({}, { status: 500 });
   }

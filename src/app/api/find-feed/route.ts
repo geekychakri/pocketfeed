@@ -1,3 +1,5 @@
+import * as Sentry from "@sentry/nextjs";
+
 import { handleAndReturnErrorResponse } from "@/lib/api/errors";
 import { findRSS as rssFinder } from "@/lib/find-rss";
 import getSession from "@/lib/iron-session/get-iron-session";
@@ -55,6 +57,9 @@ export async function POST(request: Request) {
     }
   } catch (err) {
     console.log({ err });
+    Sentry.captureException(err, {
+      tags: { api: "find-feed" },
+    });
     if (
       err instanceof Error &&
       (err.message.includes("ENOTFOUND") ||

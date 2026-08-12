@@ -389,3 +389,10 @@ export function humanReadableDate(date: string, lang = navigator.language) {
 
   return `${d} · ${t}`;
 }
+
+export class SentryAPIError extends Error {
+  constructor(message: string | undefined) {
+    super(message);
+    this.name = "SentryAPIError";
+  }
+}

@@ -1,5 +1,6 @@
 import { after, type NextRequest } from "next/server";
 
+import * as Sentry from "@sentry/nextjs";
 import Parser from "rss-parser";
 
 import getSession from "@/lib/iron-session/get-iron-session";
@@ -105,6 +106,9 @@ export async function GET(request: NextRequest) {
   } catch (err: unknown) {
     console.log({ err });
 
+    Sentry.captureException(err, {
+      tags: { api: "get-feed-data" },
+    });
     if (
       err instanceof Error &&
       (err.cause instanceof Error

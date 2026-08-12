@@ -1,5 +1,6 @@
 "use server";
 
+import * as Sentry from "@sentry/nextjs";
 import { eq } from "drizzle-orm";
 
 import { db } from "@/db/db";
@@ -34,6 +35,9 @@ export async function disconnectFeedbin() {
     return { type: "success", message: "success", userDid: did };
   } catch (err) {
     console.log(err);
+    Sentry.captureException(err, {
+      tags: { action: "disconnect-feedbin" },
+    });
     return {
       type: "internal-error",
       message: INTERNAL_ERROR_MESSAGE,

@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import xml2js from "xml2js";
 
 import { getUserFeeds } from "@/data/get-user-feeds";
@@ -51,6 +52,9 @@ export async function GET(request: Request) {
 
     return Response.json({ opml: opmlData }, { status: 200 });
   } catch (err) {
+    Sentry.captureException(err, {
+      tags: { api: "download-opml" },
+    });
     return Response.json("", { status: 500 });
   }
 }

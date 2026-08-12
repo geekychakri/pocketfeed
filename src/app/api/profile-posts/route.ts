@@ -1,5 +1,6 @@
 import { type NextRequest } from "next/server";
 
+import * as Sentry from "@sentry/nextjs";
 import { and, desc, eq, lt } from "drizzle-orm";
 
 import { db } from "@/db/db";
@@ -60,6 +61,9 @@ export async function GET(request: NextRequest) {
     console.log({ result: result.posts });
     return Response.json(result);
   } catch (error) {
+    Sentry.captureException(error, {
+      tags: { api: "profile-posts" },
+    });
     return Response.json("", { status: 500 });
   }
 }

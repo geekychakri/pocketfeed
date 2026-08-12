@@ -1,5 +1,7 @@
 import { type NextRequest } from "next/server";
 
+import * as Sentry from "@sentry/nextjs";
+
 import getSession from "@/lib/iron-session/get-iron-session";
 
 export async function GET(request: NextRequest) {
@@ -27,6 +29,9 @@ export async function GET(request: NextRequest) {
 
     return Response.json({ chapters: data.chapters });
   } catch (err) {
+    Sentry.captureException(err, {
+      tags: { api: "get-chapters" },
+    });
     return Response.json("", { status: 500 });
   }
 }

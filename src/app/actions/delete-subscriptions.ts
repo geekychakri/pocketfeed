@@ -1,5 +1,6 @@
 "use server";
 
+import * as Sentry from "@sentry/nextjs";
 import { and, eq, inArray } from "drizzle-orm";
 import qs from "qs";
 
@@ -62,6 +63,9 @@ export async function deleteSubscriptions(
     // refresh();
     return { type: "success", message: "Deleted successfully!", payload: res };
   } catch (err) {
+    Sentry.captureException(err, {
+      tags: { action: "delete-subscriptions" },
+    });
     return {
       type: "internal-error",
       message: INTERNAL_ERROR_MESSAGE,

@@ -1,4 +1,5 @@
 import { isProbablyReaderable, Readability } from "@mozilla/readability";
+import * as Sentry from "@sentry/nextjs";
 import { JSDOM, VirtualConsole } from "jsdom";
 
 import getSession from "@/lib/iron-session/get-iron-session";
@@ -44,6 +45,9 @@ export async function GET(request: Request) {
       return Response.json({ content: null });
     }
   } catch (err) {
+    Sentry.captureException(err, {
+      tags: { api: "extract-article" },
+    });
     return Response.json("", { status: 500 });
   }
 }

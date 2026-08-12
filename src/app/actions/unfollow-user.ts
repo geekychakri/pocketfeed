@@ -1,5 +1,6 @@
 "use server";
 
+import * as Sentry from "@sentry/nextjs";
 import { and, eq } from "drizzle-orm";
 
 import { db } from "@/db/db";
@@ -32,6 +33,9 @@ export async function unFollowUser(followerDid: string, followingDid: string) {
     return { type: "success", message: "success" };
   } catch (err) {
     console.log(err);
+    Sentry.captureException(err, {
+      tags: { action: "unfollow-user" },
+    });
     return { type: "internal-error", message: INTERNAL_ERROR_MESSAGE };
   }
 }

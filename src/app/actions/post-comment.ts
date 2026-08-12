@@ -1,8 +1,9 @@
 "use server";
 
+import * as Sentry from "@sentry/nextjs";
+
 import { getSessionAgent } from "@/lib/auth/session";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
-import getSession from "@/lib/iron-session/get-iron-session";
 
 const initialState = {
   type: "",
@@ -77,6 +78,9 @@ export async function postComment(prevState: any, formData: FormData | null) {
       parentPostReplyingToCID: postReplyingToCID,
     };
   } catch (err) {
+    Sentry.captureException(err, {
+      tags: { action: "post-comment" },
+    });
     return {
       type: "internal-error",
       message: INTERNAL_ERROR_MESSAGE,

@@ -1,5 +1,7 @@
 "use server";
 
+import * as Sentry from "@sentry/nextjs";
+
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
@@ -23,6 +25,9 @@ export async function followUser(followerDid: string, followingDid: string) {
     return { type: "success", message: "success" };
   } catch (err) {
     console.log(err);
+    Sentry.captureException(err, {
+      tags: { action: "follow-user" },
+    });
     return { type: "internal-error", message: INTERNAL_ERROR_MESSAGE };
   }
 }

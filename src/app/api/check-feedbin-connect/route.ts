@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import { eq } from "drizzle-orm";
 
 import { db } from "@/db/db";
@@ -33,6 +34,9 @@ export async function GET(request: Request) {
     });
   } catch (err) {
     console.log(err);
+    Sentry.captureException(err, {
+      tags: { api: "feedbin-connect" },
+    });
     return Response.json({ msg: "Something went wrong!" }, { status: 500 });
   }
 }

@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import { and, desc, lt, ne } from "drizzle-orm";
 
 import { db } from "@/db/db";
@@ -114,6 +115,9 @@ export async function GET(request: Request) {
       nextCursor: nextCursor, // Corrected path to cursor
     });
   } catch (error) {
+    Sentry.captureException(error, {
+      tags: { api: "discover-posts" },
+    });
     return Response.json("", { status: 500 });
   }
 }

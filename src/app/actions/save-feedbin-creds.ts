@@ -1,5 +1,7 @@
 "use server";
 
+import * as Sentry from "@sentry/nextjs";
+
 import { db } from "@/db/db";
 import * as schema from "@/db/schema";
 import { INTERNAL_ERROR_MESSAGE } from "@/lib/constants";
@@ -120,6 +122,9 @@ export async function saveFeedbinCreds(
     };
   } catch (err) {
     console.log(err);
+    Sentry.captureException(err, {
+      tags: { action: "save-feedbin-creds" },
+    });
     return {
       type: "internal-error",
       message: INTERNAL_ERROR_MESSAGE,
