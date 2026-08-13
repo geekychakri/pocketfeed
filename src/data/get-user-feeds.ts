@@ -9,9 +9,9 @@ import { decryptPassword } from "@/lib/crypto";
 
 type SubscriptionType = {
   id: string;
-  title: string;
+  title: string | null;
   feedUrl: string;
-  siteUrl: string;
+  siteUrl: string | null;
 }[];
 
 type FeedbinItemType = {
@@ -20,7 +20,7 @@ type FeedbinItemType = {
   feed_id: number;
   title: string;
   feed_url: string;
-  site_url: string;
+  site_url: string | null;
 };
 
 export const getUserFeeds = cache(async (did: string) => {
@@ -76,7 +76,10 @@ export const getUserFeeds = cache(async (did: string) => {
     inAppFeedsResult.value.length >= 1
   ) {
     inAppFeedSubscriptions = inAppFeedsResult.value.map((item) => ({
-      ...item,
+      id: item.id,
+      title: item.title ?? item.feedUrl,
+      feedUrl: item.feedUrl,
+      siteUrl: item.siteUrl,
       source: "pocketfeed",
     }));
   }

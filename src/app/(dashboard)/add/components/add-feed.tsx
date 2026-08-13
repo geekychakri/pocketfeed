@@ -148,8 +148,11 @@ export default function AddFeed() {
 
       setFeedPanelName("pocketfeed");
 
+      const feed = state.payload[0];
       router.push(
-        `/feed?feedUrl=${state?.payload[0].feedUrl}&title=${encodeURIComponent(state?.payload[0].title)}` as Route,
+        `/feed?feedUrl=${encodeURIComponent(feed.feedUrl)}&title=${encodeURIComponent(
+          feed.title ?? feed.feedUrl,
+        )}` as Route,
       );
     }
   }, [state, router]);
