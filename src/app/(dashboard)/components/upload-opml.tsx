@@ -61,21 +61,20 @@ export default function UploadOPML() {
         method: "POST",
         body: formData,
       });
-      if (!res.ok) {
-        throw new Error(INTERNAL_ERROR_MESSAGE);
-      }
       const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || INTERNAL_ERROR_MESSAGE);
+      }
       console.log(data);
       setOpmlFeeds(data);
       setIsFeedDialogOpen(true);
-      // toast.success("Imported successfully!");
     } catch (error) {
-      let message;
-      if (error instanceof Error) message = error.message;
-      internalErrorToast(INTERNAL_ERROR_MESSAGE);
+      const message =
+        error instanceof Error ? error.message : INTERNAL_ERROR_MESSAGE;
+      internalErrorToast(message as string);
     } finally {
       setIsLoading(false);
-      // setOpenImportAlertModal(false);
     }
   };
 
@@ -99,7 +98,7 @@ export default function UploadOPML() {
           const file = await files[0].getFile();
 
           if (file.size > MAX_FILE_SIZE) {
-            return toast.warning("Size too large!");
+            return toast.warning("Size too large! Max 4MB.");
           }
           // let filenames = files.map((file) => file);
           setFile(file);
@@ -435,12 +434,14 @@ const FeedItem = React.memo(
             checked={isChecked}
             onChange={onChange}
           />
-
-          <span className="flex flex-col gap-2">{feed.title} — </span>
         </div>
-        <span className="text-text-secondary line-clamp-1 text-sm">
-          {feed.siteUrl}
-        </span>
+
+        <div className="flex min-w-0 gap-1">
+          <span className="truncate">{feed.title || feed.feedUrl} —</span>
+          <span className="text-text-secondary truncate text-sm">
+            {feed.siteUrl || feed.feedUrl}
+          </span>
+        </div>
       </label>
     );
   },

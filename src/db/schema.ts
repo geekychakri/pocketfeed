@@ -46,9 +46,9 @@ export const feeds = pgTable(
         onDelete: "cascade",
       })
       .notNull(),
-    title: text("title").notNull(),
+    title: text("title"),
     feedUrl: text("feed_url").notNull(),
-    siteUrl: text("site_url").notNull(),
+    siteUrl: text("site_url"),
     favicon: text("favicon"),
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },

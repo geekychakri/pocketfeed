@@ -87,14 +87,17 @@ export default function FeedLinks({
                 >
                   <span className="flex items-center gap-3">
                     <Avatar className="bg-ui-normal inline-flex h-4.5 w-4.5 flex-none cursor-pointer items-center justify-center overflow-hidden rounded-full select-none">
-                      <AvatarImage
-                        className="h-full w-full rounded-[inherit] object-cover"
-                        src={
-                          record?.favicon ||
-                          `https://www.google.com/s2/favicons?domain=${record.siteUrl}&sz=64`
-                        }
-                        alt={record.title}
-                      />
+                      {record.favicon || record.siteUrl ? (
+                        <AvatarImage
+                          className="h-full w-full rounded-[inherit] object-cover"
+                          src={
+                            record.favicon ||
+                            `https://www.google.com/s2/favicons?domain=${record.siteUrl}&sz=64`
+                          }
+                          alt={record.title}
+                        />
+                      ) : null}
+
                       <AvatarFallback className="text-sm">
                         {getInitials(record.title, "folder")}
                       </AvatarFallback>

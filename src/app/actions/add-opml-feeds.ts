@@ -34,7 +34,6 @@ export async function addOPMLFeeds(
   data: ItemType[],
 ): Promise<AddOPMLFeedsResult> {
   try {
-    // throw new Error("");
     const session = await getSession();
 
     const did = session.user?.did;
@@ -68,11 +67,23 @@ export async function addOPMLFeeds(
 
     console.log({ result });
 
-    const existingFeedUrls = new Set(result.map((item) => item.feedUrl));
+    // const existingFeedUrls = new Set(result.map((item) => item.feedUrl));
 
-    const uniqueFeeds = data.filter(
-      (item) => !existingFeedUrls.has(item.feedUrl),
-    );
+    // const uniqueFeeds = data.filter(
+    //   (item) => !existingFeedUrls.has(item.feedUrl),
+    // );
+
+    // filter feeds already subscribed to and duplicates within the selection
+    const existingFeedUrls = new Set(result.map((item) => item.feedUrl));
+    const seenFeedUrls = new Set<string>();
+
+    const uniqueFeeds = data.filter((item) => {
+      if (existingFeedUrls.has(item.feedUrl)) return false;
+      if (seenFeedUrls.has(item.feedUrl)) return false;
+
+      seenFeedUrls.add(item.feedUrl);
+      return true;
+    });
 
     if (uniqueFeeds.length === 0) {
       return {
@@ -90,6 +101,8 @@ export async function addOPMLFeeds(
 
     const feedList = uniqueFeeds.map((item: ItemType) => ({
       ...item,
+      title: item.title || item.feedUrl,
+      siteUrl: item.siteUrl || null,
       did,
     }));
     console.log({ feedList });
