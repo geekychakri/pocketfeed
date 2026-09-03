@@ -1,5 +1,6 @@
 import { isProbablyReaderable, Readability } from "@mozilla/readability";
 import * as Sentry from "@sentry/nextjs";
+import { guardedFetch } from "guarded-fetch";
 import { JSDOM, VirtualConsole } from "jsdom";
 
 import getSession from "@/lib/iron-session/get-iron-session";
@@ -21,10 +22,17 @@ export async function GET(request: Request) {
       );
     }
 
-    const virtualConsole = new VirtualConsole();
+    // const virtualConsole = new VirtualConsole();
 
-    const dom = await JSDOM.fromURL(articleLink, {
-      virtualConsole,
+    // const dom = await JSDOM.fromURL(articleLink, {
+    //   virtualConsole,
+    // });
+
+    const response = await guardedFetch(articleLink);
+    const html = await response.text();
+
+    const dom = new JSDOM(html, {
+      url: articleLink,
     });
 
     if (isProbablyReaderable(dom.window.document)) {

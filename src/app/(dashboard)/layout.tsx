@@ -9,6 +9,7 @@ import FeedSubList from "@/app/(dashboard)/components/feed-sub-list";
 import PodcastLoader from "@/app/(dashboard)/components/podcast-loader";
 import ProfileAvatarWrapper from "@/app/(dashboard)/components/profile-avatar-wrapper";
 import { getDid } from "@/lib/auth/session";
+import { RegisterWebMCPTools } from "@/webmcp/tools";
 
 import YouTubeModal from "./(feed)/feed/components/YouTubeModal";
 import CheckIsOnline from "./components/check-is-online";
@@ -59,6 +60,7 @@ export default async function MainLayout({
       </SidebarNavigation>
 
       <main className="flex-1" id="main">
+        <RegisterWebMCPTools />
         <MobileNav />
 
         <PodcastLoader />
