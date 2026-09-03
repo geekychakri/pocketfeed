@@ -30,7 +30,8 @@ export async function GET(request: Request) {
   await connection();
   try {
     const headersList = await headers();
-    const userTimezone = headersList.get("pf-user-timezone") as string;
+    const userTimezone =
+      (headersList.get("pf-user-timezone") as string) ?? "UTC";
 
     console.log({ userTimezone });
 
@@ -274,6 +275,6 @@ export async function GET(request: Request) {
     Sentry.captureException(error, {
       tags: { api: "daily-feed" },
     });
-    return Response.json({}, { status: 500 });
+    return Response.json({ message: "Something went wrong" }, { status: 500 });
   }
 }
